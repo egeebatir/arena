@@ -10,15 +10,15 @@ FRAMES_PER_SIM_MINUTE = 30
 
 ARENA_RADIUS = 260
 BALL_RADIUS = 40
-GOAL_WIDTH_RADIANS = 0.28
+GOAL_WIDTH_RADIANS = 0.40
 POST_RADIUS = 8
-GOAL_DEPTH = 60
+GOAL_DEPTH = 50
 
 SPEED = 5.5
 MIN_SPEED = 4.0
 
 # PHYSICS CONSTANTS
-GRAVITY = 0.00
+GRAVITY = 0.001
 BOUNCE_DAMPING = 0.9995
 FRICTION = 0.99999
 ELASTICITY = 0.95
@@ -109,7 +109,7 @@ pygame.mixer.init()
 pygame.mixer.set_num_channels(8)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Futbol Simulasyonu - Restart Music")
+pygame.display.set_caption("Futbol Simulasyonu")
 
 # --- SES YÜKLEME ---
 # 1. Arkaplan
@@ -427,7 +427,10 @@ def start_match():
     state = "FIRST_HALF"
 
 running = True
+
+
 while running:
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
