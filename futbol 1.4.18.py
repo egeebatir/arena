@@ -1,0 +1,1952 @@
+import pygame
+import pygame.gfxdraw
+import math
+import random
+import os
+
+# =====================================================================
+#                        1. LANGUAGE SETTINGS
+# =====================================================================
+current_lang = "TR"
+LANG = {
+    "TR": {
+        "WINDOW_TITLE": "Futbol Simulasyonu",
+        "TEAM_SELECTION": "TAKIM SEÇİMİ",
+        "SETTINGS": "AYARLAR",
+        "HOME": "EV SAHİBİ",
+        "AWAY": "DEPLASMAN",
+        "SEARCH": "Takım Ara...",
+        "START_MATCH": "MAÇI BAŞLAT",
+        "BACK_TO_MENU": "MENÜYE DÖN",
+        "HALF_TIME": "İLK YARI",
+        "FULL_TIME": "MAÇ SONU",
+        "HT": "İY",
+        "FT": "MS",
+        "GOAL_EXCLAMATION": "GOLLL!",
+        "PLAYER": "Oyuncu",
+        "LBL_MASTER": "GENEL SES",
+        "LBL_STADIUM": "STADYUM",
+        "LBL_MUSIC": "GOL MÜZİĞİ",
+        "LBL_COLLISION": "TOP ÇARPMA",
+        "LBL_WHISTLE": "DÜDÜK",
+        "LBL_MISS": "DİREK / KAÇAN",
+        "LANG_BTN": "TR"
+    },
+    "ENG": {
+        "WINDOW_TITLE": "Football Simulation",
+        "TEAM_SELECTION": "TEAM SELECTION",
+        "SETTINGS": "SETTINGS",
+        "HOME": "HOME",
+        "AWAY": "AWAY",
+        "SEARCH": "Search Team...",
+        "START_MATCH": "START MATCH",
+        "BACK_TO_MENU": "BACK TO MENU",
+        "HALF_TIME": "HALF TIME",
+        "FULL_TIME": "FULL TIME",
+        "HT": "HT",
+        "FT": "FT",
+        "GOAL_EXCLAMATION": "GOAL!",
+        "PLAYER": "Player",
+        "LBL_MASTER": "MASTER VOL",
+        "LBL_STADIUM": "STADIUM",
+        "LBL_MUSIC": "GOAL MUSIC",
+        "LBL_COLLISION": "COLLISION",
+        "LBL_WHISTLE": "WHISTLE",
+        "LBL_MISS": "POST / MISS",
+        "LANG_BTN": "ENG"
+    }
+}
+lang_btn_rect = pygame.Rect(20, 20, 60, 40)
+
+# =====================================================================
+#                        2. SCREEN & GAME CONFIGURATION
+# =====================================================================
+WIDTH, HEIGHT = 800, 800
+FPS = 80
+FRAMES_PER_SIM_MINUTE = 26
+
+ARENA_RADIUS = 220
+BALL_RADIUS = 37
+GOAL_WIDTH_RADIANS = 0.42
+POST_RADIUS = 4
+GOAL_DEPTH = 52
+
+SPEED = 5.5
+MIN_SPEED = 4.0
+
+# =====================================================================
+#                        3. PHYSICS CONSTANTS
+# =====================================================================
+GRAVITY = 0.025
+BOUNCE_DAMPING = 0.95
+FRICTION = 0.999
+ELASTICITY = 1.01
+POST_ELASTICITY = 1.04
+
+# =====================================================================
+#                        4. BRAND & GAME COLORS
+# =====================================================================
+NAVY = (0, 33, 71)          # Main brand Navy (Pitch, backgrounds)
+NAVY_LIGHT = (0, 45, 95)    # Slightly lighter Navy for pitch stripes
+NAVY_DARK = (0, 20, 50)     # Darker Navy for UI Backgrounds
+CREAM = (255, 253, 218)     # Main brand Cream (UI text, borders, outer arena edge)
+BURNT_ORANGE = (204, 85, 0) # Accent 1 (Selections, buttons)
+TERRACOTTA = (226, 114, 91) # Accent 2 (Menu Titles, Goal messages)
+
+# Specific UI / Environment color assignments
+GRASS_1 = NAVY
+GRASS_2 = NAVY_LIGHT
+MENU_BG = NAVY_DARK
+SELECTED_COLOR = BURNT_ORANGE
+SCROLLBAR_BG = NAVY
+SCROLLBAR_HANDLE = CREAM
+OVERLAY_BG = (0, 20, 50, 200)
+TABLE_BG = (0, 20, 50, 230)
+
+# Exempted Core Colors (Specifically preserved for elements like goal frame, timer, etc)
+WHITE = (245, 245, 245)
+BLACK = (10, 10, 10)
+NET_COLOR = (200, 200, 200)
+POST_INNER_COLOR = (50, 50, 50)
+RED_CARD_COLOR = (250, 10, 10)
+SHADOW_COLOR = (0, 0, 0, 80)
+
+# =====================================================================
+#                        5. AUDIO & SOUNDS
+# =====================================================================
+STADIUM_SOUND = "stadium.mp3"
+COLLISION_FILE = "collision1.wav"
+MISS_SOUND_FILE = "kacti.wav"
+
+START_WHISTLE_FILE = "bas.mp3"
+HALF_WHISTLE_FILE = "orta.mp3"
+END_WHISTLE_FILE = "son.mp3"
+RED_CARD_FILE = "bas.mp3"
+
+GS_GOAL_FILE = "gs.wav"
+FB_GOAL_FILE = "fb.wav"
+BJK_GOAL_FILE = "bjk.wav"
+TS_GOAL_FILE = "ts.wav"
+
+GOAL1_FILE = "goal1.wav"
+GOAL2_FILE = "goal2.wav"
+GOAL3_FILE = "goal3.wav"
+
+master_vol = 1.0
+vol_settings = {"stadium": 0.45, "music": 0.5, "collision": 0.02, "whistle": 0.4, "miss": 0.4}
+
+# =====================================================================
+#                        6. TEAM DATABASE & LOGOS
+# =====================================================================
+# Team database is excluded from color overrides to maintain real team colors
+TEAMS = {
+    "GALATASARAY":    {"colors": [(169, 4, 50), (253, 185, 18)], "short": "GS"},
+    "FENERBAHÇE":     {"colors": [(255, 255, 0), (0, 0, 128)],   "short": "FB"},
+    "BEŞİKTAŞ":       {"colors": [(255, 255, 255), (10, 10, 10)],"short": "BJK"},
+    "TRABZONSPOR":    {"colors": [(128, 0, 0), (0, 191, 255)],   "short": "TS"},
+    "BAŞAKŞEHİR":     {"colors": [(255, 102, 0), (0, 0, 102)],   "short": "BFK"},
+    "KASIMPAŞA":      {"colors": [(255, 255, 255), (0, 0, 128)], "short": "KAS"},
+    "SİVASSPOR":      {"colors": [(255, 0, 0), (255, 255, 255)], "short": "SVS"},
+    "ALANYASPOR":     {"colors": [(255, 165, 0), (0, 128, 0)],   "short": "ALN"},
+    "RİZESPOR":       {"colors": [(0, 128, 0), (0, 0, 255)],     "short": "RİZ"},
+    "NOTTM FOREST":   {"colors": [(229, 30, 42), (255, 255, 255)],"short": "NFO"},
+    "ANTALYASPOR":    {"colors": [(255, 0, 0), (255, 255, 255)], "short": "ANT"},
+    "GAZİANTEP FK":   {"colors": [(200, 16, 46), (10, 10, 10)],  "short": "GFK"},
+    "KONYASPOR":      {"colors": [(0, 128, 0), (255, 255, 255)], "short": "KON"},
+    "KAYSERİSPOR":    {"colors": [(255, 204, 0), (255, 0, 0)],   "short": "KAY"},
+    "BODRUM FK":      {"colors": [(0, 128, 0), (255, 255, 255)], "short": "BOD"},
+    "EYÜPSPOR":       {"colors": [(230, 230, 250), (255, 215, 0)],"short": "EYP"},
+    "GÖZTEPE":        {"colors": [(255, 215, 0), (255, 0, 0)],   "short": "GÖZ"},
+    "SAMSUNSPOR":     {"colors": [(255, 0, 0), (255, 255, 255)], "short": "SAM"},
+    "KOCAELİSPOR":    {"colors": [(0, 128, 0), (10, 10, 10)],   "short": "KOC"},
+    "KARAGÜMRÜK":     {"colors": [(255, 0, 0), (10, 10, 10)],    "short": "FKG"},
+    "GENÇLERBİRLİĞİ": {"colors": [(200, 16, 46), (10, 10, 10)],  "short": "GEN"},
+    "HATAYSPOR":      {"colors": [(128, 0, 0), (255, 255, 255)], "short": "HAT"},
+    "ADANA DEMİR":    {"colors": [(0, 0, 255), (173, 216, 230)], "short": "ADS"},
+    "MAN CITY":       {"colors": [(108, 171, 221), (255, 255, 255)],"short": "MC"},
+    "LIVERPOOL":      {"colors": [(200, 16, 46), (255, 255, 255)],  "short": "LIV"},
+    "ARSENAL":        {"colors": [(239, 1, 7), (255, 255, 255)],    "short": "ARS"},
+    "ASTON VILLA":    {"colors": [(103, 14, 54), (149, 191, 229)],  "short": "AVL"},
+    "TOTTENHAM":      {"colors": [(255, 255, 255), (19, 34, 87)],   "short": "TOT"},
+    "MAN UTD":        {"colors": [(218, 41, 28), (255, 255, 255)],  "short": "MUN"},
+    "CHELSEA":        {"colors": [(3, 70, 148), (255, 255, 255)],   "short": "CHE"},
+    "REAL MADRID":    {"colors": [(255, 255, 255), (255, 215, 0)],"short": "RMA"},
+    "BARCELONA":      {"colors": [(0, 77, 152), (165, 0, 68)],    "short": "BAR"},
+    "ATLETICO":       {"colors": [(203, 53, 36), (255, 255, 255)],"short": "ATM"},
+    "GIRONA":         {"colors": [(200, 16, 46), (255, 255, 255)],"short": "GIR"},
+    "B. MUNIH":       {"colors": [(220, 5, 45), (255, 255, 255)], "short": "BAY"},
+    "DORTMUND":       {"colors": [(253, 225, 0), (10, 10, 10)],   "short": "BVB"},
+    "LEVERKUSEN":     {"colors": [(10, 10, 10), (227, 34, 25)],   "short": "B04"},
+    "RB LEIPZIG":     {"colors": [(255, 255, 255), (221, 5, 43)], "short": "RBL"},
+    "CLUB BRUGGE":    {"colors": [(0, 0, 0), (0, 116, 217)],      "short": "CLB"},
+    "NEWCASTLE":      {"colors": [(0, 0, 0), (255, 255, 255)],    "short": "NEW"},
+    "QARABAG":        {"colors": [(0, 0, 128), (227, 141, 26)],   "short": "QFK"},
+    "OLYMPIACOS":     {"colors": [(255, 255, 255), (221, 0, 0)],  "short": "OLY"},
+    "BODO/GLIMT":     {"colors": [(255, 220, 0), (0, 0, 0)],      "short": "BOD"},
+    "INTER":          {"colors": [(0, 102, 187), (10, 10, 10)],   "short": "INT"},
+    "MILAN":          {"colors": [(251, 9, 11), (10, 10, 10)],    "short": "MIL"},
+    "JUVENTUS":       {"colors": [(255, 255, 255), (10, 10, 10)], "short": "JUV"},
+    "ATALANTA":       {"colors": [(30, 113, 184), (10, 10, 10)],  "short": "ATA"},
+    "ROMA":           {"colors": [(134, 38, 51), (240, 188, 66)], "short": "ROM"},
+    "LAZIO":          {"colors": [(135, 206, 235), (255, 255, 255)],"short": "LAZ"},
+    "PSG":            {"colors": [(0, 65, 112), (218, 41, 28)],   "short": "PSG"},
+    "LILLE":          {"colors": [(238, 36, 54), (0, 51, 102)],   "short": "LIL"},
+    "MONACO":         {"colors": [(255, 0, 0), (255, 255, 255)],  "short": "ASM"},
+    "BENFICA":        {"colors": [(232, 48, 48), (255, 255, 255)],"short": "SLB"},
+    "SPORTING":       {"colors": [(0, 128, 0), (255, 255, 255)],  "short": "SCP"},
+    "PORTO":          {"colors": [(0, 0, 255), (255, 255, 255)],  "short": "POR"},
+    "AJAX":           {"colors": [(255, 255, 255), (210, 18, 46)],"short": "AJX"},
+    "PSV":            {"colors": [(255, 0, 0), (255, 255, 255)],  "short": "PSV"},
+    "FEYENOORD":      {"colors": [(255, 255, 255), (255, 0, 0)],  "short": "FEY"},
+    "PANATHINAIKOS":  {"colors": [(0, 123, 58), (255, 255, 255)], "short": "PAO"},
+    "VIKTORIA PLZEN": {"colors": [(237, 27, 36), (0, 77, 152)],   "short": "PLZ"},
+    "DINAMO ZAGREB":  {"colors": [(0, 51, 153), (255, 255, 255)], "short": "DZG"},
+    "GENK":           {"colors": [(0, 71, 156), (255, 255, 255)], "short": "GNK"},
+    "BRANN":          {"colors": [(226, 0, 26), (255, 255, 255)], "short": "BRA"},
+    "BOLOGNA":        {"colors": [(158, 27, 50), (26, 35, 66)],   "short": "BOL"},
+    "PAOK":           {"colors": [(0, 0, 0), (255, 255, 255)],    "short": "PAOK"},
+    "CELTA VIGO":     {"colors": [(138, 195, 238), (255, 255, 255)],"short": "CEL"},
+    "LUDOGORETS":     {"colors": [(13, 104, 56), (255, 255, 255)],"short": "LUD"},
+    "FERENCVAROS":    {"colors": [(28, 127, 55), (255, 255, 255)],"short": "FER"},
+    "CRVENA ZVEZDA":  {"colors": [(208, 16, 35), (255, 255, 255)],"short": "CZV"},
+    "CELTIC":         {"colors": [(0, 128, 0), (255, 255, 255)],  "short": "CLT"},
+    "STUTTGART":      {"colors": [(255, 255, 255), (227, 34, 25)],"short": "VFB"},
+    "AUGSBURG":       {"colors": [(255, 255, 255), (186, 32, 38)], "short": "AUG"},
+    "FRANKFURT":      {"colors": [(0, 0, 0), (227, 34, 25)],       "short": "FRA"},
+    "FREIBURG":       {"colors": [(218, 41, 28), (255, 255, 255)], "short": "FRE"},
+    "HAMBURG":        {"colors": [(0, 85, 164), (255, 255, 255)],  "short": "HSV"},
+    "HEIDENHEIM":     {"colors": [(227, 34, 25), (0, 51, 160)],    "short": "HEI"},
+    "HOFFENHEIM":     {"colors": [(0, 92, 169), (255, 255, 255)],  "short": "HOF"},
+    "KÖLN":           {"colors": [(227, 34, 25), (255, 255, 255)], "short": "KÖL"},
+    "MAINZ 05":       {"colors": [(237, 28, 36), (255, 255, 255)], "short": "MAI"},
+    "M. GLADBACH":    {"colors": [(0, 0, 0), (255, 255, 255)],     "short": "BMG"},
+    "ST. PAULI":      {"colors": [(105, 57, 4), (255, 255, 255)],  "short": "STP"},
+    "UNION BERLIN":   {"colors": [(218, 41, 28), (255, 255, 255)], "short": "UNB"},
+    "WERDER BREMEN":  {"colors": [(29, 162, 83), (255, 255, 255)], "short": "WER"},
+    "WOLFSBURG":      {"colors": [(98, 179, 48), (255, 255, 255)], "short": "WOB"},
+    "BOURNEMOUTH":    {"colors": [(200, 16, 46), (0, 0, 0)],        "short": "BOU"},
+    "BRENTFORD":      {"colors": [(227, 6, 19), (255, 255, 255)],   "short": "BRE"},
+    "BRIGHTON":       {"colors": [(0, 87, 184), (255, 255, 255)],   "short": "BHA"},
+    "BURNLEY":        {"colors": [(108, 29, 69), (153, 214, 234)],  "short": "BUR"},
+    "EVERTON":        {"colors": [(0, 51, 153), (255, 255, 255)],   "short": "EVE"},
+    "FULHAM":         {"colors": [(255, 255, 255), (0, 0, 0)],      "short": "FUL"},
+    "LEEDS UTD":      {"colors": [(255, 255, 255), (29, 66, 138)],  "short": "LEE"},
+    "CRYSTAL PALACE": {"colors": [(27, 69, 143), (196, 18, 46)],    "short": "CRY"},
+    "SUNDERLAND":     {"colors": [(255, 0, 0), (255, 255, 255)],    "short": "SUN"},
+    "WEST HAM":       {"colors": [(122, 38, 58), (27, 177, 231)],   "short": "WHU"},
+    "WOLVES":         {"colors": [(253, 185, 19), (0, 0, 0)],       "short": "WOL"},
+    "CAGLIARI":       {"colors": [(163, 19, 51), (0, 35, 80)],     "short": "CAG"},
+    "COMO":           {"colors": [(0, 71, 169), (255, 255, 255)],  "short": "COM"},
+    "CREMONESE":      {"colors": [(130, 130, 130), (227, 34, 25)], "short": "CRE"},
+    "FIORENTINA":     {"colors": [(72, 46, 146), (255, 255, 255)], "short": "FIO"},
+    "GENOA":          {"colors": [(166, 28, 49), (0, 36, 81)],     "short": "GNO"},
+    "LECCE":          {"colors": [(255, 217, 0), (227, 34, 25)],   "short": "LEC"},
+    "NAPOLI":         {"colors": [(18, 160, 215), (255, 255, 255)],"short": "NAP"},
+    "PARMA":          {"colors": [(255, 204, 0), (0, 51, 153)],    "short": "PAR"},
+    "PISA":           {"colors": [(0, 0, 0), (0, 84, 166)],        "short": "PIS"},
+    "SASSUOLO":       {"colors": [(0, 160, 90), (0, 0, 0)],        "short": "SAS"},
+    "TORINO":         {"colors": [(138, 30, 50), (255, 255, 255)], "short": "TOR"},
+    "UDINESE":        {"colors": [(0, 0, 0), (255, 255, 255)],     "short": "UDI"},
+    "VERONA":         {"colors": [(0, 51, 102), (255, 204, 0)],    "short": "VER"},
+    # --- LA LIGA (NEW) ---
+    "ATHLETIC CLUB":  {"colors": [(237, 28, 36), (255, 255, 255)], "short": "ATH"},
+    "REAL SOCIEDAD":  {"colors": [(0, 103, 177), (255, 255, 255)], "short": "RSO"},
+    "VILLARREAL":     {"colors": [(255, 230, 0), (0, 0, 102)],     "short": "VIL"},
+    "VALENCIA":       {"colors": [(255, 255, 255), (0, 0, 0)],     "short": "VAL"},
+    "SEVILLA":        {"colors": [(255, 255, 255), (218, 41, 28)], "short": "SEV"},
+    "REAL BETIS":     {"colors": [(0, 148, 72), (255, 255, 255)],  "short": "BET"},
+    "OSASUNA":        {"colors": [(193, 29, 39), (0, 27, 73)],     "short": "OSA"},
+    "MALLORCA":       {"colors": [(226, 0, 26), (0, 0, 0)],        "short": "MLL"},
+    "ALAVES":         {"colors": [(0, 68, 148), (255, 255, 255)],  "short": "ALA"},
+    "RAYO VALLECANO": {"colors": [(255, 255, 255), (227, 6, 19)],  "short": "RAY"},
+    "GETAFE":         {"colors": [(0, 75, 151), (255, 255, 255)],  "short": "GET"},
+    "ESPANYOL":       {"colors": [(0, 122, 195), (255, 255, 255)], "short": "ESP"},
+    "ELCHE":          {"colors": [(0, 100, 0), (255, 255, 255)],   "short": "ELC"},
+    "OVIEDO":         {"colors": [(0, 51, 160), (255, 255, 255)],  "short": "OVI"},
+    "LEVANTE":        {"colors": [(0, 51, 102), (153, 0, 51)],     "short": "LEV"},
+
+    # --- LIGUE 1 (NEW) ---
+    "MARSEILLE":      {"colors": [(255, 255, 255), (0, 150, 214)], "short": "OM"},
+    "LYON":           {"colors": [(255, 255, 255), (218, 41, 28)], "short": "OL"},
+    "LENS":           {"colors": [(237, 28, 36), (255, 215, 0)],   "short": "RCL"},
+    "NICE":           {"colors": [(218, 41, 28), (0, 0, 0)],       "short": "NIC"},
+    "RENNES":         {"colors": [(227, 34, 25), (0, 0, 0)],       "short": "REN"},
+    "STRASBOURG":     {"colors": [(0, 82, 159), (255, 255, 255)],  "short": "STR"},
+    "REIMS":          {"colors": [(226, 0, 26), (255, 255, 255)],  "short": "SDR"},
+    "TOULOUSE":       {"colors": [(92, 45, 145), (255, 255, 255)], "short": "TFC"},
+    "NANTES":         {"colors": [(253, 233, 34), (0, 100, 50)],   "short": "FCN"},
+    "MONTPELLIER":    {"colors": [(0, 35, 96), (243, 108, 33)],    "short": "MHS"},
+    "ANGERS":         {"colors": [(0, 0, 0), (255, 255, 255)],     "short": "SCO"},
+    "BREST":          {"colors": [(226, 0, 26), (255, 255, 255)],  "short": "SB2"},
+    "LE HAVRE":       {"colors": [(111, 172, 222), (0, 31, 73)],   "short": "HAC"},
+    "AUXERRE":        {"colors": [(255, 255, 255), (0, 68, 148)],  "short": "AJA"},
+    "SAINT-ETIENNE":  {"colors": [(0, 102, 51), (255, 255, 255)],  "short": "ASE"},
+
+    # --- MLS (NEW) ---
+    "INTER MIAMI":    {"colors": [(244, 181, 205), (0, 0, 0)],     "short": "MIA"},
+    "LAFC":           {"colors": [(0, 0, 0), (195, 158, 109)],     "short": "LAF"},
+    "LA GALAXY":      {"colors": [(0, 36, 93), (255, 210, 0)],     "short": "LAG"},
+    "COLUMBUS CREW":  {"colors": [(255, 223, 0), (0, 0, 0)],       "short": "CCW"},
+    "FC CINCINNATI":  {"colors": [(240, 83, 35), (38, 59, 128)],   "short": "CIN"},
+    "SEATTLE SOUNDERS":{"colors": [(93, 151, 50), (0, 85, 149)],   "short": "SEA"},
+    "NEW YORK CITY FC":{"colors": [(108, 172, 228), (4, 30, 66)],  "short": "NYC"},
+    "NY RED BULLS":   {"colors": [(226, 24, 54), (255, 255, 255)], "short": "NYR"},
+    "ATLANTA UTD":    {"colors": [(128, 0, 0), (0, 0, 0)],         "short": "ATL"},
+    "PORTLAND TIMBERS":{"colors": [(0, 72, 39), (234, 170, 0)],    "short": "PTL"},
+    "ORLANDO CITY":   {"colors": [(99, 52, 146), (255, 255, 255)], "short": "ORL"},
+    "HOUSTON DYNAMO": {"colors": [(255, 107, 0), (0, 0, 0)],       "short": "HOU"},
+    "REAL SALT LAKE": {"colors": [(179, 11, 34), (1, 31, 91)],     "short": "RSL"},
+    "PHILADELPHIA U.":{"colors": [(0, 45, 85), (179, 163, 105)],   "short": "PHI"},
+    "SPORTING KC":    {"colors": [(145, 176, 213), (0, 42, 92)],   "short": "SKC"},
+    "NEW ENGLAND REV":{"colors": [(226, 24, 54), (0, 43, 92)],     "short": "NER"},
+    "NASHVILLE SC":   {"colors": [(236, 232, 58), (31, 22, 70)],   "short": "NSC"},
+    "FC DALLAS":      {"colors": [(226, 24, 54), (0, 62, 126)],    "short": "DAL"},
+    "VANCOUVER WC":   {"colors": [(0, 36, 94), (255, 255, 255)],   "short": "VAN"},
+    "MINNESOTA UTD":  {"colors": [(135, 142, 144), (122, 184, 237)],"short": "MIN"},
+    "COLORADO RAPIDS":{"colors": [(134, 38, 51), (139, 171, 204)], "short": "COL"},
+    "CHARLOTTE FC":   {"colors": [(0, 133, 202), (0, 0, 0)],       "short": "CHR"},
+    "SAN JOSE EQ":    {"colors": [(0, 0, 0), (0, 81, 186)],        "short": "SJE"},
+    "AUSTIN FC":      {"colors": [(0, 180, 81), (0, 0, 0)],        "short": "AUS"},
+    "CHICAGO FIRE":   {"colors": [(255, 0, 0), (0, 42, 92)],       "short": "CHI"},
+    "D.C. UNITED":    {"colors": [(0, 0, 0), (239, 62, 66)],       "short": "DCU"},
+    "CF MONTREAL":    {"colors": [(0, 51, 160), (0, 0, 0)],        "short": "MTL"},
+    "ST. LOUIS CITY": {"colors": [(226, 24, 54), (0, 43, 92)],     "short": "STL"},
+    "TORONTO FC":     {"colors": [(227, 38, 54), (32, 42, 68)],    "short": "TFC"},
+    "SAN DIEGO FC":   {"colors": [(0, 193, 213), (0, 0, 0)],       "short": "SDF"},
+
+    # --- SAUDI PRO LEAGUE (NEW) ---
+    "AL HILAL":       {"colors": [(0, 94, 184), (255, 255, 255)],  "short": "HIL"},
+    "AL NASSR":       {"colors": [(254, 209, 65), (0, 52, 120)],   "short": "NAS"},
+    "AL AHLI":        {"colors": [(0, 166, 81), (255, 255, 255)],  "short": "AHL"},
+    "AL ITTIHAD":     {"colors": [(255, 215, 0), (0, 0, 0)],       "short": "ITT"},
+    "AL SHABAB":      {"colors": [(255, 255, 255), (0, 0, 0)],     "short": "SHA"},
+    "AL TAAWOUN":     {"colors": [(255, 215, 0), (0, 51, 153)],    "short": "TAA"},
+    "AL ETTIFAQ":     {"colors": [(0, 128, 64), (255, 255, 255)],  "short": "ETT"},
+    "DAMAC":          {"colors": [(255, 0, 0), (255, 215, 0)],     "short": "DAM"},
+    "AL FAYHA":       {"colors": [(255, 165, 0), (0, 0, 255)],     "short": "FAY"},
+    "AL FATEH":       {"colors": [(0, 100, 0), (255, 255, 255)],   "short": "FAT"},
+    "AL RIYADH":      {"colors": [(255, 0, 0), (0, 0, 0)],         "short": "RIY"},
+    "AL WEHDA":       {"colors": [(255, 0, 0), (255, 255, 255)],   "short": "WEH"},
+    "AL KHALEEJ":     {"colors": [(255, 255, 0), (0, 128, 0)],     "short": "KHA"},
+    "AL RAED":        {"colors": [(255, 0, 0), (0, 0, 0)],         "short": "RAE"},
+    "AL QADSIAH":     {"colors": [(255, 0, 0), (255, 255, 0)],     "short": "QAD"},
+    "AL OKHDOOD":     {"colors": [(0, 191, 255), (255, 255, 255)], "short": "OKH"},
+    "NEOM SC":        {"colors": [(0, 0, 139), (255, 215, 0)],     "short": "NEO"},
+    "AL KHOLOOD":     {"colors": [(255, 0, 0), (255, 255, 255)],   "short": "KHO"},
+}
+
+TEAM_NAMES = sorted(list(TEAMS.keys()))
+PLAYER_DATABASE = {}
+
+search_text = ""
+search_active = False
+
+def load_player_database():
+    db = {}
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(base_path, "players.txt")
+
+    if os.path.exists(file_path):
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    if ":" in line:
+                        parts = line.split(":")
+                        t_name = parts[0].strip().upper()
+                        p_names = [p.strip() for p in parts[1].split(",")]
+                        p_names = [p for p in p_names if p]
+                        if p_names:
+                            db[t_name] = p_names
+        except Exception as e:
+            pass
+    return db
+
+PLAYER_DATABASE = load_player_database()
+
+def get_random_player_name(team_key):
+    if team_key in PLAYER_DATABASE:
+        players = PLAYER_DATABASE[team_key]
+        if players:
+            return random.choice(players)
+    return f"{LANG[current_lang]['PLAYER']} {random.randint(1, 3)}"
+
+# =====================================================================
+#                        7. PYGAME SETUP & SOUND INIT
+# =====================================================================
+pygame.init()
+pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer=4096)
+pygame.mixer.set_num_channels(8)
+
+main_screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.HWSURFACE | pygame.DOUBLEBUF)
+screen = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+pygame.display.set_caption(LANG[current_lang]["WINDOW_TITLE"])
+
+def apply_volumes():
+    if stadium_music_loaded:
+        pygame.mixer.music.set_volume(vol_settings["stadium"] * master_vol)
+
+    if 'miss_sound' in globals() and miss_sound:
+        miss_sound.set_volume(vol_settings["stadium"] * master_vol)
+
+    if collision_sound:
+        collision_sound.set_volume(vol_settings["collision"] * master_vol)
+
+    whistle_vol = vol_settings["whistle"] * master_vol
+    if start_whistle_sound: start_whistle_sound.set_volume(whistle_vol)
+    if half_whistle_sound: half_whistle_sound.set_volume(whistle_vol)
+    if end_whistle_sound: end_whistle_sound.set_volume(whistle_vol)
+    if red_card_sound: red_card_sound.set_volume(whistle_vol)
+
+    for snd in goal_sounds.values():
+        if snd: snd.set_volume(vol_settings["music"] * master_vol)
+
+    if 'miss_sound' in globals() and miss_sound:
+        miss_sound.set_volume(vol_settings["miss"] * master_vol)
+
+stadium_music_loaded = False
+if os.path.exists(STADIUM_SOUND):
+    try:
+        pygame.mixer.music.load(STADIUM_SOUND)
+        stadium_music_loaded = True
+    except: pass
+
+collision_sound = None
+if os.path.exists(COLLISION_FILE):
+    try: collision_sound = pygame.mixer.Sound(COLLISION_FILE)
+    except: pass
+
+start_whistle_sound = None
+if os.path.exists(START_WHISTLE_FILE):
+    try: start_whistle_sound = pygame.mixer.Sound(START_WHISTLE_FILE)
+    except: pass
+
+half_whistle_sound = None
+if os.path.exists(HALF_WHISTLE_FILE):
+    try: half_whistle_sound = pygame.mixer.Sound(HALF_WHISTLE_FILE)
+    except: pass
+
+end_whistle_sound = None
+if os.path.exists(END_WHISTLE_FILE):
+    try: end_whistle_sound = pygame.mixer.Sound(END_WHISTLE_FILE)
+    except: pass
+
+red_card_sound = None
+if os.path.exists(RED_CARD_FILE):
+    try: red_card_sound = pygame.mixer.Sound(RED_CARD_FILE)
+    except: pass
+
+def play_collision_sound():
+    global goal_sound_channel
+    if goal_sound_channel and goal_sound_channel.get_busy(): return
+    if collision_sound: collision_sound.play()
+
+def play_red_card_sound():
+    if red_card_sound: red_card_sound.play()
+
+miss_sound = None
+if os.path.exists(MISS_SOUND_FILE):
+    try: miss_sound = pygame.mixer.Sound(MISS_SOUND_FILE)
+    except: pass
+
+def play_miss_sound():
+    if 'miss_sound' in globals() and miss_sound:
+        try:
+            miss_sound.stop() # Çalıyorsa hemen kes!
+            miss_sound.play() # Baştan başlat
+        except: pass
+
+goal_sounds = {}
+def load_sound(path):
+    if os.path.exists(path):
+        try: return pygame.mixer.Sound(path)
+        except: return None
+    return None
+
+goal_sounds["GS"] = load_sound(GS_GOAL_FILE)
+goal_sounds["FB"] = load_sound(FB_GOAL_FILE)
+goal_sounds["BJK"] = load_sound(BJK_GOAL_FILE)
+goal_sounds["TS"] = load_sound(TS_GOAL_FILE)
+goal_sounds["GOAL1"] = load_sound(GOAL1_FILE)
+goal_sounds["GOAL2"] = load_sound(GOAL2_FILE)
+goal_sounds["GOAL3"] = load_sound(GOAL3_FILE)
+
+general_pool = []
+if goal_sounds["GOAL1"]: general_pool.append(goal_sounds["GOAL1"])
+if goal_sounds["GOAL2"]: general_pool.append(goal_sounds["GOAL2"])
+if goal_sounds["GOAL3"]: general_pool.append(goal_sounds["GOAL3"])
+
+apply_volumes()
+
+# =====================================================================
+#                        8. LOGO LOADING
+# =====================================================================
+TEAM_LOGOS = {}
+logo_size = BALL_RADIUS * 3 * 2
+
+def get_safe_path(folder, filename):
+    rel_path = os.path.join(folder, filename)
+    if os.path.exists(rel_path): return rel_path
+    abs_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), folder, filename)
+    if os.path.exists(abs_path): return abs_path
+    return rel_path
+
+LOGO_FILES = {
+    "GS": "gs.png", "FB": "fb.png", "BJK": "bjk.png", "TS": "ts.png",
+    "ALN": "alanya.png", "ANT": "antalyaspor.png", "BFK": "basaksehir.png",
+    "EYP": "eyup.png", "GFK": "gaziantep.png", "GEN": "genclerbirligi.png",
+    "GÖZ": "goztepe.png", "FKG": "karagumruk.png", "KAS": "kasımpasa.png",
+    "KAY": "kayseri.png", "KOC": "kocaeli.png", "KON": "konya.png",
+    "RİZ": "rize.png", "SAM": "samsun.png"
+}
+
+LOGO_FILES_PL = {
+    "ARS": "arsenal.png", "AVL": "aston.png", "BOU": "bournemouth.png",
+    "BRE": "brentford.png", "BHA": "brighton.png", "BUR": "burnley.png",
+    "CHE": "chelsea.png", "EVE": "everton.png", "FUL": "fulham.png",
+    "LEE": "leeds.png", "LIV": "liverpool.png", "MC":  "mancity.png",
+    "MUN": "manunited.png", "NEW": "newcastle.png", "NFO": "nottinghamforest.png",
+    "CRY": "palace.png", "SUN": "sunderland.png", "TOT": "tottenham.png",
+    "WHU": "west ham.png", "WOL": "wolves.png"
+}
+
+LOGO_FILES_DE = {
+    "AUG": "augsburg.png",
+    "BAY": "bayern.png",
+    "BVB": "dortmund.png",
+    "FRA": "frankfurt.png",
+    "FRE": "freiburg.png",
+    "HSV": "hamburg.png",
+    "HEI": "heidenheim.png",
+    "HOF": "hoffenheim.png",
+    "KÖL": "koln.png",
+    "RBL": "leipzig.png",
+    "B04": "leverkusen.png",
+    "MAI": "mainz.png",
+    "BMG": "monchengladbach.png",
+    "STP": "stpauli.png",
+    "VFB": "stuttgart.png",
+    "UNB": "unionberlin.png",
+    "WER": "werderbremen.png",
+    "WOB": "wolfsburg.png"
+}
+
+LOGO_FILES_IT = {
+    "ATA": "atalanta.png",
+    "BOL": "bologna.png",
+    "CAG": "cagliari.png",
+    "COM": "como.png",
+    "CRE": "cremonese.png",
+    "FIO": "fiorentina.png",
+    "GNO": "genoa.png",
+    "INT": "inter.png",
+    "JUV": "juventus.png",
+    "LAZ": "lazio.png",
+    "LEC": "lecce.png",
+    "MIL": "milan.png",
+    "NAP": "napoli.png",
+    "PAR": "parma.png",
+    "PIS": "pisa.png",
+    "ROM": "roma.png",
+    "SAS": "sassuolo.png",
+    "TOR": "torino.png",
+    "UDI": "udinese.png",
+    "VER": "verona.png"
+}
+# İSPANYOL TAKIMLARI (imagesSP klasörü)
+LOGO_FILES_SP = {
+    "ALA": "alaves.png",
+    "ATH": "athleticbilbao.png",
+    "ATM": "atleticomadrid.png",
+    "BAR": "barcelona.png",
+    "CEL": "celtavigo.png",
+    "ELC": "elche.png",
+    "ESP": "espanyol.png",
+    "GET": "getafe.png",
+    "GIR": "girona.png",
+    "LEV": "levante.png",
+    "MLL": "mallorca.png",
+    "OSA": "osasuna.png",
+    "RAY": "rayovallecano.png",
+    "BET": "realbetis.png",
+    "RMA": "realmadrid.png",
+    "OVI": "realoviedo.png",
+    "RSO": "realsociedad.png",
+    "SEV": "sevilla.png",
+    "VAL": "valencia.png",
+    "VIL": "villereal.png"
+}
+
+def load_and_format_logo(filepath, target_size, padding_factor=0.75):
+    if not os.path.exists(filepath):
+        return None
+    try:
+        img = pygame.image.load(filepath).convert_alpha()
+        orig_w, orig_h = img.get_size()
+        max_dim = int(target_size * padding_factor)
+        scale = max_dim / max(orig_w, orig_h)
+        new_w, new_h = int(orig_w * scale), int(orig_h * scale)
+        scaled_img = pygame.transform.smoothscale(img, (new_w, new_h))
+        final_surf = pygame.Surface((target_size, target_size), pygame.SRCALPHA)
+        x_offset = (target_size - new_w) // 2
+        y_offset = (target_size - new_h) // 2
+        final_surf.blit(scaled_img, (x_offset, y_offset))
+        return final_surf
+    except Exception as e:
+        return None
+
+for team_short, filename in LOGO_FILES.items():
+    file_path = get_safe_path("imagesTR", filename)
+    formatted_logo = load_and_format_logo(file_path, logo_size)
+    if formatted_logo: TEAM_LOGOS[team_short] = formatted_logo
+
+for team_short, filename in LOGO_FILES_PL.items():
+    file_path = get_safe_path("imagesPL", filename)
+    formatted_logo = load_and_format_logo(file_path, logo_size)
+    if formatted_logo: TEAM_LOGOS[team_short] = formatted_logo
+
+for team_short, filename in LOGO_FILES_DE.items():
+    file_path = get_safe_path("imagesDE", filename)
+    formatted_logo = load_and_format_logo(file_path, logo_size)
+    if formatted_logo: TEAM_LOGOS[team_short] = formatted_logo
+
+for team_short, filename in LOGO_FILES_IT.items():
+    file_path = get_safe_path("imagesIT", filename)
+    formatted_logo = load_and_format_logo(file_path, logo_size)
+    if formatted_logo: TEAM_LOGOS[team_short] = formatted_logo
+
+for team_short, filename in LOGO_FILES_SP.items():
+    file_path = get_safe_path("imagesSP", filename)
+    formatted_logo = load_and_format_logo(file_path, logo_size)
+    if formatted_logo: TEAM_LOGOS[team_short] = formatted_logo
+# =====================================================================
+#                        9. FONTS & UI HELPERS
+# =====================================================================
+font_score = pygame.font.SysFont("impact", 54)
+font_timer = pygame.font.SysFont("impact", 26)
+font_event = pygame.font.SysFont("impact", 50)
+font_team = pygame.font.SysFont("impact", 48)
+font_goal_list = pygame.font.SysFont("impact", 20)
+font_goll_msg = pygame.font.SysFont("impact", 90)
+font_menu_title = pygame.font.SysFont("impact", 40)
+font_menu_item = pygame.font.SysFont("impact", 20)
+font_notification = pygame.font.SysFont("impact", 32)
+font_settings = pygame.font.SysFont("impact", 18)
+
+clock = pygame.time.Clock()
+
+def draw_cinematic_vignette(surface):
+    pygame.draw.rect(surface, (0,0,0), (0,0,WIDTH,HEIGHT), 20)
+
+def get_readable_color(colors):
+    c0 = colors[0]
+    c1 = colors[1]
+    lum0 = 0.299 * c0[0] + 0.587 * c0[1] + 0.114 * c0[2]
+    lum1 = 0.299 * c1[0] + 0.587 * c1[1] + 0.114 * c1[2]
+
+    if lum1 > 190:
+        if lum0 > 190:
+            return c0 if lum0 < lum1 else c1
+        return c0
+    return c1
+
+def get_outline_color(c):
+    lum = 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]
+    return WHITE if lum < 100 else BLACK
+
+def draw_text_with_outline(surface, text, font, color, x, y, align="center", outline_col=BLACK):
+    offsets = [(-2, -2), (-2, 2), (2, -2), (2, 2), (-2, 0), (2, 0), (0, -2), (0, 2)]
+    for ox, oy in offsets:
+        surf = font.render(text, True, outline_col)
+        if align == "center": rect = surf.get_rect(center=(x + ox, y + oy))
+        elif align == "right": rect = surf.get_rect(topright=(x + ox, y + oy))
+        else: rect = surf.get_rect(topleft=(x + ox, y + oy))
+        surface.blit(surf, rect)
+
+    surf = font.render(text, True, color)
+    if align == "center": rect = surf.get_rect(center=(x, y))
+    elif align == "right": rect = surf.get_rect(topright=(x, y))
+    else: rect = surf.get_rect(topleft=(x, y))
+    surface.blit(surf, rect)
+
+# =====================================================================
+#                     10. CORE DRAWING FUNCTIONS (PITCH)
+# =====================================================================
+def draw_striped_pitch(surface, cx, cy, radius):
+    pygame.draw.circle(surface, GRASS_1, (cx, cy), radius)
+    stripe_surf = pygame.Surface((radius*2, radius*2), pygame.SRCALPHA)
+    for i in range(0, radius*2, 60):
+        pygame.draw.rect(stripe_surf, GRASS_2, (0, i, radius*2, 30))
+    mask_surf = pygame.Surface((radius*2, radius*2), pygame.SRCALPHA)
+    pygame.draw.circle(mask_surf, (255, 255, 255, 255), (radius, radius), radius)
+    pygame.gfxdraw.aacircle(mask_surf, radius, radius, radius, (255, 255, 255, 255))
+    stripe_surf.blit(mask_surf, (0,0), special_flags=pygame.BLEND_RGBA_MIN)
+    surface.blit(stripe_surf, (cx - radius, cy - radius))
+
+    pad = 10
+
+    if not hasattr(draw_striped_pitch, "cached_lines"):
+        scale = 4
+        surf_size = (radius + pad) * 2 * scale
+        c_hr = surf_size // 2
+
+        lines_surf_hires = pygame.Surface((surf_size, surf_size), pygame.SRCALPHA)
+
+        pygame.draw.circle(lines_surf_hires, CREAM, (c_hr, c_hr), radius * scale, 6 * scale)
+
+        line_len = radius - 20
+        start_x = c_hr - line_len * scale
+        end_x = c_hr + line_len * scale
+        pygame.draw.line(lines_surf_hires, WHITE, (start_x, c_hr), (end_x, c_hr), 4 * scale)
+
+        pygame.draw.circle(lines_surf_hires, WHITE, (c_hr, c_hr), 50 * scale, 4 * scale)
+
+        target_size = (radius + pad) * 2
+        draw_striped_pitch.cached_lines = pygame.transform.smoothscale(lines_surf_hires, (target_size, target_size))
+
+    surface.blit(draw_striped_pitch.cached_lines, (cx - radius - pad, cy - radius - pad))
+
+def calculate_goal_posts(cx, cy, radius, angle, width_rad):
+    INWARD_OFFSET = 22
+    gx = cx + math.cos(angle) * (radius - INWARD_OFFSET)
+    gy = cy + math.sin(angle) * (radius - INWARD_OFFSET)
+
+    half_width = (width_rad * radius) / 2
+    dx = math.cos(angle + math.pi/2) * half_width
+    dy = math.sin(angle + math.pi/2) * half_width
+
+    p1x = gx - dx
+    p1y = gy - dy
+    p2x = gx + dx
+    p2y = gy + dy
+
+    start_angle = angle - width_rad / 2
+    end_angle = angle + width_rad / 2
+    return (p1x, p1y), (p2x, p2y), start_angle, end_angle
+
+def draw_real_goal(surface, cx, cy, radius, angle, width_rad):
+    (p1x, p1y), (p2x, p2y), start_angle, end_angle = calculate_goal_posts(cx, cy, radius, angle, width_rad)
+
+    dx = math.cos(angle) * GOAL_DEPTH
+    dy = math.sin(angle) * GOAL_DEPTH
+
+    b1x = p1x + dx
+    b1y = p1y + dy
+    b2x = p2x + dx
+    b2y = p2y + dy
+
+    rel_x1 = p1x - cx
+    rel_y1 = p1y - cy
+    B1 = 2 * (rel_x1 * math.cos(angle) + rel_y1 * math.sin(angle))
+    C1 = rel_x1**2 + rel_y1**2 - radius**2
+    D1 = B1**2 - 4 * C1
+    t1 = (-B1 + math.sqrt(D1)) / 2 if D1 >= 0 else 20
+
+    nf1x = p1x + t1 * math.cos(angle)
+    nf1y = p1y + t1 * math.sin(angle)
+
+    rel_x2 = p2x - cx
+    rel_y2 = p2y - cy
+    B2 = 2 * (rel_x2 * math.cos(angle) + rel_y2 * math.sin(angle))
+    C2 = rel_x2**2 + rel_y2**2 - radius**2
+    D2 = B2**2 - 4 * C2
+    t2 = (-B2 + math.sqrt(D2)) / 2 if D2 >= 0 else 20
+
+    nf2x = p2x + t2 * math.cos(angle)
+    nf2y = p2y + t2 * math.sin(angle)
+
+    ang1 = math.atan2(nf1y - cy, nf1x - cx)
+    ang2 = math.atan2(nf2y - cy, nf2x - cx)
+    diff = ang2 - ang1
+    while diff > math.pi: diff -= 2 * math.pi
+    while diff < -math.pi: diff += 2 * math.pi
+
+    steps_lr = 10
+    steps_fb = 5
+
+    for j in range(1, steps_fb + 1):
+        ratio_fb = j / steps_fb
+        points = []
+        for i in range(steps_lr + 1):
+            ratio_lr = i / steps_lr
+            a = ang1 + diff * ratio_lr
+            arc_x = cx + radius * math.cos(a)
+            arc_y = cy + radius * math.sin(a)
+            back_x = b1x + (b2x - b1x) * ratio_lr
+            back_y = b1y + (b2y - b1y) * ratio_lr
+            net_x = arc_x + (back_x - arc_x) * ratio_fb
+            net_y = arc_y + (back_y - arc_y) * ratio_fb
+            points.append((net_x, net_y))
+
+        if len(points) > 1:
+            pygame.draw.aalines(surface, NET_COLOR, False, points)
+
+    for i in range(1, steps_lr):
+        ratio_lr = i / steps_lr
+        a = ang1 + diff * ratio_lr
+        arc_x = cx + radius * math.cos(a)
+        arc_y = cy + radius * math.sin(a)
+        back_x = b1x + (b2x - b1x) * ratio_lr
+        back_y = b1y + (b2y - b1y) * ratio_lr
+        pygame.draw.aaline(surface, NET_COLOR, (arc_x, arc_y), (back_x, back_y))
+
+    pygame.draw.lines(surface, WHITE, False, [(p1x, p1y), (b1x, b1y), (b2x, b2y), (p2x, p2y)], 7)
+
+    pygame.gfxdraw.aacircle(surface, int(p1x), int(p1y), POST_RADIUS, WHITE)
+    pygame.gfxdraw.filled_circle(surface, int(p1x), int(p1y), POST_RADIUS, WHITE)
+    pygame.gfxdraw.aacircle(surface, int(p2x), int(p2y), POST_RADIUS, WHITE)
+    pygame.gfxdraw.filled_circle(surface, int(p2x), int(p2y), POST_RADIUS, WHITE)
+
+def get_random_spawn(cx, cy, r_limit):
+    while True:
+        rx = random.randint(cx - 150, cx + 150)
+        ry = random.randint(cy - 200, cy + 50)
+        dist = math.hypot(rx - cx, ry - cy)
+        if dist < r_limit - BALL_RADIUS - 10:
+            return rx, ry
+
+# =====================================================================
+#                     11. IN-GAME CLASSES (PARTICLES, BALL, CARDS)
+# =====================================================================
+class Particle:
+    def __init__(self, x, y, color):
+        self.x = x
+        self.y = y
+        self.color = color
+        angle = random.uniform(0, 2 * math.pi)
+        speed = random.uniform(1, 3)
+        self.vx = math.cos(angle) * speed
+        self.vy = math.sin(angle) * speed
+        self.life = FPS * 0.8
+        self.fade_start = FPS * 0.5
+        self.radius = random.randint(1, 3)
+
+    def update(self):
+        self.x += self.vx
+        self.y += self.vy
+        self.life -= 1
+
+    def draw(self, surface):
+        if self.life > 0:
+            alpha = 255
+            if self.life < self.fade_start:
+                alpha = int(255 * (self.life / self.fade_start))
+            s = pygame.Surface((self.radius*2, self.radius*2), pygame.SRCALPHA)
+            pygame.gfxdraw.aacircle(s, self.radius, self.radius, self.radius, (*self.color, alpha))
+            pygame.gfxdraw.filled_circle(s, self.radius, self.radius, self.radius, (*self.color, alpha))
+            surface.blit(s, (int(self.x - self.radius), int(self.y - self.radius)))
+
+particles = []
+
+class Ball:
+    def __init__(self, x, y, color_scheme, text):
+        self.x, self.y = x, y
+        self.vx = random.choice([-SPEED, SPEED])
+        self.vy = random.choice([-SPEED, SPEED])
+        self.radius = BALL_RADIUS
+        self.color = color_scheme
+        self.text = text
+        self.mass = 1.0
+        self.nerf_timer = 0
+        self.yellow_nerf_timer = 0
+        self.speed_multiplier = 1
+        self.shadow_offset = 8
+
+        self.history = []
+        self.max_history = 20  # İzlerin kuyruğunu daha net görebilmek için kapasiteyi 20'ye çıkardık
+
+        # Hıza oranlanacak iz yüzeylerini (kendi takım renkleriyle) en başta hazırlıyoruz
+        self.trail_surfaces = []
+        for i in range(self.max_history):
+            ratio = i / self.max_history
+            trail_radius = int(self.radius * ratio * 0.85)
+            if trail_radius > 0:
+                surf = pygame.Surface((trail_radius * 2, trail_radius * 2), pygame.SRCALPHA)
+                alpha = int(255 * ratio * 0.6) # Maksimum opaklık %60
+                pygame.gfxdraw.aacircle(surf, trail_radius, trail_radius, trail_radius, (*self.color[0], alpha))
+                pygame.gfxdraw.filled_circle(surf, trail_radius, trail_radius, trail_radius, (*self.color[0], alpha))
+                self.trail_surfaces.append((trail_radius, surf))
+            else:
+                self.trail_surfaces.append((0, None))
+
+    def move(self):
+        self.history.append((self.x, self.y))
+        if len(self.history) > self.max_history:
+            self.history.pop(0)
+
+        self.vy += GRAVITY
+
+        if self.nerf_timer > 0:
+            self.nerf_timer -= 1
+            self.speed_multiplier = 0.8
+        elif self.yellow_nerf_timer > 0:
+            self.yellow_nerf_timer -= 1
+            self.speed_multiplier = 0.8
+        else:
+            self.speed_multiplier = 1.0
+
+        current_friction = FRICTION
+        self.vx *= current_friction
+        self.vy *= current_friction
+        current_speed = math.hypot(self.vx, self.vy)
+
+        target_speed = SPEED * self.speed_multiplier
+        target_min_speed = MIN_SPEED * self.speed_multiplier
+
+        if current_speed < target_min_speed and current_speed > 0:
+            scale = target_min_speed / current_speed
+            self.vx *= scale
+            self.vy *= scale
+        elif current_speed == 0:
+            self.vx = random.choice([-1, 1]) * target_min_speed
+            self.vy = random.choice([-1, 1]) * target_min_speed
+
+        self.x += self.vx
+        self.y += self.vy
+
+    def draw(self, surface):
+        # --- 1. HIZA ORANTILI DİNAMİK İZ (Kuyruk) ÇİZİMİ ---
+        current_speed = math.hypot(self.vx, self.vy)
+
+        # Hızı SPEED değişkenine göre 0.0 ile 1.0 arasına oranlıyoruz
+        # Top yavaşladığında iz azalacak, hızlandığında iz artacak
+        speed_ratio = max(0.0, min(1.0, current_speed / (SPEED * 1.1)))
+
+        # Hıza göre kuyruğun ne kadar uzun olacağını belirliyoruz
+        visible_points = int(len(self.history) * speed_ratio)
+
+        if visible_points > 0 and len(self.history) > 0:
+            start_idx = len(self.history) - visible_points
+            for i in range(start_idx, len(self.history)):
+                hx, hy = self.history[i]
+
+                # History indexini, trail_surfaces indexine doğru bir şekilde oranlıyoruz
+                if visible_points > 1:
+                    surf_idx = int(((i - start_idx) / (visible_points - 1)) * (self.max_history - 1))
+                else:
+                    surf_idx = self.max_history - 1
+
+                tr, surf = self.trail_surfaces[surf_idx]
+
+                if surf:
+                    # Topun hızına göre kuyruğun opaklığını (saydamlığını) dinamik ayarlıyoruz
+                    temp_surf = surf.copy()
+                    # Pygame'de set_alpha ile var olan alpha değerleri hızımız oranında çarpılır (soluklaşır veya netleşir)
+                    temp_surf.set_alpha(int(255 * speed_ratio))
+                    surface.blit(temp_surf, (int(hx) - tr, int(hy) - tr))
+
+        # --- 2. GÖLGE ÇİZİMİ ---
+        shadow_surf = pygame.Surface((self.radius * 2, self.radius * 2), pygame.SRCALPHA)
+        pygame.draw.circle(shadow_surf, SHADOW_COLOR, (self.radius, self.radius), self.radius - 2)
+        surface.blit(shadow_surf, (int(self.x) - self.radius + self.shadow_offset, int(self.y) - self.radius + self.shadow_offset))
+
+        # --- 3. TOPUN KENDİSİ VE DESENİ ---
+        scale = 3
+        sr = self.radius * scale
+        hr_surf = pygame.Surface((sr * 2, sr * 2), pygame.SRCALPHA)
+
+        stripe_w = (sr * 2) / 6
+        for i in range(6):
+            c = self.color[0] if i % 2 == 0 else self.color[1]
+            stripe_rect = pygame.Rect(i * stripe_w, 0, stripe_w + 1.5, sr * 2)
+            pygame.draw.rect(hr_surf, c, stripe_rect)
+
+            if self.text in TEAM_LOGOS:
+                hr_surf.blit(TEAM_LOGOS[self.text], (0, 0))
+
+        mask_surf = pygame.Surface((sr * 2, sr * 2), pygame.SRCALPHA)
+        pygame.draw.circle(mask_surf, (255, 255, 255), (sr, sr), sr)
+        hr_surf.blit(mask_surf, (0, 0), special_flags=pygame.BLEND_RGBA_MIN)
+
+        pygame.draw.circle(hr_surf, WHITE, (sr, sr), sr, 4 * scale)
+
+        ball_surf = pygame.transform.smoothscale(hr_surf, (self.radius * 2, self.radius * 2))
+
+        surface.blit(ball_surf, (int(self.x) - self.radius, int(self.y) - self.radius))
+
+        if self.nerf_timer > 0:
+            pygame.draw.circle(surface, (255, 0, 0), (int(self.x), int(self.y)), self.radius + 4, 2)
+
+    def collide_wall(self, cx, cy, radius):
+        dx = self.x - cx
+        dy = self.y - cy
+        dist = math.hypot(dx, dy)
+        if dist + self.radius >= radius:
+            nx, ny = dx / dist, dy / dist
+            dot = self.vx * nx + self.vy * ny
+
+            is_crit = random.random() < 0.15
+            current_bounce = 1.05 if is_crit else BOUNCE_DAMPING
+            particle_count = 7 if is_crit else 6
+
+            if dot > 0:
+                self.vx = (self.vx - 2 * dot * nx) * current_bounce
+                self.vy = (self.vy - 2 * dot * ny) * current_bounce
+
+            overlap = (dist + self.radius) - radius
+            self.x -= nx * overlap
+            self.y -= ny * overlap
+
+            hit_x = self.x + nx * self.radius
+            hit_y = self.y + ny * self.radius
+            p_color = random.choice(self.color)
+
+            for _ in range(particle_count):
+                p = Particle(hit_x, hit_y, p_color)
+                p.vx += nx * (4 if is_crit else 2)
+                p.vy += ny * (4 if is_crit else 2)
+                particles.append(p)
+            return True
+        return False
+
+    def collide_post(self, px, py):
+        dx = self.x - px
+        dy = self.y - py
+        dist = math.hypot(dx, dy)
+        if dist < self.radius + POST_RADIUS:
+            nx, ny = dx / dist, dy / dist
+            dot = self.vx * nx + self.vy * ny
+            if dot < 0:
+                self.vx = (self.vx - 2 * dot * nx) * POST_ELASTICITY
+                self.vy = (self.vy - 2 * dot * ny) * POST_ELASTICITY
+                overlap = (self.radius + POST_RADIUS) - dist
+                self.x += nx * overlap
+                self.y += ny * overlap
+                return True
+        return False
+
+def resolve_collisions(b1, b2):
+    dx = b2.x - b1.x
+    dy = b2.y - b1.y
+    dist = math.hypot(dx, dy)
+    if dist < b1.radius + b2.radius:
+        if dist == 0: dist = 0.1
+        nx, ny = dx/dist, dy/dist
+        overlap = (b1.radius + b2.radius) - dist
+        total_mass = b1.mass + b2.mass
+        m1_ratio = b2.mass / total_mass
+        m2_ratio = b1.mass / total_mass
+        b1.x -= nx * overlap * m1_ratio
+        b1.y -= ny * overlap * m1_ratio
+        b2.x += nx * overlap * m2_ratio
+        b2.y += ny * overlap * m2_ratio
+        rx = b2.vx - b1.vx
+        ry = b2.vy - b1.vy
+        vel_along_normal = rx * nx + ry * ny
+        if vel_along_normal > 0: return False
+
+        j = -(1 + ELASTICITY) * vel_along_normal
+        j /= (1 / b1.mass + 1 / b2.mass)
+        impulse_x = j * nx
+        impulse_y = j * ny
+        b1.vx -= impulse_x / b1.mass
+        b1.vy -= impulse_y / b1.mass
+        b2.vx += impulse_x / b2.mass
+        b2.vy += impulse_y / b2.mass
+
+        hit_x = b1.x + nx * b1.radius
+        hit_y = b1.y + ny * b1.radius
+        for _ in range(5):
+            p = Particle(hit_x, hit_y, random.choice(b1.color))
+            p.vx += -nx * 3
+            p.vy += -ny * 3
+            particles.append(p)
+        for _ in range(5):
+            p = Particle(hit_x, hit_y, random.choice(b2.color))
+            p.vx += nx * 3
+            p.vy += ny * 3
+            particles.append(p)
+
+        return True
+    return False
+
+# --- SARI KART DEĞİŞKENLERİ ---
+yellow_card_obj = None
+yellow_cards_1 = 0
+yellow_cards_2 = 0
+yellow_cards_spawned_this_half = 0
+target_yellow_cards = 0
+
+class YellowCard:
+    def __init__(self, cx, cy):
+        angle = random.uniform(0, 2 * math.pi)
+        dist = math.sqrt(random.random()) * (ARENA_RADIUS - 60)
+        self.x = cx + math.cos(angle) * dist
+        self.y = cy + math.sin(angle) * dist
+        self.vx = random.uniform(-0.4, 0.4)
+        self.vy = random.uniform(-0.4, 0.4)
+        self.width = 16
+        self.height = 24
+        self.rect = pygame.Rect(self.x - self.width//2, self.y - self.height//2, self.width, self.height)
+        self.life_timer = 10 * FRAMES_PER_SIM_MINUTE
+        self.blink_start_time = 5 * FRAMES_PER_SIM_MINUTE
+        self.visible = True
+        self.active = True
+
+    def update(self):
+        if not self.active: return
+        self.life_timer -= 1
+        if self.life_timer <= 0:
+            self.active = False
+            return
+        self.x += self.vx
+        self.y += self.vy
+        dist_from_center = math.hypot(self.x - center_x, self.y - center_y)
+        if dist_from_center > ARENA_RADIUS - 50:
+            self.vx *= -1
+            self.vy *= -1
+        self.rect.center = (self.x, self.y)
+        if self.life_timer < (10 * FRAMES_PER_SIM_MINUTE) - self.blink_start_time:
+            self.visible = (self.life_timer // 10) % 2 != 0
+        else:
+            self.visible = True
+
+    def draw(self, surface):
+        if self.active and self.visible:
+            pygame.draw.rect(surface, (255, 220, 0), self.rect)
+            pygame.draw.rect(surface, WHITE, self.rect, 1)
+
+    def check_collision(self, ball):
+        if not self.active: return False
+        closest_x = max(self.rect.left, min(ball.x, self.rect.right))
+        closest_y = max(self.rect.top, min(ball.y, self.rect.bottom))
+        dx = ball.x - closest_x
+        dy = ball.y - closest_y
+        if dx*dx + dy*dy < ball.radius**2:
+            self.active = False
+            return True
+        return False
+
+class RedCard:
+    def __init__(self, cx, cy):
+        angle = random.uniform(0, 2 * math.pi)
+        dist = math.sqrt(random.random()) * (ARENA_RADIUS - 60)
+        self.x = cx + math.cos(angle) * dist
+        self.y = cy + math.sin(angle) * dist
+        self.vx = random.uniform(-0.4, 0.4)
+        self.vy = random.uniform(-0.4, 0.4)
+        self.width = 16
+        self.height = 24
+        self.rect = pygame.Rect(self.x - self.width//2, self.y - self.height//2, self.width, self.height)
+        self.life_timer = 10 * FRAMES_PER_SIM_MINUTE
+        self.blink_start_time = 5 * FRAMES_PER_SIM_MINUTE
+        self.visible = True
+        self.active = True
+
+    def update(self):
+        if not self.active: return
+        self.life_timer -= 1
+        if self.life_timer <= 0:
+            self.active = False
+            return
+        self.x += self.vx
+        self.y += self.vy
+        dist_from_center = math.hypot(self.x - center_x, self.y - center_y)
+        if dist_from_center > ARENA_RADIUS - 50:
+            self.vx *= -1
+            self.vy *= -1
+        self.rect.center = (self.x, self.y)
+        if self.life_timer < (10 * FRAMES_PER_SIM_MINUTE) - self.blink_start_time:
+            if (self.life_timer // 10) % 2 == 0:
+                self.visible = False
+            else:
+                self.visible = True
+        else:
+            self.visible = True
+
+    def draw(self, surface):
+        if self.active and self.visible:
+            pygame.draw.rect(surface, RED_CARD_COLOR, self.rect)
+            pygame.draw.rect(surface, WHITE, self.rect, 1)
+
+    def check_collision(self, ball):
+        if not self.active: return False
+        closest_x = max(self.rect.left, min(ball.x, self.rect.right))
+        closest_y = max(self.rect.top, min(ball.y, self.rect.bottom))
+        dx = ball.x - closest_x
+        dy = ball.y - closest_y
+        dist_sq = dx*dx + dy*dy
+        if dist_sq < ball.radius**2:
+            self.active = False
+            play_red_card_sound()
+            return True
+        return False
+
+# =====================================================================
+#                     12. GLOBAL GAME STATE VARIABLES
+# =====================================================================
+center_x, center_y = WIDTH // 2, HEIGHT // 2 + 40
+score1, score2 = 0, 0
+goal_angle = 1 * math.pi / 2
+goal_rotating = False
+goal_rot_speed = 0.015
+goll_timer = 0
+goal_text_color = TERRACOTTA
+goal_events_1 = []
+goal_events_2 = []
+state = "MENU"
+frame_counter = 0
+
+intro_timer, home_full_name, away_full_name, screen_shake_timer = 0, "", "", 0
+near_miss_timer = 0
+
+
+added_time_1 = random.randint(0, 1)
+added_time_2 = random.randint(1, 2)
+display_added_time = False
+end_match_timer = 0
+halftime_timer = 0
+start_delay_timer = 0
+red_card_obj = None
+cinematic_timer = 0
+red_card_spawned_this_half = False
+paused = False
+
+selected_home_idx = 0
+selected_away_idx = 1
+team1_name = ""
+team2_name = ""
+team1_colors = []
+team2_colors = []
+menu_scroll_y = 0
+is_dragging_scroll = False
+
+slider_dragging = None
+slider_rects = {
+    "MASTER": pygame.Rect(590, 150, 160, 10),
+    "STADIUM": pygame.Rect(590, 230, 160, 10),
+    "MUSIC": pygame.Rect(590, 310, 160, 10),
+    "COLLISION": pygame.Rect(590, 390, 160, 10),
+    "WHISTLE": pygame.Rect(590, 470, 160, 10),
+    "MISS": pygame.Rect(590, 550, 160, 10)
+}
+
+ball1 = None
+ball2 = None
+crowd = []
+goal_sound_channel = None
+
+red_cards_1 = 0
+red_cards_2 = 0
+
+def play_goal_music_for_team(team_short_name):
+    global goal_sound_channel
+    if goal_sound_channel and goal_sound_channel.get_busy(): goal_sound_channel.stop()
+
+    sound_to_play = None
+    if team_short_name == "GS": sound_to_play = goal_sounds["GS"]
+    elif team_short_name == "FB": sound_to_play = goal_sounds["FB"]
+    elif team_short_name == "BJK": sound_to_play = goal_sounds["BJK"]
+    elif team_short_name == "TS": sound_to_play = goal_sounds["TS"]
+    else:
+        if len(general_pool) > 0: sound_to_play = random.choice(general_pool)
+
+    if sound_to_play: goal_sound_channel = sound_to_play.play()
+
+def quit_match():
+    global state, goal_angle, goll_timer, display_added_time, frame_counter, screen_shake_timer, near_miss_timer
+
+    state = "MENU"
+    goal_angle = 1 * math.pi / 2
+
+    # EKSİK OLAN KISIM: Menüye dönüldüğünde maçtaki BÜTÜN hayalet verileri temizle
+    goal_events_1.clear()
+    goal_events_2.clear()
+    goll_timer = 0
+    display_added_time = False
+    frame_counter = 0
+    screen_shake_timer = 0
+    near_miss_timer = 0
+
+    if stadium_music_loaded:
+        try: pygame.mixer.music.stop()
+        except: pass
+    if goal_sound_channel: goal_sound_channel.stop()
+
+def start_match():
+    global ball1, ball2, crowd, team1_name, team2_name, team1_colors, team2_colors, state, score1, score2, goal_events_1, goal_events_2, frame_counter, goal_rotating, goal_sound_channel
+    global red_card_obj, red_card_spawned_this_half, halftime_timer, particles, screen_shake_timer
+    global goal_angle, added_time_1, added_time_2, start_delay_timer, cinematic_timer, red_cards_1, red_cards_2
+    global yellow_card_obj, yellow_cards_1, yellow_cards_2, yellow_cards_spawned_this_half, target_yellow_cards
+    global intro_timer, home_full_name, away_full_name
+    global near_miss_timer, goll_timer, display_added_time, end_match_timer
+
+    # Yeni maça başlarken her şeyi TAMAMEN sıfırla
+    score1, score2, frame_counter, goal_rotating, goal_angle, screen_shake_timer = 0, 0, 0, False, 1 * math.pi / 2, 0
+    particles = []
+    near_miss_timer = 0
+    goll_timer = 0
+    display_added_time = False
+    end_match_timer = 0
+
+    goal_events_1.clear()
+    goal_events_2.clear()
+
+    added_time_1 = random.randint(2, 4)
+    added_time_2 = random.randint(3, 8)
+
+    red_card_obj = None
+    red_card_spawned_this_half = False
+    halftime_timer = 0
+    goal_sound_channel = None
+
+    red_cards_1 = 0
+    red_cards_2 = 0
+
+    yellow_cards_1 = 0
+    yellow_cards_2 = 0
+    yellow_card_obj = None
+    yellow_cards_spawned_this_half = 0
+    target_yellow_cards = random.randint(1, 3)
+
+    home_key = TEAM_NAMES[selected_home_idx]
+    away_key = TEAM_NAMES[selected_away_idx]
+
+    home_full_name = home_key
+    away_full_name = away_key
+
+    team1_name = TEAMS[home_key]["short"]
+    team2_name = TEAMS[away_key]["short"]
+    team1_colors = TEAMS[home_key]["colors"]
+    team2_colors = TEAMS[away_key]["colors"]
+
+    rx1, ry1 = get_random_spawn(center_x, center_y, ARENA_RADIUS)
+    rx2, ry2 = get_random_spawn(center_x, center_y, ARENA_RADIUS)
+    ball1 = Ball(rx1, ry1, team1_colors, team1_name)
+    ball2 = Ball(rx2, ry2, team2_colors, team2_name)
+
+    crowd = []
+    while len(crowd) < 300:
+        cx = random.randint(0, WIDTH)
+        cy = random.randint(0, HEIGHT)
+        dist = math.hypot(cx - center_x, cy - center_y)
+        if dist > ARENA_RADIUS + 10:
+            col = random.choice(team1_colors) if random.random() < 0.5 else random.choice(team2_colors)
+            crowd.append((cx, cy, col))
+
+    if stadium_music_loaded:
+        try: pygame.mixer.music.play(-1)
+        except: pass
+
+    intro_timer = int(1.0 * FPS)
+    start_delay_timer = int(0.5 * FPS)
+    cinematic_timer = 0
+    state = "INTRO"
+# =====================================================================
+#                     13. MAIN GAME LOOP
+# =====================================================================
+running = True
+while running:
+    # --- EVENT HANDLING ---
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p: paused = not paused
+            if event.key == pygame.K_q: quit_match()
+            if event.key == pygame.K_r and state in ["FIRST_HALF", "SECOND_HALF", "HALFTIME", "FULLTIME"]: start_match()
+
+            if state == "MENU" and search_active:
+                if event.key == pygame.K_RETURN:
+                    search_active = False
+                elif event.key == pygame.K_BACKSPACE:
+                    search_text = search_text[:-1]
+                else:
+                    search_text += event.unicode
+                menu_scroll_y = 0
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mx, my = pygame.mouse.get_pos()
+
+            if state != "MENU" and pygame.Rect(0, 0, 100, 100).collidepoint(mx, my):
+                quit_match()
+
+            if state == "MENU":
+                if lang_btn_rect.collidepoint(mx, my):
+                    current_lang = "ENG" if current_lang == "TR" else "TR"
+                    pygame.display.set_caption(LANG[current_lang]["WINDOW_TITLE"])
+
+                search_rect = pygame.Rect(50, 110, 470, 30)
+                if search_rect.collidepoint(mx, my):
+                    search_active = True
+                else:
+                    search_active = False
+
+                for key, rect in slider_rects.items():
+                    handle = pygame.Rect(rect.x + (master_vol if key=="MASTER" else vol_settings[key.lower()]) * rect.width - 10, rect.y - 10, 20, 30)
+                    if handle.collidepoint(mx, my) or rect.collidepoint(mx, my):
+                        slider_dragging = key
+
+                filtered_teams = [name for name in TEAM_NAMES if search_text.lower() in name.lower()]
+                visible_h = HEIGHT - 250
+                total_items_h = len(filtered_teams) * 40
+                max_scroll = total_items_h - visible_h
+                if max_scroll < 0: max_scroll = 0
+                scrollbar_w = 15
+                scrollbar_x = 550
+                scrollbar_y_start = 150
+                scrollbar_h_total = visible_h
+                if total_items_h > 0: handle_h = max(30, (visible_h / total_items_h) * scrollbar_h_total)
+                else: handle_h = scrollbar_h_total
+                if max_scroll > 0:
+                    scroll_ratio = abs(menu_scroll_y) / max_scroll
+                    handle_y = scrollbar_y_start + scroll_ratio * (scrollbar_h_total - handle_h)
+                else: handle_y = scrollbar_y_start
+
+                handle_rect = pygame.Rect(scrollbar_x, handle_y, scrollbar_w, handle_h)
+                start_btn_rect = pygame.Rect(WIDTH//2 - 150, HEIGHT - 100, 300, 60)
+
+                if handle_rect.collidepoint(mx, my):
+                    is_dragging_scroll = True
+                    mouse_offset_y = my - handle_y
+
+                for i, name in enumerate(filtered_teams):
+                    item_y = 150 + i * 40 + menu_scroll_y
+                    if item_y > 140 and item_y < HEIGHT - 110:
+                        orig_idx = TEAM_NAMES.index(name)
+                        rect1 = pygame.Rect(50, item_y, 220, 30)
+                        if rect1.collidepoint(mx, my): selected_home_idx = orig_idx
+                        rect2 = pygame.Rect(300, item_y, 220, 30)
+                        if rect2.collidepoint(mx, my): selected_away_idx = orig_idx
+
+                if start_btn_rect.collidepoint(mx, my): start_match()
+
+        elif event.type == pygame.MOUSEBUTTONUP:
+            is_dragging_scroll = False
+            slider_dragging = None
+
+        elif event.type == pygame.MOUSEMOTION:
+            if is_dragging_scroll:
+                filtered_teams = [name for name in TEAM_NAMES if search_text.lower() in name.lower()]
+                visible_h = HEIGHT - 250
+                total_items_h = len(filtered_teams) * 40
+                max_scroll = total_items_h - visible_h
+                scrollbar_h_total = visible_h
+                if total_items_h > 0: handle_h = max(30, (visible_h / total_items_h) * scrollbar_h_total)
+                else: handle_h = scrollbar_h_total
+
+                if max_scroll > 0:
+                    mx, my = pygame.mouse.get_pos()
+                    new_handle_y = my - mouse_offset_y
+                    if new_handle_y < 150: new_handle_y = 150
+                    if new_handle_y > 150 + scrollbar_h_total - handle_h:
+                        new_handle_y = 150 + scrollbar_h_total - handle_h
+                    percent = (new_handle_y - 150) / (scrollbar_h_total - handle_h)
+                    menu_scroll_y = -(percent * max_scroll)
+
+            if slider_dragging:
+                mx, my = pygame.mouse.get_pos()
+                rect = slider_rects[slider_dragging]
+                val = (mx - rect.x) / rect.width
+                val = max(0.0, min(1.0, val))
+                if slider_dragging == "MASTER": master_vol = val
+                else: vol_settings[slider_dragging.lower()] = val
+                apply_volumes()
+
+        elif event.type == pygame.MOUSEWHEEL:
+            if state == "MENU":
+                filtered_teams = [name for name in TEAM_NAMES if search_text.lower() in name.lower()]
+                visible_h = HEIGHT - 250
+                total_items_h = len(filtered_teams) * 40
+                max_scroll = total_items_h - visible_h
+                if max_scroll < 0: max_scroll = 0
+                menu_scroll_y += event.y * 30
+                if menu_scroll_y > 0: menu_scroll_y = 0
+                if menu_scroll_y < -max_scroll: menu_scroll_y = -max_scroll
+
+        if state == "FULLTIME":
+            if end_match_timer > 3 * FPS:
+                restart_btn_rect = pygame.Rect(WIDTH//2 - 150, HEIGHT - 100, 300, 60)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mx, my = pygame.mouse.get_pos()
+                    if restart_btn_rect.collidepoint(mx, my):
+                        state = "MENU"
+                        goal_angle = 1 * math.pi / 2
+                        if goal_sound_channel: goal_sound_channel.stop()
+                        if stadium_music_loaded: pygame.mixer.music.stop()
+
+    # --- GAME LOGIC & DRAWING ---
+    if not paused:
+        if state == "MENU":
+            screen.fill(MENU_BG)
+
+            pygame.draw.rect(screen, SCROLLBAR_BG, lang_btn_rect, border_radius=5)
+            pygame.draw.rect(screen, CREAM, lang_btn_rect, 2, border_radius=5)
+            lang_txt = font_menu_item.render(LANG[current_lang]["LANG_BTN"], True, CREAM)
+            screen.blit(lang_txt, lang_txt.get_rect(center=lang_btn_rect.center))
+
+            title = font_menu_title.render(LANG[current_lang]["TEAM_SELECTION"], True, TERRACOTTA)
+            screen.blit(title, (275 - title.get_width()//2, 20))
+
+            settings_title = font_menu_title.render(LANG[current_lang]["SETTINGS"], True, TERRACOTTA)
+            screen.blit(settings_title, (670 - settings_title.get_width()//2, 20))
+
+            home_header = font_team.render(LANG[current_lang]["HOME"], True, CREAM)
+            screen.blit(home_header, (50, 68))
+            away_header = font_team.render(LANG[current_lang]["AWAY"], True, CREAM)
+            screen.blit(away_header, (300, 68))
+
+            search_rect = pygame.Rect(50, 110, 470, 30)
+            pygame.draw.rect(screen, SCROLLBAR_BG if not search_active else NAVY_LIGHT, search_rect, border_radius=5)
+            pygame.draw.rect(screen, CREAM if search_active else SCROLLBAR_HANDLE, search_rect, 2, border_radius=5)
+
+            prompt_text = search_text if search_text else LANG[current_lang]["SEARCH"]
+            txt_color = CREAM if search_text else (150, 150, 150)
+            search_surf = font_settings.render(prompt_text, True, txt_color)
+            screen.blit(search_surf, (60, 115))
+
+            filtered_teams = [name for name in TEAM_NAMES if search_text.lower() in name.lower()]
+
+            clip_rect = pygame.Rect(0, 150, 570, HEIGHT - 260)
+            screen.set_clip(clip_rect)
+            for i, name in enumerate(filtered_teams):
+                orig_idx = TEAM_NAMES.index(name)
+                item_y = 150 + i * 40 + menu_scroll_y
+                if item_y < 130 or item_y > HEIGHT - 100: continue
+                col = SELECTED_COLOR if orig_idx == selected_home_idx else CREAM
+                name_surf = font_menu_item.render(name, True, col)
+                screen.blit(name_surf, (50, item_y))
+                col = SELECTED_COLOR if orig_idx == selected_away_idx else CREAM
+                name_surf = font_menu_item.render(name, True, col)
+                screen.blit(name_surf, (300, item_y))
+            screen.set_clip(None)
+
+            visible_h = HEIGHT - 250
+            total_items_h = len(filtered_teams) * 40
+            max_scroll = total_items_h - visible_h
+            if max_scroll < 0: max_scroll = 0
+            scrollbar_w = 15
+            scrollbar_x = 550
+            scrollbar_y_start = 150
+            scrollbar_h_total = visible_h
+            if total_items_h > 0: handle_h = max(30, (visible_h / total_items_h) * scrollbar_h_total)
+            else: handle_h = scrollbar_h_total
+            if max_scroll > 0:
+                scroll_ratio = abs(menu_scroll_y) / max_scroll
+                handle_y = scrollbar_y_start + scroll_ratio * (scrollbar_h_total - handle_h)
+            else: handle_y = scrollbar_y_start
+
+            pygame.draw.rect(screen, SCROLLBAR_BG, (scrollbar_x, scrollbar_y_start, scrollbar_w, scrollbar_h_total))
+            pygame.draw.rect(screen, SCROLLBAR_HANDLE, (scrollbar_x, handle_y, scrollbar_w, handle_h), border_radius=5)
+
+            labels = {"MASTER": LANG[current_lang]["LBL_MASTER"],
+                      "STADIUM": LANG[current_lang]["LBL_STADIUM"],
+                      "MUSIC": LANG[current_lang]["LBL_MUSIC"],
+                      "COLLISION": LANG[current_lang]["LBL_COLLISION"],
+                      "WHISTLE": LANG[current_lang]["LBL_WHISTLE"],
+                      "MISS": LANG[current_lang]["LBL_MISS"]}
+
+            for key, rect in slider_rects.items():
+                lbl = font_settings.render(labels[key], True, CREAM)
+                screen.blit(lbl, (rect.x, rect.y - 30))
+                pygame.draw.rect(screen, SCROLLBAR_BG, rect, border_radius=5)
+                val = master_vol if key == "MASTER" else vol_settings[key.lower()]
+                fill_rect = pygame.Rect(rect.x, rect.y, rect.width * val, rect.height)
+                pygame.draw.rect(screen, SELECTED_COLOR, fill_rect, border_radius=5)
+                handle_rect = pygame.Rect(rect.x + rect.width * val - 10, rect.y - 10, 20, 30)
+                pygame.draw.rect(screen, CREAM, handle_rect, border_radius=5)
+
+            pygame.draw.rect(screen, MENU_BG, (0, HEIGHT-110, WIDTH, 110))
+
+            btn_rect = pygame.Rect(WIDTH//2 - 150, HEIGHT - 100, 300, 60)
+            pygame.draw.rect(screen, GRASS_1, btn_rect, border_radius=15)
+            pygame.draw.rect(screen, CREAM, btn_rect, 3, border_radius=15)
+            btn_txt = font_menu_title.render(LANG[current_lang]["START_MATCH"], True, CREAM)
+            btn_txt_rect = btn_txt.get_rect(center=btn_rect.center)
+            screen.blit(btn_txt, btn_txt_rect)
+
+        elif state in ["INTRO", "FIRST_HALF", "SECOND_HALF", "HALFTIME", "FULLTIME"]:
+
+            run_physics = False
+
+            if state == "INTRO":
+                if intro_timer > 0:
+                    intro_timer -= 1
+                    if intro_timer <= 0:
+                        state = "FIRST_HALF"
+
+            elif state in ["FIRST_HALF", "SECOND_HALF"]:
+                if start_delay_timer > 0:
+                    start_delay_timer -= 1
+                    if start_delay_timer == 0 and state == "FIRST_HALF":
+                        if start_whistle_sound: start_whistle_sound.play()
+                else:
+                    run_physics = True
+                    frame_counter += 1
+                    total_mins_played = frame_counter // FRAMES_PER_SIM_MINUTE
+
+                    if state == "FIRST_HALF":
+                        sim_minute = total_mins_played
+                        if not red_card_spawned_this_half and not red_card_obj:
+                            if random.random() < 0.03 / (45 * 60) * 10:
+                                red_card_obj = RedCard(center_x, center_y)
+                                red_card_spawned_this_half = True
+
+                        if yellow_cards_spawned_this_half < target_yellow_cards and not yellow_card_obj:
+                            if random.random() < 0.15 / (45 * 60) * 10:
+                                yellow_card_obj = YellowCard(center_x, center_y)
+                                yellow_cards_spawned_this_half += 1
+
+                        if sim_minute >= 45:
+                            display_added_time = True
+                            if sim_minute >= 45 + added_time_1:
+                                state = "HALFTIME"
+                                halftime_timer = 0
+                                red_card_obj = None
+                                yellow_card_obj = None
+                                if half_whistle_sound: half_whistle_sound.play()
+                        else:
+                            display_added_time = False
+
+                    elif state == "SECOND_HALF":
+                        sim_minute = 45 + total_mins_played
+                        if not red_card_spawned_this_half and not red_card_obj:
+                            if random.random() < 0.15 / (45 * 60) * 10:
+                                red_card_obj = RedCard(center_x, center_y)
+                                red_card_spawned_this_half = True
+
+                        if yellow_cards_spawned_this_half < target_yellow_cards and not yellow_card_obj:
+                            if random.random() < 0.15 / (45 * 60) * 10:
+                                yellow_card_obj = YellowCard(center_x, center_y)
+                                yellow_cards_spawned_this_half += 1
+
+                        if sim_minute >= 90:
+                            display_added_time = True
+                            if sim_minute >= 90 + added_time_2:
+                                state = "FULLTIME"
+                                cinematic_timer = int(2.5 * FPS)
+                                end_match_timer = 0
+                                if end_whistle_sound: end_whistle_sound.play()
+                        else:
+                            display_added_time = False
+
+            elif state == "FULLTIME":
+                if cinematic_timer > 0:
+                    cinematic_timer -= 1
+                    if cinematic_timer % 3 == 0:
+                        run_physics = True
+
+            if run_physics:
+                if goal_rotating:
+                    goal_angle = (goal_angle + goal_rot_speed) % (2 * math.pi)
+                if goll_timer > 0 and state != "FULLTIME":
+                    goll_timer -= 1
+
+                if red_card_obj and state != "FULLTIME":
+                    red_card_obj.update()
+                    if not red_card_obj.active: red_card_obj = None
+                    else:
+                        for b in [ball1, ball2]:
+                            if red_card_obj.check_collision(b):
+                                b.nerf_timer = 20 * FRAMES_PER_SIM_MINUTE
+                                if b == ball1: red_cards_1 += 1
+                                else: red_cards_2 += 1
+                                red_card_obj = None
+                                break
+
+                if yellow_card_obj and state != "FULLTIME":
+                    yellow_card_obj.update()
+                    if not yellow_card_obj.active: yellow_card_obj = None
+                    else:
+                        for b in [ball1, ball2]:
+                            if yellow_card_obj.check_collision(b):
+                                b.yellow_nerf_timer = 20 * FRAMES_PER_SIM_MINUTE
+                                if b == ball1: yellow_cards_1 += 1
+                                else: yellow_cards_2 += 1
+                                yellow_card_obj = None
+                                break
+
+                (p1, p2, _, _) = calculate_goal_posts(center_x, center_y, ARENA_RADIUS, goal_angle, GOAL_WIDTH_RADIANS)
+                for b in [ball1, ball2]:
+                    b.move()
+
+                    hit_post1 = b.collide_post(p1[0], p1[1])
+                    hit_post2 = b.collide_post(p2[0], p2[1])
+
+                    # Top direğe değdiği an beklemeden sesi kesip baştan başlatır
+                    if (hit_post1 or hit_post2) and state != "FULLTIME":
+                        play_miss_sound()
+
+                for _ in range(8):
+                    # BİRİNCİ TOPUN DUVARA ÇARPMASI
+                    if ball1.collide_wall(center_x, center_y, ARENA_RADIUS) and state != "FULLTIME":
+                        play_collision_sound()
+
+                    # İKİNCİ TOPUN DUVARA ÇARPMASI (BENİM SİLDİĞİM YER BURASIYDI)
+                    if ball2.collide_wall(center_x, center_y, ARENA_RADIUS) and state != "FULLTIME":
+                        play_collision_sound()
+
+                    # İKİ TOPUN BİRBİRİNE ÇARPMASI (BUNU DA SİLMİŞİM)
+                    if resolve_collisions(ball1, ball2) and state != "FULLTIME":
+                        play_collision_sound()
+
+                if state != "FULLTIME":
+                    for b in [ball1, ball2]:
+                        dist = math.hypot(b.x - center_x, b.y - center_y)
+                        if dist > ARENA_RADIUS - b.radius - 5:
+                            ball_ang = math.atan2(b.y - center_y, b.x - center_x)
+                            goal_n = goal_angle % (2*math.pi)
+                            ball_n = ball_ang % (2*math.pi)
+                            diff = abs(ball_n - goal_n)
+                            while diff > math.pi: diff = abs(diff - 2*math.pi)
+                            if diff < GOAL_WIDTH_RADIANS / 2:
+                                goll_timer = 90
+                                screen_shake_timer = 45
+
+                                time_mark = f"{sim_minute}'"
+                                if state == "FIRST_HALF":
+                                    if sim_minute > 45: time_mark = f"45+{sim_minute - 45}'"
+                                elif state == "SECOND_HALF":
+                                    if sim_minute > 90: time_mark = f"90+{sim_minute - 90}'"
+
+                                if b == ball1:
+                                    score1 += 1
+                                    goal_text_color = team1_colors[0]
+                                    scorer_name = get_random_player_name(TEAM_NAMES[selected_home_idx])
+                                    goal_events_1.append((time_mark, "GOAL", scorer_name, frame_counter, state))
+                                    ball1.x, ball1.y = center_x, center_y
+                                    play_goal_music_for_team(team1_name)
+                                else:
+                                    score2 += 1
+                                    goal_text_color = team2_colors[0]
+                                    scorer_name = get_random_player_name(TEAM_NAMES[selected_away_idx])
+                                    goal_events_2.append((time_mark, "GOAL", scorer_name, frame_counter, state))
+                                    ball2.x, ball2.y = center_x, center_y
+                                    play_goal_music_for_team(team2_name)
+
+                                if score1 + score2 >= 1: goal_rotating = True
+                                ball1.vx = random.choice([-SPEED, SPEED]) * random.uniform(0.8, 1.2)
+                                ball1.vy = random.choice([-SPEED, SPEED]) * random.uniform(0.8, 1.2)
+                                ball2.vx = random.choice([-SPEED, SPEED]) * random.uniform(0.8, 1.2)
+                                ball2.vy = random.choice([-SPEED, SPEED]) * random.uniform(0.8, 1.2)
+
+            if state == "HALFTIME":
+                halftime_timer += 1
+                if halftime_timer > 1.5 * FPS:
+                    state = "SECOND_HALF"
+                    frame_counter = 0
+                    red_card_spawned_this_half = False
+                    red_card_obj = None
+
+                    yellow_cards_spawned_this_half = 0
+                    target_yellow_cards = random.randint(1, 3)
+                    yellow_card_obj = None
+
+                    display_added_time = False
+                    rx1, ry1 = get_random_spawn(center_x, center_y, ARENA_RADIUS)
+                    rx2, ry2 = get_random_spawn(center_x, center_y, ARENA_RADIUS)
+                    ball1.x, ball1.y = rx1, ry1
+                    ball2.x, ball2.y = rx2, ry2
+
+            if state == "FULLTIME":
+                if cinematic_timer > 0:
+                    if cinematic_timer % 4 == 0:
+                        for p in particles[:]:
+                            p.update()
+                            if p.life <= 0: particles.remove(p)
+            else:
+                for p in particles[:]:
+                    p.update()
+                    if p.life <= 0: particles.remove(p)
+
+            screen.fill(NAVY_DARK)
+            draw_striped_pitch(screen, center_x, center_y, ARENA_RADIUS)
+
+            for dot in crowd:
+                pygame.draw.circle(screen, dot[2], (dot[0], dot[1]), 2)
+
+            draw_real_goal(screen, center_x, center_y, ARENA_RADIUS, goal_angle, GOAL_WIDTH_RADIANS)
+
+            if red_card_obj: red_card_obj.draw(screen)
+            if yellow_card_obj: yellow_card_obj.draw(screen)
+
+            ball1.draw(screen)
+            ball2.draw(screen)
+
+            for p in particles: p.draw(screen)
+
+            # --- YENİ: İNTRO VEYA UI ÇİZİMİ ---
+            if state == "INTRO":
+                total_frames = int(1.0 * FPS)
+                fade_frames = int(0.2 * FPS)
+
+                alpha = 255
+                frames_played = total_frames - intro_timer
+
+                if frames_played < fade_frames:
+                    alpha = int((frames_played / fade_frames) * 255)
+                elif intro_timer < fade_frames:
+                    alpha = int((intro_timer / fade_frames) * 255)
+
+                intro_surf = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+
+                def draw_alpha_text(surf, text, font, color, x, y, outline_col):
+                    offsets = [(-2, -2), (-2, 2), (2, -2), (2, 2), (-2, 0), (2, 0), (0, -2), (0, 2)]
+                    for ox, oy in offsets:
+                        s = font.render(text, True, outline_col)
+                        surf.blit(s, s.get_rect(center=(x + ox, y + oy)))
+                    s = font.render(text, True, color)
+                    surf.blit(s, s.get_rect(center=(x, y)))
+
+                c1 = get_readable_color(team1_colors)
+                c2 = get_readable_color(team2_colors)
+
+                draw_alpha_text(intro_surf, home_full_name, font_team, c1, center_x, center_y - 45, WHITE)
+                draw_alpha_text(intro_surf, "VS", font_score, WHITE, center_x, center_y + 5, NAVY_DARK)
+                draw_alpha_text(intro_surf, away_full_name, font_team, c2, center_x, center_y + 55, WHITE)
+
+                intro_surf.set_alpha(alpha)
+                screen.blit(intro_surf, (0, 0))
+
+            else:
+                # --- UI PANEL DRAWING ---
+                panel_w, panel_h = 500, 105
+                panel_x = WIDTH // 2 - panel_w // 2
+                table_surf = pygame.Surface((panel_w, panel_h), pygame.SRCALPHA)
+                pygame.draw.rect(table_surf, TABLE_BG, (0, 0, panel_w, panel_h), border_radius=15)
+                screen.blit(table_surf, (panel_x, 20))
+                pygame.draw.rect(screen, CREAM, (panel_x, 20, panel_w, panel_h), 2, border_radius=15)
+
+                align_y = 72
+
+                t1_txt_col = get_readable_color(team1_colors)
+                t2_txt_col = get_readable_color(team2_colors)
+
+                t1_short = TEAMS[TEAM_NAMES[selected_home_idx]]["short"]
+                t2_short = TEAMS[TEAM_NAMES[selected_away_idx]]["short"]
+
+                draw_text_with_outline(screen, t1_short, font_team, t1_txt_col, panel_x + 75, align_y - 30, "left", outline_col=WHITE)
+                draw_text_with_outline(screen, t2_short, font_team, t2_txt_col, panel_x + panel_w - 75, align_y - 30, "right", outline_col=WHITE)
+
+                t1_w, t1_h = font_team.size(t1_short)
+                for rc in range(red_cards_1):
+                    rc_x = panel_x + 75 + t1_w + 10 + rc * 15
+                    rc_y = align_y - 30 + t1_h // 2 - 8
+                    pygame.draw.rect(screen, RED_CARD_COLOR, (rc_x, rc_y, 10, 16))
+                    pygame.draw.rect(screen, WHITE, (rc_x, rc_y, 10, 16), 1)
+
+                for yc in range(yellow_cards_1):
+                    yc_x = panel_x + 55 - (yc * 15)
+                    yc_y = align_y - 30 + t1_h // 2 - 8
+                    pygame.draw.rect(screen, (255, 220, 0), (yc_x, yc_y, 10, 16))
+                    pygame.draw.rect(screen, WHITE, (yc_x, yc_y, 10, 16), 1)
+
+                t2_w, t2_h = font_team.size(t2_short)
+                for rc in range(red_cards_2):
+                    rc_x = panel_x + panel_w - 75 - t2_w - 20 - rc * 15
+                    rc_y = align_y - 30 + t2_h // 2 - 8
+                    pygame.draw.rect(screen, RED_CARD_COLOR, (rc_x, rc_y, 10, 16))
+                    pygame.draw.rect(screen, WHITE, (rc_x, rc_y, 10, 16), 1)
+
+                for yc in range(yellow_cards_2):
+                    yc_x = panel_x + panel_w - 65 + (yc * 15)
+                    yc_y = align_y - 30 + t2_h // 2 - 8
+                    pygame.draw.rect(screen, (255, 220, 0), (yc_x, yc_y, 10, 16))
+                    pygame.draw.rect(screen, WHITE, (yc_x, yc_y, 10, 16), 1)
+
+                center_score_x = WIDTH // 2
+                draw_text_with_outline(screen, str(score1), font_score, t1_txt_col, center_score_x - 50, align_y, outline_col=WHITE)
+                draw_text_with_outline(screen, "-", font_score, WHITE, center_score_x, align_y, outline_col=NAVY_DARK)
+                draw_text_with_outline(screen, str(score2), font_score, t2_txt_col, center_score_x + 50, align_y, outline_col=WHITE)
+
+                ui_mins = frame_counter // FRAMES_PER_SIM_MINUTE
+                ui_sim_minute = ui_mins if state == "FIRST_HALF" else (45 + ui_mins)
+
+                time_str = ""
+                if state == "FIRST_HALF":
+                    if display_added_time: time_str = f"45+{ui_sim_minute - 45}'"
+                    else: time_str = f"{ui_sim_minute}'"
+                elif state == "HALFTIME": time_str = LANG[current_lang]["HT"]
+                elif state == "SECOND_HALF":
+                    if display_added_time: time_str = f"90+{ui_sim_minute - 90}'"
+                    else: time_str = f"{ui_sim_minute}'"
+                elif state == "FULLTIME": time_str = LANG[current_lang]["FT"]
+
+                draw_text_with_outline(screen, time_str, font_timer, BLACK, WIDTH//2, 102, outline_col=WHITE)
+
+                notif_duration = 200
+                def draw_event_list(events_list, x_pos, team_color, align_right=False):
+                    y_off = 130
+                    recent_event = None
+
+                    grouped_goals = {}
+                    display_order = []
+
+                    for event_data in events_list:
+                        t_str, e_type, scorer, ev_frame, ev_state = event_data
+                        is_new = (ev_state == state) and (0 <= (frame_counter - ev_frame) < notif_duration)
+
+                        if is_new:
+                            txt = f"{LANG[current_lang]['GOAL_EXCLAMATION']} {scorer} ({t_str})"
+                            recent_event = (txt, team_color)
+
+                        if scorer not in grouped_goals:
+                            grouped_goals[scorer] = [t_str]
+                            display_order.append(scorer)
+                        else:
+                            if t_str not in grouped_goals[scorer]:
+                                grouped_goals[scorer].append(t_str)
+
+                    visible_scorers = display_order[-5:]
+
+                    for scorer in visible_scorers:
+                        times = grouped_goals[scorer]
+                        times_str = ", ".join(times)
+                        display_str = f"{scorer} {times_str}"
+
+                        t_surf = font_goal_list.render(display_str, True, CREAM)
+                        draw_x = x_pos
+                        if align_right: draw_x = x_pos - t_surf.get_width()
+                        screen.blit(t_surf, (draw_x, y_off))
+
+                        y_off += 20
+                    return recent_event
+
+                recent1 = draw_event_list(goal_events_1, panel_x + 20, team1_colors[0], align_right=False)
+                recent2 = draw_event_list(goal_events_2, panel_x + panel_w - 20, team2_colors[0], align_right=True)
+
+                notif_y = 150
+                def draw_big_notif(txt, col, y):
+                    out_color = get_outline_color(col)
+                    draw_text_with_outline(screen, txt, font_notification, col, WIDTH//2, y + 20, outline_col=out_color)
+                    return y + 40
+
+                if recent1: notif_y = draw_big_notif(recent1[0], recent1[1], notif_y)
+                if recent2: notif_y = draw_big_notif(recent2[0], recent2[1], notif_y)
+
+                if goll_timer > 0 and state != "FULLTIME":
+                    goll_surf = font_goll_msg.render(LANG[current_lang]["GOAL_EXCLAMATION"], True, goal_text_color)
+                    out_color = get_outline_color(goal_text_color)
+                    outline_surf = font_goll_msg.render(LANG[current_lang]["GOAL_EXCLAMATION"], True, out_color)
+                    gx, gy = WIDTH//2 - goll_surf.get_width()//2, HEIGHT//2 - 50
+                    screen.blit(outline_surf, (gx+4, gy+4))
+                    screen.blit(goll_surf, (gx, gy))
+
+                if state == "HALFTIME":
+                    draw_text_with_outline(screen, LANG[current_lang]["HALF_TIME"], font_event, CREAM, center_x, center_y, outline_col=NAVY_DARK)
+                elif state == "FULLTIME":
+                    draw_text_with_outline(screen, LANG[current_lang]["FULL_TIME"], font_event, CREAM, center_x, center_y, outline_col=NAVY_DARK)
+
+                    if cinematic_timer <= 0:
+                        end_match_timer += 1
+                        if end_match_timer > 3 * FPS:
+                            restart_btn_rect = pygame.Rect(WIDTH//2 - 150, HEIGHT - 100, 300, 60)
+                            pygame.draw.rect(screen, GRASS_1, restart_btn_rect, border_radius=15)
+                            pygame.draw.rect(screen, CREAM, restart_btn_rect, 3, border_radius=15)
+                            restart_txt = font_menu_title.render(LANG[current_lang]["BACK_TO_MENU"], True, CREAM)
+                            restart_txt_rect = restart_txt.get_rect(center=restart_btn_rect.center)
+                            screen.blit(restart_txt, restart_txt_rect)
+
+        shake_x, shake_y = 0, 0
+        if screen_shake_timer > 0:
+            shake_intensity = int((screen_shake_timer / 45) * 25)
+            shake_x = random.randint(-shake_intensity, shake_intensity)
+            shake_y = random.randint(-shake_intensity, shake_intensity)
+            screen_shake_timer -= 1
+
+        main_screen.fill(NAVY_DARK)
+        main_screen.blit(screen, (shake_x, shake_y))
+
+    pygame.display.flip()
+    clock.tick(FPS)
+
+pygame.quit()

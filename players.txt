@@ -37,7 +37,7 @@ DORTMUND: Serhou Guirassy, Julian Brandt, Adeyemi
 LEVERKUSEN:Aleix Garcia, İbrahim Maza, Patrik Schick, Malik Tillman
 RB LEIPZIG: Yann Diomande, Nusa, Romulo
 INTER: Lautaro Martinez, Marcus Thuram, Hakan Çalhanoğlu, Barella, Zielinski
-MILAN: Rafael Leao, Morata, Christian Pulisic, Reijnders, Loftus-Cheek
+MILAN: Rafael Leao, Christian Pulisic, Luka Modric, Saelemaekers
 JUVENTUS: Vlahovic, Kenan Yıldız, Teun Koopmeiners, Nico Gonzalez, Douglas Luiz
 ATALANTA: Lookman, Retegui, De Ketelaere, Zaniolo, Pasalic
 ROMA: Artem Dovbyk, Paulo Dybala, Lorenzo Pellegrini, Soulé, El Shaarawy
@@ -79,7 +79,7 @@ SASSUOLO: Domenico Berardi, Armand Laurienté, Kristian Thorstvedt
 GENOA: Andrea Pinamonti, Ruslan Malinovskyi, Junior Messias
 LECCE: Nikola Krstovic, Wladimiro Falcone, Federico Baschirotto
 PARMA: Dennis Man, Valentin Mihaila, Adrian Bernabe
-COMO: Patrick Cutrone, Andrea Belotti, Nico Paz
+COMO: Assane Diao, Alvaro Morata, Nico Paz
 CAGLIARI: Zito Luvumbo, Yerry Mina, Gianluca Lapadula
 EMPOLI: Lorenzo Colombo, Sebastiano Esposito, Emmanuel Gyasi
 MONZA: Daniel Maldini, Matteo Pessina, Milan Djuric
@@ -107,7 +107,7 @@ BRIGHTON: Evan Ferguson, Danny Welbeck, Simon Adingra
 BRENTFORD: Mathias Jensen, Christian Nørgaard, Mark Flekken
 BOURNEMOUTH: Justin Kluivert, Ryan Christie, Marcos Senesi
 FULHAM: Emile Smith Rowe, Alex Iwobi, Antonee Robinson
-CRYSTAL PALACE: Jean-Philippe Mateta, Adam Wharton, Cheick Doucouré
+CRYSTAL PALACE: Jean-Philippe Mateta, Adam Wharton, İsmaila Sarr
 EVERTON: Jordan Pickford, Jarrad Branthwaite, Dwight McNeil
 WOLVES: Tolu Arakodare, Hwang Hee-chan, Joao Gomes
 BURNLEY: Josh Brownhill, Lyle Foster, Luca Koleosho
