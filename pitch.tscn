@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cqd8bhd5vqkdf"]
+
+[ext_resource type="Script" uid="uid://dsyc87tuq8ehy" path="res://pitch.gd" id="1_4auri"]
+[ext_resource type="Script" uid="uid://dcnriraagsob1" path="res://ball.gd" id="2_grayp"]
+
+[node name="pitch" type="Node2D" unique_id=1737196464]
+script = ExtResource("1_4auri")
+
+[node name="Ball1" type="Node2D" parent="." unique_id=395874225]
+script = ExtResource("2_grayp")
+
+[node name="Ball2" type="Node2D" parent="." unique_id=566418391]
+script = ExtResource("2_grayp")
