@@ -2,44 +2,44 @@ GALATASARAY: Osimhen, Icardi, Leroy Sané, Barış Alper, Gabriel Sara
 FENERBAHÇE: Kerem Aktürkoğlu, Talisca, Marco Asensio, Milan Škriniar, Talisca, Talisca, Marco Asensio, Sidiki Chérif, Kerem Aktürkoğlu, İsmail Yüksek
 BEŞİKTAŞ: Vaclav Cerny, Orkun Kökçü, Cengiz Ünder, Hyeon-gyu Oh
 TRABZONSPOR: Paul Onuachu, Anthony Nwakaeme, Oleksandr Zubkov, Felipe Augusto, Ozan Tufan
-BAŞAKŞEHİR: Eldor Shomurodov, Piatek, Deniz Türüç, Serdar Gürler, Kemen
+BAŞAKŞEHİR: Eldor Shomurodov, Selke, Amine Harit, Nuno Da Costa, Kemen
 KASIMPAŞA: İrfan Can Kahveci, Cenk Tosun, Kerem Demirbay
 SİVASSPOR: Rey Manaj, Koita, Pritchard, Garry Rodrigues, Turgunboev
-ALANYASPOR: Sergio Cordova, Efecan Karaca, Güven Yalçın, Janvier, Augusto
-RİZESPOR: Ali Sowe, Olawoyin, Akintola, Varesanovic, Hadziahmetovic
-ANTALYASPOR: Adolfo Gaich, Sam Larsson, Safuri, Townsend, Kaluzinski
-GAZİANTEP FK: Kenan Kodro, Alexandru Maxim, Okereke, Kozlowski, Lungoyi
-KONYASPOR: Kramer, Aleksic, Pedrinho, Yusuf Erdoğan, Ndao
+ALANYASPOR: Elia, Efecan Karaca, Güven Yalçın, Ianis Hagi, Maestro
+RİZESPOR: Ali Sowe, Olawoyin, Pierrot, Dervişoğlu
+ANTALYASPOR: Nikola Storm, Van de Streek, Yohan Boli
+GAZİANTEP FK: Kozlowski, Mohamed Bayo, Alexandru Maxim
+KONYASPOR: Kramer, Bardhi, Pedrinho, Gonçalves, Muleka
 KAYSERİSPOR: Duckens Nazon, Boa Morte, Cardoso, Mane, Bourabia
 BODRUM FK: Puşcaş, Gökdeniz Bayrakdar, Seferi, Fredy, Taylan Antalyalı
-EYÜPSPOR: Mame Thiam, Ahmed Kutucu, Samu Saiz, Emre Akbaba, Midtsjo
+EYÜPSPOR: Umut Bozok, Lenny Pintor, Emre Akbaba, Luccas Claro
 GÖZTEPE: Juan Santos, Janderson, Arda Kurtulan
-KOCAELİ: Saffet Sancaklı, Kaan Dobra, Serdar Topraktepe
-KAYSERİ: Gökhan Ünal, Ariza Makukula, Mame Thiam
-KARAGÜMRÜK: Fabio Borini, Mbaye Diagne, Aleksandar Pesic
-GENÇLERBİRLİĞİ: Bogdan Stancu, Souleymane Youla, Andre Kona
-SAMSUNSPOR: Marius Mouandilmadji, Cheriff Ndiaye, Emre Kılınç, Carlo Holse, Carlo Holse, Carlo Holse
+KOCAELİSPOR: Bruno Petkovic, Serdar Dursun, Karol Linetty
+KAYSERİ: Laszlo Benes, German Oungkha, Fedor Chalov
+KARAGÜMRÜK: Serginho, Daniele Verde, Traore
+GENÇLERBİRLİĞİ: Sekou Koita, Oğulcan Ülgün, Metehan Mimaroğlu
+SAMSUNSPOR: Marius Mouandilmadji, Cheriff Ndiaye, Emre Kılınç, Carlo Holse,
 HATAYSPOR: Strandberg, Dele-Bashiru, Rivas, Joelson Fernandes, Görkem Sağlam
 ADANA DEMİR: Abat Aybetov, Yusuf Sarı, Tayfun Aydoğan, Maestro, Alioui
 MAN CITY: Haaland, Phil Foden, Antoine Semenyo, Marc Guehi, Savinho
-LIVERPOOL: Mohamed Salah, Luis Diaz, Darwin Nunez, Cody Gakpo, Hugo Ekitike
-ARSENAL: Bukayo Saka, Odegaard, Kai Havertz, Gabriel Martinelli, Declan Rice
+LIVERPOOL: Mohamed Salah, Szoboszlai, Alexander Isak, Cody Gakpo, Hugo Ekitike
+ARSENAL: Bukayo Saka, Gyökeres, Eberechi Eze, Trossard, Declan Rice
 ASTON VILLA: Ollie Watkins, Morgan Rogers, Leon Bailey, McGinn, Youri Tielemans
-TOTTENHAM: Solanke, James Maddison, Brennan Johnson, Kulusevski, Son Heung-min
+TOTTENHAM: Solanke, James Maddison, Richarlison, Kulusevski
 MAN UTD: Bruno Fernandes, Rashford, Hojlund, Garnacho, Mainoo
-CHELSEA: Cole Palmer, João Pedro, Nicolas Jackson, Joao Felix, Nkunku
+CHELSEA: Cole Palmer, João Pedro, Enzo Fernandez, Pedro Neto, Moises Caicedo
 REAL MADRID: Mbappé, Vinicius Jr, Jude Bellingham, Rodrygo, Arda Güler
-BARCELONA: Lewandowski, Lamine Yamal, Ferran Torres, Raphinha, Dani Olmo
-ATLETICO: Julian Alvarez, Griezmann, Alexander Sorloth, Rodrigo De Paul, Gallagher
+BARCELONA: Lewandowski, Lamine Yamal, Pedri, Raphinha
+ATLETICO: Julian Alvarez, Griezmann, Alexander Sorloth
 GIRONA: Miovski, Bryan Gil, Danjuma, Asprilla, Van de Beek
-B. MUNIH: Harry Kane, Jamal Musiala, Michael Olise, Leroy Sane, Serge Gnabry
+B. MUNIH: Harry Kane, Jamal Musiala, Michael Olise, Luis Diaz
 DORTMUND: Serhou Guirassy, Julian Brandt, Adeyemi
-LEVERKUSEN:Aleix Garcia, İbrahim Maza, Patrik Schick, Terrier, Malik Tillman
+LEVERKUSEN:Christian Kofane, İbrahim Maza, Patrik Schick, Ernest Poku
 RB LEIPZIG: Yann Diomande, Nusa, Romulo
 INTER: Lautaro Martinez, Marcus Thuram, Hakan Çalhanoğlu, Barella, Zielinski
-MILAN: Rafael Leao, Morata, Christian Pulisic, Reijnders, Loftus-Cheek
+MILAN: Rafael Leao, Christian Pulisic, Luka Modric, Saelemaekers
 JUVENTUS: Vlahovic, Kenan Yıldız, Teun Koopmeiners, Nico Gonzalez, Douglas Luiz
-ATALANTA: Lookman, Retegui, De Ketelaere, Zaniolo, Pasalic
+ATALANTA: Scamacca, Zalewski, Pasalic
 ROMA: Artem Dovbyk, Paulo Dybala, Lorenzo Pellegrini, Soulé, El Shaarawy
 LAZIO: Taty Castellanos, Zaccagni, Dia, Guendouzi, Noslin
 PSG: Bradley Barcola, Ousmane Dembele, Gonçalo Ramos, Kolo Muani, Vitinha
@@ -65,10 +65,131 @@ FERENCVAROS: Varga, Traoré, Zachariassen
 CRVENA ZVEZDA: Katai, Bukari, Dragović
 CELTIC: McGregor, Furuhashi, O'Riley
 STUTTGART: Undav, Führich, Millot
-CLUB BRUGGE: Skov Olsen, Tzolis, Vanaken, Nilsson, Vermant
-NEWCASTLE: Harvey Barnes, Anthony Gordon, Yoane Wissa, Jacob Murphy
+CLUB BRUGGE: Tzolis, Vanaken, Tresoldi, Forbs
+NEWCASTLE: Harvey Barnes, Anthony Gordon, Yoane Wissa, Tonali
 QARABAG: Camilo Duràn, Musa Qurbanlı, Kady Borges, Leandro Andrade
-OLYMPIACOS: El Kaabi, Mehdi Taremi,  Gelson Martins, Chiquinho
+OLYMPIACOS: El Kaabi, Mehdi Taremi,  Gelson Martins, Chiquinho, Podence
 BODO/GLIMT: Hauge, Evjen, Bjørkan, Berg, Høgh
-
-
+WEST HAM: Adama Traoré, Callum Wilson, Jarrod Bowen
+LEEDS UTD: Dominic Calvert-Lewin, Lukas Nmecha, Joël Piroe
+NAPOLI: Khvicha Kvaratskhelia, Romelu Lukaku, Scott McTominay
+FIORENTINA: Moise Kean, Albert Gudmundsson, David De Gea
+TORINO: Duvan Zapata, Samuele Ricci, Antonio Sanabria
+SASSUOLO: Domenico Berardi, Armand Laurienté, Kristian Thorstvedt
+GENOA: Andrea Pinamonti, Ruslan Malinovskyi, Junior Messias
+LECCE: Nikola Krstovic, Wladimiro Falcone, Federico Baschirotto
+PARMA: Dennis Man, Valentin Mihaila, Adrian Bernabe
+COMO: Assane Diao, Alvaro Morata, Nico Paz
+CAGLIARI: Zito Luvumbo, Yerry Mina, Gianluca Lapadula
+EMPOLI: Lorenzo Colombo, Sebastiano Esposito, Emmanuel Gyasi
+MONZA: Daniel Maldini, Matteo Pessina, Milan Djuric
+VENEZIA: Joel Pohjanpalo, Gianluca Busio, Gaetano Oristanio
+CREMONESE: Franco Vazquez, Jari Vandeputte, Dennis Johnsen
+PISA: Matteo Tramoni, Nicholas Bonfanti, Stefano Moreo
+UDINESE: Florian Thauvin, Jaka Bijol, Sandi Lovric
+VERONA: Casper Tengstedt, Darko Lazovic, Lorenzo Montipo
+FRANKFURT: Omar Marmoush, Mario Götze, Robin Koch
+FREIBURG: Vincenzo Grifo, Ritsu Doan, Matthias Ginter
+MAINZ 05: Jonathan Burkardt, Nadiem Amiri, Robin Zentner
+WERDER BREMEN: Mitchell Weiser, Marvin Ducksch, Romano Schmid
+WOLFSBURG: Jonas Wind, Lovro Majer, Ridle Baku
+UNION BERLIN: Kevin Volland, Danilho Doekhi, Lucas Tousart
+M. GLADBACH: Tim Kleindienst, Alassane Plea, Julian Weigl
+AUGSBURG: Phillip Tietz, Ruben Vargas, Arne Maier
+HOFFENHEIM: Andrej Kramarić, Oliver Baumann, Anton Stach
+KÖLN: Florian Kainz, Eric Martel, Timo Hübers
+HAMBURG: Robert Glatzel, Ludovit Reis, Bakery Jatta
+ST. PAULI: Jackson Irvine, Johannes Eggestein, Hauke Wahl
+HEIDENHEIM: Paul Wanner, Marvin Pieringer, Kevin Müller
+BOCHUM: Philipp Hofmann, Anthony Losilla, Felix Passlack
+HOLSTEIN KIEL: Lewis Holtby, Steven Skrzybski, Timo Becker
+BRIGHTON: Evan Ferguson, Danny Welbeck, Simon Adingra
+BRENTFORD: Mathias Jensen, Christian Nørgaard, Mark Flekken
+BOURNEMOUTH: Justin Kluivert, Ryan Christie, Marcos Senesi
+FULHAM: Emile Smith Rowe, Alex Iwobi, Antonee Robinson
+CRYSTAL PALACE: Jean-Philippe Mateta, Adam Wharton, İsmaila Sarr
+EVERTON: Jordan Pickford, Jarrad Branthwaite, Dwight McNeil
+WOLVES: Tolu Arakodare, Hwang Hee-chan, Joao Gomes
+BURNLEY: Josh Brownhill, Lyle Foster, Luca Koleosho
+SUNDERLAND: Jobe Bellingham, Trai Hume, Chris Rigg
+LEICESTER: Jamie Vardy, Abdul Fatawu, Harry Winks
+SOUTHAMPTON: Kyle Walker-Peters, Adam Armstrong, Will Smallbone
+IPSWICH: Omari Hutchinson, Liam Delap, Leif Davis
+ATHLETIC CLUB: Iñaki Williams, Nico Williams, Oihan Sancet
+REAL SOCIEDAD: Takefusa Kubo, Martin Zubimendi, Mikel Oyarzabal
+VILLARREAL: Gerard Moreno, Alex Baena, Ayoze Perez
+VALENCIA: Hugo Duro, Javi Guerra, Giorgi Mamardashvili
+SEVILLA: Dodi Lukebakio, Isaac Romero, Saul Ñiguez
+REAL BETIS: Isco, Giovani Lo Celso, Vitor Roque
+OSASUNA: Ante Budimir, Bryan Zaragoza, Aimar Oroz
+MALLORCA: Vedat Muriqi, Sergi Darder, Raíllo
+ALAVES: Kike Garcia, Carlos Vicente, Jon Guridi
+RAYO VALLECANO: Isi Palazon, James Rodriguez, Sergio Camello
+GETAFE: Borja Mayoral, Luis Milla, Christantus Uche
+ESPANYOL: Javi Puado, Leandro Cabrera, Alex Kral
+ELCHE: Nico Castro, Mourad, Aleix Febas
+OVIEDO: Santi Cazorla, Alemao, Ilyas Chaira
+LEVANTE: Jose Luis Morales, Carlos Alvarez, Pablo Martinez
+MARSEILLE: Mason Greenwood, Elye Wahi, Pierre-Emile Højbjerg
+LYON: Alexandre Lacazette, Rayan Cherki, Georges Mikautadze
+LENS: Florian Sotoca, Przemyslaw Frankowski, Brice Samba
+NICE: Terem Moffi, Evann Guessand, Marcin Bulka
+RENNES: Amine Gouiri, Ludovic Blas, Arnaud Kalimuendo
+STRASBOURG: Habib Diarra, Sebastian Nanasi, Emanuel Emegha
+REIMS: Junya Ito, Marshall Munetsi, Oumar Diakite
+TOULOUSE: Zakaria Aboukhlal, Yann Gboho, Vincent Sierro
+NANTES: Moses Simon, Pedro Chirivella, Alban Lafont
+MONTPELLIER: Teji Savanier, Akor Adams, Arnaud Nordin
+ANGERS: Himad Abdelli, Lois Diony, Yahia Fofana
+BREST: Romain Del Castillo, Mahdi Camara, Marco Bizot
+LE HAVRE: Arouna Sangante, Abdoulaye Toure, Daler Kuzyaev
+AUXERRE: Gauthier Hein, Jubal, Lassine Sinayoko
+SAINT-ETIENNE: Zuriko Davitashvili, Gautier Larsonneur, Mathieu Cafaro
+INTER MIAMI: Lionel Messi, Luis Suarez, Sergio Busquets
+LAFC: Denis Bouanga, Hugo Lloris, Olivier Giroud
+LA GALAXY: Riqui Puig, Gabriel Pec, Joseph Paintsil
+COLUMBUS CREW: Cucho Hernandez, Diego Rossi, Darlington Nagbe
+FC CINCINNATI: Luciano Acosta, Miles Robinson, Pavel Bucha
+SEATTLE SOUNDERS: Jordan Morris, Albert Rusnak, Pedro de la Vega
+NEW YORK CITY FC: Santiago Rodriguez, Matt Freese, Thiago Martins
+NY RED BULLS: Emil Forsberg, Lewis Morgan, Carlos Coronel
+ATLANTA UTD: Saba Lobjanidze, Bartosz Slisz, Brad Guzan
+PORTLAND TIMBERS: Evander, Jonathan Rodriguez, Felipe Mora
+ORLANDO CITY: Facundo Torres, Duncan McGuire, Martin Ojeda
+HOUSTON DYNAMO: Hector Herrera, Ezequiel Ponce, Amine Bassi
+REAL SALT LAKE: Cristian Arango, Diego Luna, Braian Ojeda
+PHILADELPHIA U.: Daniel Gazdag, Mikael Uhre, Andre Blake
+SPORTING KC: Alan Pulido, Erik Thommy, Daniel Salloi
+NEW ENGLAND REV: Carles Gil, Giacomo Vrioni, Esmir Bajraktarevic
+NASHVILLE SC: Hany Mukhtar, Walker Zimmerman, Sam Surridge
+FC DALLAS: Petar Musa, Jesus Ferreira, Asier Illarramendi
+VANCOUVER WC: Ryan Gauld, Brian White, Andres Cubas
+MINNESOTA UTD: Robin Lod, Teemu Pukki, Kelvin Yeboah
+COLORADO RAPIDS: Djordje Mihailovic, Cole Bassett, Zack Steffen
+CHARLOTTE FC: Karol Swiderski, Ashley Westwood, Kristijan Kahlina
+SAN JOSE EQ: Cristian Espinoza, Jeremy Ebobisse, Hernan Lopez
+AUSTIN FC: Sebastian Driussi, Gyasi Zardes, Brad Stuver
+CHICAGO FIRE: Hugo Cuypers, Brian Gutierrez, Kellyn Acosta
+D.C. UNITED: Christian Benteke, Mateusz Klich, Jared Stroud
+CF MONTREAL: Josef Martinez, Caden Clark, Samuel Piette
+ST. LOUIS CITY: Joao Klauss, Eduard Löwen, Roman Bürki
+TORONTO FC: Lorenzo Insigne, Federico Bernardeschi, Sean Johnson
+SAN DIEGO FC: Hirving Lozano, Paddy McNair, Marcus Ingvartsen
+AL HILAL: Neymar, Aleksandar Mitrovic, Ruben Neves
+AL NASSR: Cristiano Ronaldo, Sadio Mane, Aymeric Laporte
+AL AHLI: Riyad Mahrez, Roberto Firmino, Ivan Toney
+AL ITTIHAD: Karim Benzema, N'Golo Kante, Moussa Diaby
+AL SHABAB: Yannick Carrasco, Abderrazak Hamdallah, Giacomo Bonaventura
+AL TAAWOUN: Musa Barrow, Joao Pedro, Andrei Girotto
+AL ETTIFAQ: Georginio Wijnaldum, Moussa Dembele, Seko Fofana
+DAMAC: Georges-Kevin N'Koudou, Francois Kamano, Nicolae Stanciu
+AL FAYHA: Fashion Sakala, Alejandro Pozuelo, Henry Onyekuru
+AL FATEH: Lucas Zelarayan, Jason Denayer, Djaniny
+AL RIYADH: Bernard Mensah, Ibrahim Ndong, Toze
+AL WEHDA: Odion Ighalo, Craig Goodwin, Jawad El Yamiq
+AL KHALEEJ: Khaled Narey, Fabio Martins, Lisandro Lopez
+AL RAED: Amir Sayoud, Julio Tavares, Oumar Gonzalez
+AL QADSIAH: Pierre-Emerick Aubameyang, Nacho Fernandez, Ezequiel Fernandez
+AL OKHDOOD: Saviour Godwin, Alex Collado, Florin Tanase
+NEOM SC: Romarinho, Ahmed Hegazi, Salman Al-Faraj
+AL KHOLOOD: Myziane Maolida, Kevin N'Doram, William Troost-Ekong
