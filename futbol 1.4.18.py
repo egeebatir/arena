@@ -114,14 +114,14 @@ SHADOW_COLOR = (0, 0, 0, 80)
 # =====================================================================
 #                        5. AUDIO & SOUNDS
 # =====================================================================
-STADIUM_SOUND = "stadium.mp3"
+STADIUM_SOUND = "stadium2.wav"
 COLLISION_FILE = "collision1.wav"
 MISS_SOUND_FILE = "kacti.wav"
 
-START_WHISTLE_FILE = "bas.mp3"
-HALF_WHISTLE_FILE = "orta.mp3"
-END_WHISTLE_FILE = "son.mp3"
-RED_CARD_FILE = "bas.mp3"
+START_WHISTLE_FILE = "bas.wav"
+HALF_WHISTLE_FILE = "orta.wav"
+END_WHISTLE_FILE = "son.wav"
+RED_CARD_FILE = "bas.wav"
 
 GS_GOAL_FILE = "gs.wav"
 FB_GOAL_FILE = "fb.wav"

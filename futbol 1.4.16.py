@@ -29,6 +29,7 @@ LANG = {
         "LBL_MUSIC": "GOL MÜZİĞİ",
         "LBL_COLLISION": "TOP ÇARPMA",
         "LBL_WHISTLE": "DÜDÜK",
+        "LBL_MISS": "DİREK / KAÇAN",
         "LANG_BTN": "TR"
     },
     "ENG": {
@@ -51,6 +52,7 @@ LANG = {
         "LBL_MUSIC": "GOAL MUSIC",
         "LBL_COLLISION": "COLLISION",
         "LBL_WHISTLE": "WHISTLE",
+        "LBL_MISS": "POST / MISS",
         "LANG_BTN": "ENG"
     }
 }
@@ -114,11 +116,12 @@ SHADOW_COLOR = (0, 0, 0, 80)
 # =====================================================================
 STADIUM_SOUND = "stadium.mp3"
 COLLISION_FILE = "collision1.wav"
+MISS_SOUND_FILE = "kacti.wav"
 
-START_WHISTLE_FILE = "baş.mp3"
+START_WHISTLE_FILE = "bas.mp3"
 HALF_WHISTLE_FILE = "orta.mp3"
 END_WHISTLE_FILE = "son.mp3"
-RED_CARD_FILE = "baş.mp3"
+RED_CARD_FILE = "bas.mp3"
 
 GS_GOAL_FILE = "gs.wav"
 FB_GOAL_FILE = "fb.wav"
@@ -130,12 +133,7 @@ GOAL2_FILE = "goal2.wav"
 GOAL3_FILE = "goal3.wav"
 
 master_vol = 1.0
-vol_settings = {
-    "stadium": 0.2,
-    "music": 0.6,
-    "collision": 0.02,
-    "whistle": 0.4
-}
+vol_settings = {"stadium": 0.45, "music": 0.5, "collision": 0.02, "whistle": 0.4, "miss": 0.4}
 
 # =====================================================================
 #                        6. TEAM DATABASE & LOGOS
@@ -386,6 +384,10 @@ pygame.display.set_caption(LANG[current_lang]["WINDOW_TITLE"])
 def apply_volumes():
     if stadium_music_loaded:
         pygame.mixer.music.set_volume(vol_settings["stadium"] * master_vol)
+
+    if 'miss_sound' in globals() and miss_sound:
+        miss_sound.set_volume(vol_settings["stadium"] * master_vol)
+
     if collision_sound:
         collision_sound.set_volume(vol_settings["collision"] * master_vol)
 
@@ -397,6 +399,9 @@ def apply_volumes():
 
     for snd in goal_sounds.values():
         if snd: snd.set_volume(vol_settings["music"] * master_vol)
+
+    if 'miss_sound' in globals() and miss_sound:
+     miss_sound.set_volume(vol_settings["miss"] * master_vol)
 
 stadium_music_loaded = False
 if os.path.exists(STADIUM_SOUND):
@@ -438,6 +443,18 @@ def play_collision_sound():
 def play_red_card_sound():
     if red_card_sound: red_card_sound.play()
 
+miss_sound = None
+if os.path.exists(MISS_SOUND_FILE):
+    try: miss_sound = pygame.mixer.Sound(MISS_SOUND_FILE)
+    except: pass
+
+def play_miss_sound():
+    if 'miss_sound' in globals() and miss_sound:
+        try:
+            miss_sound.stop() # Çalıyorsa hemen kes!
+            miss_sound.play() # Baştan başlat
+        except: pass
+
 goal_sounds = {}
 def load_sound(path):
     if os.path.exists(path):
@@ -475,9 +492,9 @@ def get_safe_path(folder, filename):
 
 LOGO_FILES = {
     "GS": "gs.png", "FB": "fb.png", "BJK": "bjk.png", "TS": "ts.png",
-    "ALN": "alanya.png", "ANT": "antalyaspor.png", "BFK": "başakşehir.png",
-    "EYP": "eyüp.png", "GFK": "gaziantep.png", "GEN": "gençlerbirliği.png",
-    "GÖZ": "göztepe.png", "FKG": "karagümrük.png", "KAS": "kasımpaşa.png",
+    "ALN": "alanya.png", "ANT": "antalyaspor.png", "BFK": "basaksehir.png",
+    "EYP": "eyup.png", "GFK": "gaziantep.png", "GEN": "genclerbirligi.png",
+    "GÖZ": "goztepe.png", "FKG": "karagumruk.png", "KAS": "kasımpasa.png",
     "KAY": "kayseri.png", "KOC": "kocaeli.png", "KON": "konya.png",
     "RİZ": "rize.png", "SAM": "samsun.png"
 }
@@ -501,7 +518,7 @@ LOGO_FILES_DE = {
     "HSV": "hamburg.png",
     "HEI": "heidenheim.png",
     "HOF": "hoffenheim.png",
-    "KÖL": "köln.png",
+    "KÖL": "koln.png",
     "RBL": "leipzig.png",
     "B04": "leverkusen.png",
     "MAI": "mainz.png",
@@ -835,15 +852,16 @@ class Ball:
         self.shadow_offset = 8
 
         self.history = []
-        self.max_history = 10
+        self.max_history = 20  # İzlerin kuyruğunu daha net görebilmek için kapasiteyi 20'ye çıkardık
 
+        # Hıza oranlanacak iz yüzeylerini (kendi takım renkleriyle) en başta hazırlıyoruz
         self.trail_surfaces = []
         for i in range(self.max_history):
             ratio = i / self.max_history
-            trail_radius = int(self.radius * ratio * 0.8)
+            trail_radius = int(self.radius * ratio * 0.85)
             if trail_radius > 0:
                 surf = pygame.Surface((trail_radius * 2, trail_radius * 2), pygame.SRCALPHA)
-                alpha = int(255 * ratio * 0.5)
+                alpha = int(255 * ratio * 0.6) # Maksimum opaklık %60
                 pygame.gfxdraw.aacircle(surf, trail_radius, trail_radius, trail_radius, (*self.color[0], alpha))
                 pygame.gfxdraw.filled_circle(surf, trail_radius, trail_radius, trail_radius, (*self.color[0], alpha))
                 self.trail_surfaces.append((trail_radius, surf))
@@ -886,16 +904,42 @@ class Ball:
         self.y += self.vy
 
     def draw(self, surface):
-        for i, (hx, hy) in enumerate(self.history):
-            if i < len(self.trail_surfaces):
-                tr, surf = self.trail_surfaces[i]
-                if surf:
-                    surface.blit(surf, (int(hx) - tr, int(hy) - tr))
+        # --- 1. HIZA ORANTILI DİNAMİK İZ (Kuyruk) ÇİZİMİ ---
+        current_speed = math.hypot(self.vx, self.vy)
 
+        # Hızı SPEED değişkenine göre 0.0 ile 1.0 arasına oranlıyoruz
+        # Top yavaşladığında iz azalacak, hızlandığında iz artacak
+        speed_ratio = max(0.0, min(1.0, current_speed / (SPEED * 1.1)))
+
+        # Hıza göre kuyruğun ne kadar uzun olacağını belirliyoruz
+        visible_points = int(len(self.history) * speed_ratio)
+
+        if visible_points > 0 and len(self.history) > 0:
+            start_idx = len(self.history) - visible_points
+            for i in range(start_idx, len(self.history)):
+                hx, hy = self.history[i]
+
+                # History indexini, trail_surfaces indexine doğru bir şekilde oranlıyoruz
+                if visible_points > 1:
+                    surf_idx = int(((i - start_idx) / (visible_points - 1)) * (self.max_history - 1))
+                else:
+                    surf_idx = self.max_history - 1
+
+                tr, surf = self.trail_surfaces[surf_idx]
+
+                if surf:
+                    # Topun hızına göre kuyruğun opaklığını (saydamlığını) dinamik ayarlıyoruz
+                    temp_surf = surf.copy()
+                    # Pygame'de set_alpha ile var olan alpha değerleri hızımız oranında çarpılır (soluklaşır veya netleşir)
+                    temp_surf.set_alpha(int(255 * speed_ratio))
+                    surface.blit(temp_surf, (int(hx) - tr, int(hy) - tr))
+
+        # --- 2. GÖLGE ÇİZİMİ ---
         shadow_surf = pygame.Surface((self.radius * 2, self.radius * 2), pygame.SRCALPHA)
         pygame.draw.circle(shadow_surf, SHADOW_COLOR, (self.radius, self.radius), self.radius - 2)
         surface.blit(shadow_surf, (int(self.x) - self.radius + self.shadow_offset, int(self.y) - self.radius + self.shadow_offset))
 
+        # --- 3. TOPUN KENDİSİ VE DESENİ ---
         scale = 3
         sr = self.radius * scale
         hr_surf = pygame.Surface((sr * 2, sr * 2), pygame.SRCALPHA)
@@ -1142,11 +1186,9 @@ goal_events_2 = []
 state = "MENU"
 frame_counter = 0
 
-intro_timer = 0
-home_full_name = ""
-away_full_name = ""
+intro_timer, home_full_name, away_full_name, screen_shake_timer = 0, "", "", 0
+near_miss_timer = 0
 
-screen_shake_timer = 0
 
 added_time_1 = random.randint(0, 1)
 added_time_2 = random.randint(1, 2)
@@ -1174,7 +1216,8 @@ slider_rects = {
     "STADIUM": pygame.Rect(590, 230, 160, 10),
     "MUSIC": pygame.Rect(590, 310, 160, 10),
     "COLLISION": pygame.Rect(590, 390, 160, 10),
-    "WHISTLE": pygame.Rect(590, 470, 160, 10)
+    "WHISTLE": pygame.Rect(590, 470, 160, 10),
+    "MISS": pygame.Rect(590, 550, 160, 10)
 }
 
 ball1 = None
@@ -1200,10 +1243,23 @@ def play_goal_music_for_team(team_short_name):
     if sound_to_play: goal_sound_channel = sound_to_play.play()
 
 def quit_match():
-    global state
+    global state, goal_angle, goll_timer, display_added_time, frame_counter, screen_shake_timer, near_miss_timer
+
     state = "MENU"
     goal_angle = 1 * math.pi / 2
-    if stadium_music_loaded: pygame.mixer.music.stop()
+
+    # EKSİK OLAN KISIM: Menüye dönüldüğünde maçtaki BÜTÜN hayalet verileri temizle
+    goal_events_1.clear()
+    goal_events_2.clear()
+    goll_timer = 0
+    display_added_time = False
+    frame_counter = 0
+    screen_shake_timer = 0
+    near_miss_timer = 0
+
+    if stadium_music_loaded:
+        try: pygame.mixer.music.stop()
+        except: pass
     if goal_sound_channel: goal_sound_channel.stop()
 
 def start_match():
@@ -1212,15 +1268,18 @@ def start_match():
     global goal_angle, added_time_1, added_time_2, start_delay_timer, cinematic_timer, red_cards_1, red_cards_2
     global yellow_card_obj, yellow_cards_1, yellow_cards_2, yellow_cards_spawned_this_half, target_yellow_cards
     global intro_timer, home_full_name, away_full_name
+    global near_miss_timer, goll_timer, display_added_time, end_match_timer
 
-    score1, score2 = 0, 0
-    goal_events_1 = []
-    goal_events_2 = []
-    frame_counter = 0
-    goal_rotating = False
-    goal_angle = 1 * math.pi / 2
+    # Yeni maça başlarken her şeyi TAMAMEN sıfırla
+    score1, score2, frame_counter, goal_rotating, goal_angle, screen_shake_timer = 0, 0, 0, False, 1 * math.pi / 2, 0
     particles = []
-    screen_shake_timer = 0
+    near_miss_timer = 0
+    goll_timer = 0
+    display_added_time = False
+    end_match_timer = 0
+
+    goal_events_1.clear()
+    goal_events_2.clear()
 
     added_time_1 = random.randint(2, 4)
     added_time_2 = random.randint(3, 8)
@@ -1250,10 +1309,10 @@ def start_match():
     team1_colors = TEAMS[home_key]["colors"]
     team2_colors = TEAMS[away_key]["colors"]
 
-    sx1, sy1 = get_random_spawn(center_x, center_y, ARENA_RADIUS)
-    sx2, sy2 = get_random_spawn(center_x, center_y, ARENA_RADIUS)
-    ball1 = Ball(sx1, sy1, team1_colors, team1_name)
-    ball2 = Ball(sx2, sy2, team2_colors, team2_name)
+    rx1, ry1 = get_random_spawn(center_x, center_y, ARENA_RADIUS)
+    rx2, ry2 = get_random_spawn(center_x, center_y, ARENA_RADIUS)
+    ball1 = Ball(rx1, ry1, team1_colors, team1_name)
+    ball2 = Ball(rx2, ry2, team2_colors, team2_name)
 
     crowd = []
     while len(crowd) < 300:
@@ -1265,13 +1324,13 @@ def start_match():
             crowd.append((cx, cy, col))
 
     if stadium_music_loaded:
-        pygame.mixer.music.play(-1)
+        try: pygame.mixer.music.play(-1)
+        except: pass
 
     intro_timer = int(1.0 * FPS)
     start_delay_timer = int(0.5 * FPS)
     cinematic_timer = 0
     state = "INTRO"
-
 # =====================================================================
 #                     13. MAIN GAME LOOP
 # =====================================================================
@@ -1473,7 +1532,8 @@ while running:
                       "STADIUM": LANG[current_lang]["LBL_STADIUM"],
                       "MUSIC": LANG[current_lang]["LBL_MUSIC"],
                       "COLLISION": LANG[current_lang]["LBL_COLLISION"],
-                      "WHISTLE": LANG[current_lang]["LBL_WHISTLE"]}
+                      "WHISTLE": LANG[current_lang]["LBL_WHISTLE"],
+                      "MISS": LANG[current_lang]["LBL_MISS"]}
 
             for key, rect in slider_rects.items():
                 lbl = font_settings.render(labels[key], True, CREAM)
@@ -1598,12 +1658,26 @@ while running:
                 (p1, p2, _, _) = calculate_goal_posts(center_x, center_y, ARENA_RADIUS, goal_angle, GOAL_WIDTH_RADIANS)
                 for b in [ball1, ball2]:
                     b.move()
-                    b.collide_post(p1[0], p1[1])
-                    b.collide_post(p2[0], p2[1])
+
+                    hit_post1 = b.collide_post(p1[0], p1[1])
+                    hit_post2 = b.collide_post(p2[0], p2[1])
+
+                    # Top direğe değdiği an beklemeden sesi kesip baştan başlatır
+                    if (hit_post1 or hit_post2) and state != "FULLTIME":
+                        play_miss_sound()
+
                 for _ in range(8):
-                    if ball1.collide_wall(center_x, center_y, ARENA_RADIUS) and state != "FULLTIME": play_collision_sound()
-                    if ball2.collide_wall(center_x, center_y, ARENA_RADIUS) and state != "FULLTIME": play_collision_sound()
-                    if resolve_collisions(ball1, ball2) and state != "FULLTIME": play_collision_sound()
+                    # BİRİNCİ TOPUN DUVARA ÇARPMASI
+                    if ball1.collide_wall(center_x, center_y, ARENA_RADIUS) and state != "FULLTIME":
+                        play_collision_sound()
+
+                    # İKİNCİ TOPUN DUVARA ÇARPMASI (BENİM SİLDİĞİM YER BURASIYDI)
+                    if ball2.collide_wall(center_x, center_y, ARENA_RADIUS) and state != "FULLTIME":
+                        play_collision_sound()
+
+                    # İKİ TOPUN BİRBİRİNE ÇARPMASI (BUNU DA SİLMİŞİM)
+                    if resolve_collisions(ball1, ball2) and state != "FULLTIME":
+                        play_collision_sound()
 
                 if state != "FULLTIME":
                     for b in [ball1, ball2]:
@@ -1616,7 +1690,7 @@ while running:
                             while diff > math.pi: diff = abs(diff - 2*math.pi)
                             if diff < GOAL_WIDTH_RADIANS / 2:
                                 goll_timer = 90
-                                screen_shake_timer = 30
+                                screen_shake_timer = 45
 
                                 time_mark = f"{sim_minute}'"
                                 if state == "FIRST_HALF":
@@ -1692,7 +1766,7 @@ while running:
 
             # --- YENİ: İNTRO VEYA UI ÇİZİMİ ---
             if state == "INTRO":
-                total_frames = int(2.0 * FPS)
+                total_frames = int(1.0 * FPS)
                 fade_frames = int(0.2 * FPS)
 
                 alpha = 255
@@ -1864,7 +1938,7 @@ while running:
 
         shake_x, shake_y = 0, 0
         if screen_shake_timer > 0:
-            shake_intensity = int((screen_shake_timer / 30) * 12)
+            shake_intensity = int((screen_shake_timer / 45) * 25)
             shake_x = random.randint(-shake_intensity, shake_intensity)
             shake_y = random.randint(-shake_intensity, shake_intensity)
             screen_shake_timer -= 1

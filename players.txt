@@ -22,24 +22,24 @@ SAMSUNSPOR: Marius Mouandilmadji, Cheriff Ndiaye, Emre Kılınç, Carlo Holse,
 HATAYSPOR: Strandberg, Dele-Bashiru, Rivas, Joelson Fernandes, Görkem Sağlam
 ADANA DEMİR: Abat Aybetov, Yusuf Sarı, Tayfun Aydoğan, Maestro, Alioui
 MAN CITY: Haaland, Phil Foden, Antoine Semenyo, Marc Guehi, Savinho
-LIVERPOOL: Mohamed Salah, Luis Diaz, Darwin Nunez, Cody Gakpo, Hugo Ekitike
+LIVERPOOL: Mohamed Salah, Szoboszlai, Alexander Isak, Cody Gakpo, Hugo Ekitike
 ARSENAL: Bukayo Saka, Gyökeres, Eberechi Eze, Trossard, Declan Rice
 ASTON VILLA: Ollie Watkins, Morgan Rogers, Leon Bailey, McGinn, Youri Tielemans
-TOTTENHAM: Solanke, James Maddison, Brennan Johnson, Kulusevski, Son Heung-min
+TOTTENHAM: Solanke, James Maddison, Richarlison, Kulusevski
 MAN UTD: Bruno Fernandes, Rashford, Hojlund, Garnacho, Mainoo
 CHELSEA: Cole Palmer, João Pedro, Enzo Fernandez, Pedro Neto, Moises Caicedo
 REAL MADRID: Mbappé, Vinicius Jr, Jude Bellingham, Rodrygo, Arda Güler
-BARCELONA: Lewandowski, Lamine Yamal, Ferran Torres, Raphinha, Dani Olmo
+BARCELONA: Lewandowski, Lamine Yamal, Pedri, Raphinha
 ATLETICO: Julian Alvarez, Griezmann, Alexander Sorloth
 GIRONA: Miovski, Bryan Gil, Danjuma, Asprilla, Van de Beek
-B. MUNIH: Harry Kane, Jamal Musiala, Michael Olise, Leroy Sane, Serge Gnabry
+B. MUNIH: Harry Kane, Jamal Musiala, Michael Olise, Luis Diaz
 DORTMUND: Serhou Guirassy, Julian Brandt, Adeyemi
-LEVERKUSEN:Aleix Garcia, İbrahim Maza, Patrik Schick, Malik Tillman
+LEVERKUSEN:Christian Kofane, İbrahim Maza, Patrik Schick, Ernest Poku
 RB LEIPZIG: Yann Diomande, Nusa, Romulo
 INTER: Lautaro Martinez, Marcus Thuram, Hakan Çalhanoğlu, Barella, Zielinski
 MILAN: Rafael Leao, Christian Pulisic, Luka Modric, Saelemaekers
 JUVENTUS: Vlahovic, Kenan Yıldız, Teun Koopmeiners, Nico Gonzalez, Douglas Luiz
-ATALANTA: Lookman, Retegui, De Ketelaere, Zaniolo, Pasalic
+ATALANTA: Scamacca, Zalewski, Pasalic
 ROMA: Artem Dovbyk, Paulo Dybala, Lorenzo Pellegrini, Soulé, El Shaarawy
 LAZIO: Taty Castellanos, Zaccagni, Dia, Guendouzi, Noslin
 PSG: Bradley Barcola, Ousmane Dembele, Gonçalo Ramos, Kolo Muani, Vitinha
@@ -66,7 +66,7 @@ CRVENA ZVEZDA: Katai, Bukari, Dragović
 CELTIC: McGregor, Furuhashi, O'Riley
 STUTTGART: Undav, Führich, Millot
 CLUB BRUGGE: Tzolis, Vanaken, Tresoldi, Forbs
-NEWCASTLE: Harvey Barnes, Anthony Gordon, Yoane Wissa, Jacob Murphy
+NEWCASTLE: Harvey Barnes, Anthony Gordon, Yoane Wissa, Tonali
 QARABAG: Camilo Duràn, Musa Qurbanlı, Kady Borges, Leandro Andrade
 OLYMPIACOS: El Kaabi, Mehdi Taremi,  Gelson Martins, Chiquinho, Podence
 BODO/GLIMT: Hauge, Evjen, Bjørkan, Berg, Høgh
