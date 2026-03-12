@@ -116,7 +116,6 @@ var swipe_threshold: float = 60.0
 var badge_textures: Dictionary = {}  # Preloaded at _ready() for badge overlay on preview balls
 
 func _ready():
-	await get_tree().process_frame
 	Engine.time_scale = 1.0 
 	
 	if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
@@ -149,6 +148,7 @@ func _ready():
 	bg_grad.set_color(0, active_theme.bg_top)
 	bg_grad.set_color(1, active_theme.bg_bottom)
 	
+	await get_tree().process_frame
 	# --- TAB CONTAINER SYSTEM ---
 	# A clipping Control that holds 3 side-by-side pages
 	tab_container = Control.new()
@@ -164,9 +164,11 @@ func _ready():
 	# We'll size tabs_hbox after viewport is known (call_deferred)
 	call_deferred("_init_tab_sizes")
 
-	# --- PAGE 0: STATS TAB ---
-	var stats_page = _build_stats_tab()
-	tabs_hbox.add_child(stats_page)
+	# --- PAGE 0: STATS TAB (Lazy Loaded) ---
+	var stats_placeholder = Control.new()
+	stats_placeholder.name = "Stats_Placeholder"
+	stats_placeholder.custom_minimum_size.x = get_viewport_rect().size.x
+	tabs_hbox.add_child(stats_placeholder)
 
 	# --- PAGE 1: HOME TAB (existing main menu UI) ---
 	var main_margin = MarginContainer.new()
@@ -526,9 +528,11 @@ func _ready():
 	
 	setup_settings_overlay()
 
-	# --- PAGE 2: SHOP TAB ---
-	var shop_page = _build_shop_tab()
-	tabs_hbox.add_child(shop_page)
+	# --- PAGE 2: SHOP TAB (Lazy Loaded) ---
+	var shop_placeholder = Control.new()
+	shop_placeholder.name = "Shop_Placeholder"
+	shop_placeholder.custom_minimum_size.x = get_viewport_rect().size.x
+	tabs_hbox.add_child(shop_placeholder)
 
 	# --- BOTTOM NAVIGATION BAR ---
 	_build_bottom_nav()
@@ -1056,6 +1060,11 @@ func populate_teams():
 	for child in away_list.get_children(): 
 		away_list.remove_child(child); child.queue_free()
 	
+	var shared_btn_style = StyleBoxFlat.new()
+	shared_btn_style.bg_color = glass_panel
+	shared_btn_style.corner_radius_top_left = 12; shared_btn_style.corner_radius_top_right = 12
+	shared_btn_style.corner_radius_bottom_left = 12; shared_btn_style.corner_radius_bottom_right = 12
+
 	var txt_filter_home = search_bar_home.text.to_lower() if search_bar_home else ""
 	var txt_filter_away = search_bar_away.text.to_lower() if search_bar_away else ""
 	var lg_filter_h = league_dropdown_home.get_item_text(league_dropdown_home.selected) if league_dropdown_home else "All Teams"
@@ -1066,36 +1075,28 @@ func populate_teams():
 		
 		# Home column filtering
 		if (lg_filter_h == "All Teams" or team_league == lg_filter_h) and (txt_filter_home == "" or txt_filter_home in team.to_lower()):
-			var style = StyleBoxFlat.new()
-			style.bg_color = glass_panel
-			style.corner_radius_top_left = 12; style.corner_radius_top_right = 12
-			style.corner_radius_bottom_left = 12; style.corner_radius_bottom_right = 12
 			var h_btn = Button.new()
 			h_btn.mouse_filter = Control.MOUSE_FILTER_PASS
 			h_btn.text = team
 			h_btn.add_theme_font_override("font", custom_font)
 			h_btn.add_theme_font_size_override("font_size", 28)
 			h_btn.custom_minimum_size = Vector2(320, 80) 
-			h_btn.add_theme_stylebox_override("normal", style)
+			h_btn.add_theme_stylebox_override("normal", shared_btn_style)
 			if team == Global.home_team_name: h_btn.add_theme_color_override("font_color", active_theme.accent)
-			h_btn.pressed.connect(func(): Global.home_team_name = team; populate_teams())
+			h_btn.pressed.connect(func(): Global.play_click(); Global.home_team_name = team; populate_teams())
 			home_list.add_child(h_btn)
 			
 		# Away column filtering
 		if (lg_filter_a == "All Teams" or team_league == lg_filter_a) and (txt_filter_away == "" or txt_filter_away in team.to_lower()):
-			var style = StyleBoxFlat.new()
-			style.bg_color = glass_panel
-			style.corner_radius_top_left = 12; style.corner_radius_top_right = 12
-			style.corner_radius_bottom_left = 12; style.corner_radius_bottom_right = 12
 			var a_btn = Button.new()
 			a_btn.mouse_filter = Control.MOUSE_FILTER_PASS
 			a_btn.text = team
 			a_btn.add_theme_font_override("font", custom_font)
 			a_btn.add_theme_font_size_override("font_size", 28)
 			a_btn.custom_minimum_size = Vector2(320, 80)
-			a_btn.add_theme_stylebox_override("normal", style)
+			a_btn.add_theme_stylebox_override("normal", shared_btn_style)
 			if team == Global.away_team_name: a_btn.add_theme_color_override("font_color", active_theme.accent)
-			a_btn.pressed.connect(func(): Global.away_team_name = team; populate_teams())
+			a_btn.pressed.connect(func(): Global.play_click(); Global.away_team_name = team; populate_teams())
 			away_list.add_child(a_btn)
 			
 	if home_preview: home_preview.queue_redraw()
@@ -1160,8 +1161,26 @@ func _init_tab_sizes():
 		child.custom_minimum_size = Vector2(sw, 0)
 
 func _switch_tab(idx: int, instant: bool = false):
-	current_tab = idx
 	var sw = get_viewport_rect().size.x
+	
+	# Lazy Load check
+	var target_node = tabs_hbox.get_child(idx)
+	if target_node.name.ends_with("_Placeholder"):
+		var real_page: Control = null
+		if idx == 0:
+			real_page = _build_stats_tab()
+		elif idx == 2:
+			real_page = _build_shop_tab()
+		
+		if real_page:
+			real_page.custom_minimum_size = Vector2(sw, 0)
+			tabs_hbox.add_child(real_page)
+			tabs_hbox.move_child(real_page, idx)
+			target_node.queue_free()
+			_connect_all_buttons(real_page)
+			update_theme_visuals()
+
+	current_tab = idx
 	var target_x = -idx * sw
 	if instant:
 		tabs_hbox.position.x = target_x
