@@ -11,6 +11,14 @@ var LANG = {
 		"LBL_COLLISION": "TOP ÇARPMA", "LBL_WHISTLE": "DÜDÜK",
 		"LBL_THEME": "TEMA SEÇİMİ", "LBL_SHAKE": "EKRAN TİTREŞİMİ", "LBL_SPEED": "MAÇ SÜRESİ",
 		"SEC_THEME": "TEMA AYARLARI", "SEC_GAME": "OYUN AYARLARI", "SEC_AUDIO": "SES AYARLARI",
+		"STATS_TITLE": "İSTATİSTİKLER", "SHOP_TITLE": "MAĞAZA",
+		"STATS_NO_DATA": "Henüz maç oynanmadı.\nBir maç oyna ve istatistiklerin burada görünecek!",
+		"STATS_RECENT": "Son Maçlar", "STATS_TOTAL": "Toplam Maç",
+		"STATS_HOME_W": "Galibiyet (Ev)", "STATS_AWAY_W": "Galibiyet (Deplasman)",
+		"STATS_DRAW": "Beraberlik", "STATS_MOST_GOALS": "En Çok Gol", "STATS_BIGGEST_WIN": "En Büyük Fark",
+		"SHOP_COSMETICS": "KOZMETİKLER", "SHOP_BALL_SKINS": "Top Görünümleri",
+		"SHOP_BUY": "₺49.99 — SATIN AL", "SHOP_CANCEL": "VAZGEÇ",
+		"SHOP_PRO_DESC": "Tüm özel temalar, özel toplar ve reklamsız deneyim",
 		"REPLAY_ASK": "Aynı maçı tekrar oynatmak istediğinize emin misiniz?"
 	},
 	"ENG": {
@@ -21,6 +29,14 @@ var LANG = {
 		"LBL_COLLISION": "COLLISION", "LBL_WHISTLE": "WHISTLE",
 		"LBL_THEME": "SELECT THEME", "LBL_SHAKE": "SCREEN SHAKE", "LBL_SPEED": "MATCH DURATION",
 		"SEC_THEME": "THEME", "SEC_GAME": "GAME SETTINGS", "SEC_AUDIO": "AUDIO SETTINGS",
+		"STATS_TITLE": "STATISTICS", "SHOP_TITLE": "SHOP",
+		"STATS_NO_DATA": "No matches played yet.\nPlay a match and your stats will appear here!",
+		"STATS_RECENT": "Recent Matches", "STATS_TOTAL": "Total Matches",
+		"STATS_HOME_W": "Home Wins", "STATS_AWAY_W": "Away Wins",
+		"STATS_DRAW": "Draws", "STATS_MOST_GOALS": "Most Goals", "STATS_BIGGEST_WIN": "Biggest Win",
+		"SHOP_COSMETICS": "COSMETICS", "SHOP_BALL_SKINS": "Ball Skins",
+		"SHOP_BUY": "₺49.99 — BUY NOW", "SHOP_CANCEL": "CANCEL",
+		"SHOP_PRO_DESC": "Unlock all themes, custom balls and ad-free experience",
 		"REPLAY_ASK": "Are you sure you want to replay the exact same match?"
 	},
 	"ESP": {
@@ -31,6 +47,14 @@ var LANG = {
 		"LBL_COLLISION": "COLISIÓN", "LBL_WHISTLE": "SILBATO",
 		"LBL_THEME": "TEMA", "LBL_SHAKE": "VIBRACIÓN", "LBL_SPEED": "DURACIÓN",
 		"SEC_THEME": "TEMA", "SEC_GAME": "AJUSTES DE JUEGO", "SEC_AUDIO": "AUDIO",
+		"STATS_TITLE": "ESTADÍSTICAS", "SHOP_TITLE": "TIENDA",
+		"STATS_NO_DATA": "Aún no hay partidos.\n¡Juega un partido y tus estadísticas aparecerán aquí!",
+		"STATS_RECENT": "Partidos Recientes", "STATS_TOTAL": "Total Partidos",
+		"STATS_HOME_W": "Victorias (Local)", "STATS_AWAY_W": "Victorias (Visitante)",
+		"STATS_DRAW": "Empates", "STATS_MOST_GOALS": "Más Goles", "STATS_BIGGEST_WIN": "Mayor Diferencia",
+		"SHOP_COSMETICS": "COSMÉTICOS", "SHOP_BALL_SKINS": "Apariencias de Balón",
+		"SHOP_BUY": "₺49.99 — COMPRAR", "SHOP_CANCEL": "CANCELAR",
+		"SHOP_PRO_DESC": "Desbloquea todos los temas, balones y experiencia sin anuncios",
 		"REPLAY_ASK": "¿Estás seguro de que quieres volver a jugar el mismo partido?"
 	},
 	"POR": {
@@ -41,6 +65,14 @@ var LANG = {
 		"LBL_COLLISION": "COLISÃO", "LBL_WHISTLE": "APITO",
 		"LBL_THEME": "TEMA", "LBL_SHAKE": "VIBRAÇÃO", "LBL_SPEED": "DURAÇÃO",
 		"SEC_THEME": "TEMA", "SEC_GAME": "CONFIGURAÇÕES DE JOGO", "SEC_AUDIO": "ÁUDIO",
+		"STATS_TITLE": "ESTATÍSTICAS", "SHOP_TITLE": "LOJA",
+		"STATS_NO_DATA": "Nenhum jogo ainda.\nJogue uma partida e suas estatísticas aparecerão aqui!",
+		"STATS_RECENT": "Jogos Recentes", "STATS_TOTAL": "Total de Jogos",
+		"STATS_HOME_W": "Vitórias (Casa)", "STATS_AWAY_W": "Vitórias (Fora)",
+		"STATS_DRAW": "Empates", "STATS_MOST_GOALS": "Mais Gols", "STATS_BIGGEST_WIN": "Maior Diferença",
+		"SHOP_COSMETICS": "COSMÉTICOS", "SHOP_BALL_SKINS": "Aparências de Bola",
+		"SHOP_BUY": "₺49.99 — COMPRAR", "SHOP_CANCEL": "CANCELAR",
+		"SHOP_PRO_DESC": "Desbloqueie todos os temas, bolas personalizadas e experiência sem anúncios",
 		"REPLAY_ASK": "Tem certeza de que quer jogar a mesma partida?"
 	}
 }
@@ -72,11 +104,34 @@ var start_match_btn: Button
 var top_stripe_panel: PanelContainer
 var main_scroll: ScrollContainer
 
+# --- TAB NAVIGATION ---
+var current_tab: int = 1   # 0=Stats, 1=Home, 2=Shop
+var tabs_hbox: HBoxContainer
+var tab_container: Control
+var nav_bar_panel: PanelContainer
+var nav_bar_btns: Array = []
+var swipe_start: Vector2 = Vector2.ZERO
+var swipe_active: bool = false
+var swipe_threshold: float = 60.0
+var badge_textures: Dictionary = {}  # Preloaded at _ready() for badge overlay on preview balls
+
 func _ready():
+	await get_tree().process_frame
 	Engine.time_scale = 1.0 
 	
 	if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
-		Global.bg_music_player.play()
+		get_tree().create_timer(0.5).timeout.connect(func():
+			if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
+				Global.bg_music_player.play()
+		)
+	Global.load_stats()  # Load persisted match history from disk
+	# Pre-load badge overlay textures so draw_ball_preview doesn't block per frame
+	badge_textures = {
+		"FB": load("res://fb1.png"),
+		"TS": load("res://ts1.png"),
+		"GS": load("res://gs1.png"),
+		"BJK": load("res://bjk1.png")
+	}
 	
 	var bg = TextureRect.new()
 	bg_grad = Gradient.new()
@@ -94,18 +149,40 @@ func _ready():
 	bg_grad.set_color(0, active_theme.bg_top)
 	bg_grad.set_color(1, active_theme.bg_bottom)
 	
+	# --- TAB CONTAINER SYSTEM ---
+	# A clipping Control that holds 3 side-by-side pages
+	tab_container = Control.new()
+	tab_container.set_anchors_preset(Control.PRESET_FULL_RECT)
+	tab_container.clip_contents = true
+	add_child(tab_container)
+
+	# Horizontal strip of 3 pages, each screen-width wide
+	tabs_hbox = HBoxContainer.new()
+	tabs_hbox.add_theme_constant_override("separation", 0)
+	tabs_hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tab_container.add_child(tabs_hbox)
+	# We'll size tabs_hbox after viewport is known (call_deferred)
+	call_deferred("_init_tab_sizes")
+
+	# --- PAGE 0: STATS TAB ---
+	var stats_page = _build_stats_tab()
+	tabs_hbox.add_child(stats_page)
+
+	# --- PAGE 1: HOME TAB (existing main menu UI) ---
 	var main_margin = MarginContainer.new()
 	main_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
-	main_margin.add_theme_constant_override("margin_top", -150)
+	main_margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	main_margin.add_theme_constant_override("margin_top", 80)
 	main_margin.add_theme_constant_override("margin_bottom", 40)
 	main_margin.add_theme_constant_override("margin_left", 20)
 	main_margin.add_theme_constant_override("margin_right", 20)
-	add_child(main_margin)
-	
+	tabs_hbox.add_child(main_margin)
+
 	var main_vbox = VBoxContainer.new()
 	main_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	main_vbox.add_theme_constant_override("separation", 25)
 	main_margin.add_child(main_vbox)
+
 	
 	# --- ÜST BAR (Aşağı Kaymış Oldu) ---
 	var top_hbox = HBoxContainer.new()
@@ -127,8 +204,8 @@ func _ready():
 	lang_btn.add_theme_font_override("font", custom_font)
 	lang_btn.add_theme_font_size_override("font_size", 35)
 	lang_btn.add_theme_color_override("font_color", white)
-	lang_btn.add_theme_color_override("font_shadow_color", Color8(0,0,0,100))
-	lang_btn.add_theme_constant_override("shadow_offset_y", 2)
+	lang_btn.add_theme_color_override("font_shadow_color", Color8(0,0,0,150))
+	lang_btn.add_theme_constant_override("shadow_offset_y", 4)
 	lang_btn.expand_icon = true
 	lang_btn.add_theme_constant_override("icon_max_width", 50)
 	lang_btn.custom_minimum_size = Vector2(120, 70)
@@ -249,10 +326,14 @@ func _ready():
 	main_cols_hbox.add_theme_constant_override("separation", 20) # Decreased gap by 10px
 	header_offset_hbox.add_child(main_cols_hbox)
 	
+	var home_col_margin = MarginContainer.new()
+	home_col_margin.add_theme_constant_override("margin_left", 20)
+	main_cols_hbox.add_child(home_col_margin)
+
 	var home_col = VBoxContainer.new()
 	home_col.custom_minimum_size = Vector2(320, 0)
-	home_col.add_theme_constant_override("separation", 0) 
-	main_cols_hbox.add_child(home_col)
+	home_col.add_theme_constant_override("separation", 0)
+	home_col_margin.add_child(home_col)
 	
 	var away_col = VBoxContainer.new()
 	away_col.custom_minimum_size = Vector2(320, 0)
@@ -269,19 +350,13 @@ func _ready():
 	home_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	home_lbl.add_theme_color_override("font_shadow_color", Color8(0,0,0,150))
 	home_lbl.add_theme_constant_override("shadow_offset_y", 4)
-	var h_lbl_margin = MarginContainer.new()
-	h_lbl_margin.add_theme_constant_override("margin_left", 20)
-	h_lbl_margin.add_child(home_lbl)
-	home_col.add_child(h_lbl_margin)
-	
+	home_col.add_child(home_lbl)
+
 	var away_lbl = create_label_node("AWAY", Color.WHITE, 45)
 	away_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	away_lbl.add_theme_color_override("font_shadow_color", Color8(0,0,0,150))
 	away_lbl.add_theme_constant_override("shadow_offset_y", 4)
-	var a_lbl_margin = MarginContainer.new()
-	a_lbl_margin.add_theme_constant_override("margin_left", 20)
-	a_lbl_margin.add_child(away_lbl)
-	away_col.add_child(a_lbl_margin)
+	away_col.add_child(away_lbl)
 	
 	# Spacer between HOME and preview
 	var s_hp = Control.new(); s_hp.custom_minimum_size = Vector2(0, 30); home_col.add_child(s_hp)
@@ -325,11 +400,10 @@ func _ready():
 	league_dropdown_home.add_theme_stylebox_override("hover", filter_style)
 	league_dropdown_home.add_theme_stylebox_override("pressed", filter_style)
 	league_dropdown_home.add_theme_icon_override("arrow", arrow_empty)
-	var lg_h_margin = MarginContainer.new()
-	lg_h_margin.add_theme_constant_override("margin_left", 30) # Push +30px right
-	lg_h_margin.add_theme_constant_override("margin_bottom", 15)
-	lg_h_margin.add_child(league_dropdown_home)
-	home_col.add_child(lg_h_margin)
+	var lg_h_m = MarginContainer.new()
+	lg_h_m.add_theme_constant_override("margin_left", 20)
+	lg_h_m.add_child(league_dropdown_home)
+	home_col.add_child(lg_h_m)
 	league_dropdown_home.item_selected.connect(_on_filter_changed)
 	
 	league_dropdown_away = OptionButton.new()
@@ -340,12 +414,15 @@ func _ready():
 	league_dropdown_away.add_theme_stylebox_override("hover", filter_style)
 	league_dropdown_away.add_theme_stylebox_override("pressed", filter_style)
 	league_dropdown_away.add_theme_icon_override("arrow", arrow_empty)
-	var lg_a_margin = MarginContainer.new()
-	lg_a_margin.add_theme_constant_override("margin_left", 30) # Push +30px right
-	lg_a_margin.add_theme_constant_override("margin_bottom", 15)
-	lg_a_margin.add_child(league_dropdown_away)
-	away_col.add_child(lg_a_margin)
+	var lg_a_m = MarginContainer.new()
+	lg_a_m.add_theme_constant_override("margin_left", 20)
+	lg_a_m.add_child(league_dropdown_away)
+	away_col.add_child(lg_a_m)
 	league_dropdown_away.item_selected.connect(_on_filter_changed)
+	
+	# Gap between league dropdown and search bar
+	var s_gap_h = Control.new(); s_gap_h.custom_minimum_size = Vector2(0, 10); home_col.add_child(s_gap_h)
+	var s_gap_a = Control.new(); s_gap_a.custom_minimum_size = Vector2(0, 10); away_col.add_child(s_gap_a)
 	
 	search_bar_home = LineEdit.new()
 	search_bar_home.custom_minimum_size = Vector2(320, 60)
@@ -355,11 +432,10 @@ func _ready():
 	search_bar_home.add_theme_stylebox_override("focus", filter_style)
 	search_bar_home.text_changed.connect(_on_filter_changed)
 	ui_labels.append({"node": search_bar_home, "key": "SEARCH", "type": "placeholder"})
-	var sb_h_margin = MarginContainer.new()
-	sb_h_margin.add_theme_constant_override("margin_left", 30) # Push +30px right
-	sb_h_margin.add_theme_constant_override("margin_bottom", 10)
-	sb_h_margin.add_child(search_bar_home)
-	home_col.add_child(sb_h_margin)
+	var sb_h_m = MarginContainer.new()
+	sb_h_m.add_theme_constant_override("margin_left", 20)
+	sb_h_m.add_child(search_bar_home)
+	home_col.add_child(sb_h_m)
 	
 	search_bar_away = LineEdit.new()
 	search_bar_away.custom_minimum_size = Vector2(320, 60)
@@ -369,18 +445,17 @@ func _ready():
 	search_bar_away.add_theme_stylebox_override("focus", filter_style)
 	search_bar_away.text_changed.connect(_on_filter_changed)
 	ui_labels.append({"node": search_bar_away, "key": "SEARCH", "type": "placeholder"})
-	var sb_a_margin = MarginContainer.new()
-	sb_a_margin.add_theme_constant_override("margin_left", 30) # Push +30px right
-	sb_a_margin.add_theme_constant_override("margin_bottom", 10)
-	sb_a_margin.add_child(search_bar_away)
-	away_col.add_child(sb_a_margin)
+	var sb_a_m = MarginContainer.new()
+	sb_a_m.add_theme_constant_override("margin_left", 20)
+	sb_a_m.add_child(search_bar_away)
+	away_col.add_child(sb_a_m)
 	
 	setup_filters()
 	
 	# Scroll container for lists ONLY
 	var scroll_both = ScrollContainer.new()
 	scroll_both.name = "ScrollContainer"
-	scroll_both.custom_minimum_size = Vector2(685, 710) # 8 teams
+	scroll_both.custom_minimum_size = Vector2(685, 620) # ~8 teams visible
 	scroll_both.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll_both.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	var v_sc = scroll_both.get_v_scroll_bar()
@@ -401,7 +476,7 @@ func _ready():
 	var lists_hbox = HBoxContainer.new()
 	lists_hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lists_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	lists_hbox.add_theme_constant_override("separation", 30) # Increased gap by 10px
+	lists_hbox.add_theme_constant_override("separation", 20) # Match header columns gap
 	scroll_both.add_child(lists_hbox)
 	
 	home_list = VBoxContainer.new()
@@ -451,6 +526,24 @@ func _ready():
 	
 	setup_settings_overlay()
 
+	# --- PAGE 2: SHOP TAB ---
+	var shop_page = _build_shop_tab()
+	tabs_hbox.add_child(shop_page)
+
+	# --- BOTTOM NAVIGATION BAR ---
+	_build_bottom_nav()
+
+	# Start on Home (tab index 1), instantly, no tween
+	_switch_tab(1, true)
+	
+	_connect_all_buttons(self)
+
+func _connect_all_buttons(node: Node):
+	if node is Button:
+		node.pressed.connect(Global.play_click)
+	for child in node.get_children():
+		_connect_all_buttons(child)
+
 func update_theme_visuals():
 	active_theme = Global.THEMES[Global.current_theme]
 	bg_grad.set_color(0, active_theme.bg_top)
@@ -462,7 +555,18 @@ func update_theme_visuals():
 			b_style.border_color = active_theme.accent.darkened(0.5)
 			burger_popup.add_theme_stylebox_override("panel", b_style)
 
-	
+	if is_instance_valid(nav_bar_panel):
+		var nb_style = nav_bar_panel.get_theme_stylebox("panel")
+		if nb_style is StyleBoxFlat:
+			nb_style.bg_color = active_theme.bg_top
+			nb_style.bg_color.a = 0.97
+			nb_style.border_color = active_theme.accent.darkened(0.4)
+			nav_bar_panel.add_theme_stylebox_override("panel", nb_style)
+	# Refresh indicator colors
+	for btn_data in nav_bar_btns:
+		var ind: Control = btn_data["indicator"]
+		ind.queue_redraw()
+
 	var filter_style = StyleBoxFlat.new()
 	filter_style.bg_color = header_glass
 	filter_style.corner_radius_top_left = 12; filter_style.corner_radius_top_right = 12
@@ -497,6 +601,48 @@ func update_theme_visuals():
 			start_match_btn.add_theme_stylebox_override("hover", s_style)
 			start_match_btn.add_theme_stylebox_override("pressed", s_style)
 			start_match_btn.add_theme_stylebox_override("focus", s_style)
+
+	# Buz (light blue) theme: force dark text on background elements, remove outline
+	var buz_active = (Global.current_theme == "Buz")
+	var buz_text_color = Color.BLACK
+	
+	# Update stats panel accents if they exist
+	for node in get_tree().get_nodes_in_group("ThemeStatValueNodes"):
+		node.add_theme_color_override("font_color", active_theme.accent)
+		node.add_theme_color_override("font_shadow_color", active_theme.accent.darkened(0.5))
+
+	for entry in ui_labels:
+		if not is_instance_valid(entry["node"]): continue
+		var t = entry.get("type", "label")
+		var on_bg = entry.get("on_bg", false)
+		# Update language text
+		var lang = Global.current_lang
+		if LANG[lang].has(entry["key"]):
+			var txt = LANG[lang][entry["key"]]
+			if t == "label" and entry["node"] is Label:
+				entry["node"].text = txt
+			elif t == "button" and entry["node"] is Button:
+				entry["node"].text = txt
+			elif t == "placeholder" and entry["node"] is LineEdit:
+				entry["node"].placeholder_text = txt
+		# Buz: recolor only labels that are ON the gradient background (on_bg:true)
+		# and the lang button, and remove text outline
+		if buz_active and (on_bg or t == "button"):
+			if entry["node"] is Label:
+				entry["node"].add_theme_color_override("font_color", buz_text_color)
+				entry["node"].add_theme_constant_override("outline_size", 0)
+			elif entry["node"] is Button:
+				entry["node"].add_theme_color_override("font_color", buz_text_color)
+			elif t == "placeholder" and entry["node"] is LineEdit:
+				entry["node"].add_theme_color_override("font_placeholder_color", buz_text_color)
+		elif not buz_active and (on_bg or t == "button"):
+			if entry["node"] is Label:
+				entry["node"].add_theme_color_override("font_color", Color.WHITE)
+				entry["node"].remove_theme_constant_override("outline_size")
+			elif entry["node"] is Button:
+				entry["node"].add_theme_color_override("font_color", Color.WHITE)
+			elif t == "placeholder" and entry["node"] is LineEdit:
+				entry["node"].add_theme_color_override("font_placeholder_color", Color.WHITE)
 
 	if is_instance_valid(main_scroll):
 		var v_sc = main_scroll.get_v_scroll_bar()
@@ -715,7 +861,7 @@ func create_label_node(lang_key, color, f_size) -> Label:
 	lbl.add_theme_color_override("font_color", color)
 	lbl.add_theme_font_size_override("font_size", f_size) 
 	lbl.add_theme_font_override("font", custom_font)
-	ui_labels.append({"node": lbl, "key": lang_key, "type": "label"})
+	ui_labels.append({"node": lbl, "key": lang_key, "type": "label", "on_bg": true})
 	return lbl
 
 func add_slider_to_grid(grid: GridContainer, id: String, lang_key: String, default_val: float, min_val: float, max_val: float):
@@ -849,7 +995,10 @@ func draw_ball_preview(ctrl: Control, is_home: bool):
 	if not team_data: return
 	
 	var colors = team_data["colors"]
-	var center = ctrl.size / 2.0
+	var short_name = team_data.get("short", "")
+	# Use actual size when available; fall back to minimum so it draws on first frame
+	var ctrl_size = ctrl.size if ctrl.size.x > 1.0 else ctrl.custom_minimum_size
+	var center = ctrl_size / 2.0
 	var radius = 54.0
 	
 	ctrl.draw_circle(center, radius, colors[0])
@@ -861,8 +1010,16 @@ func draw_ball_preview(ctrl: Control, is_home: bool):
 			var y = sqrt(max(0, radius * radius - x * x))
 			ctrl.draw_line(center + Vector2(x, -y), center + Vector2(x, y), colors[1], 1.0)
 			
-	ctrl.draw_arc(center, radius, 0, TAU, 64, colors[1], 2.0, true)
-	ctrl.draw_arc(center, radius - 2.0, 0, TAU, 64, Color.WHITE, 1.0, true)
+	# Colored arc just inside edge, then white arc at the very edge (ALL WHITE NOW)
+	ctrl.draw_arc(center, radius - 1.5, 0, TAU, 64, Color.WHITE, 1.2, true)
+	ctrl.draw_arc(center, radius, 0, TAU, 64, Color.WHITE, 0.8, true)
+
+	# Draw team mascot badge if available
+	if badge_textures.has(short_name):
+		var badge_tex = badge_textures[short_name]
+		if badge_tex:
+			var bs = Vector2(72, 72)
+			ctrl.draw_texture_rect(badge_tex, Rect2(center - bs / 2.0, bs), false)
 
 func add_centered_toggle_to_vbox(parent: Control, id: String, lang_key: String, default_val: bool):
 	var cont = VBoxContainer.new()
@@ -991,3 +1148,584 @@ func _on_start_match():
 	if is_instance_valid(Global.bg_music_player):
 		Global.bg_music_player.stop()
 	get_tree().change_scene_to_file("res://pitch.tscn")
+
+# ======================================================
+# TAB NAVIGATION HELPERS
+# ======================================================
+
+func _init_tab_sizes():
+	# Set each page's minimum width to screen width so the hbox fills correctly
+	var sw = get_viewport_rect().size.x
+	for child in tabs_hbox.get_children():
+		child.custom_minimum_size = Vector2(sw, 0)
+
+func _switch_tab(idx: int, instant: bool = false):
+	current_tab = idx
+	var sw = get_viewport_rect().size.x
+	var target_x = -idx * sw
+	if instant:
+		tabs_hbox.position.x = target_x
+	else:
+		var tw = create_tween()
+		tw.set_ease(Tween.EASE_OUT)
+		tw.set_trans(Tween.TRANS_CUBIC)
+		tw.tween_property(tabs_hbox, "position:x", target_x, 0.28)
+	# Update nav button visuals
+	for i in range(nav_bar_btns.size()):
+		var btn_data = nav_bar_btns[i]
+		var is_active = (i == idx)
+		var btn: Button = btn_data["btn"]
+		var indicator: Control = btn_data["indicator"]
+		if is_active:
+			btn.modulate = Color.WHITE
+			indicator.visible = true
+		else:
+			btn.modulate = Color(1, 1, 1, 0.45)
+			indicator.visible = false
+
+func _build_bottom_nav():
+	var sw = get_viewport_rect().size.x
+	nav_bar_panel = PanelContainer.new()
+	var nb_style = StyleBoxFlat.new()
+	nb_style.bg_color = active_theme.bg_top
+	nb_style.bg_color.a = 0.97
+	nb_style.corner_radius_top_left = 22; nb_style.corner_radius_top_right = 22
+	nb_style.shadow_color = Color8(0, 0, 0, 120)
+	nb_style.shadow_size = 18
+	nb_style.shadow_offset = Vector2(0, -4)
+	nb_style.border_width_top = 2
+	nb_style.border_color = active_theme.accent.darkened(0.4)
+	nb_style.content_margin_left = 0
+	nb_style.content_margin_right = 0
+	nb_style.content_margin_top = 8
+	nb_style.content_margin_bottom = 8
+	nav_bar_panel.add_theme_stylebox_override("panel", nb_style)
+	nav_bar_panel.custom_minimum_size = Vector2(sw, 65)
+	nav_bar_panel.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	nav_bar_panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	add_child(nav_bar_panel)
+
+	var nav_hbox = HBoxContainer.new()
+	nav_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	nav_hbox.add_theme_constant_override("separation", 0)
+	nav_hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	nav_hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	nav_bar_panel.add_child(nav_hbox)
+
+	var icons = [
+		preload("res://statsicon.svg"),
+		preload("res://homeicon.svg"),
+		preload("res://shoppingcarticon.svg")
+	]
+
+	var sep_style = StyleBoxFlat.new()
+	sep_style.bg_color = active_theme.accent.darkened(0.55)
+
+	for i in range(3):
+		# Thin separator before 2nd and 3rd buttons
+		if i > 0:
+			var sep = VSeparator.new()
+			sep.add_theme_stylebox_override("separator", sep_style)
+			sep.custom_minimum_size = Vector2(2, 50)
+			sep.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			nav_hbox.add_child(sep)
+
+		# Container per button for indicator line
+		var btn_vbox = VBoxContainer.new()
+		btn_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+		btn_vbox.add_theme_constant_override("separation", 2)
+		btn_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		btn_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		nav_hbox.add_child(btn_vbox)
+
+		# The button itself
+		var n_btn = Button.new()
+		n_btn.icon = icons[i]
+		n_btn.expand_icon = true
+		n_btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		n_btn.custom_minimum_size = Vector2(0, 56)
+		n_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+		# 3D look: gradient shadow stylebox
+		var n_style_normal = StyleBoxFlat.new()
+		n_style_normal.bg_color = Color(0, 0, 0, 0)
+		n_style_normal.shadow_color = Color8(0, 0, 0, 60)
+		n_style_normal.shadow_size = 4
+		n_style_normal.shadow_offset = Vector2(0, 2)
+		n_btn.add_theme_stylebox_override("normal", n_style_normal)
+		n_btn.add_theme_stylebox_override("hover", n_style_normal)
+		n_btn.add_theme_stylebox_override("focus", n_style_normal)
+
+		var n_style_pressed = StyleBoxFlat.new()
+		n_style_pressed.bg_color = active_theme.accent.darkened(0.6)
+		n_style_pressed.bg_color.a = 0.25
+		n_style_pressed.corner_radius_top_left = 10; n_style_pressed.corner_radius_top_right = 10
+		n_style_pressed.corner_radius_bottom_left = 10; n_style_pressed.corner_radius_bottom_right = 10
+		n_btn.add_theme_stylebox_override("pressed", n_style_pressed)
+
+		n_btn.add_theme_constant_override("icon_max_width", 40)
+		btn_vbox.add_child(n_btn)
+
+		# Accent indicator line under active button
+		var indicator = Control.new()
+		indicator.custom_minimum_size = Vector2(40, 3)
+		indicator.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		var ind_draw_target = indicator
+		var accent_col = active_theme.accent
+		ind_draw_target.draw.connect(func():
+			ind_draw_target.draw_rect(Rect2(Vector2.ZERO, ind_draw_target.size), accent_col, true, -1.0)
+		)
+		indicator.visible = false
+		btn_vbox.add_child(indicator)
+
+		# Connect
+		var tab_idx = i
+		n_btn.pressed.connect(func(): _switch_tab(tab_idx))
+
+		nav_bar_btns.append({"btn": n_btn, "indicator": indicator})
+
+# ======================================================
+# STATS TAB
+# ======================================================
+func _build_stats_tab() -> Control:
+	var sw = get_viewport_rect().size.x
+	var page = Control.new()
+	page.custom_minimum_size = Vector2(sw, 0)
+	page.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	var margin = MarginContainer.new()
+	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.add_theme_constant_override("margin_top", 80)
+	margin.add_theme_constant_override("margin_bottom", 160)
+	margin.add_theme_constant_override("margin_left", 30)
+	margin.add_theme_constant_override("margin_right", 30)
+	page.add_child(margin)
+
+	var vbox = VBoxContainer.new()
+	vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
+	vbox.add_theme_constant_override("separation", 28)
+	margin.add_child(vbox)
+
+	# --- Title (same style as TAKIM SEÇİMİ) ---
+	var title = create_label_node("STATS_TITLE", white, 55)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_color_override("font_shadow_color", Color8(0,0,0,150))
+	title.add_theme_constant_override("shadow_offset_y", 4)
+	vbox.add_child(title)
+
+	var sep = HSeparator.new()
+	vbox.add_child(sep)
+
+	var history = Global.match_history
+
+	if history.is_empty():
+		var no_data_lbl = Label.new()
+		no_data_lbl.text = LANG[Global.current_lang]["STATS_NO_DATA"]
+		no_data_lbl.add_theme_font_override("font", custom_font)
+		no_data_lbl.add_theme_font_size_override("font_size", 34)
+		no_data_lbl.add_theme_color_override("font_color", Color8(200, 200, 200, 200))
+		no_data_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		no_data_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
+		ui_labels.append({"node": no_data_lbl, "key": "STATS_NO_DATA", "type": "label"})
+		vbox.add_child(no_data_lbl)
+	else:
+		# Compute stats
+		var total = history.size()
+		var most_goals_match = history[0]
+		var most_diff_match = history[0]
+		var home_wins = 0; var away_wins = 0; var draws = 0
+		for m in history:
+			var goals = m.home_score + m.away_score
+			var diff = abs(m.home_score - m.away_score)
+			if goals > most_goals_match.home_score + most_goals_match.away_score:
+				most_goals_match = m
+			if diff > abs(most_diff_match.home_score - most_diff_match.away_score):
+				most_diff_match = m
+			if m.home_score > m.away_score: home_wins += 1
+			elif m.away_score > m.home_score: away_wins += 1
+			else: draws += 1
+
+		var stat_panel_style = StyleBoxFlat.new()
+		stat_panel_style.bg_color = Color8(15, 25, 40, 210)
+		stat_panel_style.corner_radius_top_left = 16; stat_panel_style.corner_radius_top_right = 16
+		stat_panel_style.corner_radius_bottom_left = 16; stat_panel_style.corner_radius_bottom_right = 16
+		stat_panel_style.border_width_left = 3
+		stat_panel_style.border_color = active_theme.accent
+
+		# Row helper – redesigned with filled accent bar
+		var _add_stat = func(label_text: String, value_text: String):
+			var row_panel = PanelContainer.new()
+			var rp_style = StyleBoxFlat.new()
+			rp_style.bg_color = Color8(10, 18, 32, 230)
+			rp_style.corner_radius_top_left = 12; rp_style.corner_radius_top_right = 12
+			rp_style.corner_radius_bottom_left = 12; rp_style.corner_radius_bottom_right = 12
+			rp_style.border_width_bottom = 3
+			rp_style.border_color = active_theme.accent
+			rp_style.content_margin_left = 18; rp_style.content_margin_right = 18
+			rp_style.content_margin_top = 12; rp_style.content_margin_bottom = 12
+			row_panel.add_theme_stylebox_override("panel", rp_style)
+			var row = HBoxContainer.new()
+			row.add_theme_constant_override("separation", 20)
+			row_panel.add_child(row)
+			var lbl = Label.new()
+			lbl.text = LANG[Global.current_lang][label_text]
+			lbl.add_theme_font_override("font", custom_font)
+			lbl.add_theme_font_size_override("font_size", 30)
+			lbl.add_theme_color_override("font_color", Color.WHITE)
+			lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			ui_labels.append({"node": lbl, "key": label_text, "type": "label"})
+			row.add_child(lbl)
+			var val_lbl = Label.new()
+			val_lbl.text = value_text
+			val_lbl.add_theme_font_override("font", custom_font)
+			val_lbl.add_theme_font_size_override("font_size", 33)
+			val_lbl.add_theme_color_override("font_color", active_theme.accent)
+			val_lbl.add_theme_color_override("font_shadow_color", active_theme.accent.darkened(0.5))
+			val_lbl.add_to_group("ThemeStatValueNodes")
+			val_lbl.add_theme_constant_override("shadow_offset_x", 1)
+			val_lbl.add_theme_constant_override("shadow_offset_y", 2)
+			val_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+			row.add_child(val_lbl)
+			vbox.add_child(row_panel)
+
+		_add_stat.call("STATS_TOTAL", str(total))
+		_add_stat.call("STATS_HOME_W", str(home_wins))
+		_add_stat.call("STATS_AWAY_W", str(away_wins))
+		_add_stat.call("STATS_DRAW", str(draws))
+
+		var mg = most_goals_match
+		var mg_total = mg.home_score + mg.away_score
+		_add_stat.call("STATS_MOST_GOALS", "%s %d-%d %s (%d)" % [mg.home, mg.home_score, mg.away_score, mg.away, mg_total])
+
+		var md = most_diff_match
+		_add_stat.call("STATS_BIGGEST_WIN", "%s %d - %d %s" % [md.home, md.home_score, md.away_score, md.away])
+
+		# Recent matches (Last 5, no scroll)
+		var recent_title = Label.new()
+		recent_title.text = LANG[Global.current_lang]["STATS_RECENT"]
+		recent_title.add_theme_font_override("font", custom_font)
+		recent_title.add_theme_font_size_override("font_size", 36)
+		recent_title.add_theme_color_override("font_color", Color.WHITE)
+		recent_title.add_theme_color_override("font_shadow_color", Color8(0,0,0,150))
+		recent_title.add_theme_constant_override("shadow_offset_y", 4)
+		ui_labels.append({"node": recent_title, "key": "STATS_RECENT", "type": "label"})
+		vbox.add_child(recent_title)
+
+		var recent_vbox = VBoxContainer.new()
+		recent_vbox.add_theme_constant_override("separation", 10)
+		recent_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		vbox.add_child(recent_vbox)
+
+		# Show last 5, newest first
+		var shown = min(history.size(), 5)
+		for i in range(history.size() - 1, history.size() - 1 - shown, -1):
+			var m = history[i]
+			var r_panel = PanelContainer.new()
+			r_panel.add_theme_stylebox_override("panel", stat_panel_style)
+			var r_lbl = Label.new()
+			r_lbl.text = "%s  %d - %d  %s" % [m.home, m.home_score, m.away_score, m.away]
+			r_lbl.add_theme_font_override("font", custom_font)
+			r_lbl.add_theme_font_size_override("font_size", 28)
+			r_lbl.add_theme_color_override("font_color", Color.WHITE)
+			r_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			r_panel.add_child(r_lbl)
+			recent_vbox.add_child(r_panel)
+
+	return page
+
+# ======================================================
+# SHOP TAB
+# ======================================================
+func _build_shop_tab() -> Control:
+	var sw = get_viewport_rect().size.x
+	var page = Control.new()
+	page.custom_minimum_size = Vector2(sw, 0)
+	page.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	var margin = MarginContainer.new()
+	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.add_theme_constant_override("margin_top", 80)
+	margin.add_theme_constant_override("margin_bottom", 80)
+	margin.add_theme_constant_override("margin_left", 0)
+	margin.add_theme_constant_override("margin_right", 0)
+	page.add_child(margin)
+
+	var vbox = VBoxContainer.new()
+	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vbox.add_theme_constant_override("separation", 30)
+	margin.add_child(vbox)
+
+	# No spacer needed — margin_top handles offset
+
+	# --- SHOP TITLE (same style as TAKIM SEÇİMİ) ---
+	var title = create_label_node("SHOP_TITLE", white, 55)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_color_override("font_shadow_color", Color8(0,0,0,150))
+	title.add_theme_constant_override("shadow_offset_y", 4)
+	vbox.add_child(title)
+
+	# --- PREMIUM BANNER ---
+	var prem_panel = PanelContainer.new()
+	var prem_style = StyleBoxFlat.new()
+	prem_style.bg_color = Color8(20, 14, 40, 245)
+	prem_style.corner_radius_top_left = 22; prem_style.corner_radius_top_right = 22
+	prem_style.corner_radius_bottom_left = 22; prem_style.corner_radius_bottom_right = 22
+	prem_style.border_width_top = 3; prem_style.border_width_bottom = 3
+	prem_style.border_width_left = 3; prem_style.border_width_right = 3
+	prem_style.border_color = Color8(255, 200, 0, 230)
+	prem_style.shadow_color = Color8(255, 200, 0, 60)
+	prem_style.shadow_size = 20
+	prem_style.content_margin_left = 30; prem_style.content_margin_right = 30
+	prem_style.content_margin_top = 30; prem_style.content_margin_bottom = 30
+	prem_panel.add_theme_stylebox_override("panel", prem_style)
+	var prem_margin = MarginContainer.new()
+	prem_margin.add_theme_constant_override("margin_left", 20)
+	prem_margin.add_theme_constant_override("margin_right", 20)
+	prem_margin.add_child(prem_panel)
+	vbox.add_child(prem_margin)
+
+	var prem_vbox = VBoxContainer.new()
+	prem_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	prem_vbox.add_theme_constant_override("separation", 18)
+	prem_panel.add_child(prem_vbox)
+
+	var prem_icon_lbl = Label.new()
+	prem_icon_lbl.text = "⭐  PRO"
+	prem_icon_lbl.add_theme_font_override("font", custom_font)
+	prem_icon_lbl.add_theme_font_size_override("font_size", 52)
+	prem_icon_lbl.add_theme_color_override("font_color", Color8(255, 210, 0))
+	prem_icon_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	prem_vbox.add_child(prem_icon_lbl)
+
+	var prem_desc = Label.new()
+	prem_desc.text = LANG[Global.current_lang]["SHOP_PRO_DESC"]
+	prem_desc.add_theme_font_override("font", custom_font)
+	prem_desc.add_theme_font_size_override("font_size", 28)
+	prem_desc.add_theme_color_override("font_color", Color.WHITE)
+	prem_desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	prem_desc.autowrap_mode = TextServer.AUTOWRAP_WORD
+	ui_labels.append({"node": prem_desc, "key": "SHOP_PRO_DESC", "type": "label"})
+	prem_vbox.add_child(prem_desc)
+
+	var buy_btn = Button.new()
+	buy_btn.text = LANG[Global.current_lang]["SHOP_BUY"]
+	ui_labels.append({"node": buy_btn, "key": "SHOP_BUY", "type": "button"})
+	buy_btn.add_theme_font_override("font", custom_font)
+	buy_btn.add_theme_font_size_override("font_size", 34)
+	buy_btn.add_theme_color_override("font_color", Color8(10, 10, 10))
+	buy_btn.custom_minimum_size = Vector2(360, 75)
+	buy_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	var buy_style = StyleBoxFlat.new()
+	buy_style.bg_color = Color8(255, 210, 0)
+	buy_style.corner_radius_top_left = 16; buy_style.corner_radius_top_right = 16
+	buy_style.corner_radius_bottom_left = 16; buy_style.corner_radius_bottom_right = 16
+	buy_style.shadow_color = Color8(255, 200, 0, 120)
+	buy_style.shadow_size = 10
+	buy_style.shadow_offset = Vector2(0, 3)
+	var buy_hover_style = buy_style.duplicate()
+	buy_hover_style.bg_color = Color8(255, 230, 60)
+	buy_btn.add_theme_stylebox_override("normal", buy_style)
+	buy_btn.add_theme_stylebox_override("hover", buy_hover_style)
+	buy_btn.add_theme_stylebox_override("pressed", buy_style)
+	buy_btn.add_theme_stylebox_override("focus", buy_style)
+	buy_btn.pressed.connect(_on_buy_premium_pressed)
+	prem_vbox.add_child(buy_btn)
+
+	# --- COSMETICS SECTION ---
+	var cosm_title = create_label_node("SHOP_COSMETICS", white, 38)
+	cosm_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	cosm_title.add_theme_color_override("font_shadow_color", Color8(0,0,0,150))
+	cosm_title.add_theme_constant_override("shadow_offset_y", 4)
+	vbox.add_child(cosm_title)
+
+	var cosm_sep = HSeparator.new(); vbox.add_child(cosm_sep)
+
+	# Ball skins grid
+	var balls_label = create_label_node("SHOP_BALL_SKINS", white, 42)
+	balls_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	balls_label.add_theme_color_override("font_shadow_color", Color8(0,0,0,150))
+	balls_label.add_theme_constant_override("shadow_offset_y", 4)
+	vbox.add_child(balls_label)
+
+	var balls_grid = GridContainer.new()
+	balls_grid.columns = 3
+	balls_grid.add_theme_constant_override("h_separation", 15)
+	balls_grid.add_theme_constant_override("v_separation", 15)
+	var balls_grid_margin = MarginContainer.new()
+	balls_grid_margin.add_theme_constant_override("margin_left", 20)
+	balls_grid_margin.add_theme_constant_override("margin_right", 20)
+	balls_grid_margin.add_child(balls_grid)
+	vbox.add_child(balls_grid_margin)
+
+	var ball_skin_names = ["Klasik", "Altın", "Neon", "Krom", "Lav", "Buz"]
+	var ball_skin_colors = [
+		Color8(255,255,255), Color8(255,210,0), Color8(57,255,20),
+		Color8(180,200,220), Color8(255,80,0), Color8(120,200,255)
+	]
+	for bi in range(ball_skin_names.size()):
+		var card = PanelContainer.new()
+		var card_style = StyleBoxFlat.new()
+		card_style.bg_color = Color8(15, 25, 40, 220)
+		card_style.corner_radius_top_left = 14; card_style.corner_radius_top_right = 14
+		card_style.corner_radius_bottom_left = 14; card_style.corner_radius_bottom_right = 14
+		card_style.border_width_bottom = 3
+		card_style.border_color = ball_skin_colors[bi].darkened(0.3)
+		card_style.content_margin_top = 22; card_style.content_margin_bottom = 22
+		card.add_theme_stylebox_override("panel", card_style)
+		card.custom_minimum_size = Vector2(0, 145)
+
+		var card_vbox = VBoxContainer.new()
+		card_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+		card.add_child(card_vbox)
+
+		# Ball circle preview
+		var ball_preview = Control.new()
+		ball_preview.custom_minimum_size = Vector2(70, 70)
+		ball_preview.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		var bcolor = ball_skin_colors[bi]
+		ball_preview.draw.connect(func():
+			var c = ball_preview.size / 2.0
+			var r = 28.0
+			ball_preview.draw_circle(c, r, bcolor)
+			ball_preview.draw_arc(c, r, 0, TAU, 48, bcolor.darkened(0.4), 4, true)
+			ball_preview.draw_arc(c, r - 2.0, 0, TAU, 48, Color.WHITE, 1.5, true)
+		)
+		card_vbox.add_child(ball_preview)
+
+		var name_lbl = Label.new()
+		name_lbl.text = ball_skin_names[bi]
+		name_lbl.add_theme_font_override("font", custom_font)
+		name_lbl.add_theme_font_size_override("font_size", 30)
+		name_lbl.add_theme_color_override("font_color", Color.WHITE)
+		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		card_vbox.add_child(name_lbl)
+
+		var lock_lbl = Label.new()
+		lock_lbl.text = "🔒"
+		lock_lbl.add_theme_font_override("font", custom_font)
+		lock_lbl.add_theme_font_size_override("font_size", 28)
+		lock_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		card_vbox.add_child(lock_lbl)
+
+		balls_grid.add_child(card)
+
+	# Bottom spacer for nav bar
+	var sp_bot = Control.new(); sp_bot.custom_minimum_size = Vector2(0, 160); vbox.add_child(sp_bot)
+
+	return page
+
+func _on_buy_premium_pressed():
+	# Show a purchase confirmation dialog
+	var dlg = PanelContainer.new()
+	var dlg_style = StyleBoxFlat.new()
+	dlg_style.bg_color = Color8(15, 20, 35, 250)
+	dlg_style.corner_radius_top_left = 20; dlg_style.corner_radius_top_right = 20
+	dlg_style.corner_radius_bottom_left = 20; dlg_style.corner_radius_bottom_right = 20
+	dlg_style.border_width_top = 3; dlg_style.border_width_bottom = 3
+	dlg_style.border_width_left = 3; dlg_style.border_width_right = 3
+	dlg_style.border_color = Color8(255, 210, 0)
+	dlg_style.shadow_color = Color8(0, 0, 0, 180)
+	dlg_style.shadow_size = 30
+	dlg_style.content_margin_left = 40; dlg_style.content_margin_right = 40
+	dlg_style.content_margin_top = 35; dlg_style.content_margin_bottom = 35
+	dlg.add_theme_stylebox_override("panel", dlg_style)
+	dlg.custom_minimum_size = Vector2(600, 0)
+
+	# Center it
+	var dlg_center = CenterContainer.new()
+	dlg_center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dlg_center.add_child(dlg)
+	add_child(dlg_center)
+
+	var dlg_vbox = VBoxContainer.new()
+	dlg_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	dlg_vbox.add_theme_constant_override("separation", 25)
+	dlg.add_child(dlg_vbox)
+
+	var dlg_title = Label.new()
+	dlg_title.text = "⭐  PRO'ya Yükselt"
+	dlg_title.add_theme_font_override("font", custom_font)
+	dlg_title.add_theme_font_size_override("font_size", 44)
+	dlg_title.add_theme_color_override("font_color", Color8(255, 210, 0))
+	dlg_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	dlg_vbox.add_child(dlg_title)
+
+	var dlg_desc = Label.new()
+	dlg_desc.text = "₺49.99 karşılığında tüm premium özelliklere kalıcı erişim elde et. Bu uygulama içi satın alma Google Play üzerinden gerçekleşir."
+	dlg_desc.add_theme_font_override("font", custom_font)
+	dlg_desc.add_theme_font_size_override("font_size", 28)
+	dlg_desc.add_theme_color_override("font_color", Color.WHITE)
+	dlg_desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	dlg_desc.autowrap_mode = TextServer.AUTOWRAP_WORD
+	dlg_vbox.add_child(dlg_desc)
+
+	var dlg_hbox = HBoxContainer.new()
+	dlg_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	dlg_hbox.add_theme_constant_override("separation", 20)
+	dlg_vbox.add_child(dlg_hbox)
+
+	var cancel_btn = Button.new()
+	cancel_btn.text = "VAZGEÇ"
+	cancel_btn.add_theme_font_override("font", custom_font)
+	cancel_btn.add_theme_font_size_override("font_size", 28)
+	var cancel_style = StyleBoxFlat.new()
+	cancel_style.bg_color = Color8(60, 60, 80, 220)
+	cancel_style.corner_radius_top_left = 12; cancel_style.corner_radius_top_right = 12
+	cancel_style.corner_radius_bottom_left = 12; cancel_style.corner_radius_bottom_right = 12
+	cancel_btn.add_theme_stylebox_override("normal", cancel_style)
+	cancel_btn.add_theme_stylebox_override("hover", cancel_style)
+	cancel_btn.add_theme_stylebox_override("pressed", cancel_style)
+	cancel_btn.add_theme_stylebox_override("focus", cancel_style)
+	cancel_btn.custom_minimum_size = Vector2(200, 65)
+	cancel_btn.pressed.connect(func(): dlg_center.queue_free())
+	dlg_hbox.add_child(cancel_btn)
+
+	var confirm_btn = Button.new()
+	confirm_btn.text = "SATIN AL"
+	confirm_btn.add_theme_font_override("font", custom_font)
+	confirm_btn.add_theme_font_size_override("font_size", 28)
+	confirm_btn.add_theme_color_override("font_color", Color8(10, 10, 10))
+	var confirm_style = StyleBoxFlat.new()
+	confirm_style.bg_color = Color8(255, 210, 0)
+	confirm_style.corner_radius_top_left = 12; confirm_style.corner_radius_top_right = 12
+	confirm_style.corner_radius_bottom_left = 12; confirm_style.corner_radius_bottom_right = 12
+	confirm_btn.add_theme_stylebox_override("normal", confirm_style)
+	confirm_btn.add_theme_stylebox_override("hover", confirm_style)
+	confirm_btn.add_theme_stylebox_override("pressed", confirm_style)
+	confirm_btn.add_theme_stylebox_override("focus", confirm_style)
+	confirm_btn.custom_minimum_size = Vector2(200, 65)
+	confirm_btn.pressed.connect(func():
+		# Placeholder: trigger actual in-app billing here
+		dlg_center.queue_free()
+	)
+	dlg_hbox.add_child(confirm_btn)
+
+# ======================================================
+# SWIPE INPUT
+# ======================================================
+func _input(event: InputEvent):
+	if settings_overlay != null and settings_overlay.visible:
+		return
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				swipe_start = event.position
+				swipe_active = true
+			else:
+				swipe_active = false
+	elif event is InputEventScreenTouch:
+		if event.pressed:
+			swipe_start = event.position
+			swipe_active = true
+		else:
+			swipe_active = false
+	elif swipe_active and (event is InputEventMouseMotion or event is InputEventScreenDrag):
+		var pos = event.position
+		var delta_x = pos.x - swipe_start.x
+		var delta_y = abs(pos.y - swipe_start.y)
+		if abs(delta_x) > swipe_threshold and abs(delta_x) > delta_y * 1.5:
+			swipe_active = false
+			if delta_x < 0 and current_tab < 2:
+				_switch_tab(current_tab + 1)
+			elif delta_x > 0 and current_tab > 0:
+				_switch_tab(current_tab - 1)

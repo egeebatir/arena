@@ -1,6 +1,7 @@
 extends Node
 
 var bg_music_player: AudioStreamPlayer
+var click_player: AudioStreamPlayer
 
 var current_lang = "TR"
 var home_team_name = "GALATASARAY"
@@ -33,6 +34,7 @@ var vol_settings = {
 var current_theme = "Mavi"
 var shake_enabled = true
 var match_duration = 1 # 0 = Kısa (24s), 1 = Normal (36s), 2 = Uzun (48s)
+var match_history: Array = [] # [{home, away, home_score, away_score}]
 
 var THEMES = {
 	"Buz": {
@@ -320,6 +322,22 @@ func _ready():
 		bg_music_player.stream.loop = true
 	add_child(bg_music_player)
 	_update_bg_music_volume()
+	
+	click_player = AudioStreamPlayer.new()
+	click_player.stream = preload("res://click.ogg")
+	add_child(click_player)
+	
+	# Initial delay before starting menu music
+	get_tree().create_timer(0.5).timeout.connect(func():
+		if is_instance_valid(bg_music_player) and not bg_music_player.playing:
+			bg_music_player.play()
+	)
+
+func play_click():
+	if is_instance_valid(click_player):
+		var target_vol = master_vol * vol_settings.get("collision", 0.4) * 8.0 # Boost volume by 8x
+		click_player.volume_db = linear_to_db(clamp(target_vol, 0.0, 1.0))
+		click_player.play()
 
 func _update_bg_music_volume():
 	if is_instance_valid(bg_music_player):
@@ -328,3 +346,23 @@ func _update_bg_music_volume():
 			bg_music_player.volume_db = -80.0
 		else:
 			bg_music_player.volume_db = linear_to_db(target_vol)
+
+# ======================================================
+# STATS PERSISTENCE  (user://stats.json)
+# ======================================================
+func save_stats():
+	var file = FileAccess.open("user://stats.json", FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify(match_history))
+		file.close()
+
+func load_stats():
+	if not FileAccess.file_exists("user://stats.json"):
+		return
+	var file = FileAccess.open("user://stats.json", FileAccess.READ)
+	if file:
+		var raw = file.get_as_text()
+		file.close()
+		var parsed = JSON.parse_string(raw)
+		if parsed is Array:
+			match_history = parsed

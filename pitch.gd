@@ -2,7 +2,7 @@ extends Node2D
 
 const ARENA_RADIUS = 264.0
 var CENTER = Vector2.ZERO
-const GOAL_WIDTH_RADIANS = 0.507
+const GOAL_WIDTH_RADIANS = 0.5
 const POST_RADIUS = 4.8
 const GOAL_DEPTH = 70
 const INWARD_OFFSET = 30 
@@ -14,6 +14,7 @@ var time_lbl: Label
 var event_lbl: Label
 var event_timer: float = 0.0
 var screen_shake_timer: int = 0
+var goal_cooldown_timer: float = 0.0
 var intro_overlay: ColorRect
 
 var abandon_btn: Button
@@ -317,7 +318,7 @@ func setup_scoreboard():
 	abandon_btn.add_theme_stylebox_override("pressed", abnd_style)
 	abandon_btn.add_theme_stylebox_override("focus", abnd_style)
 	abandon_btn.custom_minimum_size = Vector2(80, 80)
-	abandon_btn.pressed.connect(func(): get_tree().change_scene_to_file("res://main_menu.tscn"))
+	abandon_btn.pressed.connect(func(): Global.play_click(); get_tree().change_scene_to_file("res://main_menu.tscn"))
 	top_ui_hbox.add_child(abandon_btn)
 	
 	var spacer = Control.new()
@@ -339,7 +340,7 @@ func setup_scoreboard():
 	pause_btn.add_theme_stylebox_override("focus", abnd_style)
 	pause_btn.custom_minimum_size = Vector2(50, 50)
 	pause_btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	pause_btn.pressed.connect(_toggle_pause)
+	pause_btn.pressed.connect(func(): Global.play_click(); _toggle_pause())
 	top_ui_hbox.add_child(pause_btn)
 
 	restart_btn = Button.new()
@@ -363,7 +364,7 @@ func setup_scoreboard():
 	restart_btn.position = Vector2((screen_w / 2.0) - 50.0, CENTER.y + ARENA_RADIUS + 50.0) 
 	
 	restart_btn.visible = false
-	restart_btn.pressed.connect(_on_restart_pressed)
+	restart_btn.pressed.connect(func(): Global.play_click(); _on_restart_pressed())
 	ui_layer.add_child(restart_btn)
 
 func _on_restart_pressed():
@@ -421,6 +422,7 @@ func _on_restart_pressed():
 	yes_btn.add_theme_stylebox_override("normal", y_style)
 	yes_btn.custom_minimum_size = Vector2(150, 60)
 	yes_btn.pressed.connect(func():
+		Global.play_click()
 		confirm_panel.queue_free()
 		_reset_match_for_replay()
 	)
@@ -440,7 +442,7 @@ func _on_restart_pressed():
 	n_style.corner_radius_bottom_left = 10; n_style.corner_radius_bottom_right = 10
 	no_btn.add_theme_stylebox_override("normal", n_style)
 	no_btn.custom_minimum_size = Vector2(150, 60)
-	no_btn.pressed.connect(func(): confirm_panel.queue_free())
+	no_btn.pressed.connect(func(): Global.play_click(); confirm_panel.queue_free())
 	hbox.add_child(no_btn)
 
 func _reset_match_for_replay():
@@ -487,6 +489,7 @@ func _toggle_pause():
 		pause_btn.icon = preload("res://pauseicon.svg")
 
 func spawn_card(ctype: String):
+	if goal_cooldown_timer > 0.0: return # Disable cards during goal cooldown
 	var angle = randf() * TAU
 	var dist = sqrt(randf()) * (ARENA_RADIUS - 60.0)
 	var cpos = CENTER + Vector2(cos(angle), sin(angle)) * dist
@@ -500,6 +503,7 @@ func spawn_card(ctype: String):
 	})
 
 func create_particle(p_pos: Vector2, base_vel: Vector2, p_color: Color):
+	if goal_cooldown_timer > 0.0: return # No particles during goal cooldown for performance
 	var angle = randf_range(0, TAU)
 	var speed = randf_range(1.33, 4.0)
 	var rand_vel = Vector2(cos(angle), sin(angle)) * speed
@@ -566,6 +570,9 @@ func _physics_process(delta):
 	else:
 		event_lbl.modulate.a = 0.0
 		
+	if goal_cooldown_timer > 0.0:
+		goal_cooldown_timer -= delta
+		
 	if state == "INTRO":
 		if intro_timer > 0:
 			intro_timer -= 1
@@ -621,6 +628,15 @@ func _physics_process(delta):
 			
 	elif state == "FULLTIME":
 		end_match_timer += 1
+		if end_match_timer == 1:
+			# Record result once on the first frame of FULLTIME
+			Global.match_history.append({
+				"home": Global.home_team_name,
+				"away": Global.away_team_name,
+				"home_score": score1,
+				"away_score": score2
+			})
+			Global.save_stats()  # Persist to disk immediately
 		if end_match_timer > 2.0 * FPS_TARGET and not restart_btn.visible:
 			restart_btn.visible = true
 			
@@ -747,6 +763,8 @@ func trigger_goal(b, team_id):
 	if score1 + score2 >= 1: goal_rotating = true
 	if Global.shake_enabled: screen_shake_timer = 22
 	
+	goal_cooldown_timer = 1.0
+	
 	ball1.reset_and_explode(CENTER)
 	ball2.reset_and_explode(CENTER)
 
@@ -784,6 +802,8 @@ func _draw():
 	while diff < -PI: diff += 2.0 * PI
 
 	var steps_lr = 10; var steps_fb = 5
+	if goal_cooldown_timer > 0.0:
+		steps_lr = 4; steps_fb = 2 # Simplify for performance
 	for j in range(1, steps_fb + 1):
 		var ratio_fb = float(j) / float(steps_fb)
 		var points = PackedVector2Array()
@@ -824,3 +844,4 @@ func trigger_popup(msg: String, color: Color = Color.WHITE, outline_col: Color =
 	event_lbl.add_theme_color_override("font_color", color)
 	event_lbl.add_theme_color_override("font_outline_color", outline_col)
 	event_timer = 3.0
+	# Performance: skip high-step drawing during cooldown

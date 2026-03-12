@@ -3,9 +3,9 @@ extends Node2D
 const POST_RADIUS = 4.0
 const POST_ELASTICITY = 1.04
 const BALL_RADIUS = 48.0
-const SPEED = 8
-const MIN_SPEED = 5.9
-const GRAVITY = 0.044
+const SPEED = 7.8
+const MIN_SPEED = 5.75
+const GRAVITY = 0.055
 const FRICTION = 0.999
 const BOUNCE_DAMPING = 0.985
 
@@ -14,6 +14,15 @@ var current_team_name = ""
 var team_colors = [Color.WHITE, Color.BLACK]
 var team_short_name = ""
 var logo_texture: Texture2D
+var badge_texture: Texture2D  # Mascot badge drawn on top of ball
+
+# Map short team names to mascot overlay images
+const BADGE_MAP = {
+	"FB":  "res://fb1.png",
+	"TS":  "res://ts1.png",
+	"GS":  "res://gs1.png",
+	"BJK": "res://bjk1.png"
+}
 
 var velocity = Vector2.ZERO
 var mass = 1.0
@@ -40,6 +49,11 @@ func init_ball(team_name: String, center_pos: Vector2, r_limit: float, avoid_pos
 	else:
 		logo_texture = null
 	self.set("current_logo_path", team_name)
+
+	# Assign mascot badge if available for this team
+	badge_texture = null
+	if BADGE_MAP.has(team_short_name):
+		badge_texture = load(BADGE_MAP[team_short_name])
 	
 	var valid_spawn = false
 	var attempts = 0
@@ -154,13 +168,20 @@ func _draw():
 			var y = sqrt(max(0, BALL_RADIUS * BALL_RADIUS - x * x))
 			draw_line(Vector2(x, -y), Vector2(x, y), team_colors[1], 1.0)
 			
-	draw_arc(Vector2.ZERO, BALL_RADIUS, 0, TAU, 64, team_colors[1], 3.0, true)
-	draw_arc(Vector2.ZERO, BALL_RADIUS - 3.0, 0, TAU, 64, white, 1.5, true)
+	# Colored arc inside, white arc at the very edge (ALL WHITE NOW)
+	draw_arc(Vector2.ZERO, BALL_RADIUS - 1.5, 0, TAU, 64, white, 1.2, true)
+	draw_arc(Vector2.ZERO, BALL_RADIUS, 0, TAU, 64, white, 0.8, true)
 	
 	if logo_texture:
 		var logo_size = Vector2(50, 50) 
 		var logo_rect = Rect2(-logo_size / 2.0, logo_size)
 		draw_texture_rect(logo_texture, logo_rect, false)
+
+	# Draw team mascot badge centered on ball
+	if badge_texture:
+		var badge_size = Vector2(80, 80)
+		var badge_rect = Rect2(-badge_size / 2.0, badge_size)
+		draw_texture_rect(badge_texture, badge_rect, false)
 
 	if nerf_timer > 0 or yellow_nerf_timer > 0:
 		var crd_w = 12
