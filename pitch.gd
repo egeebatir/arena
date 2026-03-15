@@ -128,6 +128,7 @@ func _ready():
 	static_pitch_node.scream = cream
 	static_pitch_node.swhite = white
 	static_pitch_node.position = CENTER
+	static_pitch_node.z_index = -1
 	add_child(static_pitch_node)
 	static_pitch_node.queue_redraw()
 	

@@ -158,6 +158,7 @@ func _ready():
 	tabs_hbox = HBoxContainer.new()
 	tabs_hbox.add_theme_constant_override("separation", 0)
 	tabs_hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tabs_hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tab_container.add_child(tabs_hbox)
 	# We'll size tabs_hbox after viewport is known (call_deferred)
 	call_deferred("_init_tab_sizes")
@@ -166,12 +167,14 @@ func _ready():
 	var stats_placeholder = Control.new()
 	stats_placeholder.name = "Stats_Placeholder"
 	stats_placeholder.custom_minimum_size.x = get_viewport_rect().size.x
+	stats_placeholder.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tabs_hbox.add_child(stats_placeholder)
 
 	# --- PAGE 1: HOME TAB (existing main menu UI) ---
 	var main_margin = MarginContainer.new()
 	main_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
 	main_margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	main_margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	main_margin.add_theme_constant_override("margin_top", 80)
 	main_margin.add_theme_constant_override("margin_bottom", 40)
 	main_margin.add_theme_constant_override("margin_left", 20)
@@ -459,7 +462,7 @@ func _ready():
 	# Scroll container for lists ONLY
 	var scroll_both = ScrollContainer.new()
 	scroll_both.name = "ScrollContainer"
-	scroll_both.custom_minimum_size = Vector2(0, 200) # Minimum 200px tall
+	scroll_both.custom_minimum_size = Vector2(0, 600) # Minimum 600px tall
 	scroll_both.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll_both.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll_both.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
@@ -548,6 +551,7 @@ func _ready():
 	var shop_placeholder = Control.new()
 	shop_placeholder.name = "Shop_Placeholder"
 	shop_placeholder.custom_minimum_size.x = get_viewport_rect().size.x
+	shop_placeholder.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tabs_hbox.add_child(shop_placeholder)
 
 	# --- BOTTOM NAVIGATION BAR ---
@@ -1344,6 +1348,7 @@ func _build_stats_tab() -> Control:
 	var page = Control.new()
 	page.custom_minimum_size = Vector2(sw, 0)
 	page.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	page.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 	var margin = MarginContainer.new()
 	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -1494,6 +1499,7 @@ func _build_shop_tab() -> Control:
 	var page = Control.new()
 	page.custom_minimum_size = Vector2(sw, 0)
 	page.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	page.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 	var margin = MarginContainer.new()
 	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
