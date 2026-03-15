@@ -92,6 +92,7 @@ var away_list: VBoxContainer
 var settings_overlay: ColorRect
 var ui_labels = []
 var burger_popup: PopupMenu
+var ui_separators = []
 
 var home_preview: Control
 var away_preview: Control
@@ -112,17 +113,14 @@ var nav_bar_panel: PanelContainer
 var nav_bar_btns: Array = []
 var swipe_start: Vector2 = Vector2.ZERO
 var swipe_active: bool = false
-var swipe_threshold: float = 60.0
+var swipe_threshold: float = 40.0
 var badge_textures: Dictionary = {}  # Preloaded at _ready() for badge overlay on preview balls
 
 func _ready():
 	Engine.time_scale = 1.0 
 	
 	if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
-		get_tree().create_timer(0.5).timeout.connect(func():
-			if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
-				Global.bg_music_player.play()
-		)
+		Global.bg_music_player.play()
 	Global.load_stats()  # Load persisted match history from disk
 	# Pre-load badge overlay textures so draw_ball_preview doesn't block per frame
 	badge_textures = {
@@ -309,6 +307,10 @@ func _ready():
 	)
 	top_hbox.add_child(burger_btn)
 	
+	var menu_sep = HSeparator.new()
+	main_vbox.add_child(menu_sep)
+	ui_separators.append(menu_sep)
+	
 	# --- YENİ HAVALI LİSTE PANELİ ---
 	var list_panel = PanelContainer.new()
 	var lp_style = StyleBoxFlat.new()
@@ -457,7 +459,8 @@ func _ready():
 	# Scroll container for lists ONLY
 	var scroll_both = ScrollContainer.new()
 	scroll_both.name = "ScrollContainer"
-	scroll_both.custom_minimum_size = Vector2(685, 620) # ~8 teams visible
+	scroll_both.custom_minimum_size = Vector2(0, 200) # Minimum 200px tall
+	scroll_both.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll_both.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll_both.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	var v_sc = scroll_both.get_v_scroll_bar()
@@ -484,12 +487,14 @@ func _ready():
 	home_list = VBoxContainer.new()
 	home_list.mouse_filter = Control.MOUSE_FILTER_PASS
 	home_list.custom_minimum_size = Vector2(320, 0)
+	home_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	home_list.add_theme_constant_override("separation", 10)
 	lists_hbox.add_child(home_list)
 	
 	away_list = VBoxContainer.new()
 	away_list.mouse_filter = Control.MOUSE_FILTER_PASS
 	away_list.custom_minimum_size = Vector2(320, 0)
+	away_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	away_list.add_theme_constant_override("separation", 10)
 	lists_hbox.add_child(away_list)
 	
@@ -500,11 +505,21 @@ func _ready():
 	# Yaratılış sırasında ismi atlayalım, global değişkene referans atalım. (İsterseniz globalden direkt çekebilirsiniz)
 	var start_btn = Button.new()
 	start_btn.name = "StartMatchButton"
-	start_btn.text = LANG[Global.current_lang]["START_MATCH"]
-	start_btn.add_theme_font_override("font", custom_font)
-	start_btn.add_theme_font_size_override("font_size", 50)
-	start_btn.add_theme_color_override("font_shadow_color", Color8(0,0,0,150))
-	start_btn.add_theme_constant_override("shadow_offset_y", 4)
+	start_btn.custom_minimum_size = Vector2(660, 90)
+	start_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	
+	var start_lbl = Label.new()
+	start_lbl.name = "ButtonLabel"
+	start_lbl.text = LANG[Global.current_lang]["START_MATCH"]
+	start_lbl.add_theme_font_override("font", custom_font)
+	start_lbl.add_theme_font_size_override("font_size", 50)
+	start_lbl.set_anchors_preset(Control.PRESET_FULL_RECT)
+	start_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	start_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	start_lbl.add_theme_color_override("font_shadow_color", Color8(0,0,0,180))
+	start_lbl.add_theme_constant_override("shadow_offset_x", 0)
+	start_lbl.add_theme_constant_override("shadow_offset_y", 5)
+	start_btn.add_child(start_lbl)
 	start_btn.custom_minimum_size = Vector2(660, 90)
 	start_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	start_btn.add_theme_color_override("font_color", Color8(250, 250, 250))
@@ -527,6 +542,7 @@ func _ready():
 	temp_settings["current_theme"] = Global.current_theme
 	
 	setup_settings_overlay()
+	update_theme_visuals()
 
 	# --- PAGE 2: SHOP TAB (Lazy Loaded) ---
 	var shop_placeholder = Control.new()
@@ -589,27 +605,34 @@ func update_theme_visuals():
 		if s_style is StyleBoxFlat:
 			s_style.bg_color = active_theme.bg_top
 			
-			if Global.current_theme == "Buz":
-				start_match_btn.add_theme_color_override("font_color", Color.BLACK)
-				start_match_btn.add_theme_color_override("font_shadow_color", Color8(255, 255, 255, 150))
-				s_style.border_width_bottom = 6; s_style.border_width_top = 3
-				s_style.border_width_left = 3; s_style.border_width_right = 3
-				s_style.border_color = Color8(0, 0, 0, 200)
-			else:
-				start_match_btn.add_theme_color_override("font_color", Color.WHITE)
-				start_match_btn.add_theme_color_override("font_shadow_color", Color8(0,0,0,150))
-				s_style.border_width_bottom = 0; s_style.border_width_top = 0
-				s_style.border_width_left = 0; s_style.border_width_right = 0
-				
 			start_match_btn.add_theme_stylebox_override("normal", s_style)
 			start_match_btn.add_theme_stylebox_override("hover", s_style)
 			start_match_btn.add_theme_stylebox_override("pressed", s_style)
 			start_match_btn.add_theme_stylebox_override("focus", s_style)
+			
+			var btn_lbl = start_match_btn.get_node_or_null("ButtonLabel")
+			if btn_lbl:
+				if Global.current_theme == "Buz":
+					btn_lbl.add_theme_color_override("font_color", Color.BLACK)
+					btn_lbl.remove_theme_color_override("font_shadow_color")
+				else:
+					btn_lbl.add_theme_color_override("font_color", Color.WHITE)
+					btn_lbl.add_theme_color_override("font_shadow_color", Color8(0,0,0,180))
+					btn_lbl.add_theme_constant_override("shadow_offset_x", 0)
+					btn_lbl.add_theme_constant_override("shadow_offset_y", 5)
 
 	# Buz (light blue) theme: force dark text on background elements, remove outline
 	var buz_active = (Global.current_theme == "Buz")
 	var buz_text_color = Color.BLACK
 	
+	# Update separators
+	var sep_style = StyleBoxLine.new()
+	sep_style.color = active_theme.bg_bottom
+	sep_style.thickness = 3
+	for sep in ui_separators:
+		if is_instance_valid(sep):
+			sep.add_theme_stylebox_override("separator", sep_style)
+
 	# Update stats panel accents if they exist
 	for node in get_tree().get_nodes_in_group("ThemeStatValueNodes"):
 		node.add_theme_color_override("font_color", active_theme.accent)
@@ -635,16 +658,25 @@ func update_theme_visuals():
 			if entry["node"] is Label:
 				entry["node"].add_theme_color_override("font_color", buz_text_color)
 				entry["node"].add_theme_constant_override("outline_size", 0)
+				entry["node"].remove_theme_color_override("font_shadow_color")
 			elif entry["node"] is Button:
-				entry["node"].add_theme_color_override("font_color", buz_text_color)
+				if entry["node"] != start_match_btn:
+					entry["node"].add_theme_color_override("font_color", buz_text_color)
+					entry["node"].remove_theme_color_override("font_shadow_color")
 			elif t == "placeholder" and entry["node"] is LineEdit:
 				entry["node"].add_theme_color_override("font_placeholder_color", buz_text_color)
 		elif not buz_active and (on_bg or t == "button"):
 			if entry["node"] is Label:
 				entry["node"].add_theme_color_override("font_color", Color.WHITE)
 				entry["node"].remove_theme_constant_override("outline_size")
+				# Standard title shadow
+				entry["node"].add_theme_color_override("font_shadow_color", Color8(0,0,0,150))
+				entry["node"].add_theme_constant_override("shadow_offset_y", 4)
 			elif entry["node"] is Button:
-				entry["node"].add_theme_color_override("font_color", Color.WHITE)
+				if entry["node"] != start_match_btn:
+					entry["node"].add_theme_color_override("font_color", Color.WHITE)
+					entry["node"].add_theme_color_override("font_shadow_color", Color8(0,0,0,150))
+					entry["node"].add_theme_constant_override("shadow_offset_y", 4)
 			elif t == "placeholder" and entry["node"] is LineEdit:
 				entry["node"].add_theme_color_override("font_placeholder_color", Color.WHITE)
 
@@ -858,6 +890,7 @@ func add_section_header(vbox: VBoxContainer, lang_key: String):
 	vbox.add_child(header)
 	var sep = HSeparator.new()
 	vbox.add_child(sep)
+	ui_separators.append(sep)
 
 func create_label_node(lang_key, color, f_size) -> Label: 
 	var lbl = Label.new()
@@ -1334,6 +1367,7 @@ func _build_stats_tab() -> Control:
 
 	var sep = HSeparator.new()
 	vbox.add_child(sep)
+	ui_separators.append(sep)
 
 	var history = Global.match_history
 
@@ -1558,6 +1592,7 @@ func _build_shop_tab() -> Control:
 	vbox.add_child(cosm_title)
 
 	var cosm_sep = HSeparator.new(); vbox.add_child(cosm_sep)
+	ui_separators.append(cosm_sep)
 
 	# Ball skins grid
 	var balls_label = create_label_node("SHOP_BALL_SKINS", white, 42)
@@ -1725,6 +1760,11 @@ func _on_buy_premium_pressed():
 func _input(event: InputEvent):
 	if settings_overlay != null and settings_overlay.visible:
 		return
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_RIGHT and current_tab < 2:
+			_switch_tab(current_tab + 1)
+		elif event.keycode == KEY_LEFT and current_tab > 0:
+			_switch_tab(current_tab - 1)
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:

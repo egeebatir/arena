@@ -16,6 +16,7 @@ var event_timer: float = 0.0
 var screen_shake_timer: int = 0
 var goal_cooldown_timer: float = 0.0
 var intro_overlay: ColorRect
+var game_camera: Camera2D
 
 var abandon_btn: Button
 var pause_btn: Button # YENİ DURDURMA BUTONU
@@ -120,14 +121,14 @@ func _ready():
 	bg_layer.add_child(bg_rect)
 	
 	var screen_size = get_viewport_rect().size
-	CENTER = Vector2(screen_size.x / 2.0, screen_size.y / 2.0 - 100.0) 
+	call_deferred("_init_center")
 	
 	static_pitch_node = StaticPitch.new()
 	static_pitch_node.theme_dict = active_theme
 	static_pitch_node.scream = cream
 	static_pitch_node.swhite = white
 	static_pitch_node.position = CENTER
-	bg_layer.add_child(static_pitch_node)
+	add_child(static_pitch_node)
 	static_pitch_node.queue_redraw()
 	
 	added_time_1 = randi_range(2, 4)
@@ -136,9 +137,30 @@ func _ready():
 	
 	intro_timer = int(1.0 * FPS_TARGET)
 	
+	game_camera = Camera2D.new()
+	game_camera.anchor_mode = Camera2D.ANCHOR_MODE_FIXED_TOP_LEFT
+	add_child(game_camera)
+
+func _init_center():
+	var screen_size = get_viewport_rect().size
+	CENTER = Vector2(screen_size.x / 2.0, screen_size.y / 2.0 - 100.0)
+	static_pitch_node.position = CENTER
+	static_pitch_node.queue_redraw()
 	ball1.init_ball(Global.home_team_name, CENTER, ARENA_RADIUS)
 	ball2.init_ball(Global.away_team_name, CENTER, ARENA_RADIUS, ball1.position)
 	setup_scoreboard()
+	
+	# Listen for viewport size changes
+	get_viewport().size_changed.connect(_on_viewport_resized)
+
+func _on_viewport_resized():
+	var screen_size = get_viewport_rect().size
+	CENTER = Vector2(screen_size.x / 2.0, screen_size.y / 2.0 - 100.0)
+	if is_instance_valid(static_pitch_node):
+		static_pitch_node.position = CENTER
+		static_pitch_node.queue_redraw()
+	if is_instance_valid(ball1): ball1.ARENA_CENTER = CENTER
+	if is_instance_valid(ball2): ball2.ARENA_CENTER = CENTER
 
 func get_readable_outline(c: Color) -> Color:
 	var lum = 0.299 * c.r + 0.587 * c.g + 0.114 * c.b
@@ -151,8 +173,9 @@ func setup_scoreboard():
 	
 	var score_margin = MarginContainer.new()
 	score_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	var calculated_margin = CENTER.y - ARENA_RADIUS - 480.0
-	score_margin.add_theme_constant_override("margin_top", 65.0)
+	score_margin.add_theme_constant_override("margin_top", 12.0)
+	score_margin.add_theme_constant_override("margin_left", 8.0)
+	score_margin.add_theme_constant_override("margin_right", 8.0)
 	ui_layer.add_child(score_margin)
 	
 	var center_cont = CenterContainer.new()
@@ -702,10 +725,10 @@ func _physics_process(delta):
 
 	if Global.shake_enabled and screen_shake_timer > 0:
 		var shake_intensity = int((float(screen_shake_timer) / 22.0) * 12.0)
-		position = Vector2(randf_range(-shake_intensity, shake_intensity), randf_range(-shake_intensity, shake_intensity))
+		game_camera.offset = Vector2(randf_range(-shake_intensity, shake_intensity), randf_range(-shake_intensity, shake_intensity))
 		screen_shake_timer -= 1
 	else:
-		position = Vector2.ZERO 
+		game_camera.offset = Vector2.ZERO
 
 func resolve_collisions(b1, b2) -> bool:
 	var d = b2.position - b1.position

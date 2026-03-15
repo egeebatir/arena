@@ -327,11 +327,7 @@ func _ready():
 	click_player.stream = preload("res://click.ogg")
 	add_child(click_player)
 	
-	# Initial delay before starting menu music
-	get_tree().create_timer(0.5).timeout.connect(func():
-		if is_instance_valid(bg_music_player) and not bg_music_player.playing:
-			bg_music_player.play()
-	)
+	pass
 
 func play_click():
 	if is_instance_valid(click_player):
@@ -355,8 +351,12 @@ func save_stats():
 	if file:
 		file.store_string(JSON.stringify(match_history))
 		file.close()
+	if OS.get_name() == "Web":
+		JavaScriptBridge.eval("Module.FS_handleFSError(FS.syncfs(false, function(err){}));", true)
 
 func load_stats():
+	if OS.get_name() == "Web":
+		await get_tree().process_frame
 	if not FileAccess.file_exists("user://stats.json"):
 		return
 	var file = FileAccess.open("user://stats.json", FileAccess.READ)
