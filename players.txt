@@ -24,9 +24,9 @@ ADANA DEMİR: Abat Aybetov, Yusuf Sarı, Tayfun Aydoğan, Maestro, Alioui
 MAN CITY: Haaland, Phil Foden, Antoine Semenyo, Marc Guehi, Savinho
 LIVERPOOL: Mohamed Salah, Szoboszlai, Alexander Isak, Cody Gakpo, Hugo Ekitike
 ARSENAL: Bukayo Saka, Gyökeres, Eberechi Eze, Trossard, Declan Rice
-ASTON VILLA: Ollie Watkins, Morgan Rogers, Leon Bailey, McGinn, Youri Tielemans
+ASTON VILLA: Ollie Watkins, Morgan Rogers, Leon Bailey, Youri Tielemans, Jadon Sancho
 TOTTENHAM: Solanke, James Maddison, Richarlison, Kulusevski
-MAN UTD: Bruno Fernandes, Rashford, Hojlund, Garnacho, Mainoo
+MAN UTD: Bruno Fernandes, Kobbie Mainoo, Amad Diallo, Joshua Zirkzee, Benjamin Šeško
 CHELSEA: Cole Palmer, João Pedro, Enzo Fernandez, Pedro Neto, Moises Caicedo
 REAL MADRID: Mbappé, Vinicius Jr, Jude Bellingham, Rodrygo, Arda Güler
 BARCELONA: Lewandowski, Lamine Yamal, Pedri, Raphinha
@@ -42,11 +42,11 @@ JUVENTUS: Vlahovic, Kenan Yıldız, Teun Koopmeiners, Nico Gonzalez, Douglas Lui
 ATALANTA: Scamacca, Zalewski, Pasalic
 ROMA: Artem Dovbyk, Paulo Dybala, Lorenzo Pellegrini, Soulé, El Shaarawy
 LAZIO: Taty Castellanos, Zaccagni, Dia, Guendouzi, Noslin
-PSG: Bradley Barcola, Ousmane Dembele, Gonçalo Ramos, Kolo Muani, Vitinha
+PSG: Bradley Barcola, Ousmane Dembele, Gonçalo Ramos, Kvaratskhelia, Vitinha
 LILLE: Jonathan David, Zhegrova, Angel Gomes, Sahraoui, Cabella
 MONACO: Breel Embolo, George Ilenikhena, Akliouche, Minamino, Golovin
 BENFICA: Vangelis Pavlidis, Angel Di Maria, Amdouni
-SPORTING: Viktor Gyökeres, Trincao, Pedro Goncalves, Harder, Hjulmand
+SPORTING: Luis Javier Suárez, Fotis Ioannidis, Geovany Quenda, Geny Catamo
 PORTO: Samu Omorodion, Galeno, Fabio Vieira, Nico Gonzalez, Pepê
 AJAX: Wout Weghorst, Brian Brobbey, Bertrand Traoré, Jordan Henderson, Taylor
 PSV: Luuk de Jong, Noa Lang, Johan Bakayoko, Ivan Perisic, Til
@@ -69,9 +69,9 @@ CLUB BRUGGE: Tzolis, Vanaken, Tresoldi, Forbs
 NEWCASTLE: Harvey Barnes, Anthony Gordon, Yoane Wissa, Tonali
 QARABAG: Camilo Duràn, Musa Qurbanlı, Kady Borges, Leandro Andrade
 OLYMPIACOS: El Kaabi, Mehdi Taremi,  Gelson Martins, Chiquinho, Podence
-BODO/GLIMT: Hauge, Evjen, Bjørkan, Berg, Høgh
-WEST HAM: Adama Traoré, Callum Wilson, Jarrod Bowen
-LEEDS UTD: Dominic Calvert-Lewin, Lukas Nmecha, Joël Piroe
+BODO/GLIMT: Hauge, Høgh, Blomberg, Määttä
+WEST HAM Jarrod Bowen, Adama Traoré, Callum Wilson, Tomáš Souček
+LEEDS UTD: Dominic Calvert-Lewin, Lukas Nmecha, Joël Piroe, Wilfried Gnonto
 NAPOLI: Khvicha Kvaratskhelia, Romelu Lukaku, Scott McTominay
 FIORENTINA: Moise Kean, Albert Gudmundsson, David De Gea
 TORINO: Duvan Zapata, Samuele Ricci, Antonio Sanabria
@@ -103,15 +103,15 @@ ST. PAULI: Jackson Irvine, Johannes Eggestein, Hauke Wahl
 HEIDENHEIM: Paul Wanner, Marvin Pieringer, Kevin Müller
 BOCHUM: Philipp Hofmann, Anthony Losilla, Felix Passlack
 HOLSTEIN KIEL: Lewis Holtby, Steven Skrzybski, Timo Becker
-BRIGHTON: Evan Ferguson, Danny Welbeck, Simon Adingra
-BRENTFORD: Mathias Jensen, Christian Nørgaard, Mark Flekken
-BOURNEMOUTH: Justin Kluivert, Ryan Christie, Marcos Senesi
-FULHAM: Emile Smith Rowe, Alex Iwobi, Antonee Robinson
-CRYSTAL PALACE: Jean-Philippe Mateta, Adam Wharton, İsmaila Sarr
-EVERTON: Jordan Pickford, Jarrad Branthwaite, Dwight McNeil
-WOLVES: Tolu Arakodare, Hwang Hee-chan, Joao Gomes
-BURNLEY: Josh Brownhill, Lyle Foster, Luca Koleosho
-SUNDERLAND: Jobe Bellingham, Trai Hume, Chris Rigg
+BRIGHTON: Kaoru Mitoma, Danny Welbeck, Pascal Groß, Matt O'Riley
+BRENTFORD: Igor Thiago, Fabio Carvalho, Mikkel Damsgaard, Reiss Nelson
+BOURNEMOUTH: Enes Ünal, Evanilson, Justin Kluivert, Tyler Adams
+FULHAM: Emile Smith Rowe, Alex Iwobi, Raúl Jiménez, Rodrigo Muniz, Harry Wilson
+CRYSTAL PALACE: Jean-Philippe Mateta, Ismaïla Sarr, Edward Nketiah, Brennan Johnson
+EVERTON: Jack Grealish, Beto, Idrissa Gueye, Iliman Ndiaye
+WOLVES: Tolu Arokodare, Hee-Chan Hwang, João Gomes, Angel Gomes, Adam Armstrong
+BURNLEY: Armando Broja, James Ward-Prowse, Hannibal Mejbri, Zeki Amdouni
+SUNDERLAND: Granit Xhaka, Brian Brobbey, Bertrand Traoré, Wilson Isidor
 LEICESTER: Jamie Vardy, Abdul Fatawu, Harry Winks
 SOUTHAMPTON: Kyle Walker-Peters, Adam Armstrong, Will Smallbone
 IPSWICH: Omari Hutchinson, Liam Delap, Leif Davis
@@ -124,7 +124,7 @@ REAL BETIS: Isco, Giovani Lo Celso, Vitor Roque
 OSASUNA: Ante Budimir, Bryan Zaragoza, Aimar Oroz
 MALLORCA: Vedat Muriqi, Sergi Darder, Raíllo
 ALAVES: Kike Garcia, Carlos Vicente, Jon Guridi
-RAYO VALLECANO: Isi Palazon, James Rodriguez, Sergio Camello
+RAYO VALLECANO: Isi Palazon, Jorge De Frutoz, Sergio Camello
 GETAFE: Borja Mayoral, Luis Milla, Christantus Uche
 ESPANYOL: Javi Puado, Leandro Cabrera, Alex Kral
 ELCHE: Nico Castro, Mourad, Aleix Febas
@@ -193,3 +193,19 @@ AL QADSIAH: Pierre-Emerick Aubameyang, Nacho Fernandez, Ezequiel Fernandez
 AL OKHDOOD: Saviour Godwin, Alex Collado, Florin Tanase
 NEOM SC: Romarinho, Ahmed Hegazi, Salman Al-Faraj
 AL KHOLOOD: Myziane Maolida, Kevin N'Doram, William Troost-Ekong
+TÜRKİYE: Hakan Çalhanoğlu, Arda Güler, Kenan Yıldız, Barış Alper Yılmaz, Ferdi Kadıoğlu
+ROMANYA: Nicolae Stanciu, Denis Man, Valentin Mihaila, Radu Drăgușin, Răzvan Marin
+ÇEKYA: Patrik Schick, Tomáš Souček, Václav Černý, Vladimír Coufal, Antonín Barák
+İRLANDA: Evan Ferguson, Sammie Szmodics, Nathan Collins, Caoimhín Kelleher, Matt Doherty
+DANİMARKA: Christian Eriksen, Rasmus Højlund, Pierre-Emile Højbjerg, Andreas Christensen
+KUZEY MAKEDONYA: Eljif Elmas, Enis Bardhi, Ezgjan Alioski, Stole Dimitrievski, Bojan Miovski
+İTALYA: Nicolò Barella, Federico Dimarco, Alessandro Bastoni, Federico Chiesa
+KUZEY İRLANDA: Paddy McNair, Conor Bradley, Jonny Evans, Shea Charles, Dion Charles
+POLONYA: Robert Lewandowski, Piotr Zieliński, Sebastian Szymański, Jakub Kiwior,
+ARNAVUTLUK: Kristjan Asllani, Berat Djimsiti, Nedim Bajrami, Ylber Ramadani
+SLOVAKYA: Milan Škriniar, Stanislav Lobotka, Dávid Hancko, Ondrej Duda
+KOSOVA: Vedat Muriqi, Edon Zhegrova, Milot Rashica, Amir Rrahmani
+UKRAYNA: Artem Dovbyk, Mykhailo Mudryk, Oleksandr Zinchenko, Georgiy Sudakov, Ruslan Malinovskyi
+İSVEÇ: Alexander Isak, Viktor Gyökeres, Dejan Kulusevski, Emil Forsberg, Victor Lindelöf
+GALLER: Brennan Johnson, Harry Wilson, Ethan Ampadu, Kieffer Moore, Neco Williams
+BOSNA HERSEK: Edin Džeko, Ermedin Demirović, Sead Kolašinac, Amar Dedić, Miralem Pjanić
