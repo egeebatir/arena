@@ -2,12 +2,12 @@ extends Node2D
 
 const POST_RADIUS = 4.0
 const POST_ELASTICITY = 1.04
-const BALL_RADIUS = 48.0
+const BALL_RADIUS = 47
 const SPEED = 7.8
-const MIN_SPEED = 5.75
-const GRAVITY = 0.055
+const MIN_SPEED = 5.8
+const GRAVITY = 0.001
 const FRICTION = 0.999
-const BOUNCE_DAMPING = 0.985
+const BOUNCE_DAMPING = 0.965
 
 var ARENA_CENTER = Vector2.ZERO
 var current_team_name = ""
@@ -15,13 +15,32 @@ var team_colors = [Color.WHITE, Color.BLACK]
 var team_short_name = ""
 var logo_texture: Texture2D
 var badge_texture: Texture2D  # Mascot badge drawn on top of ball
+var hat_texture: Texture2D    # Crown cosmetic worn by favorite team
+var is_favorite_team: bool = false
 
 # Map short team names to mascot overlay images
 const BADGE_MAP = {
 	"FB":  "res://fb1.png",
+	"FEN": "res://fb1.png",
 	"TS":  "res://ts1.png",
+	"TRA": "res://ts1.png",
 	"GS":  "res://gs1.png",
-	"BJK": "res://bjk1.png"
+	"GAL": "res://gs1.png",
+	"BJK": "res://bjk1.png",
+	"BAR": "res://bar1.png",
+	"RMA": "res://rma1.png",
+	"ATM": "res://atm1.png",
+	"JUV": "res://juv1.png",
+	"INT": "res://int1.png",
+	"MIL": "res://mil1.png",
+	"NAP": "res://nap1.png",
+	"TOR": "res://tor1.png",
+	"MC":  "res://mc1.png",
+	"MCI": "res://mc1.png",
+	"MUN": "res://mun1.png",
+	"CHE": "res://che1.png",
+	"ARS": "res://ars1.png",
+	"LIV": "res://liv1.png"
 }
 
 var velocity = Vector2.ZERO
@@ -37,12 +56,22 @@ var shadow_offset = Vector2(8, 8)
 var max_history = 10
 var history = []
 
-func init_ball(team_name: String, center_pos: Vector2, r_limit: float, avoid_pos: Vector2 = Vector2(-9999, -9999)):
+func init_ball(team_name: String, center_pos: Vector2, _r_limit: float, avoid_pos: Vector2 = Vector2(-9999, -9999)):
 	ARENA_CENTER = center_pos
 	current_team_name = team_name # Save the team name so it doesn't default to GS
 	team_colors = Global.TEAMS[team_name]["colors"]
 	team_short_name = Global.TEAMS[team_name]["short"]
 	
+	is_favorite_team = (current_team_name == Global.favorite_team or (Global.favorite_team != "" and team_short_name == Global.TEAMS.get(Global.favorite_team, {}).get("short", "")))
+	
+	hat_texture = null
+	if is_favorite_team and Global.equipped_hat != "none" and Global.HATS.has(Global.equipped_hat):
+		var hat_path = Global.HATS[Global.equipped_hat]["texture_path"]
+		if ResourceLoader.exists(hat_path):
+			hat_texture = load(hat_path)
+		z_index = 6
+	else:
+		z_index = 2
 	
 	if Global.TEAM_LOGOS.has(team_name) and Global.TEAM_LOGOS[team_name] != null:
 		logo_texture = Global.TEAM_LOGOS[team_name]
@@ -168,9 +197,8 @@ func _draw():
 			var y = sqrt(max(0, BALL_RADIUS * BALL_RADIUS - x * x))
 			draw_line(Vector2(x, -y), Vector2(x, y), team_colors[1], 1.0)
 			
-	# Colored arc inside, white arc at the very edge (ALL WHITE NOW)
-	draw_arc(Vector2.ZERO, BALL_RADIUS - 1.5, 0, TAU, 64, white, 1.2, true)
-	draw_arc(Vector2.ZERO, BALL_RADIUS, 0, TAU, 64, white, 0.8, true)
+	var skin_id = Global.equipped_ball_skin
+	Global.draw_ball_skin(self, Vector2.ZERO, BALL_RADIUS, skin_id)
 	
 	if logo_texture:
 		var logo_size = Vector2(50, 50) 
@@ -203,3 +231,10 @@ func _draw():
 			var card_color = Color8(250, 10, 10) if is_red else Color8(255, 220, 0)
 			draw_rect(c_rect, card_color)
 			draw_rect(c_rect, Color.WHITE, false, 1.0)
+	
+	# Draw crown cosmetic on top of favorite team ball
+	if hat_texture:
+		var hat_w = 46.0
+		var hat_h = 32.0
+		var hat_rect = Rect2(-hat_w / 2.0, -BALL_RADIUS - hat_h + 10.0, hat_w, hat_h)
+		draw_texture_rect(hat_texture, hat_rect, false)

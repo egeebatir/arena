@@ -16,17 +16,29 @@ var event_timer: float = 0.0
 var screen_shake_timer: int = 0
 var goal_cooldown_timer: float = 0.0
 var intro_overlay: ColorRect
+var stadium_player: AudioStreamPlayer
+
+var goal_banner_panel: PanelContainer
+var goal_banner_lbl: Label
+var goal_banner_timer: float = 0.0
 
 var abandon_btn: Button
-var pause_btn: Button # YENİ DURDURMA BUTONU
-var is_paused: bool = false # DURUM DEĞİŞKENİ
+var pause_btn: Button # YENI DURDURMA BUTONU
+var is_paused: bool = false # DURUM DEĞIŞKENI
 
 var restart_btn: Button
+var main_ui_layer: CanvasLayer
+var match_banner_ad_id: String = ""
 
 var t1_yellow_box: Control
 var t1_red_box: Control
 var t2_red_box: Control
 var t2_yellow_box: Control
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		Global.play_click()
+		_toggle_pause()
 
 const FPS_TARGET = 60
 var FRAMES_PER_SIM_MINUTE = 16.0
@@ -47,6 +59,9 @@ var halftime_timer = 0
 var start_delay_timer = 0
 var end_match_timer = 0
 var intro_timer = 0
+
+var team1_trailed: bool = false
+var team2_trailed: bool = false
 
 var active_cards = []
 var red_cards_1 = 0
@@ -70,16 +85,27 @@ class StaticPitch extends Node2D:
 	var swhite: Color
 	
 	func _draw():
+		# Base pitch circle
 		draw_circle(Vector2.ZERO, 264.0, theme_dict.pitch_1)
-		for y in range(-264.0, 264.0):
-			if int(y + 264.0) % 60 < 30:
-				var x = sqrt(264.0 * 264.0 - y * y)
-				draw_line(Vector2(-x, y), Vector2(x, y), theme_dict.pitch_2, 1.0)
+		
+		# Classic 60px alternating turf stripes
+		for y in range(-264, 264):
+			if int(y + 264) % 60 < 30:
+				var x = sqrt(max(0.0, 264.0 * 264.0 - float(y * y)))
+				draw_line(Vector2(-x, float(y)), Vector2(x, float(y)), theme_dict.pitch_2, 1.0)
 				
-		draw_arc(Vector2.ZERO, 264.0, 0, TAU, 128, scream, 6.0, true)
-		var line_len = 264.0 - 20
-		draw_line(Vector2(-line_len, 0), Vector2(line_len, 0), swhite, 4.0)
-		draw_arc(Vector2.ZERO, 65, 0, TAU, 64, swhite, 4.0, true)
+		# Boundary ring
+		draw_arc(Vector2.ZERO, 264.0, 0, TAU, 128, scream, 5.0, true)
+		
+		# Center halfway line
+		var line_len = 264.0 - 4.0
+		draw_line(Vector2(-line_len, 0), Vector2(line_len, 0), swhite, 3.5, true)
+		
+		# Center circle
+		draw_arc(Vector2.ZERO, 65, 0, TAU, 64, swhite, 3.5, true)
+		
+		# Center kick-off spot
+		draw_circle(Vector2.ZERO, 5.0, swhite)
 
 var static_pitch_node: StaticPitch
 
@@ -88,6 +114,9 @@ var static_pitch_node: StaticPitch
 
 func _ready():
 	Engine.time_scale = 1.0 # Remove raw time_scale speedup/slowdown 
+	Global.preload_interstitial_ad()
+	if is_instance_valid(Global.bg_music_player) and Global.bg_music_player.playing:
+		Global.bg_music_player.stop()
 	
 	# Determine logical frame count per sim minute (90 min match)
 	if Global.match_duration == 0:
@@ -97,7 +126,7 @@ func _ready():
 	else:
 		FRAMES_PER_SIM_MINUTE = 1440.0 / 45.0 # 48s total = 24s per half. 24s * 60 FPS = 1440
 		
-	active_theme = Global.THEMES[Global.current_theme]
+	active_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
 	
 	var bg_layer = CanvasLayer.new()
 	bg_layer.layer = -1 
@@ -120,54 +149,205 @@ func _ready():
 	bg_layer.add_child(bg_rect)
 	
 	var screen_size = get_viewport_rect().size
-	CENTER = Vector2(screen_size.x / 2.0, screen_size.y / 2.0 - 100.0) 
+	call_deferred("_init_center")
 	
 	static_pitch_node = StaticPitch.new()
 	static_pitch_node.theme_dict = active_theme
 	static_pitch_node.scream = cream
 	static_pitch_node.swhite = white
 	static_pitch_node.position = CENTER
-	bg_layer.add_child(static_pitch_node)
+	static_pitch_node.z_index = -1
+	add_child(static_pitch_node)
 	static_pitch_node.queue_redraw()
 	
-	added_time_1 = randi_range(2, 4)
-	added_time_2 = randi_range(3, 8)
+	added_time_1 = _generate_added_time_1()
+	added_time_2 = _generate_added_time_2()
 	target_yellow_cards = randi_range(1, 3)
 	
 	intro_timer = int(1.0 * FPS_TARGET)
 	
+	stadium_player = AudioStreamPlayer.new()
+	stadium_player.stream = preload("res://bol gol stadyum ses 2.mp3")
+	if stadium_player.stream is AudioStreamMP3:
+		stadium_player.stream.loop = true
+	add_child(stadium_player)
+	
+	var target_vol = Global.master_vol * Global.vol_settings.get("stadium", 0.2) * 1.07
+	if target_vol <= 0.01:
+		stadium_player.volume_db = -80.0
+	else:
+		stadium_player.volume_db = linear_to_db(target_vol)
+
 	ball1.init_ball(Global.home_team_name, CENTER, ARENA_RADIUS)
 	ball2.init_ball(Global.away_team_name, CENTER, ARENA_RADIUS, ball1.position)
 	setup_scoreboard()
+	
+	Global.remove_all_banners()
+	if not Global.is_premium:
+		_request_match_bottom_banner()
+
+var match_banner_retried: bool = false
+
+func _get_match_banner_ad_unit(admob_node: Node) -> String:
+	if admob_node:
+		if not admob_node.is_real:
+			if OS.has_feature("ios"):
+				if admob_node.ios_debug_banner_id != "":
+					return admob_node.ios_debug_banner_id
+				return "ca-app-pub-3940256099942544/2934735716"
+			else:
+				if admob_node.android_debug_banner_id != "":
+					return admob_node.android_debug_banner_id
+				return "ca-app-pub-3940256099942544/2014213617"
+		else:
+			if admob_node.android_real_banner_id != "":
+				return admob_node.android_real_banner_id
+			return "ca-app-pub-7323450546679743/4717442614"
+	return "ca-app-pub-7323450546679743/4717442614"
+
+func _request_match_bottom_banner():
+	if Global.is_premium: return
+	var admob_node = Global.get_admob()
+	if not admob_node: return
+	
+	match_banner_retried = false
+	
+	# Admob.gd defines is_initialization_completed as a boolean property, not a method
+	var is_inited = admob_node.get("is_initialization_completed") == true
+	if not is_inited:
+		if not admob_node.is_connected("initialization_completed", Callable(self, "_on_admob_ready_for_banner")):
+			admob_node.connect("initialization_completed", Callable(self, "_on_admob_ready_for_banner"), CONNECT_ONE_SHOT)
+		return
+
+	await get_tree().create_timer(0.3).timeout
+	if not is_inside_tree() or Global.is_premium: return
+
+	if admob_node.has_signal("banner_ad_loaded"):
+		for conn in admob_node.get_signal_connection_list("banner_ad_loaded"):
+			var target = conn.get("callable", null)
+			if target and not is_instance_valid(target.get_object()):
+				admob_node.disconnect("banner_ad_loaded", target)
+		if not admob_node.is_connected("banner_ad_loaded", Callable(self, "_on_banner_ad_loaded")):
+			admob_node.connect("banner_ad_loaded", Callable(self, "_on_banner_ad_loaded"))
+
+	if admob_node.has_signal("banner_ad_failed_to_load"):
+		for conn in admob_node.get_signal_connection_list("banner_ad_failed_to_load"):
+			var target = conn.get("callable", null)
+			if target and not is_instance_valid(target.get_object()):
+				admob_node.disconnect("banner_ad_failed_to_load", target)
+		if not admob_node.is_connected("banner_ad_failed_to_load", Callable(self, "_on_banner_ad_failed_to_load")):
+			admob_node.connect("banner_ad_failed_to_load", Callable(self, "_on_banner_ad_failed_to_load"))
+
+	var ad_unit = _get_match_banner_ad_unit(admob_node)
+	if admob_node.has_method("set_banner_position"):
+		admob_node.set_banner_position(LoadAdRequest.AdPosition.BOTTOM)
+	if admob_node.has_method("set_banner_size"):
+		admob_node.set_banner_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
+	if admob_node.has_method("set_banner_collapsible_position"):
+		admob_node.set_banner_collapsible_position(LoadAdRequest.CollapsiblePosition.DISABLED)
+	if admob_node.has_method("set_banner_anchor_to_safe_area"):
+		admob_node.set_banner_anchor_to_safe_area(true)
+	
+	if admob_node.has_method("create_banner_ad_request") and admob_node.has_method("load_banner_ad"):
+		var req = admob_node.create_banner_ad_request()
+		req.set_ad_unit_id(ad_unit)
+		req.set_ad_position(LoadAdRequest.AdPosition.BOTTOM)
+		req.set_ad_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
+		if req.has_method("set_collapsible_position"):
+			req.set_collapsible_position(LoadAdRequest.CollapsiblePosition.DISABLED)
+		if req.has_method("set_anchor_to_safe_area"):
+			req.set_anchor_to_safe_area(true)
+		admob_node.load_banner_ad(req)
+	elif admob_node.has_method("show_banner_ad"):
+		admob_node.show_banner_ad()
+
+func _on_admob_ready_for_banner(_status = null):
+	if is_inside_tree() and not Global.is_premium:
+		_request_match_bottom_banner()
+
+func _on_banner_ad_loaded(ad_info, _response_info = null):
+	if not is_inside_tree() or Global.is_premium: return
+	var admob_node = Global.get_admob()
+	if admob_node and ad_info:
+		match_banner_ad_id = ad_info.get_ad_id()
+		if admob_node.has_method("show_banner_ad"):
+			admob_node.show_banner_ad(match_banner_ad_id)
+		print("[Pitch] Match bottom banner loaded & shown: ", match_banner_ad_id)
+
+func _on_banner_ad_failed_to_load(ad_info, error_data):
+	var err_code = error_data.get_code() if error_data and error_data.has_method("get_code") else -1
+	var err_msg = error_data.get_message() if error_data and error_data.has_method("get_message") else ""
+	print("[Pitch] Match bottom banner failed to load. Code: ", err_code, " Msg: ", err_msg)
+	if not is_inside_tree() or Global.is_premium: return
+	await get_tree().create_timer(5.0).timeout
+	if not is_inside_tree() or Global.is_premium or match_banner_ad_id != "": return
+	if not match_banner_retried:
+		match_banner_retried = true
+		var admob_node = Global.get_admob()
+		if admob_node and admob_node.has_method("create_banner_ad_request") and admob_node.has_method("load_banner_ad"):
+			var ad_unit = _get_match_banner_ad_unit(admob_node)
+			var req = admob_node.create_banner_ad_request()
+			req.set_ad_unit_id(ad_unit)
+			req.set_ad_position(LoadAdRequest.AdPosition.BOTTOM)
+			req.set_ad_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
+			if req.has_method("set_collapsible_position"):
+				req.set_collapsible_position(LoadAdRequest.CollapsiblePosition.DISABLED)
+			if req.has_method("set_anchor_to_safe_area"):
+				req.set_anchor_to_safe_area(true)
+			admob_node.load_banner_ad(req)
+
+func _clean_match_banner():
+	var admob_node = Global.get_admob()
+	if admob_node:
+		if admob_node.is_connected("banner_ad_loaded", Callable(self, "_on_banner_ad_loaded")):
+			admob_node.disconnect("banner_ad_loaded", Callable(self, "_on_banner_ad_loaded"))
+		if admob_node.is_connected("banner_ad_failed_to_load", Callable(self, "_on_banner_ad_failed_to_load")):
+			admob_node.disconnect("banner_ad_failed_to_load", Callable(self, "_on_banner_ad_failed_to_load"))
+		Global.remove_all_banners()
+		match_banner_ad_id = ""
+		if admob_node.has_method("set_banner_position"):
+			admob_node.set_banner_position(LoadAdRequest.AdPosition.TOP)
+		if admob_node.has_method("set_banner_size"):
+			admob_node.set_banner_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
+		if "banner_anchor_to_safe_area" in admob_node:
+			admob_node.banner_anchor_to_safe_area = false
+
+func _exit_tree():
+	_clean_match_banner()
 
 func get_readable_outline(c: Color) -> Color:
 	var lum = 0.299 * c.r + 0.587 * c.g + 0.114 * c.b
 	return Color.BLACK if lum > 0.5 else Color.WHITE
 
 func setup_scoreboard():
-	var custom_font = preload("res://IMPACT.TTF")
+	var custom_font = preload("res://Teko-Bold.ttf")
 	var ui_layer = CanvasLayer.new()
+	main_ui_layer = ui_layer
 	add_child(ui_layer)
 	
 	var score_margin = MarginContainer.new()
 	score_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	var calculated_margin = CENTER.y - ARENA_RADIUS - 480.0
-	score_margin.add_theme_constant_override("margin_top", 65.0)
+	score_margin.add_theme_constant_override("margin_top", 12.0)
+	score_margin.add_theme_constant_override("margin_left", 8.0)
+	score_margin.add_theme_constant_override("margin_right", 8.0)
 	ui_layer.add_child(score_margin)
 	
-	var center_cont = CenterContainer.new()
+	var center_cont = VBoxContainer.new()
+	center_cont.alignment = BoxContainer.ALIGNMENT_CENTER
+	center_cont.add_theme_constant_override("separation", -2)
 	score_margin.add_child(center_cont)
 	
 	var top_panel = PanelContainer.new()
+	top_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var style = StyleBoxFlat.new()
 	style.bg_color = active_theme.bg_bottom
-	style.corner_radius_top_left = 15; style.corner_radius_top_right = 15
-	style.corner_radius_bottom_left = 15; style.corner_radius_bottom_right = 15
+	style.corner_radius_top_left = 18; style.corner_radius_top_right = 18
+	style.corner_radius_bottom_left = 18; style.corner_radius_bottom_right = 18
 	style.border_width_bottom = 2; style.border_width_top = 2
 	style.border_width_left = 2; style.border_width_right = 2
-	style.border_color = cream
-	style.content_margin_left = 35; style.content_margin_right = 35
-	style.content_margin_top = 15; style.content_margin_bottom = 15
+	style.border_color = Color(1, 1, 1, 0.22)
+	style.content_margin_left = 32; style.content_margin_right = 32
+	style.content_margin_top = 8; style.content_margin_bottom = 8
 	top_panel.add_theme_stylebox_override("panel", style)
 	center_cont.add_child(top_panel)
 	
@@ -177,7 +357,7 @@ func setup_scoreboard():
 	
 	var score_hbox = HBoxContainer.new()
 	score_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	score_hbox.add_theme_constant_override("separation", 25)
+	score_hbox.add_theme_constant_override("separation", 20)
 	main_vbox.add_child(score_hbox)
 	
 	t1_yellow_box = Control.new()
@@ -186,10 +366,10 @@ func setup_scoreboard():
 	var t1 = Label.new()
 	t1.text = ball1.team_short_name
 	t1.add_theme_font_override("font", custom_font)
-	t1.add_theme_font_size_override("font_size", 50)
+	t1.add_theme_font_size_override("font_size", 46)
 	t1.add_theme_color_override("font_color", ball1.team_colors[0])
-	t1.add_theme_color_override("font_outline_color", get_readable_outline(ball1.team_colors[0]))
-	t1.add_theme_constant_override("outline_size", 5)
+	t1.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
+	t1.add_theme_constant_override("shadow_offset_y", 2)
 	score_hbox.add_child(t1)
 	
 	t1_red_box = Control.new()
@@ -197,25 +377,27 @@ func setup_scoreboard():
 	
 	s1_lbl = Label.new()
 	s1_lbl.add_theme_font_override("font", custom_font)
-	s1_lbl.add_theme_font_size_override("font_size", 60)
+	s1_lbl.add_theme_font_size_override("font_size", 54)
 	s1_lbl.add_theme_color_override("font_color", ball1.team_colors[0])
-	s1_lbl.add_theme_color_override("font_outline_color", get_readable_outline(ball1.team_colors[0]))
-	s1_lbl.add_theme_constant_override("outline_size", 5)
+	s1_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
+	s1_lbl.add_theme_constant_override("shadow_offset_y", 2)
 	score_hbox.add_child(s1_lbl)
 	
 	var dash = Label.new()
 	dash.text = "-"
 	dash.add_theme_font_override("font", custom_font)
-	dash.add_theme_font_size_override("font_size", 60)
-	dash.add_theme_color_override("font_color", Color.WHITE)
+	dash.add_theme_font_size_override("font_size", 54)
+	dash.add_theme_color_override("font_color", Color(1, 1, 1, 0.7))
+	dash.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
+	dash.add_theme_constant_override("shadow_offset_y", 2)
 	score_hbox.add_child(dash)
 	
 	s2_lbl = Label.new()
 	s2_lbl.add_theme_font_override("font", custom_font)
-	s2_lbl.add_theme_font_size_override("font_size", 60)
+	s2_lbl.add_theme_font_size_override("font_size", 54)
 	s2_lbl.add_theme_color_override("font_color", ball2.team_colors[0])
-	s2_lbl.add_theme_color_override("font_outline_color", get_readable_outline(ball2.team_colors[0]))
-	s2_lbl.add_theme_constant_override("outline_size", 5)
+	s2_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
+	s2_lbl.add_theme_constant_override("shadow_offset_y", 2)
 	score_hbox.add_child(s2_lbl)
 	
 	t2_red_box = Control.new()
@@ -224,10 +406,10 @@ func setup_scoreboard():
 	var t2 = Label.new()
 	t2.text = ball2.team_short_name
 	t2.add_theme_font_override("font", custom_font)
-	t2.add_theme_font_size_override("font_size", 50)
+	t2.add_theme_font_size_override("font_size", 46)
 	t2.add_theme_color_override("font_color", ball2.team_colors[0])
-	t2.add_theme_color_override("font_outline_color", get_readable_outline(ball2.team_colors[0]))
-	t2.add_theme_constant_override("outline_size", 5)
+	t2.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
+	t2.add_theme_constant_override("shadow_offset_y", 2)
 	score_hbox.add_child(t2)
 	
 	t2_yellow_box = Control.new()
@@ -235,22 +417,56 @@ func setup_scoreboard():
 	
 	time_lbl = Label.new()
 	time_lbl.add_theme_font_override("font", custom_font)
-	time_lbl.add_theme_font_size_override("font_size", 36)
-	time_lbl.add_theme_color_override("font_color", Color.WHITE)
+	time_lbl.add_theme_font_size_override("font_size", 30)
+	time_lbl.add_theme_color_override("font_color", Color(1, 1, 1, 0.85))
+	time_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
+	time_lbl.add_theme_constant_override("shadow_offset_y", 2)
 	time_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	main_vbox.add_child(time_lbl)
 	
+	var banner_margin = MarginContainer.new()
+	banner_margin.add_theme_constant_override("margin_top", -10)
+	
+	goal_banner_panel = PanelContainer.new()
+	goal_banner_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	var g_style = StyleBoxFlat.new()
+	g_style.bg_color = active_theme.bg_bottom
+	g_style.corner_radius_bottom_left = 14; g_style.corner_radius_bottom_right = 14
+	g_style.border_width_left = 1; g_style.border_width_right = 1; g_style.border_width_bottom = 1
+	g_style.border_color = Color(1, 1, 1, 0.2)
+	g_style.content_margin_left = 24; g_style.content_margin_right = 24
+	g_style.content_margin_top = 6; g_style.content_margin_bottom = 6
+	goal_banner_panel.add_theme_stylebox_override("panel", g_style)
+	
+	goal_banner_lbl = Label.new()
+	goal_banner_lbl.add_theme_font_override("font", custom_font)
+	goal_banner_lbl.add_theme_font_size_override("font_size", 28)
+	goal_banner_lbl.add_theme_color_override("font_color", Color8(255, 230, 100))
+	goal_banner_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
+	goal_banner_lbl.add_theme_constant_override("shadow_offset_y", 2)
+	goal_banner_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	goal_banner_panel.add_child(goal_banner_lbl)
+	
+	goal_banner_panel.modulate.a = 0.0
+	banner_margin.add_child(goal_banner_panel)
+	center_cont.add_child(banner_margin)
+	
 	event_lbl = Label.new()
 	event_lbl.add_theme_font_override("font", custom_font)
-	event_lbl.add_theme_font_size_override("font_size", 100)
+	event_lbl.add_theme_font_size_override("font_size", 125)
 	event_lbl.add_theme_color_override("font_color", Color.WHITE)
-	event_lbl.add_theme_color_override("font_outline_color", Color.BLACK)
-	event_lbl.add_theme_constant_override("outline_size", 15)
+	event_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 230))
+	event_lbl.add_theme_constant_override("shadow_offset_y", 6)
+	event_lbl.add_theme_constant_override("shadow_offset_x", 0)
+	event_lbl.custom_minimum_size = Vector2(600, 160)
+	event_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	event_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	event_lbl.set_anchors_preset(Control.PRESET_CENTER)
 	event_lbl.grow_horizontal = Control.GROW_DIRECTION_BOTH 
 	event_lbl.grow_vertical = Control.GROW_DIRECTION_BOTH
-	event_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	event_lbl.pivot_offset = Vector2(300, 80)
 	event_lbl.modulate.a = 0.0
+	event_lbl.position.y -= 100.0
 	ui_layer.add_child(event_lbl)
 	
 	intro_overlay = ColorRect.new()
@@ -296,7 +512,7 @@ func setup_scoreboard():
 
 	var top_ui_margin = MarginContainer.new()
 	top_ui_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	top_ui_margin.add_theme_constant_override("margin_top", 50)
+	top_ui_margin.add_theme_constant_override("margin_top", 78)
 	top_ui_margin.add_theme_constant_override("margin_left", 30)
 	top_ui_margin.add_theme_constant_override("margin_right", 30)
 	ui_layer.add_child(top_ui_margin)
@@ -305,128 +521,224 @@ func setup_scoreboard():
 	top_ui_hbox.alignment = BoxContainer.ALIGNMENT_BEGIN
 	top_ui_margin.add_child(top_ui_hbox)
 	
-	# --- ÇIKIŞ BUTONU (Aşağı İndirildi) ---
+	# --- ÇIKIŞ BUTONU (Modernize & Standardize 72x72) ---
 	abandon_btn = Button.new()
 	abandon_btn.text = "<"
 	abandon_btn.add_theme_font_override("font", custom_font)
-	abandon_btn.add_theme_font_size_override("font_size", 70)
-	abandon_btn.add_theme_color_override("font_color", cream)
+	abandon_btn.add_theme_font_size_override("font_size", 42)
+	abandon_btn.add_theme_color_override("font_color", Color.WHITE)
 	var abnd_style = StyleBoxFlat.new()
-	abnd_style.bg_color = Color(0,0,0,0)
+	abnd_style.bg_color = active_theme.bg_bottom.darkened(0.2)
+	abnd_style.corner_radius_top_left = 18; abnd_style.corner_radius_top_right = 18
+	abnd_style.corner_radius_bottom_left = 18; abnd_style.corner_radius_bottom_right = 18
+	abnd_style.border_width_left = 1.5; abnd_style.border_width_top = 1.5; abnd_style.border_width_right = 1.5
+	abnd_style.border_width_bottom = 3.5; abnd_style.border_color = active_theme.accent.darkened(0.25)
+	abnd_style.shadow_color = Color8(0, 0, 0, 120)
+	abnd_style.shadow_size = 6
+	abnd_style.shadow_offset = Vector2(0, 3)
+	abnd_style.content_margin_left = 12; abnd_style.content_margin_right = 12
+	abnd_style.content_margin_top = 8; abnd_style.content_margin_bottom = 8
+	var abnd_hover = abnd_style.duplicate(); abnd_hover.bg_color = active_theme.bg_bottom.lightened(0.1)
+	var abnd_pressed = abnd_style.duplicate(); abnd_pressed.border_width_bottom = 1.5; abnd_pressed.content_margin_top = 11
 	abandon_btn.add_theme_stylebox_override("normal", abnd_style)
-	abandon_btn.add_theme_stylebox_override("hover", abnd_style)
-	abandon_btn.add_theme_stylebox_override("pressed", abnd_style)
+	abandon_btn.add_theme_stylebox_override("hover", abnd_hover)
+	abandon_btn.add_theme_stylebox_override("pressed", abnd_pressed)
 	abandon_btn.add_theme_stylebox_override("focus", abnd_style)
-	abandon_btn.custom_minimum_size = Vector2(80, 80)
-	abandon_btn.pressed.connect(func(): Global.play_click(); get_tree().change_scene_to_file("res://main_menu.tscn"))
+	abandon_btn.custom_minimum_size = Vector2(72, 72)
+	abandon_btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	abandon_btn.pressed.connect(func():
+		Global.play_click()
+		set_physics_process(false)
+		set_process(false)
+		Engine.time_scale = 0.0
+		if is_instance_valid(ball1): ball1.velocity = Vector2.ZERO
+		if is_instance_valid(ball2): ball2.velocity = Vector2.ZERO
+		if state == "FULLTIME":
+			Global.increment_matches_played()
+		if is_instance_valid(stadium_player):
+			stadium_player.stop()
+		if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
+			Global.bg_music_player.play()
+		abandon_btn.disabled = true
+		_clean_match_banner()
+		if state == "FIRST_HALF" or state == "INTRO":
+			Engine.time_scale = 1.0
+			get_tree().change_scene_to_file("res://main_menu.tscn")
+		else:
+			Global.show_interstitial_ad(func():
+				Engine.time_scale = 1.0
+				get_tree().change_scene_to_file("res://main_menu.tscn")
+			)
+	)
 	top_ui_hbox.add_child(abandon_btn)
 	
 	var spacer = Control.new()
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top_ui_hbox.add_child(spacer)
 	
-	# --- DURDURMA BUTONU (Aynı Hizada Sağ Üstte) ---
+	# --- DURDURMA BUTONU (Modernize & Standardize 72x72) ---
 	pause_btn = Button.new()
 	pause_btn.text = ""
 	pause_btn.icon = preload("res://pauseicon.svg")
 	pause_btn.expand_icon = true
 	pause_btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	pause_btn.add_theme_font_override("font", custom_font)
-	pause_btn.add_theme_font_size_override("font_size", 30)
-	pause_btn.add_theme_color_override("font_color", cream)
-	pause_btn.add_theme_stylebox_override("normal", abnd_style)
-	pause_btn.add_theme_stylebox_override("hover", abnd_style)
-	pause_btn.add_theme_stylebox_override("pressed", abnd_style)
-	pause_btn.add_theme_stylebox_override("focus", abnd_style)
-	pause_btn.custom_minimum_size = Vector2(50, 50)
+	pause_btn.add_theme_constant_override("icon_max_width", 38)
+	var p_btn_style = StyleBoxFlat.new()
+	p_btn_style.bg_color = active_theme.bg_bottom.darkened(0.2)
+	p_btn_style.corner_radius_top_left = 18; p_btn_style.corner_radius_top_right = 18
+	p_btn_style.corner_radius_bottom_left = 18; p_btn_style.corner_radius_bottom_right = 18
+	p_btn_style.border_width_left = 1.5; p_btn_style.border_width_top = 1.5; p_btn_style.border_width_right = 1.5
+	p_btn_style.border_width_bottom = 3.5; p_btn_style.border_color = active_theme.accent.darkened(0.25)
+	p_btn_style.shadow_color = Color8(0, 0, 0, 120)
+	p_btn_style.shadow_size = 6
+	p_btn_style.shadow_offset = Vector2(0, 3)
+	p_btn_style.content_margin_left = 12; p_btn_style.content_margin_right = 12
+	p_btn_style.content_margin_top = 8; p_btn_style.content_margin_bottom = 8
+	var p_btn_hover = p_btn_style.duplicate(); p_btn_hover.bg_color = active_theme.bg_bottom.lightened(0.1)
+	var p_btn_pressed = p_btn_style.duplicate(); p_btn_pressed.border_width_bottom = 1.5; p_btn_pressed.content_margin_top = 11
+	pause_btn.add_theme_stylebox_override("normal", p_btn_style)
+	pause_btn.add_theme_stylebox_override("hover", p_btn_hover)
+	pause_btn.add_theme_stylebox_override("pressed", p_btn_pressed)
+	pause_btn.add_theme_stylebox_override("focus", p_btn_style)
+	pause_btn.custom_minimum_size = Vector2(72, 72)
 	pause_btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	pause_btn.pressed.connect(func(): Global.play_click(); _toggle_pause())
 	top_ui_hbox.add_child(pause_btn)
 
+	# --- YENIDEN OYNA BUTONU (Enlarged 108x108 & Lowered) ---
 	restart_btn = Button.new()
 	restart_btn.text = ""
 	restart_btn.icon = preload("res://replayicon.svg")
 	restart_btn.expand_icon = true
 	restart_btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	restart_btn.add_theme_constant_override("icon_max_width", 54)
 	restart_btn.add_theme_font_override("font", custom_font)
-	restart_btn.add_theme_font_size_override("font_size", 40)
-	restart_btn.add_theme_color_override("font_color", cream)
+	restart_btn.add_theme_font_size_override("font_size", 44)
+	restart_btn.add_theme_color_override("font_color", Color.WHITE)
+	
 	var rest_style = StyleBoxFlat.new()
-	rest_style.bg_color = Color(0,0,0,0)
+	rest_style.bg_color = active_theme.accent
+	rest_style.corner_radius_top_left = 28; rest_style.corner_radius_top_right = 28
+	rest_style.corner_radius_bottom_left = 28; rest_style.corner_radius_bottom_right = 28
+	rest_style.border_width_bottom = 6; rest_style.border_color = active_theme.accent.darkened(0.4)
+	rest_style.shadow_color = Color8(0, 0, 0, 180)
+	rest_style.shadow_size = 18
+	rest_style.shadow_offset = Vector2(0, 5)
+	rest_style.content_margin_top = 18; rest_style.content_margin_bottom = 18
+	rest_style.content_margin_left = 22; rest_style.content_margin_right = 22
+	var rest_hover = rest_style.duplicate(); rest_hover.bg_color = active_theme.accent.lightened(0.12)
+	var rest_press = rest_style.duplicate(); rest_press.border_width_bottom = 0; rest_press.content_margin_top = 24
 	restart_btn.add_theme_stylebox_override("normal", rest_style)
-	restart_btn.add_theme_stylebox_override("hover", rest_style)
-	restart_btn.add_theme_stylebox_override("pressed", rest_style)
+	restart_btn.add_theme_stylebox_override("hover", rest_hover)
+	restart_btn.add_theme_stylebox_override("pressed", rest_press)
 	restart_btn.add_theme_stylebox_override("focus", rest_style)
 	
-	restart_btn.custom_minimum_size = Vector2(100, 100)
+	restart_btn.custom_minimum_size = Vector2(108, 108)
 	var screen_w = get_viewport_rect().size.x
-	var screen_h = get_viewport_rect().size.y
-	restart_btn.position = Vector2((screen_w / 2.0) - 50.0, CENTER.y + ARENA_RADIUS + 50.0) 
+	restart_btn.position = Vector2((screen_w / 2.0) - 54.0, CENTER.y + ARENA_RADIUS + 80.0) 
 	
 	restart_btn.visible = false
 	restart_btn.pressed.connect(func(): Global.play_click(); _on_restart_pressed())
 	ui_layer.add_child(restart_btn)
 
+func _generate_added_time_1() -> int:
+	var r = randf()
+	if r < 0.20: return 0
+	elif r < 0.40: return 1
+	elif r < 0.80: return 2
+	else: return 3
+
+func _generate_added_time_2() -> int:
+	var r = randf()
+	if r < 0.10: return 0
+	elif r < 0.20: return 1
+	elif r < 0.30: return 2
+	elif r < 0.40: return 3
+	elif r < 0.60: return 4
+	elif r < 0.80: return 5
+	elif r < 0.90: return 6
+	else: return 7
+
+
 func _on_restart_pressed():
-	# REPLAY CONFIRMATION POPUP
+	# REPLAY CONFIRMATION POPUP WITH MODERN THEME HARMONIZATION
+	var overlay = ColorRect.new()
+	overlay.color = Color(0, 0, 0, 0.75)
+	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	
 	var confirm_panel = PanelContainer.new()
 	var cp_style = StyleBoxFlat.new()
-	cp_style.bg_color = Color8(15, 25, 35, 245)
-	cp_style.corner_radius_top_left = 20; cp_style.corner_radius_top_right = 20
-	cp_style.corner_radius_bottom_left = 20; cp_style.corner_radius_bottom_right = 20
+	cp_style.bg_color = active_theme.bg_bottom.darkened(0.15)
+	cp_style.corner_radius_top_left = 22; cp_style.corner_radius_top_right = 22
+	cp_style.corner_radius_bottom_left = 22; cp_style.corner_radius_bottom_right = 22
+	cp_style.border_width_top = 3; cp_style.border_width_bottom = 5
+	cp_style.border_width_left = 3; cp_style.border_width_right = 3
+	cp_style.border_color = active_theme.accent
+	cp_style.shadow_color = Color8(0, 0, 0, 200)
+	cp_style.shadow_size = 35
+	cp_style.content_margin_left = 30; cp_style.content_margin_right = 30
+	cp_style.content_margin_top = 26; cp_style.content_margin_bottom = 26
 	confirm_panel.add_theme_stylebox_override("panel", cp_style)
-	confirm_panel.custom_minimum_size = Vector2(700, 350)
-	var screen_size = get_viewport_rect().size
-	confirm_panel.position = Vector2((screen_size.x - 700) / 2, (screen_size.y - 350) / 2)
-	get_node("/root").add_child(confirm_panel) # Or add to ui_layer safely
+	confirm_panel.custom_minimum_size = Vector2(min(get_viewport_rect().size.x * 0.92, 620), 0)
+	
+	var center = CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.add_child(confirm_panel)
+	overlay.add_child(center)
+	
+	if is_instance_valid(main_ui_layer):
+		main_ui_layer.add_child(overlay)
+	else:
+		add_child(overlay)
+	
+	# Pop-in scale bounce animation
+	confirm_panel.pivot_offset = Vector2(min(get_viewport_rect().size.x * 0.92, 620) / 2.0, 160.0)
+	confirm_panel.scale = Vector2(0.85, 0.85)
+	var tw = create_tween()
+	tw.set_ease(Tween.EASE_OUT)
+	tw.set_trans(Tween.TRANS_BACK)
+	tw.tween_property(confirm_panel, "scale", Vector2.ONE, 0.26)
 	
 	var vbox = VBoxContainer.new()
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	vbox.add_theme_constant_override("separation", 50)
+	vbox.add_theme_constant_override("separation", 24)
 	confirm_panel.add_child(vbox)
 	
-	var custom_font = preload("res://IMPACT.TTF")
+	var custom_font = preload("res://Teko-Bold.ttf")
+	
+	# Replay Icon Header with accent halo
+	var ic_rect = TextureRect.new()
+	ic_rect.texture = preload("res://replayicon.svg")
+	ic_rect.custom_minimum_size = Vector2(56, 56)
+	ic_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	ic_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	ic_rect.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	ic_rect.modulate = active_theme.accent
+	vbox.add_child(ic_rect)
 	
 	var lbl = Label.new()
-	# Retrieve string safely even if missing, default to TR.
-	var lang_dict = {"TR": "Aynı maçı tekrar oynatmak istediğinize emin misiniz?",
-					 "ENG": "Are you sure you want to replay the exact same match?",
-					 "ESP": "¿Estás seguro de que quieres volver a jugar el mismo partido?",
-					 "POR": "Tem certeza de que quer jogar a mesma partida?"}
+	var lang_dict = {
+		"TR": "Aynı maçı tekrar oynatmak istediğinize emin misiniz?",
+		"ENG": "Are you sure you want to replay the exact same match?",
+		"ESP": "¿Estás seguro de que quieres volver a jugar el mismo partido?",
+		"POR": "Tem certeza de que quer jogar a mesma partida?"
+	}
 	var ask_str = lang_dict.get(Global.current_lang, lang_dict["TR"])
 	
 	lbl.text = ask_str
 	lbl.add_theme_font_override("font", custom_font)
-	lbl.add_theme_font_size_override("font_size", 40)
+	lbl.add_theme_font_size_override("font_size", 34)
+	lbl.add_theme_color_override("font_color", Color.WHITE)
+	lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
+	lbl.add_theme_constant_override("shadow_offset_y", 2)
 	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
 	vbox.add_child(lbl)
 	
 	var hbox = HBoxContainer.new()
 	hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	hbox.add_theme_constant_override("separation", 50)
+	hbox.add_theme_constant_override("separation", 20)
 	vbox.add_child(hbox)
-	
-	var yes_btn = Button.new()
-	var yes_txt = "EVET"
-	if Global.current_lang == "ENG": yes_txt = "YES"
-	elif Global.current_lang == "ESP": yes_txt = "SÍ"
-	elif Global.current_lang == "POR": yes_txt = "SIM"
-	yes_btn.text = yes_txt
-	yes_btn.add_theme_font_override("font", custom_font)
-	yes_btn.add_theme_font_size_override("font_size", 30)
-	var y_style = StyleBoxFlat.new()
-	y_style.bg_color = Color8(34, 139, 34)
-	y_style.corner_radius_top_left = 10; y_style.corner_radius_top_right = 10
-	y_style.corner_radius_bottom_left = 10; y_style.corner_radius_bottom_right = 10
-	yes_btn.add_theme_stylebox_override("normal", y_style)
-	yes_btn.custom_minimum_size = Vector2(150, 60)
-	yes_btn.pressed.connect(func():
-		Global.play_click()
-		confirm_panel.queue_free()
-		_reset_match_for_replay()
-	)
-	hbox.add_child(yes_btn)
 	
 	var no_btn = Button.new()
 	var no_txt = "HAYIR"
@@ -436,14 +748,56 @@ func _on_restart_pressed():
 	no_btn.text = no_txt
 	no_btn.add_theme_font_override("font", custom_font)
 	no_btn.add_theme_font_size_override("font_size", 30)
+	no_btn.add_theme_color_override("font_color", Color8(220, 230, 245))
 	var n_style = StyleBoxFlat.new()
-	n_style.bg_color = Color8(178, 34, 34)
-	n_style.corner_radius_top_left = 10; n_style.corner_radius_top_right = 10
-	n_style.corner_radius_bottom_left = 10; n_style.corner_radius_bottom_right = 10
+	n_style.bg_color = active_theme.bg_top.lightened(0.12)
+	n_style.corner_radius_top_left = 14; n_style.corner_radius_top_right = 14
+	n_style.corner_radius_bottom_left = 14; n_style.corner_radius_bottom_right = 14
+	n_style.border_width_bottom = 4; n_style.border_color = active_theme.bg_bottom.darkened(0.35)
+	n_style.content_margin_top = 10; n_style.content_margin_bottom = 10
+	n_style.content_margin_left = 24; n_style.content_margin_right = 24
+	var n_hov = n_style.duplicate(); n_hov.bg_color = active_theme.bg_top.lightened(0.2)
+	var n_press = n_style.duplicate(); n_press.border_width_bottom = 0; n_press.content_margin_top = 14
 	no_btn.add_theme_stylebox_override("normal", n_style)
-	no_btn.custom_minimum_size = Vector2(150, 60)
-	no_btn.pressed.connect(func(): Global.play_click(); confirm_panel.queue_free())
+	no_btn.add_theme_stylebox_override("hover", n_hov)
+	no_btn.add_theme_stylebox_override("pressed", n_press)
+	no_btn.add_theme_stylebox_override("focus", n_style)
+	no_btn.custom_minimum_size = Vector2(170, 58)
+	no_btn.pressed.connect(func():
+		Global.play_click()
+		overlay.queue_free()
+	)
 	hbox.add_child(no_btn)
+	
+	var yes_btn = Button.new()
+	var yes_txt = "EVET"
+	if Global.current_lang == "ENG": yes_txt = "YES"
+	elif Global.current_lang == "ESP": yes_txt = "SÍ"
+	elif Global.current_lang == "POR": yes_txt = "SIM"
+	yes_btn.text = yes_txt
+	yes_btn.add_theme_font_override("font", custom_font)
+	yes_btn.add_theme_font_size_override("font_size", 30)
+	yes_btn.add_theme_color_override("font_color", Color.WHITE)
+	var y_style = StyleBoxFlat.new()
+	y_style.bg_color = Color8(34, 197, 94)
+	y_style.corner_radius_top_left = 14; y_style.corner_radius_top_right = 14
+	y_style.corner_radius_bottom_left = 14; y_style.corner_radius_bottom_right = 14
+	y_style.border_width_bottom = 4; y_style.border_color = Color8(20, 130, 60)
+	y_style.content_margin_top = 10; y_style.content_margin_bottom = 10
+	y_style.content_margin_left = 24; y_style.content_margin_right = 24
+	var y_hov = y_style.duplicate(); y_hov.bg_color = Color8(45, 215, 110)
+	var y_press = y_style.duplicate(); y_press.border_width_bottom = 0; y_press.content_margin_top = 14
+	yes_btn.add_theme_stylebox_override("normal", y_style)
+	yes_btn.add_theme_stylebox_override("hover", y_hov)
+	yes_btn.add_theme_stylebox_override("pressed", y_press)
+	yes_btn.add_theme_stylebox_override("focus", y_style)
+	yes_btn.custom_minimum_size = Vector2(170, 58)
+	yes_btn.pressed.connect(func():
+		Global.play_click()
+		overlay.queue_free()
+		_reset_match_for_replay()
+	)
+	hbox.add_child(yes_btn)
 
 func _reset_match_for_replay():
 	# Reset states
@@ -459,6 +813,9 @@ func _reset_match_for_replay():
 	yellow_cards_2 = 0
 	red_card_spawned_this_half = false
 	yellow_cards_spawned_this_half = 0
+	target_yellow_cards = randi_range(1, 3)
+	team1_trailed = false
+	team2_trailed = false
 	display_added_time = false
 	is_paused = false
 	event_timer = 0.0
@@ -467,6 +824,17 @@ func _reset_match_for_replay():
 	goal_rotating = false
 	goal_angle = PI / 2.0
 	halftime_timer = 0
+	goal_banner_timer = 0.0
+	if is_instance_valid(goal_banner_panel):
+		goal_banner_panel.modulate.a = 0.0
+	if is_instance_valid(s1_lbl): s1_lbl.text = "0"
+	if is_instance_valid(s2_lbl): s2_lbl.text = "0"
+	if is_instance_valid(time_lbl): time_lbl.text = "0'"
+	added_time_1 = _generate_added_time_1()
+	added_time_2 = _generate_added_time_2()
+	
+	if is_instance_valid(stadium_player):
+		stadium_player.stop()
 	
 	Engine.time_scale = 1.0
 	pause_btn.icon = preload("res://pauseicon.svg")
@@ -484,9 +852,13 @@ func _toggle_pause():
 	if is_paused:
 		Engine.time_scale = 0.0 # Bütün fizik/zaman akışını dondurur
 		pause_btn.icon = preload("res://resumeicon.svg")
+		if is_instance_valid(stadium_player):
+			stadium_player.stream_paused = true
 	else:
 		Engine.time_scale = 1.0 # Eski hıza döndür
 		pause_btn.icon = preload("res://pauseicon.svg")
+		if is_instance_valid(stadium_player):
+			stadium_player.stream_paused = false
 
 func spawn_card(ctype: String):
 	if goal_cooldown_timer > 0.0: return # Disable cards during goal cooldown
@@ -560,18 +932,29 @@ func draw_stacked_cards(container: Control, count: int, color: Color):
 		container.add_child(p)
 
 func _physics_process(delta):
-	if is_paused: return # DURDURULDUYSA FİZİK İŞLEMLERİNİ ATLAA
+	if is_paused: return # DURDURULDUYSA FIZIK IŞLEMLERINI ATLAA
 
 	var run_physics = false
 	if event_timer > 0:
 		event_timer -= delta
-		if event_timer < 1.0: event_lbl.modulate.a = event_timer
+		if event_timer < 0.4: event_lbl.modulate.a = event_timer / 0.4
 		else: event_lbl.modulate.a = 1.0
 	else:
 		event_lbl.modulate.a = 0.0
 		
 	if goal_cooldown_timer > 0.0:
 		goal_cooldown_timer -= delta
+		
+	if goal_banner_timer > 0.0:
+		goal_banner_timer -= delta
+		if goal_banner_timer > 4.5:
+			goal_banner_panel.modulate.a = (5.0 - goal_banner_timer) / 0.5
+		elif goal_banner_timer < 1.0:
+			goal_banner_panel.modulate.a = goal_banner_timer
+		else:
+			goal_banner_panel.modulate.a = 1.0
+	else:
+		goal_banner_panel.modulate.a = 0.0
 		
 	if state == "INTRO":
 		if intro_timer > 0:
@@ -586,6 +969,8 @@ func _physics_process(delta):
 		if start_delay_timer > 0:
 			start_delay_timer -= 1
 		else:
+			if is_instance_valid(stadium_player) and not stadium_player.playing:
+				stadium_player.play()
 			run_physics = true
 			frame_counter += 1
 			var total_mins_played = frame_counter / FRAMES_PER_SIM_MINUTE
@@ -634,9 +1019,33 @@ func _physics_process(delta):
 				"home": Global.home_team_name,
 				"away": Global.away_team_name,
 				"home_score": score1,
-				"away_score": score2
+				"away_score": score2,
+				"home_yellow": yellow_cards_1,
+				"home_red": red_cards_1,
+				"away_yellow": yellow_cards_2,
+				"away_red": red_cards_2
 			})
 			Global.save_stats()  # Persist to disk immediately
+			Global.record_match_result(Global.home_team_name, Global.away_team_name, score1, score2)
+			
+			# --- GOOGLE PLAY ACHIEVEMENTS TRIGGERS ---
+			var total_matches = Global.match_history.size()
+			if total_matches >= 10:
+				Global.unlock_achievement("TEN_MATCHES")
+			if score1 > score2 or score2 > score1:
+				Global.unlock_achievement("FIRST_WIN")
+			if (score1 > 0 and score2 == 0) or (score2 > 0 and score1 == 0):
+				Global.unlock_achievement("CLEAN_SHEET")
+			if score1 >= 5 or score2 >= 5:
+				Global.unlock_achievement("FIVE_GOALS")
+			if score1 >= 3 or score2 >= 3:
+				Global.unlock_achievement("HAT_TRICK")
+			if (score1 > score2 and team1_trailed) or (score2 > score1 and team2_trailed):
+				Global.unlock_achievement("COMEBACK_KING")
+			if Global.favorite_team != "":
+				if (Global.home_team_name == Global.favorite_team and score1 > score2) or (Global.away_team_name == Global.favorite_team and score2 > score1):
+					Global.unlock_achievement("FAVORITE_CHAMPION")
+					
 		if end_match_timer > 2.0 * FPS_TARGET and not restart_btn.visible:
 			restart_btn.visible = true
 			
@@ -646,9 +1055,9 @@ func _physics_process(delta):
 		
 		var time_str = ""
 		var s_min = int(sim_minute)
-		if state == "FIRST_HALF": time_str = "45+" + str(s_min - 45) + "'" if display_added_time else str(s_min) + "'"
+		if state == "FIRST_HALF": time_str = ("45+" + str(int(sim_minute - 45.0) + 1) + "'") if (display_added_time and added_time_1 > 0) else (str(s_min) + "'")
 		elif state == "HALFTIME": time_str = Global.LANG[Global.current_lang]["HT"]
-		elif state == "SECOND_HALF": time_str = "90+" + str(s_min - 90) + "'" if display_added_time else str(s_min) + "'"
+		elif state == "SECOND_HALF": time_str = ("90+" + str(int(sim_minute - 90.0) + 1) + "'") if (display_added_time and added_time_2 > 0) else (str(s_min) + "'")
 		elif state == "FULLTIME": time_str = Global.LANG[Global.current_lang]["FT"]
 		time_lbl.text = time_str
 		
@@ -702,10 +1111,10 @@ func _physics_process(delta):
 
 	if Global.shake_enabled and screen_shake_timer > 0:
 		var shake_intensity = int((float(screen_shake_timer) / 22.0) * 12.0)
-		position = Vector2(randf_range(-shake_intensity, shake_intensity), randf_range(-shake_intensity, shake_intensity))
+		game_camera.offset = Vector2(randf_range(-shake_intensity, shake_intensity), randf_range(-shake_intensity, shake_intensity))
 		screen_shake_timer -= 1
 	else:
-		position = Vector2.ZERO 
+		game_camera.offset = Vector2.ZERO
 
 func resolve_collisions(b1, b2) -> bool:
 	var d = b2.position - b1.position
@@ -713,7 +1122,7 @@ func resolve_collisions(b1, b2) -> bool:
 	
 	if dist < 52.0 + 52.0:
 		if dist == 0: dist = 0.1
-		var n = d.normalized()
+		var n = d.normalized() if dist > 0.001 else Vector2(1, 0)
 		var overlap = (52.0 + 52.0) - dist
 		var total_mass = b1.mass + b2.mass
 		var m1_ratio = b2.mass / total_mass
@@ -752,14 +1161,71 @@ func check_goal(b, team_id):
 			trigger_goal(b, team_id)
 
 func trigger_goal(b, team_id):
+	Global.play_goal_music()
+	Global.trigger_vibration(500)
+	
 	var goal_str = Global.LANG[Global.current_lang]["GOAL"]
+	var team_color = ball1.team_colors[0] if team_id == 1 else ball2.team_colors[0]
+	
 	if team_id == 1:
 		score1 += 1
-		trigger_popup(goal_str, ball1.team_colors[0], get_readable_outline(ball1.team_colors[0]))
+		if score1 < score2:
+			team1_trailed = true
+		elif score1 > score2 and score2 > 0:
+			# Team 1 took the lead after conceding
+			pass
+		trigger_popup(goal_str, team_color, get_readable_outline(team_color))
 	else:
 		score2 += 1
-		trigger_popup(goal_str, ball2.team_colors[0], get_readable_outline(ball2.team_colors[0]))
+		if score2 < score1:
+			team2_trailed = true
+		elif score2 > score1 and score1 > 0:
+			# Team 2 took the lead after conceding
+			pass
+		trigger_popup(goal_str, team_color, get_readable_outline(team_color))
 		
+	if score1 < score2: team1_trailed = true
+	if score2 < score1: team2_trailed = true
+		
+	var time_str = ""
+	var s_min = int(sim_minute) + 1
+	if state == "FIRST_HALF":
+		if display_added_time:
+			var extra = int(sim_minute - 45.0) + 1
+			time_str = "45+" + str(extra)
+		else:
+			time_str = str(min(s_min, 45))
+	elif state == "SECOND_HALF":
+		if display_added_time:
+			var extra = int(sim_minute - 90.0) + 1
+			time_str = "90+" + str(extra)
+		else:
+			time_str = str(min(s_min, 90))
+	else:
+		time_str = str(s_min)
+	
+	var scoring_team_name = Global.home_team_name if team_id == 1 else Global.away_team_name
+	var custom_names = []
+	if Global.custom_player_names.has(scoring_team_name):
+		var team_dict = Global.custom_player_names[scoring_team_name]
+		if typeof(team_dict) == TYPE_DICTIONARY:
+			for key in team_dict:
+				var pname = String(team_dict[key]).strip_edges()
+				if pname != "":
+					custom_names.append(pname)
+	
+	if custom_names.size() > 0:
+		var chosen_name = custom_names[randi() % custom_names.size()]
+		goal_banner_lbl.text = chosen_name + " (" + time_str + "')"
+	else:
+		var available_nums = [7, 8, 9, 10, 11, 14, 17, 19, 21, 23]
+		var scorer_num = available_nums[randi() % available_nums.size()]
+		goal_banner_lbl.text = "#" + str(scorer_num) + " (" + time_str + "')"
+	goal_banner_lbl.add_theme_color_override("font_color", Color.WHITE)
+	goal_banner_lbl.remove_theme_color_override("font_outline_color")
+	goal_banner_lbl.remove_theme_constant_override("outline_size")
+	goal_banner_timer = 5.0
+
 	if score1 + score2 >= 1: goal_rotating = true
 	if Global.shake_enabled: screen_shake_timer = 22
 	
@@ -802,8 +1268,6 @@ func _draw():
 	while diff < -PI: diff += 2.0 * PI
 
 	var steps_lr = 10; var steps_fb = 5
-	if goal_cooldown_timer > 0.0:
-		steps_lr = 4; steps_fb = 2 # Simplify for performance
 	for j in range(1, steps_fb + 1):
 		var ratio_fb = float(j) / float(steps_fb)
 		var points = PackedVector2Array()
@@ -839,9 +1303,20 @@ func _draw():
 		var c = p.color; c.a = alpha
 		draw_circle(p.pos, p.radius, c)
 	
-func trigger_popup(msg: String, color: Color = Color.WHITE, outline_col: Color = Color.BLACK):
+func trigger_popup(msg: String, color: Color = Color.WHITE, _outline_col: Color = Color.BLACK):
 	event_lbl.text = msg
 	event_lbl.add_theme_color_override("font_color", color)
-	event_lbl.add_theme_color_override("font_outline_color", outline_col)
-	event_timer = 3.0
+	event_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 230))
+	event_lbl.add_theme_constant_override("shadow_offset_y", 6)
+	event_lbl.add_theme_constant_override("shadow_offset_x", 0)
+	event_lbl.pivot_offset = Vector2(300, 80)
+	event_lbl.scale = Vector2(0.35, 0.35)
+	event_lbl.modulate.a = 1.0
+	var tw = create_tween()
+	tw.set_trans(Tween.TRANS_BACK)
+	tw.set_ease(Tween.EASE_OUT)
+	tw.tween_property(event_lbl, "scale", Vector2(1.25, 1.25), 0.16)
+	tw.set_trans(Tween.TRANS_SINE)
+	tw.tween_property(event_lbl, "scale", Vector2(1.0, 1.0), 0.10)
+	event_timer = 1.3
 	# Performance: skip high-step drawing during cooldown

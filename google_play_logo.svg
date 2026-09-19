@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Left Blue/Cyan section -->
+  <path fill="#00D2FF" d="M52 42C44 51 38 64 38 80v352c0 16 6 29 14 38l4 4 220-220v-4L56 38l-4 4z"/>
+  <!-- Top Green section -->
+  <path fill="#00E676" d="M346 182L106 46c-18-10-36-9-48 2l218 218 70-70z"/>
+  <!-- Bottom Red/Coral section -->
+  <path fill="#FF3A44" d="M346 330L276 260 58 478c12 11 30 12 48 2l240-136z"/>
+  <!-- Right Yellow/Amber section -->
+  <path fill="#FFC800" d="M446 238l-100-56-70 74 70 74 100-56c18-10 18-26 0-36z"/>
+</svg>

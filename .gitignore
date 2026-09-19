@@ -1,3 +1,9 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+build/
+*.apk
+*.aab
+*.idsig
+*.bak
+tools/service_account.json

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 40" width="100" height="40">
+  <defs>
+    <linearGradient id="vipGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF3A8"/>
+      <stop offset="35%" stop-color="#FFD700"/>
+      <stop offset="70%" stop-color="#E59400"/>
+      <stop offset="100%" stop-color="#995200"/>
+    </linearGradient>
+    <linearGradient id="vipBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3A1054"/>
+      <stop offset="50%" stop-color="#240738"/>
+      <stop offset="100%" stop-color="#140320"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Badge Pill -->
+  <rect x="2" y="2" width="96" height="36" rx="18" fill="url(#vipBg)" stroke="url(#vipGold)" stroke-width="2.5"/>
+  
+  <!-- Left Star -->
+  <polygon points="17,11 19.5,17 25.5,17.5 21,21.5 22.5,27.5 17,24 11.5,27.5 13,21.5 8.5,17.5 14.5,17" fill="url(#vipGold)"/>
+  
+  <!-- "VIP PRO" Text -->
+  <text x="56" y="25" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="16" fill="url(#vipGold)" text-anchor="middle" letter-spacing="1.5">VIP PRO</text>
+  
+  <!-- Right Star Mini -->
+  <polygon points="85,13 86.5,17 90.5,17.5 87.5,20.5 88.5,24.5 85,22 81.5,24.5 82.5,20.5 79.5,17.5 83.5,17" fill="url(#vipGold)"/>
+</svg>

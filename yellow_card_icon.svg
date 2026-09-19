@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <defs>
+    <linearGradient id="yellowCardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF566"/>
+      <stop offset="35%" stop-color="#FFDD00"/>
+      <stop offset="100%" stop-color="#D99B00"/>
+    </linearGradient>
+    <linearGradient id="yellowCardBorder" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFBD0"/>
+      <stop offset="100%" stop-color="#996300"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 3D Card Shadow / Bevel Base -->
+  <rect x="10" y="7" width="28" height="36" rx="4" ry="4" fill="#664400" transform="rotate(-6 24 24)"/>
+  
+  <!-- Main Card Body -->
+  <rect x="10" y="5" width="28" height="36" rx="4" ry="4" fill="url(#yellowCardGrad)" stroke="url(#yellowCardBorder)" stroke-width="1.5" transform="rotate(-6 24 24)"/>
+  
+  <!-- Top Diagonal Glass Highlight -->
+  <path d="M 12 7 L 34 5 C 36 5, 37 6, 37 8 L 37 16 L 12 28 Z" fill="#FFFFFF" opacity="0.35" transform="rotate(-6 24 24)"/>
+</svg>

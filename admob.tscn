@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://b5mksc8hciuao"]
+
+[ext_resource type="Script" uid="uid://byf2lsp4no6cv" path="res://addons/AdmobPlugin/Admob.gd" id="1_okkro"]
+
+[node name="Admob" type="Node" unique_id=2079397749]
+script = ExtResource("1_okkro")
+is_real = true
+banner_position = 0
+banner_size = 5
+banner_collapsible_position = 0
+banner_anchor_to_safe_area = false
+android_debug_application_id = "ca-app-pub-7323450546679743~1161340980"
+android_real_application_id = "ca-app-pub-7323450546679743~1161340980"
+android_real_banner_id = "ca-app-pub-7323450546679743/4717442614"
+android_real_interstitial_id = "ca-app-pub-7323450546679743/2839044573"
+android_real_rewarded_id = "ca-app-pub-7323450546679743/9893418413"
+android_debug_banner_id = "ca-app-pub-3940256099942544/2014213617"
+android_debug_interstitial_id = "ca-app-pub-3940256099942544/1033173712"
+android_debug_rewarded_id = "ca-app-pub-3940256099942544/5224354917"
+test_device_hashed_ids = ["8580D501F29E4FEA13E99D740024BA1B"]
+metadata/_custom_type_script = "uid://byf2lsp4no6cv"
