@@ -293,6 +293,78 @@ var LANG = {
 		"EARNED_REWARD": "Ganhou +%s %s!",
 		"SQUAD_SUFFIX": "PLANTEL", "TAP_TO_SWITCH_TEAM": "Toque para mudar de equipa",
 		"SELECT_TEAM": "SELECIONAR EQUIPA", "SEARCH_TEAM": "Pesquisar equipa..."
+	},
+	"ITA": {
+		"TEAM_SELECTION": "SELEZIONE SQUADRA", "SETTINGS": "IMPOSTAZIONI",
+		"HOME": "CASA", "AWAY": "TRASFERTA", "SEARCH": "Cerca Squadra...",
+		"START_MATCH": "INIZIA PARTITA", "LANG_BTN": "ITA", "CLOSE": "CHIUDI", "SAVE": "SALVA",
+		"LBL_MASTER": "VOLUME GENERALE", "LBL_MENU_MUSIC": "MUSICA MENU", "LBL_STADIUM": "STADIO", "LBL_MUSIC": "MUSICA GOL",
+		"LBL_THEME": "TEMA", "LBL_SHAKE": "VIBRAZIONE SCHERMO", "LBL_VIBRATION": "VIBRAZIONE", "LBL_SPEED": "DURATA PARTITA",
+		"SEC_THEME": "TEMA", "SEC_GAME": "IMPOSTAZIONI DI GIOCO", "SEC_AUDIO": "AUDIO",
+		"STATS_TITLE": "STATISTICHE", "SHOP_TITLE": "NEGOZIO",
+		"STATS_NO_DATA": "Nessuna partita giocata.\nGioca una partita e le tue statistiche appariranno qui!",
+		"STATS_RECENT": "Partite Recenti", "STATS_TOTAL": "Partite Totali",
+		"STATS_HOME_W": "Vittorie (Casa)", "STATS_AWAY_W": "Vittorie (Trasf.)",
+		"STATS_DRAW": "Pareggi", "STATS_MOST_GOALS": "Più Gol", "STATS_BIGGEST_WIN": "Miglior Vittoria",
+		"SHOP_COSMETICS": "COSMETICI", "SHOP_BALL_SKINS": "Aspetti Pallone",
+		"SHOP_BUY": "0.99€ — ACQUISTA ORA", "SHOP_CANCEL": "ANNULLA",
+		"SHOP_PRO_DESC": "Sblocca tutti i temi, palloni, corone e rimuovi le pubblicità",
+		"REPLAY_ASK": "Sei sicuro di voler rigiocare la stessa partita?",
+		"RANDOM": "CASUALE",
+		"SHOP_WATCH_AD": "GUARDA VIDEO (+50 Monete)", "SHOP_EQUIPPED": "IN USO", "SHOP_EQUIP": "USA",
+		"SKIN_CLASSIC": "Classico", "SKIN_GOLD": "Oro", "SKIN_NEON": "Neon", 
+		"SKIN_CHROME": "Cromo", "SKIN_LAVA": "Lava", "SKIN_ICE": "Ghiaccio",
+		"FAV_YOURS": "La Tua Preferita", "FAV_MAKE": "Imposta Preferita",
+		"FAV_CONFIRM_TITLE": "Cambia Squadra Preferita",
+		"FAV_CONFIRM_DESC": "Sei sicuro di voler cambiare la tua squadra preferita in \"%s\"?",
+		"CONFIRM_YES": "CONFERMA",
+		"CURRENCY": "Monete",
+		"FAV_STATS_PLAYED": "Partite Giocate",
+		"FAV_STATS_WINRATE": "Percentuale Vittorie",
+		"FAV_STATS_GOALS_FOR": "Gol (Fatti / Subiti)",
+		"FAV_STATS_GOALS_AGAINST": "Gol Subiti",
+		"FAV_STATS_BIGGEST_WIN": "Miglior Vittoria",
+		"FAV_STATS_BIGGEST_LOSS": "Peggior Sconfitta",
+		"FAV_STATS_CARDS": "Cartellini",
+		"ON": "ATTIVO", "OFF": "DISATTIVO",
+		"STATS_GENERAL": "STATISTICHE GENERALI", "STATS_TEAM": "STATISTICHE DI %s",
+		"GOALS_DIFF_LABEL": "Diff: %+d",
+		"FAV_STATS_YELLOW_CARDS": "Cartellini Gialli", "FAV_STATS_RED_CARDS": "Cartellini Rossi",
+		"PLAYER_LIST_TITLE": "ROSA", "PLAYER_LIST_BTN": "Rosa Giocatori",
+		"NO_FAV_TEAM_WARN": "Nessuna Squadra Preferita",
+		"MAX_CHAR_WARN": "Massimo 20 caratteri!", "ADD_PLAYER": "+ AGGIUNGI GIOCATORE",
+		"PRO_ACTIVE": "PRO ATTIVO", "RESTORE_PURCHASES": "Ripristina Acquisti",
+		"PRIVACY_POLICY": "Informativa sulla Privacy", "PRIVACY_TITLE": "INFORMATIVA SULLA PRIVACY",
+		"RESTORE_CHECK": "Verifica acquisti...", "RESTORE_SUCCESS": "Acquisti ripristinati!",
+		"EXIT_CONFIRM": "Sei sicuro di voler uscire?", "EXIT_TITLE": "ESCI", "SEC_ACCOUNT": "ACCOUNT E PRIVACY",
+		"SHOP_HATS": "Corone e Accessori", "HAT_KINGS_CROWN": "Corona del Re", "HAT_QUEENS_CROWN": "Corona della Regina",
+		"HAT_NONE": "Nessuna Corona", "HAT_FAV_NOTICE": "Le corone appaiono solo sul pallone della squadra preferita.",
+		"SHOP_UNEQUIP": "RIMUOVI", "NEED_MORE_COINS": "Monete insufficienti!",
+		"ACHIEVEMENTS_BTN": "Obiettivi Google Play", "AD_PREPARING": "Annuncio in preparazione, riprova tra qualche secondo...",
+		"DAILY_QUESTS_TITLE": "MISSIONI GIORNALIERE", "DAILY_QUESTS_BTN": "Missioni Giornaliere",
+		"QUEST_CLAIM": "RISCATTA", "QUEST_CLAIMED": "RISCATTATO", "QUEST_IN_PROGRESS": "In Corso",
+		"LUCKY_WHEEL_TITLE": "RUOTA DELLA FORTUNA", "LUCKY_WHEEL_BTN": "Ruota della Fortuna",
+		"LUCKY_WHEEL_SPIN": "GIRA", "LUCKY_WHEEL_FREE": "GIRO GRATIS", "LUCKY_WHEEL_AD": "GUARDA PUBBLICITÀ & GIRA",
+		"LUCKY_WHEEL_NO_SPINS": "Nessun giro rimasto oggi! Torna domani.",
+		"LEADERBOARD_TITLE": "CLASSIFICA", "LEADERBOARD_BTN": "Classifica",
+		"LEADERBOARD_PLAYER": "Giocatore - Squadra", "LEADERBOARD_GOALS": "Gol Totali", "LEADERBOARD_RANK": "Posizione",
+		"QUEST_PROGRESS": "Progresso", "QUEST_REWARD": "Ricompensa", "REMAINING_AD_SPINS": "Giri Pubblicitari Rimasti",
+		"LEADERBOARD_OPEN": "VEDI CLASSIFICA MONDIALE", "LEADERBOARD_SYNC": "SINCRONIZZA PUNTEGGIO",
+		"LEADERBOARD_HINT": "Unisciti alla classifica mondiale di Google Play Games e sfida gli altri giocatori!",
+		"GOALS_SUFFIX": "Gol", "PRO_UPGRADE_TITLE": "Passa a PRO", "LEADERBOARD_LOCAL_TITLE": "La Tua Scheda Punteggio",
+		"LEADERBOARD_GLOBAL_TITLE": "Classifica Globale Google Play Games",
+		"LEAGUE_TURKEY": "Campionato Turco", "LEAGUE_ENGLAND": "Campionato Inglese", "LEAGUE_SPAIN": "Campionato Spagnolo",
+		"LEAGUE_GERMANY": "Campionato Tedesco", "LEAGUE_ITALY": "Campionato Italiano", "LEAGUE_FRANCE": "Campionato Francese",
+		"LEAGUE_USA": "Campionato Americano", "LEAGUE_SAUDI": "Campionato Saudita", "LEAGUE_WORLD": "Club Mondiali",
+		"LEAGUE_ALL": "Tutte le Squadre", "LEAGUE_SELECT": "Seleziona Campionato...",
+		"STATS_FORM": "Ultime 5 Partite", "STATS_CLEAN_SHEETS": "%d Partite con Porta Inviolata",
+		"STATS_TOTAL_GOALS": "Gol Totali", "STATS_AVG_GOALS": "Media Gol a Partita",
+		"STATS_SELECT_FAV_PROMPT": "Scegli la tua squadra preferita per visualizzare record e statistiche approfondite!",
+		"STATS_CHOOSE_FAV_BTN": "SCEGLI SQUADRA PREFERITA",
+		"DUR_SHORT": "Breve", "DUR_NORMAL": "Normale", "DUR_LONG": "Lunga",
+		"EARNED_REWARD": "Hai guadagnato +%s %s!",
+		"SQUAD_SUFFIX": "ROSA", "TAP_TO_SWITCH_TEAM": "Tocca per cambiare squadra",
+		"SELECT_TEAM": "SELEZIONA SQUADRA", "SEARCH_TEAM": "Cerca squadra..."
 	}
 }
 
@@ -357,7 +429,7 @@ var is_refreshing_stats: bool = false
 const MENU_BANNER_ID = "ca-app-pub-7323450546679743/4717442614"
 var menu_banner_ad_id: String = ""
 var is_banner_loading: bool = false
-var menu_banner_retried: bool = false
+var menu_banner_retry_count: int = 0
 
 # ======================================================
 # 3D TACTILE BUTTON STYLING HELPER
@@ -616,6 +688,7 @@ func _ready():
 	lang_popup.add_item(" English (ENG)", 1)
 	lang_popup.add_item(" Español (ESP)", 2)
 	lang_popup.add_item(" Português (POR)", 3)
+	lang_popup.add_item(" Italiano (ITA)", 4)
 	add_child(lang_popup)
 	
 	lang_btn.pressed.connect(func():
@@ -624,7 +697,7 @@ func _ready():
 	)
 	
 	lang_popup.id_pressed.connect(func(id):
-		var lang_map = {0: "TR", 1: "ENG", 2: "ESP", 3: "POR"}
+		var lang_map = {0: "TR", 1: "ENG", 2: "ESP", 3: "POR", 4: "ITA"}
 		_change_language(lang_map.get(id, "TR"))
 	)
 	
@@ -1619,6 +1692,7 @@ func _open_settings():
 	temp_settings["vibration_enabled"] = Global.vibration_enabled
 	temp_settings["match_duration"] = Global.match_duration
 	temp_settings["current_theme"] = Global.current_theme
+	temp_settings["original_theme"] = Global.current_theme
 	
 	if is_instance_valid(settings_overlay):
 		settings_overlay.queue_free()
@@ -1663,7 +1737,7 @@ func setup_settings_overlay():
 	# Make a distinct top bar for AYARLAR inside the window
 	var window_title_bg = PanelContainer.new()
 	var wtb_style = StyleBoxFlat.new()
-	wtb_style.bg_color = active_theme.bg_top.darkened(0.15)
+	wtb_style.bg_color = active_theme.bg_bottom.darkened(0.1)
 	wtb_style.corner_radius_top_left = 20; wtb_style.corner_radius_top_right = 20
 	wtb_style.corner_radius_bottom_left = 20; wtb_style.corner_radius_bottom_right = 20
 	wtb_style.content_margin_top = 15; wtb_style.content_margin_bottom = 15
@@ -1718,7 +1792,9 @@ func setup_settings_overlay():
 		t_btn.custom_minimum_size = Vector2(80, 80)
 		t_btn.pressed.connect(func():
 			temp_settings["current_theme"] = theme_name
-			# Rebuild the overlay quickly to show selected outline outline update
+			Global.current_theme = theme_name
+			update_theme_visuals()
+			# Rebuild the overlay quickly to show selected outline update
 			settings_overlay.queue_free()
 			setup_settings_overlay()
 			settings_overlay.visible = true
@@ -1928,7 +2004,11 @@ func setup_settings_overlay():
 	close_btn.add_theme_stylebox_override("pressed", c_pressed)
 	close_btn.add_theme_stylebox_override("focus", c_style)
 	close_btn.custom_minimum_size = Vector2(250, 75)
-	close_btn.pressed.connect(func(): settings_overlay.visible = false)
+	close_btn.pressed.connect(func():
+		Global.current_theme = temp_settings.get("original_theme", Global.current_theme)
+		update_theme_visuals()
+		settings_overlay.visible = false
+	)
 	bot_hbox.add_child(close_btn)
 	ui_labels.append({"node": close_btn, "key": "CLOSE", "type": "button"})
 
@@ -1963,6 +2043,7 @@ func setup_settings_overlay():
 		Global.vibration_enabled = temp_settings.get("vibration_enabled", true)
 		Global.match_duration = temp_settings["match_duration"]
 		Global.current_theme = temp_settings["current_theme"]
+		temp_settings["original_theme"] = temp_settings["current_theme"]
 		Global.save_progression()
 		
 		# Immediately update node hierarchy
@@ -1981,24 +2062,28 @@ func _open_player_list():
 	player_list_overlay.visible = true
 
 func setup_player_list_overlay():
+	# 1. Touch Event Isolation - Stop mouse filter prevents touches bleeding through to main menu
 	player_list_overlay = ColorRect.new()
-	player_list_overlay.color = Color8(0, 0, 0, 0)
+	player_list_overlay.color = Color8(0, 0, 0, 180)
+	player_list_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	player_list_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	player_list_overlay.visible = false
 	add_child(player_list_overlay)
 	
 	var center_container = CenterContainer.new()
+	center_container.mouse_filter = Control.MOUSE_FILTER_STOP
 	center_container.set_anchors_preset(Control.PRESET_FULL_RECT)
-	center_container.position.y += 20.0
+	center_container.position.y += 15.0
 	player_list_overlay.add_child(center_container)
 	
 	var panel = PanelContainer.new()
-	panel.custom_minimum_size = Vector2(660, 0)
+	panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	panel.custom_minimum_size = Vector2(700, 0)
 	var p_style = StyleBoxFlat.new()
-	p_style.bg_color = active_theme.bg_bottom.darkened(0.15)
+	p_style.bg_color = active_theme.bg_bottom.darkened(0.18)
 	p_style.corner_radius_top_left = 24; p_style.corner_radius_top_right = 24
 	p_style.corner_radius_bottom_left = 24; p_style.corner_radius_bottom_right = 24
-	p_style.shadow_color = Color8(0, 0, 0, 200)
+	p_style.shadow_color = Color8(0, 0, 0, 220)
 	p_style.shadow_size = 40
 	p_style.border_width_top = 3; p_style.border_width_bottom = 5
 	p_style.border_width_left = 3; p_style.border_width_right = 3
@@ -2010,7 +2095,7 @@ func setup_player_list_overlay():
 	
 	var s_vbox = VBoxContainer.new()
 	s_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	s_vbox.add_theme_constant_override("separation", 16)
+	s_vbox.add_theme_constant_override("separation", 14)
 	panel.add_child(s_vbox)
 	
 	# Target team state
@@ -2021,11 +2106,11 @@ func setup_player_list_overlay():
 	# Window title: "[TEAM] SQUAD" / "[TAKIM] KADROSU"
 	var window_title_bg = PanelContainer.new()
 	var wtb_style = StyleBoxFlat.new()
-	wtb_style.bg_color = active_theme.bg_top.darkened(0.25)
+	wtb_style.bg_color = active_theme.bg_bottom.darkened(0.1)
 	wtb_style.corner_radius_top_left = 16; wtb_style.corner_radius_top_right = 16
 	wtb_style.corner_radius_bottom_left = 16; wtb_style.corner_radius_bottom_right = 16
 	wtb_style.border_width_bottom = 2.5; wtb_style.border_color = active_theme.accent
-	wtb_style.content_margin_top = 12; wtb_style.content_margin_bottom = 12
+	wtb_style.content_margin_top = 10; wtb_style.content_margin_bottom = 10
 	wtb_style.content_margin_left = 20; wtb_style.content_margin_right = 20
 	window_title_bg.add_theme_stylebox_override("panel", wtb_style)
 	s_vbox.add_child(window_title_bg)
@@ -2035,13 +2120,17 @@ func setup_player_list_overlay():
 	s_title.add_theme_font_override("font", custom_font)
 	s_title.add_theme_font_size_override("font_size", 38)
 	s_title.add_theme_color_override("font_color", Color.WHITE)
+	s_title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
+	s_title.add_theme_constant_override("shadow_offset_y", 2)
+	s_title.add_theme_color_override("font_outline_color", Color8(0, 0, 0, 240))
+	s_title.add_theme_constant_override("outline_size", 3)
 	s_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	window_title_bg.add_child(s_title)
 	
 	# Top section: Team ball preview & interactive team switcher
 	var header_vbox = VBoxContainer.new()
 	header_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	header_vbox.add_theme_constant_override("separation", 6)
+	header_vbox.add_theme_constant_override("separation", 4)
 	s_vbox.add_child(header_vbox)
 
 	var ball_btn = Button.new()
@@ -2065,6 +2154,7 @@ func setup_player_list_overlay():
 	
 	var team_btn = Button.new()
 	team_btn.text = target_team + " ▾"
+	team_btn.custom_minimum_size = Vector2(0, 48)
 	team_btn.add_theme_font_override("font", custom_font)
 	team_btn.add_theme_font_size_override("font_size", 32)
 	team_btn.add_theme_color_override("font_color", Color8(255, 215, 0))
@@ -2080,7 +2170,9 @@ func setup_player_list_overlay():
 	switch_hint.text = LANG.get(Global.current_lang, LANG["ENG"]).get("TAP_TO_SWITCH_TEAM", "Takım değiştirmek için dokun")
 	switch_hint.add_theme_font_override("font", custom_font)
 	switch_hint.add_theme_font_size_override("font_size", 18)
-	switch_hint.add_theme_color_override("font_color", Color8(180, 200, 230))
+	switch_hint.add_theme_color_override("font_color", Color.WHITE)
+	switch_hint.add_theme_color_override("font_outline_color", Color8(0, 0, 0, 180))
+	switch_hint.add_theme_constant_override("outline_size", 2)
 	switch_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	header_vbox.add_child(switch_hint)
 
@@ -2088,7 +2180,7 @@ func setup_player_list_overlay():
 	var toast_lbl = Label.new()
 	toast_lbl.add_theme_font_override("font", custom_font)
 	toast_lbl.add_theme_font_size_override("font_size", 24)
-	toast_lbl.add_theme_color_override("font_color", Color8(255, 215, 80))
+	toast_lbl.add_theme_color_override("font_color", Color8(255, 225, 80))
 	toast_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	toast_lbl.visible = false
 	s_vbox.add_child(toast_lbl)
@@ -2101,10 +2193,11 @@ func setup_player_list_overlay():
 				toast_lbl.visible = false
 		)
 
-	# Scrollable player list (expanded height for easier scrolling)
+	# Scrollable player list (touch isolated)
 	var scroll = ScrollContainer.new()
 	var screen_h = get_viewport_rect().size.y
-	scroll.custom_minimum_size = Vector2(610, min(screen_h * 0.48, 480))
+	scroll.custom_minimum_size = Vector2(650, min(screen_h * 0.46, 450))
+	scroll.mouse_filter = Control.MOUSE_FILTER_STOP
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	scroll.follow_focus = true
@@ -2114,92 +2207,197 @@ func setup_player_list_overlay():
 	list_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	list_vbox.add_theme_constant_override("separation", 10)
 	scroll.add_child(list_vbox)
-	
-	var line_edits = {}
 
-	# Helper to add a player row with cross delete button
-	var create_player_row = func(num_val: String, default_name: String = ""):
+	# Localization maps
+	var cap_badge_names = {
+		"TR": "★ KAPTAN",
+		"ENG": "★ CAPTAIN",
+		"ESP": "★ CAPITÁN",
+		"POR": "★ CAPITÃO",
+		"ITA": "★ CAPITANO"
+	}
+	var cap_ph_map = {
+		"TR": "Kaptan Adı...",
+		"ENG": "Captain Name...",
+		"ESP": "Nombre del Capitán...",
+		"POR": "Nome do Capitão...",
+		"ITA": "Nome del Capitano..."
+	}
+	var player_ph_map = {
+		"TR": "Oyuncu Adı...",
+		"ENG": "Player Name...",
+		"ESP": "Nombre del Jugador...",
+		"POR": "Nome do Jogador...",
+		"ITA": "Nome del Giocatore..."
+	}
+	var add_player_text_map = {
+		"TR": "+ OYUNCU EKLE",
+		"ENG": "+ ADD PLAYER",
+		"ESP": "+ AÑADIR JUGADOR",
+		"POR": "+ ADICIONAR JOGADOR",
+		"ITA": "+ AGGIUNGI GIOCATORE"
+	}
+
+	# Array to track all active player row dictionaries
+	var player_rows: Array = []
+
+	# Updates roles, styles, badges and placeholders for all rows
+	var update_all_row_roles = func():
+		for i in range(player_rows.size()):
+			var r = player_rows[i]
+			var is_cap = (i == 0)
+			
+			# Captain badge visibility
+			if is_instance_valid(r["badge_panel"]):
+				r["badge_panel"].visible = is_cap
+			
+			# Border and accent colors
+			var num_border_col = Color8(255, 215, 0) if is_cap else active_theme.accent
+			var hash_col = Color8(255, 215, 0) if is_cap else active_theme.accent
+			var name_border_col = Color8(255, 215, 0, 220) if is_cap else active_theme.accent.darkened(0.3)
+			
+			if is_instance_valid(r["hash_lbl"]):
+				r["hash_lbl"].add_theme_color_override("font_color", hash_col)
+			
+			if is_instance_valid(r["num_panel"]):
+				var np_style = StyleBoxFlat.new()
+				np_style.bg_color = active_theme.bg_bottom.darkened(0.35)
+				np_style.corner_radius_top_left = 10; np_style.corner_radius_top_right = 10
+				np_style.corner_radius_bottom_left = 10; np_style.corner_radius_bottom_right = 10
+				np_style.border_width_left = 1.5; np_style.border_width_right = 1.5
+				np_style.border_width_top = 1.5; np_style.border_width_bottom = 2.5
+				np_style.border_color = num_border_col
+				np_style.content_margin_left = 8; np_style.content_margin_right = 8
+				r["num_panel"].add_theme_stylebox_override("panel", np_style)
+			
+			if is_instance_valid(r["name_edit"]):
+				var ph = cap_ph_map.get(Global.current_lang, cap_ph_map["ENG"]) if is_cap else player_ph_map.get(Global.current_lang, player_ph_map["ENG"])
+				r["name_edit"].placeholder_text = ph
+				
+				var ne_style = StyleBoxFlat.new()
+				ne_style.bg_color = active_theme.bg_bottom.darkened(0.3)
+				ne_style.corner_radius_top_left = 10; ne_style.corner_radius_top_right = 10
+				ne_style.corner_radius_bottom_left = 10; ne_style.corner_radius_bottom_right = 10
+				ne_style.border_width_left = 1.5; ne_style.border_width_right = 1.5
+				ne_style.border_width_top = 1.5; ne_style.border_width_bottom = 2.5
+				ne_style.border_color = name_border_col
+				ne_style.content_margin_left = 12; ne_style.content_margin_right = 12
+				r["name_edit"].add_theme_stylebox_override("normal", ne_style)
+				r["name_edit"].add_theme_stylebox_override("focus", ne_style)
+
+	# Helper to create a single player row
+	var create_player_row = func(num_val: String, default_name: String = "") -> Dictionary:
 		var row = HBoxContainer.new()
 		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_theme_constant_override("separation", 10)
 		
-		# Number box
+		# 1. Number box with "#" label and editable number LineEdit
 		var num_panel = PanelContainer.new()
-		var np_style = StyleBoxFlat.new()
-		np_style.bg_color = active_theme.bg_bottom.darkened(0.35)
-		np_style.corner_radius_top_left = 10; np_style.corner_radius_top_right = 10
-		np_style.corner_radius_bottom_left = 10; np_style.corner_radius_bottom_right = 10
-		np_style.border_width_left = 1.0; np_style.border_width_right = 1.0
-		np_style.border_width_top = 1.0; np_style.border_width_bottom = 2.5
-		np_style.border_color = active_theme.accent
-		np_style.content_margin_left = 10; np_style.content_margin_right = 10
-		num_panel.add_theme_stylebox_override("panel", np_style)
-		num_panel.custom_minimum_size = Vector2(65, 48)
+		num_panel.custom_minimum_size = Vector2(76, 52)
 		
-		var num_lbl = Label.new()
-		num_lbl.text = "#" + num_val
-		num_lbl.add_theme_font_override("font", custom_font)
-		num_lbl.add_theme_font_size_override("font_size", 26)
-		num_lbl.add_theme_color_override("font_color", active_theme.accent)
-		num_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		num_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		num_panel.add_child(num_lbl)
+		var num_hbox = HBoxContainer.new()
+		num_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+		num_hbox.add_theme_constant_override("separation", 2)
+		num_panel.add_child(num_hbox)
+		
+		var hash_lbl = Label.new()
+		hash_lbl.text = "#"
+		hash_lbl.add_theme_font_override("font", custom_font)
+		hash_lbl.add_theme_font_size_override("font_size", 24)
+		hash_lbl.add_theme_color_override("font_color", active_theme.accent)
+		num_hbox.add_child(hash_lbl)
+		
+		var num_edit = LineEdit.new()
+		num_edit.custom_minimum_size = Vector2(40, 48)
+		num_edit.max_length = 3
+		num_edit.text = num_val
+		num_edit.alignment = HORIZONTAL_ALIGNMENT_CENTER
+		num_edit.add_theme_font_override("font", custom_font)
+		num_edit.add_theme_font_size_override("font_size", 26)
+		num_edit.add_theme_color_override("font_color", Color.WHITE)
+		var empty_style = StyleBoxEmpty.new()
+		num_edit.add_theme_stylebox_override("normal", empty_style)
+		num_edit.add_theme_stylebox_override("focus", empty_style)
+		num_hbox.add_child(num_edit)
 		row.add_child(num_panel)
 		
-		# LineEdit input with 20 max length
-		var input_edit = LineEdit.new()
-		input_edit.custom_minimum_size = Vector2(410, 48)
-		input_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		input_edit.max_length = 20
-		input_edit.add_theme_font_override("font", custom_font)
-		input_edit.add_theme_font_size_override("font_size", 25)
-		var ph_map = {
-			"TR": "#" + num_val + " Oyuncu Adı...",
-			"ENG": "#" + num_val + " Player Name...",
-			"ESP": "#" + num_val + " Nombre del Jugador...",
-			"POR": "#" + num_val + " Nome do Jogador..."
-		}
-		input_edit.placeholder_text = ph_map.get(Global.current_lang, ph_map["ENG"])
+		# 2. Captain Badge (Gold pill badge)
+		var badge_panel = PanelContainer.new()
+		var bp_style = StyleBoxFlat.new()
+		bp_style.bg_color = Color8(255, 215, 0, 35)
+		bp_style.border_color = Color8(255, 215, 0)
+		bp_style.border_width_left = 1.5; bp_style.border_width_right = 1.5
+		bp_style.border_width_top = 1.5; bp_style.border_width_bottom = 2.5
+		bp_style.corner_radius_top_left = 8; bp_style.corner_radius_top_right = 8
+		bp_style.corner_radius_bottom_left = 8; bp_style.corner_radius_bottom_right = 8
+		bp_style.content_margin_left = 10; bp_style.content_margin_right = 10
+		bp_style.content_margin_top = 4; bp_style.content_margin_bottom = 4
+		badge_panel.add_theme_stylebox_override("panel", bp_style)
+		badge_panel.custom_minimum_size = Vector2(100, 52)
 		
-		var edit_style = StyleBoxFlat.new()
-		edit_style.bg_color = active_theme.bg_bottom.darkened(0.3)
-		edit_style.corner_radius_top_left = 10; edit_style.corner_radius_top_right = 10
-		edit_style.corner_radius_bottom_left = 10; edit_style.corner_radius_bottom_right = 10
-		edit_style.border_width_left = 1.0; edit_style.border_width_right = 1.0
-		edit_style.border_width_top = 1.0; edit_style.border_width_bottom = 2.5
-		edit_style.border_color = active_theme.accent.darkened(0.3)
-		edit_style.content_margin_left = 12; edit_style.content_margin_right = 12
-		input_edit.add_theme_stylebox_override("normal", edit_style)
-		input_edit.add_theme_stylebox_override("focus", edit_style)
-		input_edit.add_theme_color_override("font_color", Color.WHITE)
-		input_edit.add_theme_color_override("font_placeholder_color", Color8(180, 200, 230))
-		input_edit.text = default_name
+		var cap_lbl = Label.new()
+		cap_lbl.text = cap_badge_names.get(Global.current_lang, cap_badge_names["ENG"])
+		cap_lbl.add_theme_font_override("font", custom_font)
+		cap_lbl.add_theme_font_size_override("font_size", 22)
+		cap_lbl.add_theme_color_override("font_color", Color8(255, 225, 60))
+		cap_lbl.add_theme_color_override("font_outline_color", Color8(0, 0, 0, 220))
+		cap_lbl.add_theme_constant_override("outline_size", 2)
+		cap_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		cap_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		badge_panel.add_child(cap_lbl)
+		badge_panel.visible = false
+		row.add_child(badge_panel)
 		
-		input_edit.text_changed.connect(func(new_text: String):
+		# 3. LineEdit name input with 20 max length
+		var name_edit = LineEdit.new()
+		name_edit.custom_minimum_size = Vector2(250, 52)
+		name_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		name_edit.max_length = 20
+		name_edit.text = default_name
+		name_edit.add_theme_font_override("font", custom_font)
+		name_edit.add_theme_font_size_override("font_size", 26)
+		name_edit.add_theme_color_override("font_color", Color.WHITE)
+		name_edit.add_theme_color_override("font_placeholder_color", Color8(220, 220, 230, 160))
+		name_edit.text_changed.connect(func(new_text: String):
 			if new_text.length() >= 20:
-				show_toast.call(LANG[Global.current_lang]["MAX_CHAR_WARN"])
+				show_toast.call(LANG.get(Global.current_lang, LANG["ENG"]).get("MAX_CHAR_WARN", "Maksimum 20 karakter!"))
 		)
-		row.add_child(input_edit)
-		line_edits[num_val] = input_edit
+		row.add_child(name_edit)
 		
-		# Delete Cross (✕) Button
+		# 4. Delete (✕) Button (min 48x48 touch target: 52x52)
 		var del_btn = Button.new()
 		del_btn.text = "✕"
-		del_btn.custom_minimum_size = Vector2(48, 48)
+		del_btn.custom_minimum_size = Vector2(52, 52)
 		del_btn.add_theme_font_override("font", custom_font)
-		del_btn.add_theme_font_size_override("font_size", 24)
+		del_btn.add_theme_font_size_override("font_size", 26)
 		del_btn.add_theme_color_override("font_color", Color.WHITE)
 		apply_3d_style_to_button(del_btn, Color8(220, 50, 50), Color8(150, 25, 25), 10, 3)
+		row.add_child(del_btn)
+		
+		var entry = {
+			"row": row,
+			"num_panel": num_panel,
+			"hash_lbl": hash_lbl,
+			"num_edit": num_edit,
+			"badge_panel": badge_panel,
+			"name_edit": name_edit,
+			"del_btn": del_btn
+		}
 		
 		del_btn.pressed.connect(func():
 			Global.play_click()
-			if line_edits.has(num_val):
-				line_edits.erase(num_val)
+			if player_rows.size() <= 1:
+				# Cannot remove the only row (Captain slot); clear text instead
+				entry["name_edit"].text = ""
+				return
+			player_rows.erase(entry)
 			row.queue_free()
+			update_all_row_roles.call()
 		)
-		row.add_child(del_btn)
 		
 		list_vbox.add_child(row)
+		player_rows.append(entry)
+		return entry
 
 	# Dynamic loader for any selected team
 	var load_team_players = func(t_name: String):
@@ -2208,27 +2406,49 @@ func setup_player_list_overlay():
 		team_btn.text = target_team + " ▾"
 		ball_preview.queue_redraw()
 		
-		for c in list_vbox.get_children():
-			c.queue_free()
-		line_edits.clear()
+		for r in player_rows:
+			if is_instance_valid(r["row"]):
+				r["row"].queue_free()
+		player_rows.clear()
 		
 		var existing_names = {}
 		if Global.custom_player_names.has(target_team):
-			existing_names = Global.custom_player_names[target_team]
-			
-		var squad_numbers = ["7", "8", "9", "10", "11", "14", "17", "19", "21", "23"]
-		var all_keys = []
-		for n in squad_numbers:
-			if not all_keys.has(n): all_keys.append(n)
-		for k in existing_names:
+			var raw = Global.custom_player_names[target_team]
+			if typeof(raw) == TYPE_DICTIONARY:
+				existing_names = raw
+				
+		var saved_list = []
+		var has_10 = false
+		for k in existing_names.keys():
+			if str(k) == "10":
+				has_10 = true
+				var p_val = String(existing_names[k]).strip_edges()
+				saved_list.append({"num": "10", "name": p_val})
+				break
+		for k in existing_names.keys():
 			var sk = str(k)
-			if not all_keys.has(sk): all_keys.append(sk)
-			
-		for num_str in all_keys:
-			var val_name = ""
-			if existing_names.has(num_str): val_name = String(existing_names[num_str])
-			elif existing_names.has(int(num_str)): val_name = String(existing_names[int(num_str)])
-			create_player_row.call(num_str, val_name)
+			if has_10 and sk == "10":
+				continue
+			var p_val = String(existing_names[k]).strip_edges()
+			saved_list.append({"num": sk, "name": p_val})
+		
+		if saved_list.size() == 0:
+			# Slot 1: Captain (#10)
+			create_player_row.call("10", "")
+			# Slot 2: Empty slot (#9)
+			create_player_row.call("9", "")
+		elif saved_list.size() == 1:
+			# Slot 1: Captain (saved player)
+			create_player_row.call(saved_list[0].num, saved_list[0].name)
+			# Slot 2: Empty slot
+			var second_num = "9" if saved_list[0].num != "9" else "10"
+			create_player_row.call(second_num, "")
+		else:
+			# Show all saved players (first is Captain)
+			for item in saved_list:
+				create_player_row.call(item.num, item.name)
+				
+		update_all_row_roles.call()
 
 	# Initial squad populate
 	load_team_players.call(target_team)
@@ -2238,15 +2458,18 @@ func setup_player_list_overlay():
 		Global.play_click()
 		var p_overlay = ColorRect.new()
 		p_overlay.color = Color(0, 0, 0, 0.85)
+		p_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 		p_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 		player_list_overlay.add_child(p_overlay)
 		
 		var p_center = CenterContainer.new()
+		p_center.mouse_filter = Control.MOUSE_FILTER_STOP
 		p_center.set_anchors_preset(Control.PRESET_FULL_RECT)
 		p_overlay.add_child(p_center)
 		
 		var p_panel = PanelContainer.new()
-		p_panel.custom_minimum_size = Vector2(580, min(screen_h * 0.75, 620))
+		p_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+		p_panel.custom_minimum_size = Vector2(660, min(screen_h * 0.82, 760))
 		var pp_style = StyleBoxFlat.new()
 		pp_style.bg_color = active_theme.bg_bottom.darkened(0.2)
 		pp_style.corner_radius_top_left = 20; pp_style.corner_radius_top_right = 20
@@ -2266,17 +2489,22 @@ func setup_player_list_overlay():
 		var p_title = Label.new()
 		p_title.text = LANG.get(Global.current_lang, LANG["ENG"]).get("SELECT_TEAM", "TAKIM SEÇ")
 		p_title.add_theme_font_override("font", custom_font)
-		p_title.add_theme_font_size_override("font_size", 34)
-		p_title.add_theme_color_override("font_color", active_theme.accent)
+		p_title.add_theme_font_size_override("font_size", 36)
+		p_title.add_theme_color_override("font_color", Color.WHITE)
+		p_title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
+		p_title.add_theme_constant_override("shadow_offset_y", 2)
+		p_title.add_theme_color_override("font_outline_color", Color8(0, 0, 0, 240))
+		p_title.add_theme_constant_override("outline_size", 3)
 		p_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		p_vb.add_child(p_title)
 		
 		var search_box = LineEdit.new()
 		search_box.placeholder_text = LANG.get(Global.current_lang, LANG["ENG"]).get("SEARCH_TEAM", "Takım ara...")
-		search_box.custom_minimum_size = Vector2(500, 48)
+		search_box.custom_minimum_size = Vector2(580, 54)
 		search_box.add_theme_font_override("font", custom_font)
-		search_box.add_theme_font_size_override("font_size", 22)
+		search_box.add_theme_font_size_override("font_size", 24)
 		search_box.add_theme_color_override("font_color", Color.WHITE)
+		search_box.add_theme_color_override("font_placeholder_color", Color8(220, 220, 230, 160))
 		var sb_style = StyleBoxFlat.new()
 		sb_style.bg_color = active_theme.bg_bottom.darkened(0.35)
 		sb_style.corner_radius_top_left = 12; sb_style.corner_radius_top_right = 12
@@ -2289,8 +2517,9 @@ func setup_player_list_overlay():
 		p_vb.add_child(search_box)
 		
 		var t_scroll = ScrollContainer.new()
-		t_scroll.custom_minimum_size = Vector2(520, min(screen_h * 0.50, 420))
+		t_scroll.custom_minimum_size = Vector2(600, min(screen_h * 0.55, 520))
 		t_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		t_scroll.mouse_filter = Control.MOUSE_FILTER_PASS
 		t_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 		t_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 		p_vb.add_child(t_scroll)
@@ -2311,9 +2540,10 @@ func setup_player_list_overlay():
 					continue
 				var b = Button.new()
 				b.text = tm
-				b.custom_minimum_size = Vector2(250, 50)
+				b.custom_minimum_size = Vector2(285, 58)
+				b.mouse_filter = Control.MOUSE_FILTER_PASS
 				b.add_theme_font_override("font", custom_font)
-				b.add_theme_font_size_override("font_size", 22)
+				b.add_theme_font_size_override("font_size", 26)
 				b.add_theme_color_override("font_color", Color.WHITE)
 				if tm == target_team:
 					apply_3d_style_to_button(b, active_theme.accent, active_theme.accent.darkened(0.4), 12, 3.5, 12, 8)
@@ -2335,10 +2565,10 @@ func setup_player_list_overlay():
 		
 		var p_close_btn = Button.new()
 		p_close_btn.text = LANG.get(Global.current_lang, LANG["ENG"])["CLOSE"]
-		p_close_btn.custom_minimum_size = Vector2(160, 48)
+		p_close_btn.custom_minimum_size = Vector2(200, 56)
 		p_close_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		p_close_btn.add_theme_font_override("font", custom_font)
-		p_close_btn.add_theme_font_size_override("font_size", 24)
+		p_close_btn.add_theme_font_size_override("font_size", 26)
 		apply_3d_style_to_button(p_close_btn, Color8(200, 45, 45), Color8(130, 25, 25), 12, 3.5, 20, 8)
 		p_close_btn.add_theme_color_override("font_color", Color.WHITE)
 		p_close_btn.pressed.connect(func():
@@ -2350,82 +2580,53 @@ func setup_player_list_overlay():
 	ball_btn.pressed.connect(open_team_picker)
 	team_btn.pressed.connect(open_team_picker)
 
-	# --- PLUS LINE: Add new number & player name ---
-	var add_row = HBoxContainer.new()
-	add_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	add_row.add_theme_constant_override("separation", 10)
-	s_vbox.add_child(add_row)
+	# --- Explicit "+ OYUNCU EKLE" / "+ ADD PLAYER" Button ---
+	var add_player_btn = Button.new()
+	var add_txt = add_player_text_map.get(Global.current_lang, LANG.get(Global.current_lang, {}).get("ADD_PLAYER", "+ ADD PLAYER"))
+	add_player_btn.text = add_txt
+	add_player_btn.custom_minimum_size = Vector2(650, 54)
+	add_player_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	add_player_btn.add_theme_font_override("font", custom_font)
+	add_player_btn.add_theme_font_size_override("font_size", 28)
+	add_player_btn.add_theme_color_override("font_color", Color.WHITE)
+	apply_3d_style_to_button(add_player_btn, active_theme.accent.darkened(0.15), active_theme.accent.darkened(0.45), 14, 4, 16, 8)
 	
-	var add_num_edit = LineEdit.new()
-	add_num_edit.placeholder_text = "#"
-	add_num_edit.max_length = 3
-	add_num_edit.custom_minimum_size = Vector2(70, 48)
-	add_num_edit.add_theme_font_override("font", custom_font)
-	add_num_edit.add_theme_font_size_override("font_size", 24)
-	add_num_edit.add_theme_color_override("font_color", Color.WHITE)
-	add_num_edit.add_theme_color_override("font_placeholder_color", Color8(180, 200, 230))
-	
-	var add_num_style = StyleBoxFlat.new()
-	add_num_style.bg_color = active_theme.bg_bottom.darkened(0.35)
-	add_num_style.corner_radius_top_left = 10; add_num_style.corner_radius_top_right = 10
-	add_num_style.corner_radius_bottom_left = 10; add_num_style.corner_radius_bottom_right = 10
-	add_num_style.border_width_left = 1.0; add_num_style.border_width_right = 1.0
-	add_num_style.border_width_top = 1.0; add_num_style.border_width_bottom = 2.5
-	add_num_style.border_color = active_theme.accent
-	add_num_style.content_margin_left = 10; add_num_style.content_margin_right = 10
-	add_num_edit.add_theme_stylebox_override("normal", add_num_style)
-	add_num_edit.add_theme_stylebox_override("focus", add_num_style)
-	add_row.add_child(add_num_edit)
-	
-	var add_name_edit = LineEdit.new()
-	add_name_edit.placeholder_text = LANG[Global.current_lang]["ADD_PLAYER"]
-	add_name_edit.max_length = 20
-	add_name_edit.custom_minimum_size = Vector2(400, 48)
-	add_name_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	add_name_edit.add_theme_font_override("font", custom_font)
-	add_name_edit.add_theme_font_size_override("font_size", 25)
-	add_name_edit.add_theme_color_override("font_color", Color.WHITE)
-	add_name_edit.add_theme_color_override("font_placeholder_color", Color8(180, 200, 230))
-	
-	var add_name_style = StyleBoxFlat.new()
-	add_name_style.bg_color = active_theme.bg_bottom.darkened(0.3)
-	add_name_style.corner_radius_top_left = 10; add_name_style.corner_radius_top_right = 10
-	add_name_style.corner_radius_bottom_left = 10; add_name_style.corner_radius_bottom_right = 10
-	add_name_style.border_width_left = 1.0; add_name_style.border_width_right = 1.0
-	add_name_style.border_width_top = 1.0; add_name_style.border_width_bottom = 2.5
-	add_name_style.border_color = active_theme.accent
-	add_name_style.content_margin_left = 12; add_name_style.content_margin_right = 12
-	add_name_edit.add_theme_stylebox_override("normal", add_name_style)
-	add_name_edit.add_theme_stylebox_override("focus", add_name_style)
-	
-	add_name_edit.text_changed.connect(func(new_text: String):
-		if new_text.length() >= 20:
-			show_toast.call(LANG[Global.current_lang]["MAX_CHAR_WARN"])
-	)
-	add_row.add_child(add_name_edit)
-	
-	var add_btn = Button.new()
-	add_btn.text = "+"
-	add_btn.custom_minimum_size = Vector2(60, 48)
-	add_btn.add_theme_font_override("font", custom_font)
-	add_btn.add_theme_font_size_override("font_size", 34)
-	add_btn.add_theme_color_override("font_color", Color.WHITE)
-	apply_3d_style_to_button(add_btn, active_theme.accent, active_theme.accent.darkened(0.35), 10, 3)
-	
-	add_btn.pressed.connect(func():
+	add_player_btn.pressed.connect(func():
 		Global.play_click()
-		var n_str = add_num_edit.text.strip_edges()
-		if n_str == "":
-			n_str = str(line_edits.size() + 1)
-		var p_str = add_name_edit.text.strip_edges()
-		if p_str != "":
-			create_player_row.call(n_str, p_str)
-			add_num_edit.text = ""
-			add_name_edit.text = ""
+		if player_rows.size() >= 23:
+			show_toast.call("Maksimum 23 oyuncu ekleyebilirsiniz!")
+			return
+		
+		# Find next unused squad number
+		var pref_numbers = ["10", "9", "7", "11", "8", "6", "5", "4", "3", "2", "1", "14", "17", "19", "20", "21", "22", "23"]
+		var used_nums = {}
+		for r in player_rows:
+			if is_instance_valid(r["num_edit"]):
+				used_nums[r["num_edit"].text.strip_edges()] = true
+		
+		var chosen_num = ""
+		for pn in pref_numbers:
+			if not used_nums.has(pn):
+				chosen_num = pn
+				break
+		if chosen_num == "":
+			chosen_num = str(player_rows.size() + 1)
+			
+		var new_entry = create_player_row.call(chosen_num, "")
+		update_all_row_roles.call()
+		
+		# Auto-scroll to bottom and focus new input
+		get_tree().create_timer(0.05).timeout.connect(func():
+			if is_instance_valid(scroll):
+				scroll.scroll_vertical = int(scroll.get_v_scroll_bar().max_value)
+			if is_instance_valid(new_entry["name_edit"]):
+				new_entry["name_edit"].grab_focus()
+		)
 	)
-	add_row.add_child(add_btn)
+	s_vbox.add_child(add_player_btn)
+	ui_labels.append({"node": add_player_btn, "key": "ADD_PLAYER", "type": "button"})
 
-	# Bottom buttons
+	# Bottom buttons (CLOSE & SAVE)
 	var bot_hbox = HBoxContainer.new()
 	bot_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	bot_hbox.add_theme_constant_override("separation", 20)
@@ -2433,18 +2634,21 @@ func setup_player_list_overlay():
 	s_vbox.add_child(bot_hbox)
 	
 	var close_btn = Button.new()
-	close_btn.text = LANG[Global.current_lang]["CLOSE"]
+	close_btn.text = LANG.get(Global.current_lang, LANG["ENG"]).get("CLOSE", "KAPAT")
 	close_btn.add_theme_font_override("font", custom_font)
 	close_btn.add_theme_font_size_override("font_size", 30)
 	close_btn.custom_minimum_size = Vector2(250, 65)
 	apply_3d_style_to_button(close_btn, active_theme.bg_top.lightened(0.12), active_theme.bg_bottom.darkened(0.35), 15, 4)
-	close_btn.add_theme_color_override("font_color", Color8(220, 230, 245))
-	close_btn.pressed.connect(func(): player_list_overlay.visible = false)
+	close_btn.add_theme_color_override("font_color", Color.WHITE)
+	close_btn.pressed.connect(func():
+		Global.play_click()
+		player_list_overlay.visible = false
+	)
 	bot_hbox.add_child(close_btn)
 	ui_labels.append({"node": close_btn, "key": "CLOSE", "type": "button"})
 
 	var save_btn = Button.new()
-	save_btn.text = LANG[Global.current_lang]["SAVE"]
+	save_btn.text = LANG.get(Global.current_lang, LANG["ENG"]).get("SAVE", "KAYDET")
 	save_btn.add_theme_font_override("font", custom_font)
 	save_btn.add_theme_font_size_override("font_size", 30)
 	save_btn.custom_minimum_size = Vector2(250, 65)
@@ -2454,11 +2658,23 @@ func setup_player_list_overlay():
 	save_btn.pressed.connect(func():
 		if target_team != "":
 			var team_saved_names = {}
-			for num_key in line_edits:
-				if is_instance_valid(line_edits[num_key]):
-					var txt = line_edits[num_key].text.strip_edges()
+			var used_saved_nums = {}
+			for r in player_rows:
+				if is_instance_valid(r["name_edit"]):
+					var txt = r["name_edit"].text.strip_edges()
 					if txt != "":
-						team_saved_names[str(num_key)] = txt
+						var n_str = ""
+						if is_instance_valid(r["num_edit"]):
+							n_str = r["num_edit"].text.strip_edges()
+						if n_str == "" or not n_str.is_valid_int():
+							n_str = "10" if r == player_rows[0] else str(team_saved_names.size() + 1)
+						var final_n = n_str
+						var dupe_idx = 1
+						while used_saved_nums.has(final_n):
+							final_n = str(int(n_str) + dupe_idx)
+							dupe_idx += 1
+						used_saved_nums[final_n] = true
+						team_saved_names[final_n] = txt
 			Global.custom_player_names[target_team] = team_saved_names
 			Global.save_progression()
 		Global.play_click()
@@ -2482,8 +2698,10 @@ func create_label_node(lang_key, color, f_size) -> Label:
 	lbl.add_theme_color_override("font_color", color)
 	lbl.add_theme_font_size_override("font_size", f_size) 
 	lbl.add_theme_font_override("font", custom_font)
-	lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
+	lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
 	lbl.add_theme_constant_override("shadow_offset_y", 2)
+	lbl.add_theme_color_override("font_outline_color", Color8(0, 0, 0, 220))
+	lbl.add_theme_constant_override("outline_size", 3)
 	ui_labels.append({"node": lbl, "key": lang_key, "type": "label", "on_bg": true})
 	return lbl
 
@@ -3162,7 +3380,7 @@ func _change_language(lang_code: String):
 		burger_menu_overlay = null
 
 func _on_lang_dropdown_selected(idx: int):
-	var lang_map = {0: "TR", 1: "ENG", 2: "ESP", 3: "POR"}
+	var lang_map = {0: "TR", 1: "ENG", 2: "ESP", 3: "POR", 4: "ITA"}
 	_change_language(lang_map.get(idx, "TR"))
 
 func _on_start_match():
@@ -3482,7 +3700,7 @@ func _build_stats_tab() -> Control:
 		return card
 
 	# Helper to create large, readable stat tile
-	var create_stat_tile = func(label_key: String, val_str: String, sub_str: String = "", sub_color: Color = Color8(175, 195, 220), icon_tex: Texture2D = null) -> PanelContainer:
+	var create_stat_tile = func(label_key: String, val_str: String, sub_str: String = "", sub_color: Color = Color.WHITE, icon_tex: Texture2D = null) -> PanelContainer:
 		var p = PanelContainer.new()
 		var ps = StyleBoxFlat.new()
 		var cell_bg = active_theme.bg_bottom.darkened(0.75) if is_buz else active_theme.bg_bottom.darkened(0.38)
@@ -3520,7 +3738,7 @@ func _build_stats_tab() -> Control:
 		l.text = LANG[lang].get(label_key, label_key)
 		l.add_theme_font_override("font", custom_font)
 		l.add_theme_font_size_override("font_size", 22)
-		l.add_theme_color_override("font_color", Color8(210, 225, 245))
+		l.add_theme_color_override("font_color", Color.WHITE)
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		ui_labels.append({"node": l, "key": label_key, "type": "label"})
 		top_hb.add_child(l)
@@ -3572,7 +3790,7 @@ func _build_stats_tab() -> Control:
 		hdr_lbl.text = LANG[lang].get(title_key, title_key)
 		hdr_lbl.add_theme_font_override("font", custom_font)
 		hdr_lbl.add_theme_font_size_override("font_size", 20)
-		hdr_lbl.add_theme_color_override("font_color", Color8(215, 230, 245))
+		hdr_lbl.add_theme_color_override("font_color", Color.WHITE)
 		hdr_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		ui_labels.append({"node": hdr_lbl, "key": title_key, "type": "label"})
 		inner_vbox.add_child(hdr_lbl)
@@ -3582,7 +3800,7 @@ func _build_stats_tab() -> Control:
 		val_lbl.add_theme_font_override("font", custom_font)
 		val_lbl.add_theme_font_size_override("font_size", 28)
 		if score_str == "-":
-			val_lbl.add_theme_color_override("font_color", Color8(170, 185, 200))
+			val_lbl.add_theme_color_override("font_color", Color.WHITE)
 		elif is_win:
 			val_lbl.add_theme_color_override("font_color", Color8(50, 235, 115))
 			val_lbl.add_theme_color_override("font_shadow_color", Color8(0, 80, 20, 180))
@@ -3598,7 +3816,7 @@ func _build_stats_tab() -> Control:
 			opp_lbl.text = opp_str
 			opp_lbl.add_theme_font_override("font", custom_font)
 			opp_lbl.add_theme_font_size_override("font_size", 18)
-			opp_lbl.add_theme_color_override("font_color", Color8(210, 225, 245))
+			opp_lbl.add_theme_color_override("font_color", Color.WHITE)
 			opp_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			inner_vbox.add_child(opp_lbl)
 
@@ -3765,7 +3983,7 @@ func _build_stats_tab() -> Control:
 		wr_lbl.text = LANG[lang].get("FAV_STATS_WINRATE", "Galibiyet Oranı")
 		wr_lbl.add_theme_font_override("font", custom_font)
 		wr_lbl.add_theme_font_size_override("font_size", 22)
-		wr_lbl.add_theme_color_override("font_color", Color8(210, 225, 245))
+		wr_lbl.add_theme_color_override("font_color", Color.WHITE)
 		wr_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		ui_labels.append({"node": wr_lbl, "key": "FAV_STATS_WINRATE", "type": "label"})
 		wr_inner_vb.add_child(wr_lbl)
@@ -3799,7 +4017,7 @@ func _build_stats_tab() -> Control:
 		# Cell 3: Goals For / Against (Atılan / Yenilen) with Color-Coded Averaj
 		var goal_diff_val = f_goals_f - f_goals_a
 		var goal_diff_str = (LANG[lang].get("GOALS_DIFF_LABEL", "Diff: %+d") % goal_diff_val)
-		var diff_color = Color8(75, 235, 130) if goal_diff_val > 0 else (Color8(255, 110, 110) if goal_diff_val < 0 else Color8(175, 195, 220))
+		var diff_color = Color8(75, 235, 130) if goal_diff_val > 0 else (Color8(255, 110, 110) if goal_diff_val < 0 else Color.WHITE)
 		fav_grid.add_child(create_stat_tile.call("FAV_STATS_GOALS_FOR", "%d / %d" % [int(f_goals_f), int(f_goals_a)], goal_diff_str, diff_color))
 
 		# Cell 4: Yellow & Red Cards & Clean Sheets (Kartlar & Gol Yememe)
@@ -3827,7 +4045,7 @@ func _build_stats_tab() -> Control:
 		cards_title_lbl.text = LANG[lang].get("FAV_STATS_CARDS", "Kartlar")
 		cards_title_lbl.add_theme_font_override("font", custom_font)
 		cards_title_lbl.add_theme_font_size_override("font_size", 22)
-		cards_title_lbl.add_theme_color_override("font_color", Color8(210, 225, 245))
+		cards_title_lbl.add_theme_color_override("font_color", Color.WHITE)
 		cards_title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		ui_labels.append({"node": cards_title_lbl, "key": "FAV_STATS_CARDS", "type": "label"})
 		card_inner_vb.add_child(cards_title_lbl)
@@ -3878,7 +4096,7 @@ func _build_stats_tab() -> Control:
 		cs_lbl.text = LANG[lang].get("STATS_CLEAN_SHEETS", "%d Maç Gol Yemedi") % f_clean_sheets
 		cs_lbl.add_theme_font_override("font", custom_font)
 		cs_lbl.add_theme_font_size_override("font_size", 17)
-		cs_lbl.add_theme_color_override("font_color", Color8(175, 205, 235))
+		cs_lbl.add_theme_color_override("font_color", Color.WHITE)
 		cs_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		card_inner_vb.add_child(cs_lbl)
 
@@ -3930,7 +4148,7 @@ func _build_stats_tab() -> Control:
 		cta_desc.text = LANG[lang].get("STATS_SELECT_FAV_PROMPT", "Takımına özel rekorları ve detaylı istatistikleri görmek için favori takımını seç!")
 		cta_desc.add_theme_font_override("font", custom_font)
 		cta_desc.add_theme_font_size_override("font_size", 22)
-		cta_desc.add_theme_color_override("font_color", Color8(210, 225, 245))
+		cta_desc.add_theme_color_override("font_color", Color.WHITE)
 		cta_desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		cta_desc.autowrap_mode = TextServer.AUTOWRAP_WORD
 		cta_vbox.add_child(cta_desc)
@@ -3972,7 +4190,7 @@ func _build_stats_tab() -> Control:
 		no_data_lbl.text = LANG[lang]["STATS_NO_DATA"]
 		no_data_lbl.add_theme_font_override("font", custom_font)
 		no_data_lbl.add_theme_font_size_override("font_size", 28)
-		no_data_lbl.add_theme_color_override("font_color", Color8(210, 225, 245))
+		no_data_lbl.add_theme_color_override("font_color", Color.WHITE)
 		no_data_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		no_data_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
 		ui_labels.append({"node": no_data_lbl, "key": "STATS_NO_DATA", "type": "label"})
@@ -4321,7 +4539,7 @@ func _build_shop_tab() -> Control:
 	var shop_scroll = ScrollContainer.new()
 	shop_scroll.set_anchors_preset(Control.PRESET_FULL_RECT)
 	shop_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	shop_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	shop_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	margin.add_child(shop_scroll)
 
 	var vbox = VBoxContainer.new()
@@ -5849,7 +6067,7 @@ func _on_rewarded_failed_to_show(_ad_info = null, _error_data = null):
 
 func _on_banner_loaded(ad_info, _response_info = null):
 	is_banner_loading = false
-	menu_banner_retried = false
+	menu_banner_retry_count = 0
 	if Global.is_premium: return
 	var ad_id = ad_info.get_ad_id() if ad_info else ""
 	menu_banner_ad_id = ad_id
@@ -5868,14 +6086,14 @@ func _on_banner_failed_to_load(ad_info, error_data):
 	var err_msg = error_data.get_message() if error_data and error_data.has_method("get_message") else ""
 	print("[AdMob] Unified Menu Banner failed to load. Code: ", err_code, " Message: ", err_msg)
 	if not is_inside_tree() or Global.is_premium: return
-	if not menu_banner_retried:
-		menu_banner_retried = true
-		await get_tree().create_timer(12.0).timeout
-		if is_inside_tree() and not Global.is_premium and menu_banner_ad_id == "":
-			print("[AdMob] Retrying Unified Menu Banner once...")
-			_ensure_menu_top_banner()
-	else:
-		print("[AdMob] Menu banner retry already attempted; stopping retries to avoid spamming.")
+	
+	menu_banner_retry_count += 1
+	var delay = min(25.0 + float(menu_banner_retry_count * 15), 60.0)
+	print("[AdMob] Scheduling menu banner retry #", menu_banner_retry_count, " in ", delay, " seconds...")
+	await get_tree().create_timer(delay).timeout
+	if is_inside_tree() and not Global.is_premium and menu_banner_ad_id == "":
+		print("[AdMob] Retrying Unified Menu Banner now...")
+		_ensure_menu_top_banner()
 
 func _on_rewarded_failed_to_load(ad_info, error_data):
 	is_rewarded_loading = false
@@ -6284,7 +6502,7 @@ func _open_lucky_wheel():
 			spin_btn.add_theme_color_override("font_color", Color.WHITE)
 		else:
 			status_lbl.text = LANG.get(Global.current_lang, LANG["ENG"]).get("LUCKY_WHEEL_NO_SPINS", "Bugünkü hakların bitti! Yarın tekrar gel.")
-			status_lbl.add_theme_color_override("font_color", Color8(180, 190, 210))
+			status_lbl.add_theme_color_override("font_color", Color.WHITE)
 			
 			var next_spin_prefix = "Sonraki Ücretsiz Çevirme: "
 			if Global.current_lang == "ENG": next_spin_prefix = "Next Free Spin in: "
@@ -6296,7 +6514,7 @@ func _open_lucky_wheel():
 			spin_btn.text = LANG.get(Global.current_lang, LANG["ENG"])["CLOSE"]
 			spin_btn.disabled = false
 			apply_3d_style_to_button(spin_btn, active_theme.bg_top.lightened(0.1), active_theme.bg_bottom.darkened(0.3), 16, 4.5, 30, 10)
-			spin_btn.add_theme_color_override("font_color", Color8(200, 210, 230))
+			spin_btn.add_theme_color_override("font_color", Color.WHITE)
 	
 	update_wheel_status.call()
 	
@@ -6400,7 +6618,7 @@ func _open_lucky_wheel():
 	var cl_s = StyleBoxFlat.new()
 	cl_s.bg_color = Color(0, 0, 0, 0)
 	close_btn.add_theme_stylebox_override("normal", cl_s)
-	close_btn.add_theme_color_override("font_color", Color8(180, 200, 230))
+	close_btn.add_theme_color_override("font_color", Color.WHITE)
 	close_btn.pressed.connect(func():
 		Global.play_click()
 		overlay.queue_free()

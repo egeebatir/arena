@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dubkk5ne01e63"
+
+[deps]
+
+files=["res://achievements_import/AchievementsLocalizations.First Victory.translation", "res://achievements_import/AchievementsLocalizations.Win your first match.translation", "res://achievements_import/AchievementsLocalizations.en_US.translation"]
+
+source_file="res://achievements_import/AchievementsLocalizations.csv"
+dest_files=["res://achievements_import/AchievementsLocalizations.First Victory.translation", "res://achievements_import/AchievementsLocalizations.Win your first match.translation", "res://achievements_import/AchievementsLocalizations.en_US.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

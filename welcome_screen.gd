@@ -103,6 +103,22 @@ var LANG = {
 		"CLOSE": "FECHAR",
 		"VISIT_WEB": "ebstudyo.com ↗",
 		"SKIP_HINT": "Toque para pular"
+	},
+	"ITA": {
+		"TITLE": "BOL GOL FUTBOL",
+		"SUBTITLE": "EB STUDIO  •  ebstudyo.com",
+		"STUDIO_NAME": "EB STUDIO",
+		"PRESENTS": "PRESENTA",
+		"PLAY_NOW": "GIOCA ORA",
+		"GUEST": "GIOCA COME OSPITE",
+		"LOGIN_PLAY": "Accedi con Google Play",
+		"PLAY_CONNECTED": "Connesso a Google Play",
+		"CONNECTING": "CONNESSIONE...",
+		"PRIVACY": "Informativa sulla Privacy",
+		"PRIVACY_TITLE": "INFORMATIVA SULLA PRIVACY",
+		"CLOSE": "CHIUDI",
+		"VISIT_WEB": "ebstudyo.com ↗",
+		"SKIP_HINT": "Tocca per saltare"
 	}
 }
 

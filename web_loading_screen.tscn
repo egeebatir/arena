@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://djqyndcux84a3"]
+[gd_scene format=3 uid="uid://djqyndcux84a3"]
 
 [ext_resource type="Script" path="res://web_loading_screen.gd" id="1_wls"]
 

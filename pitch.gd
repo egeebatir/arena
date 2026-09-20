@@ -17,6 +17,7 @@ var screen_shake_timer: int = 0
 var goal_cooldown_timer: float = 0.0
 var intro_overlay: ColorRect
 var stadium_player: AudioStreamPlayer
+var game_camera: Camera2D
 
 var goal_banner_panel: PanelContainer
 var goal_banner_lbl: Label
@@ -172,6 +173,9 @@ func _ready():
 		stadium_player.stream.loop = true
 	add_child(stadium_player)
 	
+	game_camera = Camera2D.new()
+	add_child(game_camera)
+	
 	var target_vol = Global.master_vol * Global.vol_settings.get("stadium", 0.2) * 1.07
 	if target_vol <= 0.01:
 		stadium_player.volume_db = -80.0
@@ -186,7 +190,7 @@ func _ready():
 	if not Global.is_premium:
 		_request_match_bottom_banner()
 
-var match_banner_retried: bool = false
+var match_banner_retry_count: int = 0
 
 func _get_match_banner_ad_unit(admob_node: Node) -> String:
 	if admob_node:
@@ -210,7 +214,7 @@ func _request_match_bottom_banner():
 	var admob_node = Global.get_admob()
 	if not admob_node: return
 	
-	match_banner_retried = false
+	match_banner_retry_count = 0
 	
 	# Admob.gd defines is_initialization_completed as a boolean property, not a method
 	var is_inited = admob_node.get("is_initialization_completed") == true
@@ -268,6 +272,7 @@ func _on_admob_ready_for_banner(_status = null):
 func _on_banner_ad_loaded(ad_info, _response_info = null):
 	if not is_inside_tree() or Global.is_premium: return
 	var admob_node = Global.get_admob()
+	match_banner_retry_count = 0
 	if admob_node and ad_info:
 		match_banner_ad_id = ad_info.get_ad_id()
 		if admob_node.has_method("show_banner_ad"):
@@ -279,22 +284,25 @@ func _on_banner_ad_failed_to_load(ad_info, error_data):
 	var err_msg = error_data.get_message() if error_data and error_data.has_method("get_message") else ""
 	print("[Pitch] Match bottom banner failed to load. Code: ", err_code, " Msg: ", err_msg)
 	if not is_inside_tree() or Global.is_premium: return
-	await get_tree().create_timer(5.0).timeout
+	
+	match_banner_retry_count += 1
+	var delay = min(20.0 + float(match_banner_retry_count * 15), 60.0)
+	print("[Pitch] Scheduling match banner retry #", match_banner_retry_count, " in ", delay, " seconds...")
+	await get_tree().create_timer(delay).timeout
 	if not is_inside_tree() or Global.is_premium or match_banner_ad_id != "": return
-	if not match_banner_retried:
-		match_banner_retried = true
-		var admob_node = Global.get_admob()
-		if admob_node and admob_node.has_method("create_banner_ad_request") and admob_node.has_method("load_banner_ad"):
-			var ad_unit = _get_match_banner_ad_unit(admob_node)
-			var req = admob_node.create_banner_ad_request()
-			req.set_ad_unit_id(ad_unit)
-			req.set_ad_position(LoadAdRequest.AdPosition.BOTTOM)
-			req.set_ad_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
-			if req.has_method("set_collapsible_position"):
-				req.set_collapsible_position(LoadAdRequest.CollapsiblePosition.DISABLED)
-			if req.has_method("set_anchor_to_safe_area"):
-				req.set_anchor_to_safe_area(true)
-			admob_node.load_banner_ad(req)
+	
+	var admob_node = Global.get_admob()
+	if admob_node and admob_node.has_method("create_banner_ad_request") and admob_node.has_method("load_banner_ad"):
+		var ad_unit = _get_match_banner_ad_unit(admob_node)
+		var req = admob_node.create_banner_ad_request()
+		req.set_ad_unit_id(ad_unit)
+		req.set_ad_position(LoadAdRequest.AdPosition.BOTTOM)
+		req.set_ad_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
+		if req.has_method("set_collapsible_position"):
+			req.set_collapsible_position(LoadAdRequest.CollapsiblePosition.DISABLED)
+		if req.has_method("set_anchor_to_safe_area"):
+			req.set_anchor_to_safe_area(true)
+		admob_node.load_banner_ad(req)
 
 func _clean_match_banner():
 	var admob_node = Global.get_admob()
@@ -327,7 +335,7 @@ func setup_scoreboard():
 	
 	var score_margin = MarginContainer.new()
 	score_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	score_margin.add_theme_constant_override("margin_top", 12.0)
+	score_margin.add_theme_constant_override("margin_top", 32.0)
 	score_margin.add_theme_constant_override("margin_left", 8.0)
 	score_margin.add_theme_constant_override("margin_right", 8.0)
 	ui_layer.add_child(score_margin)
@@ -363,11 +371,18 @@ func setup_scoreboard():
 	t1_yellow_box = Control.new()
 	score_hbox.add_child(t1_yellow_box)
 	
+	var c1 = ball1.team_colors[0]
+	var lum1 = c1.get_luminance()
+	var t1_col = c1.lightened(0.35) if lum1 < 0.3 else (c1.darkened(0.2) if lum1 > 0.85 else c1)
+	var t1_outline = Color.BLACK if lum1 > 0.45 else Color.WHITE
+	
 	var t1 = Label.new()
 	t1.text = ball1.team_short_name
 	t1.add_theme_font_override("font", custom_font)
 	t1.add_theme_font_size_override("font_size", 46)
-	t1.add_theme_color_override("font_color", ball1.team_colors[0])
+	t1.add_theme_color_override("font_color", t1_col)
+	t1.add_theme_color_override("font_outline_color", t1_outline)
+	t1.add_theme_constant_override("outline_size", 4)
 	t1.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	t1.add_theme_constant_override("shadow_offset_y", 2)
 	score_hbox.add_child(t1)
@@ -378,7 +393,9 @@ func setup_scoreboard():
 	s1_lbl = Label.new()
 	s1_lbl.add_theme_font_override("font", custom_font)
 	s1_lbl.add_theme_font_size_override("font_size", 54)
-	s1_lbl.add_theme_color_override("font_color", ball1.team_colors[0])
+	s1_lbl.add_theme_color_override("font_color", t1_col)
+	s1_lbl.add_theme_color_override("font_outline_color", t1_outline)
+	s1_lbl.add_theme_constant_override("outline_size", 4)
 	s1_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	s1_lbl.add_theme_constant_override("shadow_offset_y", 2)
 	score_hbox.add_child(s1_lbl)
@@ -392,10 +409,17 @@ func setup_scoreboard():
 	dash.add_theme_constant_override("shadow_offset_y", 2)
 	score_hbox.add_child(dash)
 	
+	var c2 = ball2.team_colors[0]
+	var lum2 = c2.get_luminance()
+	var t2_col = c2.lightened(0.35) if lum2 < 0.3 else (c2.darkened(0.2) if lum2 > 0.85 else c2)
+	var t2_outline = Color.BLACK if lum2 > 0.45 else Color.WHITE
+	
 	s2_lbl = Label.new()
 	s2_lbl.add_theme_font_override("font", custom_font)
 	s2_lbl.add_theme_font_size_override("font_size", 54)
-	s2_lbl.add_theme_color_override("font_color", ball2.team_colors[0])
+	s2_lbl.add_theme_color_override("font_color", t2_col)
+	s2_lbl.add_theme_color_override("font_outline_color", t2_outline)
+	s2_lbl.add_theme_constant_override("outline_size", 4)
 	s2_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	s2_lbl.add_theme_constant_override("shadow_offset_y", 2)
 	score_hbox.add_child(s2_lbl)
@@ -407,7 +431,9 @@ func setup_scoreboard():
 	t2.text = ball2.team_short_name
 	t2.add_theme_font_override("font", custom_font)
 	t2.add_theme_font_size_override("font_size", 46)
-	t2.add_theme_color_override("font_color", ball2.team_colors[0])
+	t2.add_theme_color_override("font_color", t2_col)
+	t2.add_theme_color_override("font_outline_color", t2_outline)
+	t2.add_theme_constant_override("outline_size", 4)
 	t2.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	t2.add_theme_constant_override("shadow_offset_y", 2)
 	score_hbox.add_child(t2)
@@ -458,6 +484,8 @@ func setup_scoreboard():
 	event_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 230))
 	event_lbl.add_theme_constant_override("shadow_offset_y", 6)
 	event_lbl.add_theme_constant_override("shadow_offset_x", 0)
+	event_lbl.add_theme_color_override("font_outline_color", Color.BLACK)
+	event_lbl.add_theme_constant_override("outline_size", 8)
 	event_lbl.custom_minimum_size = Vector2(600, 160)
 	event_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	event_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -466,7 +494,6 @@ func setup_scoreboard():
 	event_lbl.grow_vertical = Control.GROW_DIRECTION_BOTH
 	event_lbl.pivot_offset = Vector2(300, 80)
 	event_lbl.modulate.a = 0.0
-	event_lbl.position.y -= 100.0
 	ui_layer.add_child(event_lbl)
 	
 	intro_overlay = ColorRect.new()
@@ -512,7 +539,7 @@ func setup_scoreboard():
 
 	var top_ui_margin = MarginContainer.new()
 	top_ui_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	top_ui_margin.add_theme_constant_override("margin_top", 78)
+	top_ui_margin.add_theme_constant_override("margin_top", 32)
 	top_ui_margin.add_theme_constant_override("margin_left", 30)
 	top_ui_margin.add_theme_constant_override("margin_right", 30)
 	ui_layer.add_child(top_ui_margin)
@@ -550,7 +577,7 @@ func setup_scoreboard():
 		Global.play_click()
 		set_physics_process(false)
 		set_process(false)
-		Engine.time_scale = 0.0
+		Engine.time_scale = 1.0
 		if is_instance_valid(ball1): ball1.velocity = Vector2.ZERO
 		if is_instance_valid(ball2): ball2.velocity = Vector2.ZERO
 		if state == "FULLTIME":
@@ -562,7 +589,6 @@ func setup_scoreboard():
 		abandon_btn.disabled = true
 		_clean_match_banner()
 		if state == "FIRST_HALF" or state == "INTRO":
-			Engine.time_scale = 1.0
 			get_tree().change_scene_to_file("res://main_menu.tscn")
 		else:
 			Global.show_interstitial_ad(func():
@@ -635,7 +661,8 @@ func setup_scoreboard():
 	
 	restart_btn.custom_minimum_size = Vector2(108, 108)
 	var screen_w = get_viewport_rect().size.x
-	restart_btn.position = Vector2((screen_w / 2.0) - 54.0, CENTER.y + ARENA_RADIUS + 80.0) 
+	var screen_h = get_viewport_rect().size.y
+	restart_btn.position = Vector2((screen_w - 108.0) / 2.0, (screen_h / 2.0) + ARENA_RADIUS + 24.0)
 	
 	restart_btn.visible = false
 	restart_btn.pressed.connect(func(): Global.play_click(); _on_restart_pressed())
@@ -721,7 +748,8 @@ func _on_restart_pressed():
 		"TR": "Aynı maçı tekrar oynatmak istediğinize emin misiniz?",
 		"ENG": "Are you sure you want to replay the exact same match?",
 		"ESP": "¿Estás seguro de que quieres volver a jugar el mismo partido?",
-		"POR": "Tem certeza de que quer jogar a mesma partida?"
+		"POR": "Tem certeza de que quer jogar a mesma partida?",
+		"ITA": "Sei sicuro di voler rigiocare la stessa partita?"
 	}
 	var ask_str = lang_dict.get(Global.current_lang, lang_dict["TR"])
 	
@@ -745,6 +773,7 @@ func _on_restart_pressed():
 	if Global.current_lang == "ENG": no_txt = "NO"
 	elif Global.current_lang == "ESP": no_txt = "NO"
 	elif Global.current_lang == "POR": no_txt = "NÃO"
+	elif Global.current_lang == "ITA": no_txt = "NO"
 	no_btn.text = no_txt
 	no_btn.add_theme_font_override("font", custom_font)
 	no_btn.add_theme_font_size_override("font_size", 30)
@@ -774,6 +803,7 @@ func _on_restart_pressed():
 	if Global.current_lang == "ENG": yes_txt = "YES"
 	elif Global.current_lang == "ESP": yes_txt = "SÍ"
 	elif Global.current_lang == "POR": yes_txt = "SIM"
+	elif Global.current_lang == "ITA": yes_txt = "SÌ"
 	yes_btn.text = yes_txt
 	yes_btn.add_theme_font_override("font", custom_font)
 	yes_btn.add_theme_font_size_override("font_size", 30)
@@ -1025,8 +1055,17 @@ func _physics_process(delta):
 				"away_yellow": yellow_cards_2,
 				"away_red": red_cards_2
 			})
-			Global.save_stats()  # Persist to disk immediately
-			Global.record_match_result(Global.home_team_name, Global.away_team_name, score1, score2)
+			Global.record_match_result(
+				Global.home_team_name,
+				Global.away_team_name,
+				score1,
+				score2,
+				{
+					"team1_trailed": team1_trailed,
+					"team2_trailed": team2_trailed,
+					"is_comeback": (score1 > score2 and team1_trailed) or (score2 > score1 and team2_trailed)
+				}
+			)
 			
 			# --- GOOGLE PLAY ACHIEVEMENTS TRIGGERS ---
 			var total_matches = Global.match_history.size()
@@ -1067,11 +1106,13 @@ func _physics_process(delta):
 		
 		ball1.move()
 		ball2.move()
-		ball1.collide_post(posts.p1); ball1.collide_post(posts.p2)
-		ball2.collide_post(posts.p1); ball2.collide_post(posts.p2)
-		ball1.collide_wall(CENTER, ARENA_RADIUS)
-		ball2.collide_wall(CENTER, ARENA_RADIUS)
-		resolve_collisions(ball1, ball2)
+		var hit1_post = ball1.collide_post(posts.p1) or ball1.collide_post(posts.p2)
+		var hit2_post = ball2.collide_post(posts.p1) or ball2.collide_post(posts.p2)
+		var hit1_wall = ball1.collide_wall(CENTER, ARENA_RADIUS)
+		var hit2_wall = ball2.collide_wall(CENTER, ARENA_RADIUS)
+		var hit_balls = resolve_collisions(ball1, ball2)
+		if hit1_post or hit2_post or hit1_wall or hit2_wall or hit_balls:
+			Global.play_click()
 		check_goal(ball1, 1); check_goal(ball2, 2)
 		
 		var ui_needs_update = false
@@ -1305,7 +1346,12 @@ func _draw():
 	
 func trigger_popup(msg: String, color: Color = Color.WHITE, _outline_col: Color = Color.BLACK):
 	event_lbl.text = msg
-	event_lbl.add_theme_color_override("font_color", color)
+	var lum = color.get_luminance()
+	var display_col = color.lightened(0.35) if lum < 0.3 else (color.darkened(0.15) if lum > 0.85 else color)
+	var out_col = Color.BLACK if lum > 0.45 else Color.WHITE
+	event_lbl.add_theme_color_override("font_color", display_col)
+	event_lbl.add_theme_color_override("font_outline_color", out_col)
+	event_lbl.add_theme_constant_override("outline_size", 8)
 	event_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 230))
 	event_lbl.add_theme_constant_override("shadow_offset_y", 6)
 	event_lbl.add_theme_constant_override("shadow_offset_x", 0)

@@ -1,0 +1,17 @@
+{
+  "home_team": "BOURNEMOUTH SC",
+  "away_team": "LIVERPOOL SC",
+  "home_stars": [
+    "Antoine Semenyo",
+    "Evanilson",
+    "Justin Kluivert"
+  ],
+  "away_stars": [
+    "Mohamed Salah",
+    "Luis Diaz",
+    "Virgil van Dijk"
+  ],
+  "mode": "regular",
+  "max_seconds": 45.0,
+  "lang": "TR"
+}

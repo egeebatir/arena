@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://blr42uewuk8n"
+
+[deps]
+
+files=["res://achievements_import/AchievementsMetadata.İlk maçını kazan.translation", "res://achievements_import/AchievementsMetadata.false.translation", "res://achievements_import/AchievementsMetadata.1.translation", "res://achievements_import/AchievementsMetadata.REVEALED.translation", "res://achievements_import/AchievementsMetadata.50.translation", "res://achievements_import/AchievementsMetadata.1.translation"]
+
+source_file="res://achievements_import/AchievementsMetadata.csv"
+dest_files=["res://achievements_import/AchievementsMetadata.İlk maçını kazan.translation", "res://achievements_import/AchievementsMetadata.false.translation", "res://achievements_import/AchievementsMetadata.1.translation", "res://achievements_import/AchievementsMetadata.REVEALED.translation", "res://achievements_import/AchievementsMetadata.50.translation", "res://achievements_import/AchievementsMetadata.1.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

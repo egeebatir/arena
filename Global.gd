@@ -19,6 +19,9 @@ var LANG = {
 	},
 	"POR": {
 		"GOAL": "GOLO!", "HT": "INT", "FT": "FIM"
+	},
+	"ITA": {
+		"GOAL": "GOL!", "HT": "PT", "FT": "FINALE"
 	}
 }
 
@@ -32,7 +35,7 @@ var vol_settings = {
 	"whistle": 0.4
 }
 
-var current_theme = "Turkuaz"
+var current_theme = "Mavi"
 var shake_enabled = true
 var vibration_enabled = true
 var match_duration = 1 # 0 = Kısa (24s), 1 = Normal (36s), 2 = Uzun (48s)
@@ -70,7 +73,7 @@ func get_formatted_premium_price() -> String:
 		return premium_price_formatted
 	if current_lang == "TR":
 		return "49.99 TL"
-	elif current_lang == "ESP" or current_lang == "POR":
+	elif current_lang == "ESP" or current_lang == "POR" or current_lang == "ITA":
 		return "0.99 €"
 	return "$0.99"
 
@@ -92,48 +95,48 @@ var play_games_leaderboards_client: Node = null
 const ACHIEVEMENTS = {
 	"FIRST_WIN": {
 		"id": "CgkI2eP165kXEAIQAQ",
-		"title": {"TR": "İlk Galibiyet", "ENG": "First Victory", "ESP": "Primera Victoria", "POR": "Primeira Vitória"},
-		"desc": {"TR": "İlk maçını kazan", "ENG": "Win your first match", "ESP": "Gana tu primer partido", "POR": "Vença sua primeira partida"}
+		"title": {"TR": "İlk Galibiyet", "ENG": "First Victory", "ESP": "Primera Victoria", "POR": "Primeira Vitória", "ITA": "Prima Vittoria"},
+		"desc": {"TR": "İlk maçını kazan", "ENG": "Win your first match", "ESP": "Gana tu primer partido", "POR": "Vença sua primeira partida", "ITA": "Vinci la tua prima partita"}
 	},
 	"CLEAN_SHEET": {
 		"id": "CgkI2eP165kXEAIQAg",
-		"title": {"TR": "Gol Yemeden", "ENG": "Clean Sheet", "ESP": "Valla Invicta", "POR": "Sem Sofrer Golos"},
-		"desc": {"TR": "Gol yemeden maç kazan", "ENG": "Win without conceding", "ESP": "Gana sin recibir goles", "POR": "Vença sem sofrer golos"}
+		"title": {"TR": "Gol Yemeden", "ENG": "Clean Sheet", "ESP": "Valla Invicta", "POR": "Sem Sofrer Golos", "ITA": "Porta Inviolata"},
+		"desc": {"TR": "Gol yemeden maç kazan", "ENG": "Win without conceding", "ESP": "Gana sin recibir goles", "POR": "Vença sem sofrer golos", "ITA": "Vinci una partita senza subire gol"}
 	},
 	"FIVE_GOALS": {
 		"id": "CgkI2eP165kXEAIQAw",
-		"title": {"TR": "Gol Yağmuru", "ENG": "Goal Rain", "ESP": "Lluvia de Goles", "POR": "Chuva de Golos"},
-		"desc": {"TR": "Bir maçta 5 veya daha fazla gol at", "ENG": "Score 5+ goals in a match", "ESP": "Anota 5+ goles en un partido", "POR": "Marque 5+ golos numa partida"}
+		"title": {"TR": "Gol Yağmuru", "ENG": "Goal Rain", "ESP": "Lluvia de Goles", "POR": "Chuva de Golos", "ITA": "Pioggia di Gol"},
+		"desc": {"TR": "Bir maçta 5 veya daha fazla gol at", "ENG": "Score 5+ goals in a match", "ESP": "Anota 5+ goles en un partido", "POR": "Marque 5+ golos numa partida", "ITA": "Segna 5 o più gol in una partita"}
 	},
 	"HAT_TRICK": {
 		"id": "CgkI2eP165kXEAIQBA",
-		"title": {"TR": "Hat-Trick", "ENG": "Hat-Trick", "ESP": "Hat-Trick", "POR": "Hat-Trick"},
-		"desc": {"TR": "Aynı oyuncuyla bir maçta 3 gol at", "ENG": "Score 3 goals with the same player", "ESP": "Anota 3 goles con el mismo jugador", "POR": "Marque 3 golos com o mesmo jogador"}
+		"title": {"TR": "Hat-Trick", "ENG": "Hat-Trick", "ESP": "Hat-Trick", "POR": "Hat-Trick", "ITA": "Tripletta"},
+		"desc": {"TR": "Aynı oyuncuyla bir maçta 3 gol at", "ENG": "Score 3 goals with the same player", "ESP": "Anota 3 goles con el mismo jugador", "POR": "Marque 3 golos com o mesmo jogador", "ITA": "Segna 3 gol con lo stesso giocatore"}
 	},
 	"COMEBACK_KING": {
 		"id": "CgkI2eP165kXEAIQBQ",
-		"title": {"TR": "Geri Dönüş Kralı", "ENG": "Comeback King", "ESP": "Rey de la Remontada", "POR": "Rei da Reviravolta"},
-		"desc": {"TR": "Geriye düştüğün maçı kazan", "ENG": "Win after trailing behind", "ESP": "Gana tras ir perdiendo", "POR": "Vença após estar a perder"}
+		"title": {"TR": "Geri Dönüş Kralı", "ENG": "Comeback King", "ESP": "Rey de la Remontada", "POR": "Rei da Reviravolta", "ITA": "Re della Rimonta"},
+		"desc": {"TR": "Geriye düştüğün maçı kazan", "ENG": "Win after trailing behind", "ESP": "Gana tras ir perdiendo", "POR": "Vença após estar a perder", "ITA": "Vinci una partita dopo essere andato sotto"}
 	},
 	"ROYALTY": {
 		"id": "CgkI2eP165kXEAIQBg",
-		"title": {"TR": "Kraliyet Tacı", "ENG": "Royalty", "ESP": "Realeza", "POR": "Realeza"},
-		"desc": {"TR": "Favori takımına bir taç kuşandır", "ENG": "Equip a crown on your favorite team", "ESP": "Equipa una corona a tu equipo", "POR": "Equipe uma coroa na sua equipa"}
+		"title": {"TR": "Kraliyet Tacı", "ENG": "Royalty", "ESP": "Realeza", "POR": "Realeza", "ITA": "Corona Reale"},
+		"desc": {"TR": "Favori takımına bir taç kuşandır", "ENG": "Equip a crown on your favorite team", "ESP": "Equipa una corona a tu equipo", "POR": "Equipe uma coroa na sua equipa", "ITA": "Equipaggia una corona alla tua squadra"}
 	},
 	"COLLECTOR": {
 		"id": "CgkI2eP165kXEAIQBw",
-		"title": {"TR": "Koleksiyoncu", "ENG": "Collector", "ESP": "Coleccionista", "POR": "Colecionador"},
-		"desc": {"TR": "3 farklı top görünümü aç", "ENG": "Unlock 3 ball skins", "ESP": "Desbloquea 3 balones", "POR": "Desbloqueie 3 bolas"}
+		"title": {"TR": "Koleksiyoncu", "ENG": "Collector", "ESP": "Coleccionista", "POR": "Colecionador", "ITA": "Collezionista"},
+		"desc": {"TR": "3 farklı top görünümü aç", "ENG": "Unlock 3 ball skins", "ESP": "Desbloquea 3 balones", "POR": "Desbloqueie 3 bolas", "ITA": "Sblocca 3 aspetti pallone differenti"}
 	},
 	"TEN_MATCHES": {
 		"id": "CgkI2eP165kXEAIQCA",
-		"title": {"TR": "Sadık Futbolcu", "ENG": "Dedicated Player", "ESP": "Jugador Dedicado", "POR": "Jogador Dedicado"},
-		"desc": {"TR": "10 maç tamamla", "ENG": "Complete 10 matches", "ESP": "Completa 10 partidos", "POR": "Complete 10 partidas"}
+		"title": {"TR": "Sadık Futbolcu", "ENG": "Dedicated Player", "ESP": "Jugador Dedicado", "POR": "Jogador Dedicado", "ITA": "Giocatore Fedele"},
+		"desc": {"TR": "10 maç tamamla", "ENG": "Complete 10 matches", "ESP": "Completa 10 partidos", "POR": "Complete 10 partidas", "ITA": "Completa 10 partite"}
 	},
 	"FAVORITE_CHAMPION": {
 		"id": "CgkI2eP165kXEAIQCQ",
-		"title": {"TR": "Sadık Taraftar", "ENG": "True Supporter", "ESP": "Verdadero Hincha", "POR": "Verdadeiro Adepto"},
-		"desc": {"TR": "Favori takımınla maç kazan", "ENG": "Win a match with your favorite team", "ESP": "Gana con tu equipo favorito", "POR": "Vença com a sua equipa favorita"}
+		"title": {"TR": "Sadık Taraftar", "ENG": "True Supporter", "ESP": "Verdadero Hincha", "POR": "Verdadeiro Adepto", "ITA": "Tifoso Autentico"},
+		"desc": {"TR": "Favori takımınla maç kazan", "ENG": "Win a match with your favorite team", "ESP": "Gana con tu equipo favorito", "POR": "Vença com a sua equipa favorita", "ITA": "Vinci una partita con la tua squadra preferita"}
 	}
 }
 
@@ -303,8 +306,8 @@ func show_interstitial_ad(on_complete: Callable = Callable()):
 		admob_node.connect("interstitial_ad_dismissed_full_screen_content", dis_callable, CONNECT_ONE_SHOT)
 		admob_node.connect("interstitial_ad_failed_to_show_full_screen_content", fail_callable, CONNECT_ONE_SHOT)
 		
-		# Fallback timeout in case ad UI doesn't trigger callback
-		get_tree().create_timer(10.0).timeout.connect(cleanup_and_callback)
+		# Fallback timeout in case ad UI doesn't trigger callback (wall-clock time, ignores time_scale)
+		get_tree().create_timer(2.5, true, false, true).timeout.connect(cleanup_and_callback)
 		
 		print("[Global] Showing Interstitial ad...")
 		admob_node.show_interstitial_ad()
@@ -338,7 +341,8 @@ const HATS = {
 			"TR": "Kral Tacı",
 			"ENG": "King's Crown",
 			"ESP": "Corona de Rey",
-			"POR": "Coroa de Rei"
+			"POR": "Coroa de Rei",
+			"ITA": "Corona del Re"
 		}
 	},
 	"queens_crown": {
@@ -349,7 +353,8 @@ const HATS = {
 			"TR": "Kraliçe Tacı",
 			"ENG": "Queen's Crown",
 			"ESP": "Corona de Reina",
-			"POR": "Coroa de Rainha"
+			"POR": "Coroa de Rainha",
+			"ITA": "Corona della Regina"
 		}
 	}
 }
@@ -361,11 +366,6 @@ func increment_matches_played():
 
 
 var THEMES = {
-	"Buz": {
-		"bg_top": Color8(250, 255, 255), "bg_bottom": Color8(180, 210, 240),
-		"pitch_1": Color8(200, 220, 245), "pitch_2": Color8(220, 240, 255),
-		"panel": Color8(150, 180, 200, 230), "accent": Color8(0, 255, 255)
-	},
 	"Pembe": {
 		"bg_top": Color8(255, 180, 200), "bg_bottom": Color8(60, 10, 30),
 		"pitch_1": Color8(90, 20, 50), "pitch_2": Color8(120, 30, 70),
@@ -375,11 +375,6 @@ var THEMES = {
 		"bg_top": Color8(150, 230, 230), "bg_bottom": Color8(0, 50, 50),
 		"pitch_1": Color8(0, 80, 80), "pitch_2": Color8(0, 110, 110),
 		"panel": Color8(5, 25, 25, 230), "accent": Color8(0, 255, 200)
-	},
-	"Sarı": {
-		"bg_top": Color8(220, 210, 150), "bg_bottom": Color8(50, 40, 10),
-		"pitch_1": Color8(80, 65, 15), "pitch_2": Color8(110, 90, 25),
-		"panel": Color8(30, 25, 5, 230), "accent": Color8(173, 255, 47)
 	},
 	"Yeşil": {
 		"bg_top": Color8(160, 200, 160), "bg_bottom": Color8(10, 40, 15),
@@ -391,30 +386,10 @@ var THEMES = {
 		"pitch_1": Color8(0, 18, 40), "pitch_2": Color8(0, 35, 75),
 		"panel": Color8(5, 10, 20, 230), "accent": Color8(255, 100, 0)
 	},
-	"Turuncu": {
-		"bg_top": Color8(255, 180, 120), "bg_bottom": Color8(80, 25, 0),
-		"pitch_1": Color8(120, 40, 0), "pitch_2": Color8(150, 60, 10),
-		"panel": Color8(40, 10, 5, 230), "accent": Color8(255, 255, 0)
-	},
-	"Bordo": {
-		"bg_top": Color8(200, 100, 120), "bg_bottom": Color8(50, 0, 10),
-		"pitch_1": Color8(70, 10, 20), "pitch_2": Color8(100, 20, 30),
-		"panel": Color8(25, 5, 10, 230), "accent": Color8(255, 105, 180)
-	},
 	"Mor": {
 		"bg_top": Color8(180, 150, 220), "bg_bottom": Color8(30, 10, 50),
 		"pitch_1": Color8(45, 15, 80), "pitch_2": Color8(60, 25, 110),
 		"panel": Color8(20, 5, 30, 230), "accent": Color8(0, 255, 255)
-	},
-	"Kırmızı": {
-		"bg_top": Color8(210, 160, 160), "bg_bottom": Color8(40, 10, 15),
-		"pitch_1": Color8(60, 15, 20), "pitch_2": Color8(90, 25, 30),
-		"panel": Color8(25, 5, 10, 230), "accent": Color8(255, 255, 0)
-	},
-	"Kahverengi": {
-		"bg_top": Color8(160, 130, 110), "bg_bottom": Color8(50, 30, 15),
-		"pitch_1": Color8(60, 40, 20), "pitch_2": Color8(80, 50, 30),
-		"panel": Color8(30, 20, 10, 230), "accent": Color8(255, 215, 0)
 	},
 	"Siyah": {
 		"bg_top": Color8(100, 100, 100), "bg_bottom": Color8(10, 10, 10),
@@ -426,39 +401,39 @@ var THEMES = {
 const LEAGUES = {
 	"TURKEY": {
 		"id": "TURKEY",
-		"name": {"TR": "Türkiye Ligi", "ENG": "Turkish League", "ESP": "Liga Turca", "POR": "Liga Turca"}
+		"name": {"TR": "Türkiye Ligi", "ENG": "Turkish League", "ESP": "Liga Turca", "POR": "Liga Turca", "ITA": "Campionato Turco"}
 	},
 	"ENGLAND": {
 		"id": "ENGLAND",
-		"name": {"TR": "İngiltere Ligi", "ENG": "English League", "ESP": "Liga Inglesa", "POR": "Liga Inglesa"}
+		"name": {"TR": "İngiltere Ligi", "ENG": "English League", "ESP": "Liga Inglesa", "POR": "Liga Inglesa", "ITA": "Campionato Inglese"}
 	},
 	"SPAIN": {
 		"id": "SPAIN",
-		"name": {"TR": "İspanya Ligi", "ENG": "Spanish League", "ESP": "Liga Española", "POR": "Liga Espanhola"}
+		"name": {"TR": "İspanya Ligi", "ENG": "Spanish League", "ESP": "Liga Española", "POR": "Liga Espanhola", "ITA": "Campionato Spagnolo"}
 	},
 	"GERMANY": {
 		"id": "GERMANY",
-		"name": {"TR": "Almanya Ligi", "ENG": "German League", "ESP": "Liga Alemana", "POR": "Liga Alemã"}
+		"name": {"TR": "Almanya Ligi", "ENG": "German League", "ESP": "Liga Alemana", "POR": "Liga Alemã", "ITA": "Campionato Tedesco"}
 	},
 	"ITALY": {
 		"id": "ITALY",
-		"name": {"TR": "İtalya Ligi", "ENG": "Italian League", "ESP": "Liga Italiana", "POR": "Liga Italiana"}
+		"name": {"TR": "İtalya Ligi", "ENG": "Italian League", "ESP": "Liga Italiana", "POR": "Liga Italiana", "ITA": "Campionato Italiano"}
 	},
 	"FRANCE": {
 		"id": "FRANCE",
-		"name": {"TR": "Fransa Ligi", "ENG": "French League", "ESP": "Liga Francesa", "POR": "Liga Francesa"}
+		"name": {"TR": "Fransa Ligi", "ENG": "French League", "ESP": "Liga Francesa", "POR": "Liga Francesa", "ITA": "Campionato Francese"}
 	},
 	"USA": {
 		"id": "USA",
-		"name": {"TR": "Amerika Ligi", "ENG": "American League", "ESP": "Liga Americana", "POR": "Liga Americana"}
+		"name": {"TR": "Amerika Ligi", "ENG": "American League", "ESP": "Liga Americana", "POR": "Liga Americana", "ITA": "Campionato Americano"}
 	},
 	"SAUDI": {
 		"id": "SAUDI",
-		"name": {"TR": "Suudi Ligi", "ENG": "Saudi League", "ESP": "Liga Saudí", "POR": "Liga Saudita"}
+		"name": {"TR": "Suudi Ligi", "ENG": "Saudi League", "ESP": "Liga Saudí", "POR": "Liga Saudita", "ITA": "Campionato Saudita"}
 	},
 	"WORLD": {
 		"id": "WORLD",
-		"name": {"TR": "Dünya Kulüpleri", "ENG": "World Clubs", "ESP": "Clubes del Mundo", "POR": "Clubes do Mundo"}
+		"name": {"TR": "Dünya Kulüpleri", "ENG": "World Clubs", "ESP": "Clubes del Mundo", "POR": "Clubes do Mundo", "ITA": "Club Mondiali"}
 	}
 }
 
@@ -875,7 +850,7 @@ func load_progression():
 			lucky_wheel_pending_ad_spins = int(parsed["lucky_wheel_pending_ad_spins"])
 		if parsed.has("daily_quests") and parsed["daily_quests"] is Array:
 			daily_quests = parsed["daily_quests"]
-		if parsed.has("current_lang") and String(parsed["current_lang"]) in ["TR", "ENG", "ESP", "POR"]:
+		if parsed.has("current_lang") and String(parsed["current_lang"]) in ["TR", "ENG", "ESP", "POR", "ITA"]:
 			current_lang = String(parsed["current_lang"])
 		if parsed.has("master_vol"):
 			master_vol = float(parsed["master_vol"])
@@ -884,6 +859,8 @@ func load_progression():
 				vol_settings[k] = float(parsed["vol_settings"][k])
 		if parsed.has("current_theme") and THEMES.has(parsed["current_theme"]):
 			current_theme = String(parsed["current_theme"])
+		else:
+			current_theme = "Mavi"
 		if parsed.has("shake_enabled"):
 			shake_enabled = bool(parsed["shake_enabled"])
 		if parsed.has("match_duration"):
@@ -898,7 +875,7 @@ func load_progression():
 # ======================================================
 func check_daily_reset():
 	var today = Time.get_date_string_from_system()
-	if daily_date != today:
+	if daily_date != today or daily_quests.is_empty():
 		daily_date = today
 		lucky_wheel_free_spins_used = 0
 		lucky_wheel_ad_spins_used = 0
@@ -922,99 +899,430 @@ func get_active_custom_player_name() -> String:
 					return p_str
 	return "Kaptan"
 
-func generate_daily_quests():
-	var fav = favorite_team if favorite_team != "" else "GALATA FK"
-	var p_name = get_active_custom_player_name()
-	
-	daily_quests = [
+const QUEST_POOL = {
+	"easy": [
 		{
-			"id": "fav_team_win",
-			"type": "fav_win",
-			"desc": {
-				"TR": fav + " ile 1 maç kazan",
-				"ENG": "Win 1 match with " + fav,
-				"ESP": "Gana 1 partido con " + fav,
-				"POR": "Vença 1 jogo com " + fav
-			},
+			"id": "easy_play_1",
+			"type": "play_matches",
 			"target": 1,
-			"progress": 0,
-			"reward": 35,
-			"claimed": false
+			"reward": 25,
+			"desc": {
+				"TR": "1 maç oyna",
+				"ENG": "Play 1 match",
+				"ESP": "Juega 1 partido",
+				"POR": "Joga 1 partida",
+				"ITA": "Gioca 1 partita"
+			}
 		},
 		{
-			"id": "player_goals",
-			"type": "player_goals",
-			"desc": {
-				"TR": p_name + " ile 2 gol at",
-				"ENG": "Score 2 goals with " + p_name,
-				"ESP": "Marca 2 goles con " + p_name,
-				"POR": "Marque 2 golos com " + p_name
-			},
+			"id": "easy_play_2",
+			"type": "play_matches",
 			"target": 2,
-			"progress": 0,
-			"reward": 40,
-			"claimed": false
+			"reward": 30,
+			"desc": {
+				"TR": "2 maç oyna",
+				"ENG": "Play 2 matches",
+				"ESP": "Juega 2 partidos",
+				"POR": "Joga 2 partidas",
+				"ITA": "Gioca 2 partite"
+			}
 		},
 		{
-			"id": "clean_sheet_match",
-			"type": "clean_sheet",
-			"desc": {
-				"TR": "Gol yemeden maç tamamla",
-				"ENG": "Complete a match without conceding",
-				"ESP": "Completa un partido sin recibir goles",
-				"POR": "Complete um jogo sem sofrer golos"
-			},
+			"id": "easy_wheel_spin",
+			"type": "wheel_spin",
 			"target": 1,
-			"progress": 0,
+			"reward": 25,
+			"desc": {
+				"TR": "Şans çarkını 1 kez çevir",
+				"ENG": "Spin the lucky wheel 1 time",
+				"ESP": "Gira la ruleta de la suerte 1 vez",
+				"POR": "Gira a roleta da sorte 1 vez",
+				"ITA": "Gira la ruota della fortuna 1 volta"
+			}
+		},
+		{
+			"id": "easy_fav_goal",
+			"type": "fav_goals",
+			"target": 1,
+			"reward": 30,
+			"desc": {
+				"TR": "{fav} ile 1 gol at",
+				"ENG": "Score 1 goal with {fav}",
+				"ESP": "Marca 1 gol con {fav}",
+				"POR": "Marca 1 golo com {fav}",
+				"ITA": "Segna 1 gol con {fav}"
+			}
+		},
+		{
+			"id": "easy_captain_goal",
+			"type": "captain_goals",
+			"target": 1,
+			"reward": 30,
+			"desc": {
+				"TR": "Kaptan oyuncun ({captain}) ile 1 gol at",
+				"ENG": "Score 1 goal with your captain ({captain})",
+				"ESP": "Marca 1 gol con tu capitán ({captain})",
+				"POR": "Marca 1 golo com o teu capitão ({captain})",
+				"ITA": "Segna 1 gol con il tuo capitano ({captain})"
+			}
+		},
+		{
+			"id": "easy_win_1",
+			"type": "win_match",
+			"target": 1,
+			"reward": 35,
+			"desc": {
+				"TR": "1 maç kazan",
+				"ENG": "Win 1 match",
+				"ESP": "Gana 1 partido",
+				"POR": "Vence 1 partida",
+				"ITA": "Vinci 1 partita"
+			}
+		},
+		{
+			"id": "easy_score_2",
+			"type": "total_goals",
+			"target": 2,
+			"reward": 30,
+			"desc": {
+				"TR": "Toplam 2 gol at",
+				"ENG": "Score 2 total goals",
+				"ESP": "Marca 2 goles en total",
+				"POR": "Marca 2 golos no total",
+				"ITA": "Segna 2 gol in totale"
+			}
+		}
+	],
+	"medium": [
+		{
+			"id": "med_fav_win",
+			"type": "fav_win",
+			"target": 1,
 			"reward": 45,
-			"claimed": false
+			"desc": {
+				"TR": "{fav} ile 1 maç kazan",
+				"ENG": "Win 1 match with {fav}",
+				"ESP": "Gana 1 partido con {fav}",
+				"POR": "Vence 1 partida com {fav}",
+				"ITA": "Vinci 1 partita con {fav}"
+			}
+		},
+		{
+			"id": "med_captain_goals_2",
+			"type": "captain_goals",
+			"target": 2,
+			"reward": 45,
+			"desc": {
+				"TR": "Kaptan oyuncun ({captain}) ile 2 gol at",
+				"ENG": "Score 2 goals with your captain ({captain})",
+				"ESP": "Marca 2 goles con tu capitán ({captain})",
+				"POR": "Marca 2 golos com o teu capitão ({captain})",
+				"ITA": "Segna 2 gol con il tuo capitano ({captain})"
+			}
+		},
+		{
+			"id": "med_win_margin_2",
+			"type": "win_margin",
+			"target": 2,
+			"reward": 45,
+			"desc": {
+				"TR": "En az 2 farkla maç kazan",
+				"ENG": "Win a match by at least 2 goals margin",
+				"ESP": "Gana un partido por al menos 2 goles de diferencia",
+				"POR": "Vence uma partida por pelo menos 2 golos de diferença",
+				"ITA": "Vinci una partita con almeno 2 gol di scarto"
+			}
+		},
+		{
+			"id": "med_goals_in_match_3",
+			"type": "goals_in_match",
+			"target": 3,
+			"reward": 40,
+			"desc": {
+				"TR": "Bir maçta 3 veya daha fazla gol at",
+				"ENG": "Score 3 or more goals in a single match",
+				"ESP": "Marca 3 o más goles en un solo partido",
+				"POR": "Marca 3 ou mais golos numa única partida",
+				"ITA": "Segna 3 o più gol in una singola partita"
+			}
+		},
+		{
+			"id": "med_fav_goals_3",
+			"type": "fav_goals",
+			"target": 3,
+			"reward": 45,
+			"desc": {
+				"TR": "{fav} ile toplam 3 gol at",
+				"ENG": "Score 3 total goals with {fav}",
+				"ESP": "Marca 3 goles en total con {fav}",
+				"POR": "Marca 3 golos no total com {fav}",
+				"ITA": "Segna 3 gol in totale con {fav}"
+			}
+		},
+		{
+			"id": "med_clean_sheet",
+			"type": "clean_sheet",
+			"target": 1,
+			"reward": 50,
+			"desc": {
+				"TR": "Gol yemeden maç kazan (Kalesini Koru)",
+				"ENG": "Win a match without conceding (Clean Sheet)",
+				"ESP": "Gana un partido sin recibir goles (Valla Invicta)",
+				"POR": "Vence uma partida sem sofrer golos (Sem Sofrer Golos)",
+				"ITA": "Vinci una partita senza subire gol (Porta Inviolata)"
+			}
+		},
+		{
+			"id": "med_win_2",
+			"type": "win_match",
+			"target": 2,
+			"reward": 50,
+			"desc": {
+				"TR": "2 maç kazan",
+				"ENG": "Win 2 matches",
+				"ESP": "Gana 2 partidos",
+				"POR": "Vence 2 partidas",
+				"ITA": "Vinci 2 partite"
+			}
+		}
+	],
+	"hard": [
+		{
+			"id": "hard_comeback_win",
+			"type": "comeback_win",
+			"target": 1,
+			"reward": 65,
+			"desc": {
+				"TR": "Favori takımınla geriye düştüğün maçı çevir ve kazan (Geri Dönüş)",
+				"ENG": "Win a match with your favorite team after trailing behind (Comeback)",
+				"ESP": "Remonta y gana un partido con tu equipo favorito tras ir perdiendo",
+				"POR": "Vira o jogo e vence com a tua equipa favorita após estar a perder",
+				"ITA": "Rimonta e vinci una partita con la tua squadra preferita dopo essere andato sotto"
+			}
+		},
+		{
+			"id": "hard_goals_in_match_4",
+			"type": "goals_in_match",
+			"target": 4,
+			"reward": 60,
+			"desc": {
+				"TR": "Bir maçta 4 veya daha fazla gol at",
+				"ENG": "Score 4 or more goals in a single match",
+				"ESP": "Marca 4 o más goles en un solo partido",
+				"POR": "Marca 4 ou mais golos numa única partida",
+				"ITA": "Segna 4 o più gol in una singola partita"
+			}
+		},
+		{
+			"id": "hard_goals_in_match_5",
+			"type": "goals_in_match",
+			"target": 5,
+			"reward": 75,
+			"desc": {
+				"TR": "Bir maçta 5 veya daha fazla gol at (Gol Yağmuru)",
+				"ENG": "Score 5 or more goals in a single match (Goal Rain)",
+				"ESP": "Marca 5 o más goles en un solo partido (Lluvia de Goles)",
+				"POR": "Marca 5 ou mais golos numa única partida (Chuva de Golos)",
+				"ITA": "Segna 5 o più gol in una singola partita (Pioggia di Gol)"
+			}
+		},
+		{
+			"id": "hard_captain_hat_trick",
+			"type": "captain_goals",
+			"target": 3,
+			"reward": 70,
+			"desc": {
+				"TR": "Kaptan oyuncun ({captain}) ile 3 gol at (Hat-Trick)",
+				"ENG": "Score a hat-trick (3 goals) with your captain ({captain})",
+				"ESP": "Marca un hat-trick (3 goles) con tu capitán ({captain})",
+				"POR": "Marca um hat-trick (3 golos) com o teu capitão ({captain})",
+				"ITA": "Segna una tripletta (3 gol) con il tuo capitano ({captain})"
+			}
+		},
+		{
+			"id": "hard_win_margin_3",
+			"type": "win_margin",
+			"target": 3,
+			"reward": 70,
+			"desc": {
+				"TR": "En az 3 farkla maç kazan (Ezici Galibiyet)",
+				"ENG": "Win a match by at least 3 goals margin (Dominant Win)",
+				"ESP": "Gana un partido por al menos 3 goles de diferencia",
+				"POR": "Vence uma partida por pelo menos 3 golos de diferença",
+				"ITA": "Vinci una partita con almeno 3 gol di scarto"
+			}
+		},
+		{
+			"id": "hard_clean_sheet_margin_2",
+			"type": "clean_sheet_margin",
+			"target": 2,
+			"reward": 65,
+			"desc": {
+				"TR": "Gol yemeden en az 2 farkla maç kazan",
+				"ENG": "Win by at least 2 goals with a clean sheet",
+				"ESP": "Gana por al menos 2 goles y con la valla invicta",
+				"POR": "Vence por pelo menos 2 golos sem sofrer golos",
+				"ITA": "Vinci con almeno 2 gol di scarto senza subire gol"
+			}
+		},
+		{
+			"id": "hard_fav_win_2",
+			"type": "fav_win",
+			"target": 2,
+			"reward": 75,
+			"desc": {
+				"TR": "{fav} ile 2 maç kazan",
+				"ENG": "Win 2 matches with {fav}",
+				"ESP": "Gana 2 partidos con {fav}",
+				"POR": "Vence 2 partidas com {fav}",
+				"ITA": "Vinci 2 partite con {fav}"
+			}
 		}
 	]
+}
 
-func record_match_result(home: String, away: String, home_score: int, away_score: int):
+func generate_daily_quests():
+	var fav = favorite_team if favorite_team != "" else home_team_name
+	if fav == "":
+		fav = "GALATA FK"
+	var captain = get_active_custom_player_name()
+
+	var easy_pool = QUEST_POOL.get("easy", [])
+	var med_pool = QUEST_POOL.get("medium", [])
+	var hard_pool = QUEST_POOL.get("hard", [])
+
+	var selected_easy = easy_pool[randi() % easy_pool.size()] if easy_pool.size() > 0 else {}
+	var selected_med = med_pool[randi() % med_pool.size()] if med_pool.size() > 0 else {}
+	var selected_hard = hard_pool[randi() % hard_pool.size()] if hard_pool.size() > 0 else {}
+
+	daily_quests = []
+
+	for raw_template in [selected_easy, selected_med, selected_hard]:
+		if raw_template.is_empty():
+			continue
+		var q = raw_template.duplicate(true)
+		q["progress"] = 0
+		q["claimed"] = false
+
+		# Format dynamic placeholders in all languages
+		var formatted_desc = {}
+		var desc_dict = q.get("desc", {})
+		for lang_key in desc_dict:
+			var s = String(desc_dict[lang_key])
+			s = s.replace("{fav}", fav)
+			s = s.replace("{captain}", captain)
+			s = s.replace("{target}", str(q.get("target", 1)))
+			formatted_desc[lang_key] = s
+		q["desc"] = formatted_desc
+
+		daily_quests.append(q)
+
+func record_match_result(home: String, away: String, home_score: int, away_score: int, match_data: Dictionary = {}):
 	check_daily_reset()
 	var fav = favorite_team if favorite_team != "" else home_team_name
 	
 	var is_fav_home = (home == fav)
 	var is_fav_away = (away == fav)
-	var is_fav_match = is_fav_home or is_fav_away
 	
 	var fav_score = 0
 	var opp_score = 0
 	var fav_won = false
+	var is_player_home = true
 	
 	if is_fav_home:
 		fav_score = home_score
 		opp_score = away_score
 		fav_won = (home_score > away_score)
+		is_player_home = true
 	elif is_fav_away:
 		fav_score = away_score
 		opp_score = home_score
 		fav_won = (away_score > home_score)
+		is_player_home = false
 	else:
 		# Player was home team by default
 		fav_score = home_score
 		opp_score = away_score
 		fav_won = (home_score > away_score)
+		is_player_home = true
 	
-	# Track Leaderboard goals
+	var player_score = fav_score
+	var player_won = fav_won
+	var goal_margin = player_score - opp_score
+	var clean_sheet = (player_won and opp_score == 0)
+	
+	# Determine Comeback status
+	var is_comeback = false
+	if match_data.has("is_comeback"):
+		is_comeback = bool(match_data["is_comeback"])
+	elif match_data.has("team1_trailed") or match_data.has("team2_trailed"):
+		var trailed = match_data.get("team1_trailed", false) if is_player_home else match_data.get("team2_trailed", false)
+		is_comeback = player_won and bool(trailed)
+	
+	# Captain goals scored (defaults to player_score if not explicitly specified)
+	var captain_goals_scored = int(match_data.get("captain_goals", player_score))
+	
+	# Update Leaderboard goals
 	if fav_score > 0:
 		favorite_team_goals_scored += fav_score
 	
-	# Update Quests
+	# Update Daily Quests
 	for q in daily_quests:
 		if q.get("claimed", false):
 			continue
 		var q_type = q.get("type", "")
-		if q_type == "fav_win" and fav_won:
-			q["progress"] = min(q["target"], int(q["progress"]) + 1)
-		elif q_type == "player_goals" and fav_score > 0:
-			q["progress"] = min(q["target"], int(q["progress"]) + fav_score)
-		elif q_type == "clean_sheet" and opp_score == 0 and fav_won:
-			q["progress"] = min(q["target"], int(q["progress"]) + 1)
-		elif q_type == "play_matches":
-			q["progress"] = min(q["target"], int(q["progress"]) + 1)
-			
+		var cur_p = int(q.get("progress", 0))
+		var tgt = int(q.get("target", 1))
+		
+		match q_type:
+			"play_matches":
+				q["progress"] = min(tgt, cur_p + 1)
+			"win_match":
+				if player_won:
+					q["progress"] = min(tgt, cur_p + 1)
+			"fav_win":
+				if fav_won:
+					q["progress"] = min(tgt, cur_p + 1)
+			"fav_goals":
+				if fav_score > 0:
+					q["progress"] = min(tgt, cur_p + fav_score)
+			"total_goals":
+				if player_score > 0:
+					q["progress"] = min(tgt, cur_p + player_score)
+			"captain_goals", "player_goals":
+				if captain_goals_scored > 0:
+					q["progress"] = min(tgt, cur_p + captain_goals_scored)
+			"clean_sheet":
+				if clean_sheet:
+					q["progress"] = min(tgt, cur_p + 1)
+			"comeback_win":
+				if is_comeback:
+					q["progress"] = min(tgt, cur_p + 1)
+			"goals_in_match":
+				if player_score >= tgt:
+					q["progress"] = tgt
+				else:
+					q["progress"] = max(cur_p, player_score)
+			"win_margin":
+				if player_won and goal_margin >= tgt:
+					q["progress"] = tgt
+				elif player_won:
+					q["progress"] = max(cur_p, goal_margin)
+			"clean_sheet_margin":
+				if clean_sheet and goal_margin >= tgt:
+					q["progress"] = tgt
+				elif clean_sheet:
+					q["progress"] = max(cur_p, goal_margin)
+					
+	save_progression()
+
+func record_quest_wheel_spin():
+	for q in daily_quests:
+		if q.get("claimed", false):
+			continue
+		if q.get("type", "") == "wheel_spin":
+			var tgt = int(q.get("target", 1))
+			q["progress"] = min(tgt, int(q.get("progress", 0)) + 1)
 	save_progression()
 
 func claim_quest_reward(quest_id: String) -> int:
@@ -1058,6 +1366,7 @@ func spin_lucky_wheel() -> Dictionary:
 	
 	# Reward coins
 	ad_credits += int(result["coins"])
+	record_quest_wheel_spin()
 	save_progression()
 	return result
 

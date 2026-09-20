@@ -6,4 +6,9 @@ build/
 *.aab
 *.idsig
 *.bak
+*.zip
 tools/service_account.json
+.antigravity/
+convert.cs
+convert.ps1
+goal1.m4a
