@@ -338,7 +338,7 @@ func setup_scoreboard():
 	
 	var score_margin = MarginContainer.new()
 	score_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	score_margin.add_theme_constant_override("margin_top", 140.0)
+	score_margin.add_theme_constant_override("margin_top", 240.0)
 	score_margin.add_theme_constant_override("margin_left", 8.0)
 	score_margin.add_theme_constant_override("margin_right", 8.0)
 	ui_layer.add_child(score_margin)
@@ -549,7 +549,7 @@ func setup_scoreboard():
 
 	var top_ui_margin = MarginContainer.new()
 	top_ui_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	top_ui_margin.add_theme_constant_override("margin_top", 32)
+	top_ui_margin.add_theme_constant_override("margin_top", 120)
 	top_ui_margin.add_theme_constant_override("margin_left", 30)
 	top_ui_margin.add_theme_constant_override("margin_right", 30)
 	ui_layer.add_child(top_ui_margin)
@@ -672,7 +672,7 @@ func setup_scoreboard():
 	restart_btn.custom_minimum_size = Vector2(108, 108)
 	var screen_w = get_viewport_rect().size.x
 	var screen_h = get_viewport_rect().size.y
-	restart_btn.position = Vector2((screen_w - 108.0) / 2.0, (screen_h / 2.0) + ARENA_RADIUS + 24.0)
+	restart_btn.position = Vector2((screen_w - 108.0) / 2.0, (screen_h / 2.0) + ARENA_RADIUS + 140.0)
 	
 	restart_btn.visible = false
 	restart_btn.pressed.connect(func(): Global.play_click(); _on_restart_pressed())
