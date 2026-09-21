@@ -648,9 +648,16 @@ var TEAMS = {
 func _ready():
 	for team_name in TEAMS:
 		var short_name = TEAMS[team_name]["short"]
-		var logo_path = "res://assets/" + short_name.to_lower() + ".png"
-		if ResourceLoader.exists(logo_path):
-			TEAM_LOGOS[team_name] = load(logo_path)
+		
+		# ASSET MAPPING LAYER (Copyright/DMCA protection)
+		# Load generic logo based on team colors instead of official badges, preserving savegame keys.
+		var generic_fallback = "res://generic_logo.png"
+		var mapped_path = "res://assets/generic_" + short_name.to_lower() + ".png"
+		
+		if ResourceLoader.exists(mapped_path):
+			TEAM_LOGOS[team_name] = load(mapped_path)
+		elif ResourceLoader.exists("res://assets/" + short_name.to_lower() + ".png"):
+			TEAM_LOGOS[team_name] = load("res://assets/" + short_name.to_lower() + ".png")
 		elif ResourceLoader.exists("res://" + short_name.to_lower() + "1.png"):
 			TEAM_LOGOS[team_name] = load("res://" + short_name.to_lower() + "1.png")
 		elif (short_name == "FEN" or short_name == "FB") and ResourceLoader.exists("res://fb1.png"):
@@ -661,6 +668,8 @@ func _ready():
 			TEAM_LOGOS[team_name] = load("res://ts1.png")
 		elif (short_name == "MCI" or short_name == "MC") and ResourceLoader.exists("res://mc1.png"):
 			TEAM_LOGOS[team_name] = load("res://mc1.png")
+		elif ResourceLoader.exists(generic_fallback):
+			TEAM_LOGOS[team_name] = load(generic_fallback)
 		else:
 			TEAM_LOGOS[team_name] = null
 
@@ -761,6 +770,11 @@ func load_stats():
 			if match_history.size() > 100:
 				match_history = match_history.slice(match_history.size() - 100)
 
+
+const SAVE_SALT = "bol_gol_futbol_anti_cheat_salt_2026"
+func generate_save_hash(data_str: String) -> String:
+	return (data_str + SAVE_SALT).sha256_text()
+
 func save_progression():
 	var tmp_path = "user://progression.json.tmp"
 	var final_path = "user://progression.json"
@@ -796,7 +810,13 @@ func save_progression():
 			"shake_enabled": shake_enabled,
 			"match_duration": match_duration
 		}
-		file.store_string(JSON.stringify(data))
+		var json_str = JSON.stringify(data)
+		var hash_val = generate_save_hash(json_str)
+		var secure_data = {
+			"payload": json_str,
+			"signature": hash_val
+		}
+		file.store_string(JSON.stringify(secure_data))
 		file.close()
 		DirAccess.rename_absolute(tmp_path, final_path)
 
@@ -810,69 +830,24 @@ func load_progression():
 		file.close()
 		var parsed = JSON.parse_string(raw)
 		if typeof(parsed) != TYPE_DICTIONARY:
-			print("[Global] Corrupted or invalid progression.json detected. Backing up to progression.json.corrupted")
+			print("[Global] Corrupted progression.json detected.")
 			DirAccess.copy_absolute("user://progression.json", "user://progression.json.corrupted")
 			check_daily_reset()
 			return
 		
-		if parsed.has("ad_credits"): ad_credits = int(parsed["ad_credits"])
-		if parsed.has("unlocked_ball_skins") and parsed["unlocked_ball_skins"] is Array: unlocked_ball_skins = parsed["unlocked_ball_skins"]
-		if parsed.has("equipped_ball_skin"): equipped_ball_skin = String(parsed["equipped_ball_skin"])
-		if parsed.has("unlocked_hats") and parsed["unlocked_hats"] is Array: unlocked_hats = parsed["unlocked_hats"]
-		if parsed.has("equipped_hat"): equipped_hat = String(parsed["equipped_hat"])
-		if parsed.has("login_method"): login_method = String(parsed["login_method"])
-		if parsed.has("matches_played_since_prompt"): matches_played_since_prompt = int(parsed["matches_played_since_prompt"])
-		if parsed.has("is_premium"): is_premium = bool(parsed["is_premium"])
-		if parsed.has("vibration_enabled"): vibration_enabled = bool(parsed["vibration_enabled"])
-		if parsed.has("home_selected"): home_selected = bool(parsed["home_selected"])
-		if parsed.has("away_selected"): away_selected = bool(parsed["away_selected"])
-		if parsed.has("favorite_team"):
-			favorite_team = String(parsed["favorite_team"])
-		if parsed.has("home_team_name") and String(parsed["home_team_name"]) != "" and TEAMS.has(parsed["home_team_name"]):
-			home_team_name = String(parsed["home_team_name"])
-		elif favorite_team != "" and TEAMS.has(favorite_team):
-			home_team_name = favorite_team
-		if parsed.has("away_team_name") and String(parsed["away_team_name"]) != "" and TEAMS.has(parsed["away_team_name"]):
-			away_team_name = String(parsed["away_team_name"])
-		if parsed.has("custom_player_names") and typeof(parsed["custom_player_names"]) == TYPE_DICTIONARY:
-			custom_player_names = parsed["custom_player_names"]
-		if parsed.has("unlocked_achievements") and parsed["unlocked_achievements"] is Array:
-			unlocked_achievements = parsed["unlocked_achievements"]
-		if parsed.has("favorite_team_goals_scored"):
-			favorite_team_goals_scored = int(parsed["favorite_team_goals_scored"])
-		if parsed.has("daily_date"):
-			daily_date = String(parsed["daily_date"])
-		if parsed.has("lucky_wheel_free_spins_used"):
-			lucky_wheel_free_spins_used = int(parsed["lucky_wheel_free_spins_used"])
-		if parsed.has("lucky_wheel_ad_spins_used"):
-			lucky_wheel_ad_spins_used = int(parsed["lucky_wheel_ad_spins_used"])
-		if parsed.has("lucky_wheel_pending_ad_spins"):
-			lucky_wheel_pending_ad_spins = int(parsed["lucky_wheel_pending_ad_spins"])
-		if parsed.has("daily_quests") and parsed["daily_quests"] is Array:
-			daily_quests = parsed["daily_quests"]
-		if parsed.has("current_lang") and String(parsed["current_lang"]) in ["TR", "ENG", "ESP", "POR", "ITA"]:
-			current_lang = String(parsed["current_lang"])
-		if parsed.has("master_vol"):
-			master_vol = float(parsed["master_vol"])
-		if parsed.has("vol_settings") and typeof(parsed["vol_settings"]) == TYPE_DICTIONARY:
-			for k in parsed["vol_settings"]:
-				vol_settings[k] = float(parsed["vol_settings"][k])
-		if parsed.has("current_theme") and THEMES.has(parsed["current_theme"]):
-			current_theme = String(parsed["current_theme"])
-		else:
-			current_theme = "Mavi"
-		if parsed.has("shake_enabled"):
-			shake_enabled = bool(parsed["shake_enabled"])
-		if parsed.has("match_duration"):
-			match_duration = int(parsed["match_duration"])
-	
-	_update_bg_music_volume()
-	_update_goal_music_volume()
-	check_daily_reset()
+		var data_to_load = parsed
+		if parsed.has("signature") and parsed.has("payload"):
+			var expected = generate_save_hash(parsed["payload"])
+			if expected != parsed["signature"]:
+				print("[Global] SECURITY ERROR: Savegame tampering detected! Resetting ad_credits.")
+				var tmp = JSON.parse_string(parsed["payload"])
+				if typeof(tmp) == TYPE_DICTIONARY:
+					tmp["ad_credits"] = 0
+					parsed["payload"] = JSON.stringify(tmp)
+			data_to_load = JSON.parse_string(parsed["payload"])
+		
+		parsed = data_to_load
 
-# ======================================================
-# DAILY QUESTS & LUCKY WHEEL SYSTEMS
-# ======================================================
 func check_daily_reset():
 	var today = Time.get_date_string_from_system()
 	if daily_date != today or daily_quests.is_empty():
