@@ -428,6 +428,8 @@ var is_refreshing_stats: bool = false
 
 const MENU_BANNER_ID = "ca-app-pub-7323450546679743/4717442614"
 var menu_banner_ad_id: String = ""
+var shop_notification_dot: Panel
+
 var is_banner_loading: bool = false
 var menu_banner_retry_count: int = 0
 
@@ -523,6 +525,7 @@ func _ready():
 		Global.preload_interstitial_ad()
 		if not Global.is_premium:
 			_ensure_menu_top_banner()
+	_update_shop_notification()
 
 	if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
 		Global.bg_music_player.play()
@@ -3548,6 +3551,29 @@ func _build_bottom_nav():
 
 		n_btn.add_theme_constant_override("icon_max_width", 40)
 		btn_vbox.add_child(n_btn)
+		
+		if i == 2:
+			shop_notification_dot = Panel.new()
+			var dot_style = StyleBoxFlat.new()
+			dot_style.bg_color = Color(1.0, 0.2, 0.2)
+			dot_style.corner_radius_top_left = 12
+			dot_style.corner_radius_top_right = 12
+			dot_style.corner_radius_bottom_left = 12
+			dot_style.corner_radius_bottom_right = 12
+			dot_style.border_width_left = 2; dot_style.border_width_top = 2; dot_style.border_width_right = 2; dot_style.border_width_bottom = 2
+			dot_style.border_color = Color.WHITE
+			shop_notification_dot.add_theme_stylebox_override("panel", dot_style)
+			shop_notification_dot.custom_minimum_size = Vector2(14, 14)
+			shop_notification_dot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			shop_notification_dot.anchor_left = 0.5
+			shop_notification_dot.anchor_right = 0.5
+			shop_notification_dot.anchor_top = 0.5
+			shop_notification_dot.anchor_bottom = 0.5
+			shop_notification_dot.offset_left = 8
+			shop_notification_dot.offset_top = -22
+			shop_notification_dot.offset_right = 22
+			shop_notification_dot.offset_bottom = -8
+			n_btn.add_child(shop_notification_dot)
 
 		# Accent indicator line under active button
 		var indicator = Control.new()
@@ -5468,7 +5494,21 @@ func _input(event: InputEvent):
 # ======================================================
 # ADMOB & SHOP LOGIC
 # ======================================================
+func _update_shop_notification():
+	if not is_instance_valid(shop_notification_dot): return
+	var has_notif = false
+	Global.check_daily_reset()
+	for q in Global.daily_quests:
+		if not q.get("claimed", false) and int(q.get("progress", 0)) >= int(q.get("target", 1)):
+			has_notif = true
+			break
+	if Global.lucky_wheel_free_spins_used < 1: has_notif = true
+	if Global.lucky_wheel_pending_ad_spins > 0: has_notif = true
+	if Global.lucky_wheel_ad_spins_used < 3: has_notif = true
+	shop_notification_dot.visible = has_notif
+
 func _refresh_shop_tab():
+	_update_shop_notification()
 	# 1. Update all currency labels across all UI elements
 	for item in ui_labels:
 		if is_instance_valid(item.get("node")):
@@ -6007,6 +6047,7 @@ func _on_admob_initialized(_status = null):
 		Global.preload_interstitial_ad()
 		if not Global.is_premium:
 			_ensure_menu_top_banner()
+	_update_shop_notification()
 
 func _connect_admob_signals(admob_node: Node):
 	if not admob_node: return
