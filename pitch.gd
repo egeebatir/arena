@@ -184,12 +184,9 @@ func _ready():
 
 	ball1.init_ball(Global.home_team_name, CENTER, ARENA_RADIUS)
 	ball2.init_ball(Global.away_team_name, CENTER, ARENA_RADIUS, ball1.position)
-	
 	var themes_list = Global.THEMES.keys()
 	var random_theme = themes_list[randi() % themes_list.size()]
 	Global.active_theme = Global.THEMES[random_theme]
-	Global.save_progression()
-	
 	setup_scoreboard()
 	
 	Global.remove_all_banners()
@@ -333,13 +330,7 @@ func get_readable_outline(c: Color) -> Color:
 	var lum = 0.299 * c.r + 0.587 * c.g + 0.114 * c.b
 	return Color.BLACK if lum > 0.5 else Color.WHITE
 
-func 
-	var themes_list = Global.THEMES.keys()
-	var random_theme = themes_list[randi() % themes_list.size()]
-	Global.active_theme = Global.THEMES[random_theme]
-	Global.save_progression()
-	
-	setup_scoreboard():
+func setup_scoreboard():
 	var custom_font = preload("res://Teko-Bold.ttf")
 	var ui_layer = CanvasLayer.new()
 	main_ui_layer = ui_layer
@@ -359,27 +350,15 @@ func
 	
 	var top_panel = PanelContainer.new()
 	top_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-
-	var pill = StyleBoxFlat.new()
-	pill.bg_color = Color(0.05, 0.08, 0.12, 0.85)
-	pill.corner_radius_top_left = 32; pill.corner_radius_top_right = 32
-	pill.corner_radius_bottom_left = 32; pill.corner_radius_bottom_right = 32
-	pill.border_width_left = 2; pill.border_width_right = 2
-	pill.border_width_top = 2; pill.border_width_bottom = 4
-	pill.border_color = Color(1.0, 1.0, 1.0, 0.15)
-	pill.content_margin_left = 40; pill.content_margin_right = 40
-	pill.content_margin_top = 10; pill.content_margin_bottom = 14
-	top_panel.add_theme_stylebox_override("panel", pill)
-
 	var style = StyleBoxFlat.new()
-	style.bg_color = active_theme.bg_bottom
-	style.corner_radius_top_left = 18; style.corner_radius_top_right = 18
-	style.corner_radius_bottom_left = 18; style.corner_radius_bottom_right = 18
-	style.border_width_bottom = 2; style.border_width_top = 2
+	style.bg_color = Color(0.05, 0.08, 0.12, 0.85)
+	style.corner_radius_top_left = 32; style.corner_radius_top_right = 32
+	style.corner_radius_bottom_left = 32; style.corner_radius_bottom_right = 32
 	style.border_width_left = 2; style.border_width_right = 2
-	style.border_color = Color(1, 1, 1, 0.22)
-	style.content_margin_left = 32; style.content_margin_right = 32
-	style.content_margin_top = 8; style.content_margin_bottom = 8
+	style.border_width_top = 2; style.border_width_bottom = 4
+	style.border_color = Color(1.0, 1.0, 1.0, 0.15)
+	style.content_margin_left = 40; style.content_margin_right = 40
+	style.content_margin_top = 10; style.content_margin_bottom = 14
 	top_panel.add_theme_stylebox_override("panel", style)
 	center_cont.add_child(top_panel)
 	
