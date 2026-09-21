@@ -3555,13 +3555,13 @@ func _build_bottom_nav():
 		if i == 2:
 			shop_notification_dot = Panel.new()
 			var dot_style = StyleBoxFlat.new()
-			dot_style.bg_color = Color(1.0, 0.2, 0.2)
+			dot_style.bg_color = Color8(245, 60, 60)
 			dot_style.corner_radius_top_left = 12
 			dot_style.corner_radius_top_right = 12
 			dot_style.corner_radius_bottom_left = 12
 			dot_style.corner_radius_bottom_right = 12
 			dot_style.border_width_left = 2; dot_style.border_width_top = 2; dot_style.border_width_right = 2; dot_style.border_width_bottom = 2
-			dot_style.border_color = Color.WHITE
+			dot_style.border_color = Color8(10, 15, 25)
 			shop_notification_dot.add_theme_stylebox_override("panel", dot_style)
 			shop_notification_dot.custom_minimum_size = Vector2(14, 14)
 			shop_notification_dot.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -3795,8 +3795,8 @@ func _build_stats_tab() -> Control:
 	var create_win_loss_box = func(title_key: String, score_str: String, opp_str: String, is_win: bool) -> PanelContainer:
 		var p = PanelContainer.new()
 		var ps = StyleBoxFlat.new()
-		var cell_bg = (Color8(18, 55, 30, 235) if is_win else Color8(55, 18, 24, 235))
-		ps.bg_color = cell_bg
+		var cell_bg = active_theme.bg_bottom.darkened(0.75) if is_buz else active_theme.bg_bottom.darkened(0.38)
+		ps.bg_color = Color(cell_bg.r, cell_bg.g, cell_bg.b, 0.94)
 		ps.corner_radius_top_left = 12; ps.corner_radius_top_right = 12
 		ps.corner_radius_bottom_left = 12; ps.corner_radius_bottom_right = 12
 		ps.border_width_left = 1.0; ps.border_width_right = 1.0

@@ -1339,15 +1339,14 @@ func claim_quest_reward(quest_id: String) -> int:
 	return 0
 
 const WHEEL_SEGMENTS = [
-	{"coins": 10,  "weight": 26, "color": Color8(229, 57, 53)},   # Crimson Red
-	{"coins": 20,  "weight": 20, "color": Color8(30, 136, 229)},  # Azure Blue
-	{"coins": 35,  "weight": 16, "color": Color8(67, 160, 71)},   # Emerald Green
-	{"coins": 50,  "weight": 12, "color": Color8(251, 140, 0)},   # Amber Orange
-	{"coins": 75,  "weight": 9,  "color": Color8(142, 36, 170)},  # Royal Purple
-	{"coins": 100, "weight": 7,  "color": Color8(0, 172, 193)},   # Cyan / Teal
-	{"coins": 150, "weight": 5,  "color": Color8(216, 27, 96)},   # Rose Magenta
-	{"coins": 250, "weight": 3,  "color": Color8(244, 81, 30)},   # Deep Bronze
-	{"coins": 500, "weight": 2,  "color": Color8(255, 215, 0)}    # Gold Jackpot
+	{"coins": 10,  "weight": 150, "color": Color8(20, 35, 55)},   # Deep Navy
+	{"coins": 20,  "weight": 200, "color": Color8(30, 55, 85)},   # Dark Blue
+	{"coins": 30,  "weight": 175, "color": Color8(45, 110, 140)}, # Cyan-ish
+	{"coins": 50,  "weight": 200, "color": Color8(34, 160, 75)},  # Solid Green
+	{"coins": 100, "weight": 150, "color": Color8(50, 225, 110)}, # Neon Green
+	{"coins": 200, "weight": 50,  "color": Color8(255, 145, 0)},  # Neon Orange
+	{"coins": 300, "weight": 50,  "color": Color8(255, 65, 80)},  # Neon Red
+	{"coins": 500, "weight": 25,  "color": Color8(255, 215, 0)}   # Gold Jackpot
 ]
 
 func spin_lucky_wheel() -> Dictionary:
