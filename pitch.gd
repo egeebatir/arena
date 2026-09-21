@@ -184,6 +184,12 @@ func _ready():
 
 	ball1.init_ball(Global.home_team_name, CENTER, ARENA_RADIUS)
 	ball2.init_ball(Global.away_team_name, CENTER, ARENA_RADIUS, ball1.position)
+	
+	var themes_list = Global.THEMES.keys()
+	var random_theme = themes_list[randi() % themes_list.size()]
+	Global.active_theme = Global.THEMES[random_theme]
+	Global.save_progression()
+	
 	setup_scoreboard()
 	
 	Global.remove_all_banners()
@@ -327,7 +333,13 @@ func get_readable_outline(c: Color) -> Color:
 	var lum = 0.299 * c.r + 0.587 * c.g + 0.114 * c.b
 	return Color.BLACK if lum > 0.5 else Color.WHITE
 
-func setup_scoreboard():
+func 
+	var themes_list = Global.THEMES.keys()
+	var random_theme = themes_list[randi() % themes_list.size()]
+	Global.active_theme = Global.THEMES[random_theme]
+	Global.save_progression()
+	
+	setup_scoreboard():
 	var custom_font = preload("res://Teko-Bold.ttf")
 	var ui_layer = CanvasLayer.new()
 	main_ui_layer = ui_layer
@@ -335,7 +347,7 @@ func setup_scoreboard():
 	
 	var score_margin = MarginContainer.new()
 	score_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	score_margin.add_theme_constant_override("margin_top", 32.0)
+	score_margin.add_theme_constant_override("margin_top", 140.0)
 	score_margin.add_theme_constant_override("margin_left", 8.0)
 	score_margin.add_theme_constant_override("margin_right", 8.0)
 	ui_layer.add_child(score_margin)
@@ -347,6 +359,18 @@ func setup_scoreboard():
 	
 	var top_panel = PanelContainer.new()
 	top_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+
+	var pill = StyleBoxFlat.new()
+	pill.bg_color = Color(0.05, 0.08, 0.12, 0.85)
+	pill.corner_radius_top_left = 32; pill.corner_radius_top_right = 32
+	pill.corner_radius_bottom_left = 32; pill.corner_radius_bottom_right = 32
+	pill.border_width_left = 2; pill.border_width_right = 2
+	pill.border_width_top = 2; pill.border_width_bottom = 4
+	pill.border_color = Color(1.0, 1.0, 1.0, 0.15)
+	pill.content_margin_left = 40; pill.content_margin_right = 40
+	pill.content_margin_top = 10; pill.content_margin_bottom = 14
+	top_panel.add_theme_stylebox_override("panel", pill)
+
 	var style = StyleBoxFlat.new()
 	style.bg_color = active_theme.bg_bottom
 	style.corner_radius_top_left = 18; style.corner_radius_top_right = 18
@@ -382,6 +406,7 @@ func setup_scoreboard():
 	t1.add_theme_font_size_override("font_size", 46)
 	t1.add_theme_color_override("font_color", t1_col)
 	t1.add_theme_color_override("font_outline_color", t1_outline)
+	t1.add_theme_font_size_override("font_size", 42)
 	t1.add_theme_constant_override("outline_size", 4)
 	t1.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	t1.add_theme_constant_override("shadow_offset_y", 2)
@@ -395,6 +420,7 @@ func setup_scoreboard():
 	s1_lbl.add_theme_font_size_override("font_size", 54)
 	s1_lbl.add_theme_color_override("font_color", t1_col)
 	s1_lbl.add_theme_color_override("font_outline_color", t1_outline)
+	s1_lbl.add_theme_font_size_override("font_size", 54)
 	s1_lbl.add_theme_constant_override("outline_size", 4)
 	s1_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	s1_lbl.add_theme_constant_override("shadow_offset_y", 2)
@@ -404,6 +430,7 @@ func setup_scoreboard():
 	dash.text = "-"
 	dash.add_theme_font_override("font", custom_font)
 	dash.add_theme_font_size_override("font_size", 54)
+	dash.add_theme_font_size_override("font_size", 48)
 	dash.add_theme_color_override("font_color", Color(1, 1, 1, 0.7))
 	dash.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	dash.add_theme_constant_override("shadow_offset_y", 2)
@@ -419,6 +446,7 @@ func setup_scoreboard():
 	s2_lbl.add_theme_font_size_override("font_size", 54)
 	s2_lbl.add_theme_color_override("font_color", t2_col)
 	s2_lbl.add_theme_color_override("font_outline_color", t2_outline)
+	s2_lbl.add_theme_font_size_override("font_size", 54)
 	s2_lbl.add_theme_constant_override("outline_size", 4)
 	s2_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	s2_lbl.add_theme_constant_override("shadow_offset_y", 2)
@@ -433,6 +461,7 @@ func setup_scoreboard():
 	t2.add_theme_font_size_override("font_size", 46)
 	t2.add_theme_color_override("font_color", t2_col)
 	t2.add_theme_color_override("font_outline_color", t2_outline)
+	t2.add_theme_font_size_override("font_size", 42)
 	t2.add_theme_constant_override("outline_size", 4)
 	t2.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	t2.add_theme_constant_override("shadow_offset_y", 2)
@@ -515,7 +544,8 @@ func setup_scoreboard():
 	intro_t1.add_theme_font_size_override("font_size", 54)
 	intro_t1.add_theme_color_override("font_color", ball1.team_colors[0])
 	intro_t1.add_theme_color_override("font_outline_color", Color.WHITE)
-	intro_t1.add_theme_constant_override("outline_size", 4)
+	intro_t1.add_theme_font_size_override("font_size", 42)
+	t1.add_theme_constant_override("outline_size", 4)
 	intro_t1.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	intro_vbox.add_child(intro_t1)
 	
@@ -533,7 +563,8 @@ func setup_scoreboard():
 	intro_t2.add_theme_font_size_override("font_size", 54)
 	intro_t2.add_theme_color_override("font_color", ball2.team_colors[0])
 	intro_t2.add_theme_color_override("font_outline_color", Color.WHITE)
-	intro_t2.add_theme_constant_override("outline_size", 4)
+	intro_t2.add_theme_font_size_override("font_size", 42)
+	t2.add_theme_constant_override("outline_size", 4)
 	intro_t2.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	intro_vbox.add_child(intro_t2)
 
