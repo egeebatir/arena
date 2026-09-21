@@ -1,15 +1,15 @@
 {
-  "home_team": "BOURNEMOUTH SC",
-  "away_team": "LIVERPOOL SC",
+  "home_team": "MANCHESTER C.",
+  "away_team": "SUNDERLAND SC",
   "home_stars": [
-    "Antoine Semenyo",
-    "Evanilson",
-    "Justin Kluivert"
+    "Erling Haaland",
+    "Kevin De Bruyne",
+    "Phil Foden"
   ],
   "away_stars": [
-    "Mohamed Salah",
-    "Luis Diaz",
-    "Virgil van Dijk"
+    "Jobe Bellingham",
+    "Romaine Mundle",
+    "Chris Rigg"
   ],
   "mode": "regular",
   "max_seconds": 45.0,

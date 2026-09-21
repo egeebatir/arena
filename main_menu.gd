@@ -5776,7 +5776,7 @@ func _ensure_menu_top_banner():
 		var req = admob_node.create_banner_ad_request()
 		req.set_ad_unit_id(target_ad_unit)
 		req.set_ad_position(LoadAdRequest.AdPosition.TOP)
-		req.set_ad_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
+		req.set_ad_size(LoadAdRequest.RequestedAdSize.BANNER)
 		if req.has_method("set_collapsible_position"):
 			req.set_collapsible_position(LoadAdRequest.CollapsiblePosition.DISABLED)
 		if req.has_method("set_anchor_to_safe_area"):

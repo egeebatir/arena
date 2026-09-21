@@ -6,7 +6,7 @@
 script = ExtResource("1_okkro")
 is_real = true
 banner_position = 0
-banner_size = 5
+banner_size = 0
 banner_collapsible_position = 0
 banner_anchor_to_safe_area = false
 android_debug_application_id = "ca-app-pub-7323450546679743~1161340980"

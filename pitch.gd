@@ -249,7 +249,7 @@ func _request_match_bottom_banner():
 	if admob_node.has_method("set_banner_position"):
 		admob_node.set_banner_position(LoadAdRequest.AdPosition.BOTTOM)
 	if admob_node.has_method("set_banner_size"):
-		admob_node.set_banner_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
+		admob_node.set_banner_size(LoadAdRequest.RequestedAdSize.BANNER)
 	if admob_node.has_method("set_banner_collapsible_position"):
 		admob_node.set_banner_collapsible_position(LoadAdRequest.CollapsiblePosition.DISABLED)
 	if admob_node.has_method("set_banner_anchor_to_safe_area"):
@@ -259,7 +259,7 @@ func _request_match_bottom_banner():
 		var req = admob_node.create_banner_ad_request()
 		req.set_ad_unit_id(ad_unit)
 		req.set_ad_position(LoadAdRequest.AdPosition.BOTTOM)
-		req.set_ad_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
+		req.set_ad_size(LoadAdRequest.RequestedAdSize.BANNER)
 		if req.has_method("set_collapsible_position"):
 			req.set_collapsible_position(LoadAdRequest.CollapsiblePosition.DISABLED)
 		if req.has_method("set_anchor_to_safe_area"):
@@ -300,7 +300,7 @@ func _on_banner_ad_failed_to_load(ad_info, error_data):
 		var req = admob_node.create_banner_ad_request()
 		req.set_ad_unit_id(ad_unit)
 		req.set_ad_position(LoadAdRequest.AdPosition.BOTTOM)
-		req.set_ad_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
+		req.set_ad_size(LoadAdRequest.RequestedAdSize.BANNER)
 		if req.has_method("set_collapsible_position"):
 			req.set_collapsible_position(LoadAdRequest.CollapsiblePosition.DISABLED)
 		if req.has_method("set_anchor_to_safe_area"):
@@ -319,7 +319,7 @@ func _clean_match_banner():
 		if admob_node.has_method("set_banner_position"):
 			admob_node.set_banner_position(LoadAdRequest.AdPosition.TOP)
 		if admob_node.has_method("set_banner_size"):
-			admob_node.set_banner_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
+			admob_node.set_banner_size(LoadAdRequest.RequestedAdSize.BANNER)
 		if "banner_anchor_to_safe_area" in admob_node:
 			admob_node.banner_anchor_to_safe_area = false
 
