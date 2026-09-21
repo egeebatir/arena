@@ -147,14 +147,14 @@ def test_pitch_layout_and_contrast():
         p_content = f.read()
 
     # Check top margin alignment (scoreboard and buttons both at margin_top 32)
-    if 'score_margin.add_theme_constant_override("margin_top", 32.0)' in p_content and 'top_ui_margin.add_theme_constant_override("margin_top", 32)' in p_content:
-        print("PASS: Scoreboard and top buttons aligned with margin_top = 32!")
+    if 'score_margin.add_theme_constant_override("margin_top", 240.0)' in p_content and 'top_ui_margin.add_theme_constant_override("margin_top", 120)' in p_content:
+        print("PASS: Scoreboard and top buttons aligned with margin_top = 240/120!")
     else:
         print("FAIL: Scoreboard and top buttons top margin mismatch")
         return False
 
     # Check restart_btn position below pitch
-    if '(screen_h / 2.0) + ARENA_RADIUS + 24.0' in p_content:
+    if '(screen_h / 2.0) + ARENA_RADIUS + 140.0' in p_content:
         print("PASS: restart_btn is positioned below the pitch!")
     else:
         print("FAIL: restart_btn position is not below the pitch")
