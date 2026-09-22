@@ -1,17 +1,17 @@
 {
-  "home_team": "MANCHESTER C.",
-  "away_team": "SUNDERLAND SC",
+  "home_team": "A. MADRID",
+  "away_team": "R. MADRID",
   "home_stars": [
-    "Erling Haaland",
-    "Kevin De Bruyne",
-    "Phil Foden"
+    "Antoine Griezmann",
+    "Julian Alvarez",
+    "Rodrigo De Paul"
   ],
   "away_stars": [
-    "Jobe Bellingham",
-    "Romaine Mundle",
-    "Chris Rigg"
+    "Kylian Mbappe",
+    "Vinicius Jr",
+    "Jude Bellingham"
   ],
   "mode": "regular",
   "max_seconds": 45.0,
-  "lang": "TR"
+  "lang": "ESP"
 }

@@ -50,6 +50,7 @@ var LANG = {
 		"RESTORE_CHECK": "Satın alımlar kontrol ediliyor...", "RESTORE_SUCCESS": "Satın alımlar geri yüklendi!",
 		"EXIT_CONFIRM": "Çıkmak istediğinize emin misiniz?", "EXIT_TITLE": "ÇIKIŞ", "SEC_ACCOUNT": "HESAP & GİZLİLİK",
 		"SHOP_HATS": "Taçlar & Aksesuarlar", "HAT_KINGS_CROWN": "Kral Tacı", "HAT_QUEENS_CROWN": "Kraliçe Tacı",
+		"HAT_VIKING": "Viking Miğferi", "HAT_MAGIC": "Büyücü Şapkası",
 		"HAT_NONE": "Taç Yok", "HAT_FAV_NOTICE": "Taçlar yalnızca favori takımının topunda görünür.",
 		"SHOP_UNEQUIP": "ÇIKAR", "NEED_MORE_COINS": "Yetersiz Jeton!",
 		"ACHIEVEMENTS_BTN": "Google Play Başarımları", "AD_PREPARING": "Reklam hazırlanıyor, lütfen birkaç saniye sonra tekrar deneyin...",
@@ -122,6 +123,7 @@ var LANG = {
 		"RESTORE_CHECK": "Checking purchases...", "RESTORE_SUCCESS": "Purchases restored!",
 		"EXIT_CONFIRM": "Are you sure you want to exit?", "EXIT_TITLE": "EXIT", "SEC_ACCOUNT": "ACCOUNT & PRIVACY",
 		"SHOP_HATS": "Crowns & Accessories", "HAT_KINGS_CROWN": "King's Crown", "HAT_QUEENS_CROWN": "Queen's Crown",
+		"HAT_VIKING": "Viking Helmet", "HAT_MAGIC": "Magic Hat",
 		"HAT_NONE": "No Crown", "HAT_FAV_NOTICE": "Crowns only appear on your favorite team's ball.",
 		"SHOP_UNEQUIP": "UNEQUIP", "NEED_MORE_COINS": "Insufficient Coins!",
 		"ACHIEVEMENTS_BTN": "Google Play Achievements", "AD_PREPARING": "Ad is preparing, please try again in a few seconds...",
@@ -194,6 +196,7 @@ var LANG = {
 		"RESTORE_CHECK": "Comprobando compras...", "RESTORE_SUCCESS": "¡Compras restauradas!",
 		"EXIT_CONFIRM": "¿Estás seguro de que quieres salir?", "EXIT_TITLE": "SALIR", "SEC_ACCOUNT": "CUENTA Y PRIVACIDAD",
 		"SHOP_HATS": "Coronas y Accesorios", "HAT_KINGS_CROWN": "Corona de Rey", "HAT_QUEENS_CROWN": "Corona de Reina",
+		"HAT_VIKING": "Casco Vikingo", "HAT_MAGIC": "Sombrero Mágico",
 		"HAT_NONE": "Sin Corona", "HAT_FAV_NOTICE": "Las coronas solo aparecen en el balón favorito.",
 		"SHOP_UNEQUIP": "QUITAR", "NEED_MORE_COINS": "¡Monedas insuficientes!",
 		"ACHIEVEMENTS_BTN": "Logros de Google Play", "AD_PREPARING": "El anuncio se está preparando, por favor intenta en unos segundos...",
@@ -266,6 +269,7 @@ var LANG = {
 		"RESTORE_CHECK": "A verificar compras...", "RESTORE_SUCCESS": "Compras restauradas!",
 		"EXIT_CONFIRM": "Tem certeza de que deseja sair?", "EXIT_TITLE": "SAIR", "SEC_ACCOUNT": "CONTA E PRIVACIDADE",
 		"SHOP_HATS": "Coroas e Acessórios", "HAT_KINGS_CROWN": "Coroa de Rei", "HAT_QUEENS_CROWN": "Coroa de Rainha",
+		"HAT_VIKING": "Capacete Viking", "HAT_MAGIC": "Chapéu Mágico",
 		"HAT_NONE": "Sem Coroa", "HAT_FAV_NOTICE": "As coroas só aparecem na bola favorita.",
 		"SHOP_UNEQUIP": "REMOVER", "NEED_MORE_COINS": "Moedas insuficientes!",
 		"ACHIEVEMENTS_BTN": "Conquistas do Google Play", "AD_PREPARING": "O anúncio está a preparar-se, tente novamente em algun segundos...",
@@ -338,6 +342,7 @@ var LANG = {
 		"RESTORE_CHECK": "Verifica acquisti...", "RESTORE_SUCCESS": "Acquisti ripristinati!",
 		"EXIT_CONFIRM": "Sei sicuro di voler uscire?", "EXIT_TITLE": "ESCI", "SEC_ACCOUNT": "ACCOUNT E PRIVACY",
 		"SHOP_HATS": "Corone e Accessori", "HAT_KINGS_CROWN": "Corona del Re", "HAT_QUEENS_CROWN": "Corona della Regina",
+		"HAT_VIKING": "Elmo Vichingo", "HAT_MAGIC": "Cappello Magico",
 		"HAT_NONE": "Nessuna Corona", "HAT_FAV_NOTICE": "Le corone appaiono solo sul pallone della squadra preferita.",
 		"SHOP_UNEQUIP": "RIMUOVI", "NEED_MORE_COINS": "Monete insufficienti!",
 		"ACHIEVEMENTS_BTN": "Obiettivi Google Play", "AD_PREPARING": "Annuncio in preparazione, riprova tra qualche secondo...",
@@ -552,7 +557,10 @@ func _ready():
 		"MUN": load("res://mun1.png"),
 		"CHE": load("res://che1.png"),
 		"ARS": load("res://ars1.png"),
-		"LIV": load("res://liv1.png")
+		"LIV": load("res://liv1.png"),
+		"TUR": load("res://tur1.png"),
+		"ARG": load("res://arg1.png"),
+		"POR": load("res://por1.png")
 	}
 	
 	var bg = TextureRect.new()
@@ -5050,7 +5058,9 @@ func _build_shop_tab() -> Control:
 	var hat_list = [
 		{"id": "none", "name_key": "HAT_NONE", "price": 0, "icon": null},
 		{"id": "kings_crown", "name_key": "HAT_KINGS_CROWN", "price": 500, "icon": preload("res://hat_kings_crown.png")},
-		{"id": "queens_crown", "name_key": "HAT_QUEENS_CROWN", "price": 500, "icon": preload("res://hat_queens_crown.png")}
+		{"id": "queens_crown", "name_key": "HAT_QUEENS_CROWN", "price": 500, "icon": preload("res://hat_queens_crown.png")},
+		{"id": "viking_helmet", "name_key": "HAT_VIKING", "price": 1250, "icon": preload("res://hat_viking.png")},
+		{"id": "magic_hat", "name_key": "HAT_MAGIC", "price": 1500, "icon": preload("res://hat_magic.png")}
 	]
 
 	for h_data in hat_list:

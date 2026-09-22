@@ -40,7 +40,10 @@ const BADGE_MAP = {
 	"MUN": "res://mun1.png",
 	"CHE": "res://che1.png",
 	"ARS": "res://ars1.png",
-	"LIV": "res://liv1.png"
+	"LIV": "res://liv1.png",
+	"TUR": "res://tur1.png",
+	"ARG": "res://arg1.png",
+	"POR": "res://por1.png"
 }
 
 var velocity = Vector2.ZERO

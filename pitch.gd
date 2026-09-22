@@ -150,7 +150,7 @@ func _ready():
 	bg_layer.add_child(bg_rect)
 	
 	var screen_size = get_viewport_rect().size
-	call_deferred("_init_center")
+	CENTER = Vector2(screen_size.x / 2.0, screen_size.y / 2.0 - 100.0)
 	
 	static_pitch_node = StaticPitch.new()
 	static_pitch_node.theme_dict = active_theme
@@ -186,7 +186,7 @@ func _ready():
 	ball2.init_ball(Global.away_team_name, CENTER, ARENA_RADIUS, ball1.position)
 	var themes_list = Global.THEMES.keys()
 	var random_theme = themes_list[randi() % themes_list.size()]
-	Global.active_theme = Global.THEMES[random_theme]
+	active_theme = Global.THEMES[random_theme]
 	setup_scoreboard()
 	
 	Global.remove_all_banners()
@@ -973,6 +973,7 @@ func draw_stacked_cards(container: Control, count: int, color: Color):
 
 func _physics_process(delta):
 	if is_paused: return # DURDURULDUYSA FIZIK IŞLEMLERINI ATLAA
+	if not is_instance_valid(event_lbl) or not is_instance_valid(s1_lbl): return
 
 	var run_physics = false
 	if event_timer > 0:
