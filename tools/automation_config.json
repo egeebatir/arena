@@ -1,17 +1,17 @@
 {
-  "home_team": "A. MADRID",
-  "away_team": "R. MADRID",
+  "home_team": "ARSENAL SC",
+  "away_team": "CHELSEA SC",
   "home_stars": [
-    "Antoine Griezmann",
-    "Julian Alvarez",
-    "Rodrigo De Paul"
+    "Bukayo Saka",
+    "Martin Odegaard",
+    "Kai Havertz"
   ],
   "away_stars": [
-    "Kylian Mbappe",
-    "Vinicius Jr",
-    "Jude Bellingham"
+    "Cole Palmer",
+    "Nicolas Jackson",
+    "Enzo Fernandez"
   ],
   "mode": "regular",
   "max_seconds": 45.0,
-  "lang": "ESP"
+  "lang": "ENG"
 }

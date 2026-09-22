@@ -43,6 +43,19 @@ var match_history: Array = [] # [{home, away, home_score, away_score}]
 
 # --- PROGRESSION & ADS ---
 var ad_credits: int = 0
+var last_rewarded_ad_time: float = 0.0
+const REWARDED_AD_COOLDOWN_SEC: float = 300.0 # 5 minutes (300 seconds) ideal retention cooldown
+
+func get_rewarded_ad_cooldown_left() -> float:
+	var now = Time.get_unix_time_from_system()
+	var elapsed = now - last_rewarded_ad_time
+	if elapsed < REWARDED_AD_COOLDOWN_SEC:
+		return max(0.0, REWARDED_AD_COOLDOWN_SEC - elapsed)
+	return 0.0
+
+func is_rewarded_ad_ready() -> bool:
+	return get_rewarded_ad_cooldown_left() <= 0.0
+
 var unlocked_ball_skins: Array = ["default"]
 var equipped_ball_skin: String = "default"
 var unlocked_hats: Array = []
@@ -817,6 +830,7 @@ func save_progression():
 	if file:
 		var data = {
 			"ad_credits": ad_credits,
+			"last_rewarded_ad_time": last_rewarded_ad_time,
 			"unlocked_ball_skins": unlocked_ball_skins,
 			"equipped_ball_skin": equipped_ball_skin,
 			"unlocked_hats": unlocked_hats,
@@ -881,7 +895,38 @@ func load_progression():
 					parsed["payload"] = JSON.stringify(tmp)
 			data_to_load = JSON.parse_string(parsed["payload"])
 		
-		parsed = data_to_load
+		if data_to_load is Dictionary:
+			if data_to_load.has("ad_credits"): ad_credits = int(data_to_load["ad_credits"])
+			if data_to_load.has("last_rewarded_ad_time"): last_rewarded_ad_time = float(data_to_load["last_rewarded_ad_time"])
+			if data_to_load.has("unlocked_ball_skins"): unlocked_ball_skins = data_to_load["unlocked_ball_skins"]
+			if data_to_load.has("equipped_ball_skin"): equipped_ball_skin = data_to_load["equipped_ball_skin"]
+			if data_to_load.has("unlocked_hats"): unlocked_hats = data_to_load["unlocked_hats"]
+			if data_to_load.has("equipped_hat"): equipped_hat = data_to_load["equipped_hat"]
+			if data_to_load.has("favorite_team"): favorite_team = data_to_load["favorite_team"]
+			if data_to_load.has("login_method"): login_method = data_to_load["login_method"]
+			if data_to_load.has("matches_played_since_prompt"): matches_played_since_prompt = int(data_to_load["matches_played_since_prompt"])
+			if data_to_load.has("is_premium"): is_premium = bool(data_to_load["is_premium"])
+			if data_to_load.has("vibration_enabled"): vibration_enabled = bool(data_to_load["vibration_enabled"])
+			if data_to_load.has("home_team_name"): home_team_name = data_to_load["home_team_name"]
+			if data_to_load.has("away_team_name"): away_team_name = data_to_load["away_team_name"]
+			if data_to_load.has("home_selected"): home_selected = bool(data_to_load["home_selected"])
+			if data_to_load.has("away_selected"): away_selected = bool(data_to_load["away_selected"])
+			if data_to_load.has("custom_player_names"): custom_player_names = data_to_load["custom_player_names"]
+			if data_to_load.has("unlocked_achievements"): unlocked_achievements = data_to_load["unlocked_achievements"]
+			if data_to_load.has("favorite_team_goals_scored"): favorite_team_goals_scored = int(data_to_load["favorite_team_goals_scored"])
+			if data_to_load.has("daily_date"): daily_date = data_to_load["daily_date"]
+			if data_to_load.has("lucky_wheel_free_spins_used"): lucky_wheel_free_spins_used = int(data_to_load["lucky_wheel_free_spins_used"])
+			if data_to_load.has("lucky_wheel_ad_spins_used"): lucky_wheel_ad_spins_used = int(data_to_load["lucky_wheel_ad_spins_used"])
+			if data_to_load.has("lucky_wheel_pending_ad_spins"): lucky_wheel_pending_ad_spins = int(data_to_load["lucky_wheel_pending_ad_spins"])
+			if data_to_load.has("daily_quests"): daily_quests = data_to_load["daily_quests"]
+			if data_to_load.has("current_lang"): current_lang = data_to_load["current_lang"]
+			if data_to_load.has("master_vol"): master_vol = float(data_to_load["master_vol"])
+			if data_to_load.has("vol_settings"): vol_settings = data_to_load["vol_settings"]
+			if data_to_load.has("current_theme"): current_theme = data_to_load["current_theme"]
+			if data_to_load.has("shake_enabled"): shake_enabled = bool(data_to_load["shake_enabled"])
+			if data_to_load.has("match_duration"): match_duration = int(data_to_load["match_duration"])
+		check_daily_reset()
+
 
 func check_daily_reset():
 	var today = Time.get_date_string_from_system()

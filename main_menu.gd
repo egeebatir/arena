@@ -23,6 +23,7 @@ var LANG = {
 		"SHOP_PRO_DESC": "Tüm özel temalar, özel toplar, taçlar ve reklamsız deneyim",
 		"REPLAY_ASK": "Aynı maçı tekrar oynatmak istediğinize emin misiniz?",
 		"RANDOM": "RASTGELE",
+		"AD_COOLDOWN_WAIT": "Lütfen bekle: %02d:%02d",
 		"SHOP_WATCH_AD": "VİDEO İZLE (+50 Jeton)", "SHOP_EQUIPPED": "SEÇİLİ", "SHOP_EQUIP": "KULLAN",
 		"SKIN_CLASSIC": "Klasik", "SKIN_GOLD": "Altın", "SKIN_NEON": "Neon", 
 		"SKIN_CHROME": "Krom", "SKIN_LAVA": "Lav", "SKIN_ICE": "Buz",
@@ -96,6 +97,7 @@ var LANG = {
 		"SHOP_PRO_DESC": "Unlock all themes, custom balls, crowns and ad-free experience",
 		"REPLAY_ASK": "Are you sure you want to replay the exact same match?",
 		"RANDOM": "RANDOM",
+		"AD_COOLDOWN_WAIT": "Please wait: %02d:%02d",
 		"SHOP_WATCH_AD": "WATCH VIDEO (+50 Coins)", "SHOP_EQUIPPED": "EQUIPPED", "SHOP_EQUIP": "EQUIP",
 		"SKIN_CLASSIC": "Classic", "SKIN_GOLD": "Gold", "SKIN_NEON": "Neon", 
 		"SKIN_CHROME": "Chrome", "SKIN_LAVA": "Lava", "SKIN_ICE": "Ice",
@@ -169,6 +171,7 @@ var LANG = {
 		"SHOP_PRO_DESC": "Desbloquea todos los temas, balones y experiencia sin anuncios",
 		"REPLAY_ASK": "¿Estás seguro de que quieres volver a jugar el mismo partido?",
 		"RANDOM": "ALEATORIO",
+		"AD_COOLDOWN_WAIT": "Por favor espera: %02d:%02d",
 		"SHOP_WATCH_AD": "VER VIDEO (+50 Monedas)", "SHOP_EQUIPPED": "EQUIPADO", "SHOP_EQUIP": "EQUIPAR",
 		"SKIN_CLASSIC": "Clásico", "SKIN_GOLD": "Oro", "SKIN_NEON": "Neón", 
 		"SKIN_CHROME": "Cromo", "SKIN_LAVA": "Lava", "SKIN_ICE": "Hielo",
@@ -242,6 +245,7 @@ var LANG = {
 		"SHOP_PRO_DESC": "Desbloqueie todos os temas, bolas e experiência sem anúncios",
 		"REPLAY_ASK": "Tem certeza de que deseja jogar a mesma partida?",
 		"RANDOM": "ALEATÓRIO",
+		"AD_COOLDOWN_WAIT": "Por favor aguarde: %02d:%02d",
 		"SHOP_WATCH_AD": "VER VÍDEO (+50 Moedas)", "SHOP_EQUIPPED": "EQUIPADO", "SHOP_EQUIP": "EQUIPAR",
 		"SKIN_CLASSIC": "Clássico", "SKIN_GOLD": "Ouro", "SKIN_NEON": "Neon", 
 		"SKIN_CHROME": "Cromo", "SKIN_LAVA": "Lava", "SKIN_ICE": "Gelo",
@@ -315,6 +319,7 @@ var LANG = {
 		"SHOP_PRO_DESC": "Sblocca tutti i temi, palloni, corone e rimuovi le pubblicità",
 		"REPLAY_ASK": "Sei sicuro di voler rigiocare la stessa partita?",
 		"RANDOM": "CASUALE",
+		"AD_COOLDOWN_WAIT": "Attendi: %02d:%02d",
 		"SHOP_WATCH_AD": "GUARDA VIDEO (+50 Monete)", "SHOP_EQUIPPED": "IN USO", "SHOP_EQUIP": "USA",
 		"SKIN_CLASSIC": "Classico", "SKIN_GOLD": "Oro", "SKIN_NEON": "Neon", 
 		"SKIN_CHROME": "Cromo", "SKIN_LAVA": "Lava", "SKIN_ICE": "Ghiaccio",
@@ -3692,8 +3697,12 @@ func _build_stats_tab() -> Control:
 	lead_btn.pressed.connect(_open_leaderboard)
 	lead_box.add_child(lead_btn)
 
-	# Main Menu Style Horizontal Separator Line
+	# Main Menu Style Horizontal Separator Line (Matches Team Selection Menu Exactly)
 	var stats_sep = HSeparator.new()
+	var sep_style = StyleBoxLine.new()
+	sep_style.color = active_theme.bg_bottom
+	sep_style.thickness = 3
+	stats_sep.add_theme_stylebox_override("separator", sep_style)
 	main_vbox.add_child(stats_sep)
 	ui_separators.append(stats_sep)
 
@@ -4734,6 +4743,26 @@ func _build_shop_tab() -> Control:
 	ad_btn.custom_minimum_size = Vector2(210, 58)
 	ad_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ad_btn.pressed.connect(_show_admob_rewarded)
+
+	var update_btn_display = func():
+		if not is_instance_valid(ad_btn): return
+		if not Global.is_rewarded_ad_ready():
+			var cd = int(Global.get_rewarded_ad_cooldown_left())
+			var mins = cd / 60
+			var secs = cd % 60
+			ad_btn.text = "⏳ %02d:%02d" % [mins, secs]
+			ad_btn.modulate = Color(0.85, 0.85, 0.85, 0.88)
+		else:
+			ad_btn.text = LANG.get(Global.current_lang, LANG["ENG"]).get("SHOP_WATCH_AD", "VİDEO İZLE (+50 Jeton)")
+			ad_btn.modulate = Color.WHITE
+
+	var update_ad_btn_timer = Timer.new()
+	update_ad_btn_timer.wait_time = 1.0
+	update_ad_btn_timer.autostart = true
+	update_ad_btn_timer.timeout.connect(update_btn_display)
+	ad_btn.add_child(update_ad_btn_timer)
+	update_btn_display.call()
+
 	rewards_hbox.add_child(ad_btn)
 
 	var wheel_btn = Button.new()
@@ -5854,6 +5883,15 @@ var wheel_on_reward_callback: Callable = Callable()
 func _show_admob_rewarded():
 	Global.play_click()
 	active_reward_purpose = "general"
+
+	if not Global.is_rewarded_ad_ready():
+		var cd = int(Global.get_rewarded_ad_cooldown_left())
+		var mins = cd / 60
+		var secs = cd % 60
+		var fmt = LANG.get(Global.current_lang, LANG["ENG"]).get("AD_COOLDOWN_WAIT", "Lütfen bekle: %02d:%02d")
+		_show_toast(fmt % [mins, secs])
+		return
+
 	var admob_node = Global.get_admob()
 	if admob_node and admob_node.has_method("show_rewarded_ad"):
 		if admob_node.has_method("is_rewarded_ad_loaded") and admob_node.is_rewarded_ad_loaded():
@@ -6016,6 +6054,7 @@ func _on_rewarded_video_earned(_ad_info = null, _reward_data = null):
 		return
 	
 	Global.ad_credits += 50
+	Global.last_rewarded_ad_time = Time.get_unix_time_from_system()
 	Global.save_progression()
 	_refresh_shop_tab()
 	
