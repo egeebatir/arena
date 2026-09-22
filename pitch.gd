@@ -1,6 +1,6 @@
 extends Node2D
 
-const ARENA_RADIUS = 280.0
+const ARENA_RADIUS = 264.0
 var CENTER = Vector2.ZERO
 const GOAL_WIDTH_RADIANS = 0.5
 const POST_RADIUS = 4.8
@@ -84,7 +84,7 @@ class StaticPitch extends Node2D:
 	var theme_dict: Dictionary
 	var scream: Color
 	var swhite: Color
-	var arena_radius: float = 280.0
+	var arena_radius: float = 264.0
 	
 	func _draw():
 		# Base pitch circle
@@ -1135,8 +1135,10 @@ func _physics_process(delta):
 			if (score1 > score2 and team1_trailed) or (score2 > score1 and team2_trailed):
 				Global.unlock_achievement("COMEBACK_KING")
 			if Global.favorite_team != "":
-				if (Global.home_team_name == Global.favorite_team and score1 > score2) or (Global.away_team_name == Global.favorite_team and score2 > score1):
+				if (Global.is_team_match(Global.home_team_name, Global.favorite_team) and score1 > score2) or (Global.is_team_match(Global.away_team_name, Global.favorite_team) and score2 > score1):
 					Global.unlock_achievement("FAVORITE_CHAMPION")
+					
+			_report_match_to_server()
 					
 		if end_match_timer > 2.0 * FPS_TARGET and not restart_btn.visible:
 			restart_btn.visible = true
@@ -1419,3 +1421,17 @@ func trigger_popup(msg: String, color: Color = Color.WHITE, _outline_col: Color 
 	tw.tween_property(event_lbl, "scale", Vector2(1.0, 1.0), 0.10)
 	event_timer = 1.3
 	# Performance: skip high-step drawing during cooldown
+
+func _report_match_to_server():
+	var http = HTTPRequest.new()
+	http.timeout = 5.0
+	add_child(http)
+	http.request_completed.connect(func(_result, _response_code, _headers, _body):
+		if is_instance_valid(http):
+			http.queue_free()
+	)
+	var url = "https://www.ebstudyo.com/api/report_match.php"
+	var err = http.request(url, ["User-Agent: BolGolFutbolApp/1.0"], HTTPClient.METHOD_POST, "")
+	if err != OK and is_instance_valid(http):
+		http.queue_free()
+

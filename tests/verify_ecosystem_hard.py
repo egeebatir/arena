@@ -224,7 +224,7 @@ def check_shop_and_assets():
     team_crests = [
         "ars1.png", "atm1.png", "bar1.png", "che1.png", "int1.png", "juv1.png",
         "liv1.png", "mc1.png", "mil1.png", "mun1.png", "nap1.png", "rma1.png",
-        "tur1.png", "arg1.png", "por1.png"
+        "tur1.png", "arg1.png", "por1.png", "eng1.png", "usa1.png", "ita1.png", "tor1.png"
     ]
     for cname in team_crests:
         cpath = os.path.join(futbol_dir, cname)

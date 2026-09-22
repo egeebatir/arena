@@ -43,7 +43,10 @@ const BADGE_MAP = {
 	"LIV": "res://liv1.png",
 	"TUR": "res://tur1.png",
 	"ARG": "res://arg1.png",
-	"POR": "res://por1.png"
+	"POR": "res://por1.png",
+	"ENG": "res://eng1.png",
+	"USA": "res://usa1.png",
+	"ITA": "res://ita1.png"
 }
 
 var velocity = Vector2.ZERO
@@ -210,7 +213,7 @@ func _draw():
 
 	# Draw team mascot badge centered on ball
 	if badge_texture:
-		var badge_size = Vector2(80, 80)
+		var badge_size = Vector2(88, 88)
 		var badge_rect = Rect2(-badge_size / 2.0, badge_size)
 		draw_texture_rect(badge_texture, badge_rect, false)
 
@@ -239,5 +242,14 @@ func _draw():
 	if hat_texture:
 		var hat_w = 46.0
 		var hat_h = 32.0
-		var hat_rect = Rect2(-hat_w / 2.0, -BALL_RADIUS - hat_h + 10.0, hat_w, hat_h)
+		var y_overlap = 10.0
+		if Global.equipped_hat == "viking_helmet":
+			hat_w = 54.0
+			hat_h = 38.0
+			y_overlap = 16.0
+		elif Global.equipped_hat == "magic_hat":
+			hat_w = 50.0
+			hat_h = 42.0
+			y_overlap = 12.0
+		var hat_rect = Rect2(-hat_w / 2.0, -BALL_RADIUS - hat_h + y_overlap, hat_w, hat_h)
 		draw_texture_rect(hat_texture, hat_rect, false)

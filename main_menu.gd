@@ -66,7 +66,7 @@ var LANG = {
 		"LEADERBOARD_HINT": "Google Play Games ile dünya sıralamasına katıl ve diğer oyuncularla yarış!",
 		"GOALS_SUFFIX": "Gol", "PRO_UPGRADE_TITLE": "PRO'ya Yükselt", "LEADERBOARD_LOCAL_TITLE": "Skor Kartın",
 		"LEADERBOARD_GLOBAL_TITLE": "Google Play Games Dünya Sıralaması",
-		"LEAGUE_TURKEY": "Türkiye Ligi", "LEAGUE_ENGLAND": "İngiltere Ligi", "LEAGUE_SPAIN": "İspanya Ligi",
+		"LEAGUE_TURKEY": "Türkiye Ligi", "LEAGUE_NATIONAL": "Milli Takımlar", "LEAGUE_ENGLAND": "İngiltere Ligi", "LEAGUE_SPAIN": "İspanya Ligi",
 		"LEAGUE_GERMANY": "Almanya Ligi", "LEAGUE_ITALY": "İtalya Ligi", "LEAGUE_FRANCE": "Fransa Ligi",
 		"LEAGUE_USA": "Amerika Ligi", "LEAGUE_SAUDI": "Suudi Arabistan Ligi", "LEAGUE_WORLD": "Dünya Kulüpleri",
 		"LEAGUE_ALL": "Tüm Takımlar", "LEAGUE_SELECT": "Lig Seç...",
@@ -139,7 +139,7 @@ var LANG = {
 		"LEADERBOARD_HINT": "Join Google Play Games global leaderboard and compete worldwide!",
 		"GOALS_SUFFIX": "Goals", "PRO_UPGRADE_TITLE": "Upgrade to PRO", "LEADERBOARD_LOCAL_TITLE": "Your Scorecard",
 		"LEADERBOARD_GLOBAL_TITLE": "Google Play Games Global Leaderboard",
-		"LEAGUE_TURKEY": "Turkish League", "LEAGUE_ENGLAND": "English League", "LEAGUE_SPAIN": "Spanish League",
+		"LEAGUE_TURKEY": "Turkish League", "LEAGUE_NATIONAL": "National Teams", "LEAGUE_ENGLAND": "English League", "LEAGUE_SPAIN": "Spanish League",
 		"LEAGUE_GERMANY": "German League", "LEAGUE_ITALY": "Italian League", "LEAGUE_FRANCE": "French League",
 		"LEAGUE_USA": "American League", "LEAGUE_SAUDI": "Saudi League", "LEAGUE_WORLD": "World Clubs",
 		"LEAGUE_ALL": "All Teams", "LEAGUE_SELECT": "Select League...",
@@ -212,7 +212,7 @@ var LANG = {
 		"LEADERBOARD_HINT": "¡Únete a la clasificación global de Google Play Games y compite mundialmente!",
 		"GOALS_SUFFIX": "Goles", "PRO_UPGRADE_TITLE": "Mejorar a PRO", "LEADERBOARD_LOCAL_TITLE": "Tu Tarjeta de Puntuación",
 		"LEADERBOARD_GLOBAL_TITLE": "Clasificación Global de Google Play Games",
-		"LEAGUE_TURKEY": "Liga Turca", "LEAGUE_ENGLAND": "Liga Inglesa", "LEAGUE_SPAIN": "Liga Española",
+		"LEAGUE_TURKEY": "Liga Turca", "LEAGUE_NATIONAL": "Selecciones", "LEAGUE_ENGLAND": "Liga Inglesa", "LEAGUE_SPAIN": "Liga Española",
 		"LEAGUE_GERMANY": "Liga Alemana", "LEAGUE_ITALY": "Liga Italiana", "LEAGUE_FRANCE": "Liga Francesa",
 		"LEAGUE_USA": "Liga Americana", "LEAGUE_SAUDI": "Liga Saudí", "LEAGUE_WORLD": "Clubes del Mundo",
 		"LEAGUE_ALL": "Todos los Equipos", "LEAGUE_SELECT": "Elegir Liga...",
@@ -285,7 +285,7 @@ var LANG = {
 		"LEADERBOARD_HINT": "Junte-se à classificação global do Google Play Games e compita mundialmente!",
 		"GOALS_SUFFIX": "Golos", "PRO_UPGRADE_TITLE": "Melhorar para PRO", "LEADERBOARD_LOCAL_TITLE": "O Seu Cartão de Pontuação",
 		"LEADERBOARD_GLOBAL_TITLE": "Classificação Global do Google Play Games",
-		"LEAGUE_TURKEY": "Liga Turca", "LEAGUE_ENGLAND": "Liga Inglesa", "LEAGUE_SPAIN": "Liga Espanhola",
+		"LEAGUE_TURKEY": "Liga Turca", "LEAGUE_NATIONAL": "Seleções", "LEAGUE_ENGLAND": "Liga Inglesa", "LEAGUE_SPAIN": "Liga Espanhola",
 		"LEAGUE_GERMANY": "Liga Alemã", "LEAGUE_ITALY": "Liga Italiana", "LEAGUE_FRANCE": "Liga Francesa",
 		"LEAGUE_USA": "Liga Americana", "LEAGUE_SAUDI": "Liga Saudita", "LEAGUE_WORLD": "Clubes do Mundo",
 		"LEAGUE_ALL": "Todas as Equipas", "LEAGUE_SELECT": "Escolher Liga...",
@@ -358,7 +358,7 @@ var LANG = {
 		"LEADERBOARD_HINT": "Unisciti alla classifica mondiale di Google Play Games e sfida gli altri giocatori!",
 		"GOALS_SUFFIX": "Gol", "PRO_UPGRADE_TITLE": "Passa a PRO", "LEADERBOARD_LOCAL_TITLE": "La Tua Scheda Punteggio",
 		"LEADERBOARD_GLOBAL_TITLE": "Classifica Globale Google Play Games",
-		"LEAGUE_TURKEY": "Campionato Turco", "LEAGUE_ENGLAND": "Campionato Inglese", "LEAGUE_SPAIN": "Campionato Spagnolo",
+		"LEAGUE_TURKEY": "Campionato Turco", "LEAGUE_NATIONAL": "Nazionali", "LEAGUE_ENGLAND": "Campionato Inglese", "LEAGUE_SPAIN": "Campionato Spagnolo",
 		"LEAGUE_GERMANY": "Campionato Tedesco", "LEAGUE_ITALY": "Campionato Italiano", "LEAGUE_FRANCE": "Campionato Francese",
 		"LEAGUE_USA": "Campionato Americano", "LEAGUE_SAUDI": "Campionato Saudita", "LEAGUE_WORLD": "Club Mondiali",
 		"LEAGUE_ALL": "Tutte le Squadre", "LEAGUE_SELECT": "Seleziona Campionato...",
@@ -3316,6 +3316,7 @@ func _update_fav_buttons():
 const LEAGUE_FILTER_CONFIG = [
 	{"key": "LEAGUE_SELECT", "id": "SELECT"},
 	{"key": "LEAGUE_TURKEY", "id": "TURKEY"},
+	{"key": "LEAGUE_NATIONAL", "id": "NATIONAL"},
 	{"key": "LEAGUE_ENGLAND", "id": "ENGLAND"},
 	{"key": "LEAGUE_SPAIN", "id": "SPAIN"},
 	{"key": "LEAGUE_GERMANY", "id": "GERMANY"},
@@ -3877,8 +3878,10 @@ func _build_stats_tab() -> Control:
 			var m_h_score = int(m.get("home_score", m.get("score_h", 0)))
 			var m_a_score = int(m.get("away_score", m.get("score_a", 0)))
 
-			if m_home == Global.favorite_team or m_away == Global.favorite_team:
-				var is_h = (m_home == Global.favorite_team)
+			var is_h = Global.is_team_match(m_home, Global.favorite_team)
+			var is_a = Global.is_team_match(m_away, Global.favorite_team)
+
+			if is_h or is_a:
 				var fav_s = m_h_score if is_h else m_a_score
 				var opp_s = m_a_score if is_h else m_h_score
 				var opp_name = m_away if is_h else m_home

@@ -335,7 +335,7 @@ func remove_all_banners():
 const HATS = {
 	"viking_helmet": {
 		"id": "viking_helmet",
-		"price": 1250,
+		"price": 1000,
 		"texture_path": "res://hat_viking.png",
 		"name": {
 			"TR": "Viking Miğferi",
@@ -347,7 +347,7 @@ const HATS = {
 	},
 	"magic_hat": {
 		"id": "magic_hat",
-		"price": 1500,
+		"price": 750,
 		"texture_path": "res://hat_magic.png",
 		"name": {
 			"TR": "Büyücü Şapkası",
@@ -423,6 +423,10 @@ var THEMES = {
 }
 
 const LEAGUES = {
+	"NATIONAL": {
+		"id": "NATIONAL",
+		"name": {"TR": "Milli Takımlar", "ENG": "National Teams", "ESP": "Selecciones", "POR": "Seleções", "ITA": "Nazionali"}
+	},
 	"TURKEY": {
 		"id": "TURKEY",
 		"name": {"TR": "Türkiye Ligi", "ENG": "Turkish League", "ESP": "Liga Turca", "POR": "Liga Turca", "ITA": "Campionato Turco"}
@@ -464,10 +468,13 @@ const LEAGUES = {
 var TEAM_LOGOS = {}
 
 var TEAMS = {
-	# --- MİLLİ TAKIMLAR (Hazırlık) ---
+	# --- MİLLİ TAKIMLAR ---
 	"TÜRKİYE":        {"colors": [Color8(227, 10, 23), Color8(255, 255, 255)], "short": "TUR", "league": "NATIONAL", "type": "national"},
 	"ARJANTİN":       {"colors": [Color8(116, 172, 223), Color8(255, 255, 255)], "short": "ARG", "league": "NATIONAL", "type": "national"},
 	"PORTEKİZ":       {"colors": [Color8(255, 0, 0), Color8(0, 102, 0)], "short": "POR", "league": "NATIONAL", "type": "national"},
+	"İNGİLTERE":      {"colors": [Color8(255, 255, 255), Color8(206, 17, 38)], "short": "ENG", "league": "NATIONAL", "type": "national"},
+	"ABD":            {"colors": [Color8(10, 49, 97), Color8(255, 255, 255)],   "short": "USA", "league": "NATIONAL", "type": "national"},
+	"İTALYA":         {"colors": [Color8(0, 102, 204), Color8(255, 255, 255)], "short": "ITA", "league": "NATIONAL", "type": "national"},
 	# --- TÜRKİYE LİGİ ---
 	"GALATA FK":      {"colors": [Color8(169, 4, 50), Color8(253, 185, 18)], "short": "GAL", "league": "TURKEY", "type": "club"},
 	"FENER FK":       {"colors": [Color8(255, 255, 0), Color8(0, 0, 128)],   "short": "FEN", "league": "TURKEY", "type": "club"},
@@ -1218,32 +1225,37 @@ func generate_daily_quests():
 			formatted_desc[lang_key] = s
 		q["desc"] = formatted_desc
 
-		daily_quests.append(q)
+func is_team_match(t1: String, t2: String) -> bool:
+	if t1 == "" or t2 == "": return false
+	if t1 == t2: return true
+	var s1_clean = t1.strip_edges().to_lower()
+	var s2_clean = t2.strip_edges().to_lower()
+	if s1_clean == s2_clean: return true
+	var short1 = TEAMS.get(t1, {}).get("short", "").to_lower()
+	var short2 = TEAMS.get(t2, {}).get("short", "").to_lower()
+	if short1 != "" and short2 != "" and short1 == short2: return true
+	if short1 != "" and short1 == s2_clean: return true
+	if short2 != "" and short2 == s1_clean: return true
+	return false
 
 func record_match_result(home: String, away: String, home_score: int, away_score: int, match_data: Dictionary = {}):
 	check_daily_reset()
 	var fav = favorite_team if favorite_team != "" else home_team_name
 	
-	var is_fav_home = (home == fav)
-	var is_fav_away = (away == fav)
+	var is_fav_home = is_team_match(home, fav)
+	var is_fav_away = is_team_match(away, fav)
 	
 	var fav_score = 0
 	var opp_score = 0
 	var fav_won = false
 	var is_player_home = true
 	
-	if is_fav_home:
-		fav_score = home_score
-		opp_score = away_score
-		fav_won = (home_score > away_score)
-		is_player_home = true
-	elif is_fav_away:
+	if is_fav_away and not is_fav_home:
 		fav_score = away_score
 		opp_score = home_score
 		fav_won = (away_score > home_score)
 		is_player_home = false
 	else:
-		# Player was home team by default
 		fav_score = home_score
 		opp_score = away_score
 		fav_won = (home_score > away_score)
