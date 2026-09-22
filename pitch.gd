@@ -1434,4 +1434,3 @@ func _report_match_to_server():
 	var err = http.request(url, ["User-Agent: BolGolFutbolApp/1.0"], HTTPClient.METHOD_POST, "")
 	if err != OK and is_instance_valid(http):
 		http.queue_free()
-

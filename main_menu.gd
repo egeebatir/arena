@@ -3221,7 +3221,9 @@ func show_fav_change_confirmation(target_team: String):
 
 func _execute_favorite_team_change(target_team: String):
 	Global.favorite_team = target_team
+	Global.recalculate_favorite_team_goals()
 	Global.save_progression()
+	_update_fav_buttons()
 	populate_teams()
 	_refresh_stats_tab()
 

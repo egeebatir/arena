@@ -213,7 +213,7 @@ func _draw():
 
 	# Draw team mascot badge centered on ball
 	if badge_texture:
-		var badge_size = Vector2(88, 88)
+		var badge_size = Vector2(92, 92)
 		var badge_rect = Rect2(-badge_size / 2.0, badge_size)
 		draw_texture_rect(badge_texture, badge_rect, false)
 

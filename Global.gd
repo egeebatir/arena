@@ -1283,12 +1283,30 @@ func is_team_match(t1: String, t2: String) -> bool:
 	if short2 != "" and short2 == s1_clean: return true
 	return false
 
+func recalculate_favorite_team_goals() -> int:
+	if favorite_team == "":
+		favorite_team_goals_scored = 0
+		return 0
+	var total = 0
+	for m in match_history:
+		var m_home = m.get("home", "")
+		var m_away = m.get("away", "")
+		var m_h_score = int(m.get("home_score", m.get("score_h", 0)))
+		var m_a_score = int(m.get("away_score", m.get("score_a", 0)))
+		if is_team_match(m_home, favorite_team):
+			total += m_h_score
+		elif is_team_match(m_away, favorite_team):
+			total += m_a_score
+	favorite_team_goals_scored = total
+	return total
+
 func record_match_result(home: String, away: String, home_score: int, away_score: int, match_data: Dictionary = {}):
 	check_daily_reset()
-	var fav = favorite_team if favorite_team != "" else home_team_name
+	var fav = favorite_team
 	
-	var is_fav_home = is_team_match(home, fav)
-	var is_fav_away = is_team_match(away, fav)
+	var is_fav_home = is_team_match(home, fav) if fav != "" else false
+	var is_fav_away = is_team_match(away, fav) if fav != "" else false
+	var fav_played = (is_fav_home or is_fav_away)
 	
 	var fav_score = 0
 	var opp_score = 0
@@ -1300,16 +1318,22 @@ func record_match_result(home: String, away: String, home_score: int, away_score
 		opp_score = home_score
 		fav_won = (away_score > home_score)
 		is_player_home = false
-	else:
+	elif is_fav_home:
 		fav_score = home_score
 		opp_score = away_score
 		fav_won = (home_score > away_score)
 		is_player_home = true
+	else:
+		fav_score = 0
+		opp_score = away_score
+		fav_won = false
+		is_player_home = true
 	
-	var player_score = fav_score
-	var player_won = fav_won
-	var goal_margin = player_score - opp_score
-	var clean_sheet = (player_won and opp_score == 0)
+	var player_score = fav_score if fav_played else home_score
+	var player_opp = opp_score if fav_played else away_score
+	var player_won = fav_won if fav_played else (home_score > away_score)
+	var goal_margin = player_score - player_opp
+	var clean_sheet = (player_won and player_opp == 0)
 	
 	# Determine Comeback status
 	var is_comeback = false
@@ -1323,7 +1347,7 @@ func record_match_result(home: String, away: String, home_score: int, away_score
 	var captain_goals_scored = int(match_data.get("captain_goals", player_score))
 	
 	# Update Leaderboard goals
-	if fav_score > 0:
+	if fav_played and fav_score > 0:
 		favorite_team_goals_scored += fav_score
 	
 	# Update Daily Quests
@@ -1341,10 +1365,10 @@ func record_match_result(home: String, away: String, home_score: int, away_score
 				if player_won:
 					q["progress"] = min(tgt, cur_p + 1)
 			"fav_win":
-				if fav_won:
+				if fav_played and fav_won:
 					q["progress"] = min(tgt, cur_p + 1)
 			"fav_goals":
-				if fav_score > 0:
+				if fav_played and fav_score > 0:
 					q["progress"] = min(tgt, cur_p + fav_score)
 			"total_goals":
 				if player_score > 0:
