@@ -1,6 +1,6 @@
 extends Node2D
 
-const ARENA_RADIUS = 264.0
+const ARENA_RADIUS = 280.0
 var CENTER = Vector2.ZERO
 const GOAL_WIDTH_RADIANS = 0.5
 const POST_RADIUS = 4.8
@@ -84,22 +84,23 @@ class StaticPitch extends Node2D:
 	var theme_dict: Dictionary
 	var scream: Color
 	var swhite: Color
+	var arena_radius: float = 280.0
 	
 	func _draw():
 		# Base pitch circle
-		draw_circle(Vector2.ZERO, 264.0, theme_dict.pitch_1)
+		draw_circle(Vector2.ZERO, arena_radius, theme_dict.pitch_1)
 		
-		# Classic 60px alternating turf stripes
-		for y in range(-264, 264):
-			if int(y + 264) % 60 < 30:
-				var x = sqrt(max(0.0, 264.0 * 264.0 - float(y * y)))
+		# Classic alternating turf stripes
+		for y in range(-int(arena_radius), int(arena_radius)):
+			if int(y + arena_radius) % 60 < 30:
+				var x = sqrt(max(0.0, arena_radius * arena_radius - float(y * y)))
 				draw_line(Vector2(-x, float(y)), Vector2(x, float(y)), theme_dict.pitch_2, 1.0)
 				
 		# Boundary ring
-		draw_arc(Vector2.ZERO, 264.0, 0, TAU, 128, scream, 5.0, true)
+		draw_arc(Vector2.ZERO, arena_radius, 0, TAU, 128, scream, 5.0, true)
 		
 		# Center halfway line
-		var line_len = 264.0 - 4.0
+		var line_len = arena_radius - 4.0
 		draw_line(Vector2(-line_len, 0), Vector2(line_len, 0), swhite, 3.5, true)
 		
 		# Center circle
@@ -150,9 +151,15 @@ func _ready():
 	bg_layer.add_child(bg_rect)
 	
 	var screen_size = get_viewport_rect().size
-	CENTER = Vector2(screen_size.x / 2.0, screen_size.y / 2.0 - 100.0)
+	# Dynamic vertical centering in available playable space:
+	# Top safe boundary: bottom of header scoreboard pill + goal banner (~195px)
+	# Bottom safe boundary: top of bottom AdMob banner safe zone (screen_size.y - 130px)
+	var top_limit = 195.0
+	var bottom_limit = screen_size.y - 130.0
+	CENTER = Vector2(screen_size.x / 2.0, (top_limit + bottom_limit) / 2.0)
 	
 	static_pitch_node = StaticPitch.new()
+	static_pitch_node.arena_radius = ARENA_RADIUS
 	static_pitch_node.theme_dict = active_theme
 	static_pitch_node.scream = cream
 	static_pitch_node.swhite = white
@@ -174,6 +181,7 @@ func _ready():
 	add_child(stadium_player)
 	
 	game_camera = Camera2D.new()
+	game_camera.anchor_mode = Camera2D.ANCHOR_MODE_FIXED_TOP_LEFT
 	add_child(game_camera)
 	
 	var target_vol = Global.master_vol * Global.vol_settings.get("stadium", 0.2) * 1.07
@@ -338,9 +346,9 @@ func setup_scoreboard():
 	
 	var score_margin = MarginContainer.new()
 	score_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	score_margin.add_theme_constant_override("margin_top", 240.0)
-	score_margin.add_theme_constant_override("margin_left", 8.0)
-	score_margin.add_theme_constant_override("margin_right", 8.0)
+	score_margin.add_theme_constant_override("margin_top", 64)
+	score_margin.add_theme_constant_override("margin_left", 16)
+	score_margin.add_theme_constant_override("margin_right", 16)
 	ui_layer.add_child(score_margin)
 	
 	var center_cont = VBoxContainer.new()
@@ -351,25 +359,42 @@ func setup_scoreboard():
 	var top_panel = PanelContainer.new()
 	top_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var style = StyleBoxFlat.new()
-	style.bg_color = Color(0.05, 0.08, 0.12, 0.85)
-	style.corner_radius_top_left = 32; style.corner_radius_top_right = 32
-	style.corner_radius_bottom_left = 32; style.corner_radius_bottom_right = 32
+	style.bg_color = active_theme.bg_bottom.darkened(0.28)
+	style.bg_color.a = 0.92
+	style.corner_radius_top_left = 22; style.corner_radius_top_right = 22
+	style.corner_radius_bottom_left = 22; style.corner_radius_bottom_right = 22
 	style.border_width_left = 2; style.border_width_right = 2
 	style.border_width_top = 2; style.border_width_bottom = 4
-	style.border_color = Color(1.0, 1.0, 1.0, 0.15)
-	style.content_margin_left = 40; style.content_margin_right = 40
-	style.content_margin_top = 10; style.content_margin_bottom = 14
+	style.border_color = active_theme.accent.darkened(0.15)
+	style.shadow_color = Color8(0, 0, 0, 160)
+	style.shadow_size = 8
+	style.shadow_offset = Vector2(0, 3)
+	style.content_margin_left = 20; style.content_margin_right = 20
+	style.content_margin_top = 6; style.content_margin_bottom = 8
 	top_panel.add_theme_stylebox_override("panel", style)
 	center_cont.add_child(top_panel)
 	
 	var main_vbox = VBoxContainer.new()
 	main_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	main_vbox.add_theme_constant_override("separation", 2)
 	top_panel.add_child(main_vbox)
 	
 	var score_hbox = HBoxContainer.new()
 	score_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	score_hbox.add_theme_constant_override("separation", 20)
+	score_hbox.add_theme_constant_override("separation", 14)
 	main_vbox.add_child(score_hbox)
+	
+	# Team 1 Crest Badge
+	var t1_icon = TextureRect.new()
+	t1_icon.custom_minimum_size = Vector2(34, 34)
+	t1_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	t1_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	t1_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	if ball1.badge_texture:
+		t1_icon.texture = ball1.badge_texture
+	elif ball1.logo_texture:
+		t1_icon.texture = ball1.logo_texture
+	score_hbox.add_child(t1_icon)
 	
 	t1_yellow_box = Control.new()
 	score_hbox.add_child(t1_yellow_box)
@@ -382,10 +407,9 @@ func setup_scoreboard():
 	var t1 = Label.new()
 	t1.text = ball1.team_short_name
 	t1.add_theme_font_override("font", custom_font)
-	t1.add_theme_font_size_override("font_size", 46)
+	t1.add_theme_font_size_override("font_size", 38)
 	t1.add_theme_color_override("font_color", t1_col)
 	t1.add_theme_color_override("font_outline_color", t1_outline)
-	t1.add_theme_font_size_override("font_size", 42)
 	t1.add_theme_constant_override("outline_size", 4)
 	t1.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	t1.add_theme_constant_override("shadow_offset_y", 2)
@@ -396,10 +420,9 @@ func setup_scoreboard():
 	
 	s1_lbl = Label.new()
 	s1_lbl.add_theme_font_override("font", custom_font)
-	s1_lbl.add_theme_font_size_override("font_size", 54)
+	s1_lbl.add_theme_font_size_override("font_size", 48)
 	s1_lbl.add_theme_color_override("font_color", t1_col)
 	s1_lbl.add_theme_color_override("font_outline_color", t1_outline)
-	s1_lbl.add_theme_font_size_override("font_size", 54)
 	s1_lbl.add_theme_constant_override("outline_size", 4)
 	s1_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	s1_lbl.add_theme_constant_override("shadow_offset_y", 2)
@@ -408,9 +431,8 @@ func setup_scoreboard():
 	var dash = Label.new()
 	dash.text = "-"
 	dash.add_theme_font_override("font", custom_font)
-	dash.add_theme_font_size_override("font_size", 54)
-	dash.add_theme_font_size_override("font_size", 48)
-	dash.add_theme_color_override("font_color", Color(1, 1, 1, 0.7))
+	dash.add_theme_font_size_override("font_size", 40)
+	dash.add_theme_color_override("font_color", Color(1, 1, 1, 0.6))
 	dash.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	dash.add_theme_constant_override("shadow_offset_y", 2)
 	score_hbox.add_child(dash)
@@ -422,10 +444,9 @@ func setup_scoreboard():
 	
 	s2_lbl = Label.new()
 	s2_lbl.add_theme_font_override("font", custom_font)
-	s2_lbl.add_theme_font_size_override("font_size", 54)
+	s2_lbl.add_theme_font_size_override("font_size", 48)
 	s2_lbl.add_theme_color_override("font_color", t2_col)
 	s2_lbl.add_theme_color_override("font_outline_color", t2_outline)
-	s2_lbl.add_theme_font_size_override("font_size", 54)
 	s2_lbl.add_theme_constant_override("outline_size", 4)
 	s2_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	s2_lbl.add_theme_constant_override("shadow_offset_y", 2)
@@ -437,10 +458,9 @@ func setup_scoreboard():
 	var t2 = Label.new()
 	t2.text = ball2.team_short_name
 	t2.add_theme_font_override("font", custom_font)
-	t2.add_theme_font_size_override("font_size", 46)
+	t2.add_theme_font_size_override("font_size", 38)
 	t2.add_theme_color_override("font_color", t2_col)
 	t2.add_theme_color_override("font_outline_color", t2_outline)
-	t2.add_theme_font_size_override("font_size", 42)
 	t2.add_theme_constant_override("outline_size", 4)
 	t2.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	t2.add_theme_constant_override("shadow_offset_y", 2)
@@ -449,32 +469,58 @@ func setup_scoreboard():
 	t2_yellow_box = Control.new()
 	score_hbox.add_child(t2_yellow_box)
 	
+	# Team 2 Crest Badge
+	var t2_icon = TextureRect.new()
+	t2_icon.custom_minimum_size = Vector2(34, 34)
+	t2_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	t2_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	t2_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	if ball2.badge_texture:
+		t2_icon.texture = ball2.badge_texture
+	elif ball2.logo_texture:
+		t2_icon.texture = ball2.logo_texture
+	score_hbox.add_child(t2_icon)
+	
+	var time_pill = PanelContainer.new()
+	time_pill.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	var time_style = StyleBoxFlat.new()
+	time_style.bg_color = Color(0, 0, 0, 0.40)
+	time_style.corner_radius_top_left = 10; time_style.corner_radius_top_right = 10
+	time_style.corner_radius_bottom_left = 10; time_style.corner_radius_bottom_right = 10
+	time_style.border_width_left = 1; time_style.border_width_top = 1
+	time_style.border_width_right = 1; time_style.border_width_bottom = 1
+	time_style.border_color = Color(1, 1, 1, 0.12)
+	time_style.content_margin_left = 16; time_style.content_margin_right = 16
+	time_style.content_margin_top = 2; time_style.content_margin_bottom = 2
+	time_pill.add_theme_stylebox_override("panel", time_style)
+	main_vbox.add_child(time_pill)
+	
 	time_lbl = Label.new()
 	time_lbl.add_theme_font_override("font", custom_font)
-	time_lbl.add_theme_font_size_override("font_size", 30)
-	time_lbl.add_theme_color_override("font_color", Color(1, 1, 1, 0.85))
+	time_lbl.add_theme_font_size_override("font_size", 24)
+	time_lbl.add_theme_color_override("font_color", Color8(255, 235, 120))
 	time_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	time_lbl.add_theme_constant_override("shadow_offset_y", 2)
 	time_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	main_vbox.add_child(time_lbl)
+	time_pill.add_child(time_lbl)
 	
 	var banner_margin = MarginContainer.new()
-	banner_margin.add_theme_constant_override("margin_top", -10)
+	banner_margin.add_theme_constant_override("margin_top", -8)
 	
 	goal_banner_panel = PanelContainer.new()
 	goal_banner_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var g_style = StyleBoxFlat.new()
-	g_style.bg_color = active_theme.bg_bottom
+	g_style.bg_color = active_theme.bg_bottom.darkened(0.2)
 	g_style.corner_radius_bottom_left = 14; g_style.corner_radius_bottom_right = 14
-	g_style.border_width_left = 1; g_style.border_width_right = 1; g_style.border_width_bottom = 1
-	g_style.border_color = Color(1, 1, 1, 0.2)
-	g_style.content_margin_left = 24; g_style.content_margin_right = 24
-	g_style.content_margin_top = 6; g_style.content_margin_bottom = 6
+	g_style.border_width_left = 1.5; g_style.border_width_right = 1.5; g_style.border_width_bottom = 2.5
+	g_style.border_color = active_theme.accent.darkened(0.2)
+	g_style.content_margin_left = 22; g_style.content_margin_right = 22
+	g_style.content_margin_top = 5; g_style.content_margin_bottom = 5
 	goal_banner_panel.add_theme_stylebox_override("panel", g_style)
 	
 	goal_banner_lbl = Label.new()
 	goal_banner_lbl.add_theme_font_override("font", custom_font)
-	goal_banner_lbl.add_theme_font_size_override("font_size", 28)
+	goal_banner_lbl.add_theme_font_size_override("font_size", 26)
 	goal_banner_lbl.add_theme_color_override("font_color", Color8(255, 230, 100))
 	goal_banner_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	goal_banner_lbl.add_theme_constant_override("shadow_offset_y", 2)
@@ -514,17 +560,15 @@ func setup_scoreboard():
 	intro_vbox.grow_horizontal = Control.GROW_DIRECTION_BOTH 
 	intro_vbox.grow_vertical = Control.GROW_DIRECTION_BOTH
 	intro_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	intro_vbox.position.y -= 100.0 # Shift up to match arena
 	intro_overlay.add_child(intro_vbox)
 	
 	var intro_t1 = Label.new()
 	intro_t1.text = Global.home_team_name
 	intro_t1.add_theme_font_override("font", custom_font)
-	intro_t1.add_theme_font_size_override("font_size", 54)
+	intro_t1.add_theme_font_size_override("font_size", 46)
 	intro_t1.add_theme_color_override("font_color", ball1.team_colors[0])
 	intro_t1.add_theme_color_override("font_outline_color", Color.WHITE)
-	intro_t1.add_theme_font_size_override("font_size", 42)
-	t1.add_theme_constant_override("outline_size", 4)
+	intro_t1.add_theme_constant_override("outline_size", 4)
 	intro_t1.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	intro_vbox.add_child(intro_t1)
 	
@@ -539,19 +583,18 @@ func setup_scoreboard():
 	var intro_t2 = Label.new()
 	intro_t2.text = Global.away_team_name
 	intro_t2.add_theme_font_override("font", custom_font)
-	intro_t2.add_theme_font_size_override("font_size", 54)
+	intro_t2.add_theme_font_size_override("font_size", 46)
 	intro_t2.add_theme_color_override("font_color", ball2.team_colors[0])
 	intro_t2.add_theme_color_override("font_outline_color", Color.WHITE)
-	intro_t2.add_theme_font_size_override("font_size", 42)
-	t2.add_theme_constant_override("outline_size", 4)
+	intro_t2.add_theme_constant_override("outline_size", 4)
 	intro_t2.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	intro_vbox.add_child(intro_t2)
 
 	var top_ui_margin = MarginContainer.new()
 	top_ui_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	top_ui_margin.add_theme_constant_override("margin_top", 120)
-	top_ui_margin.add_theme_constant_override("margin_left", 30)
-	top_ui_margin.add_theme_constant_override("margin_right", 30)
+	top_ui_margin.add_theme_constant_override("margin_top", 64)
+	top_ui_margin.add_theme_constant_override("margin_left", 24)
+	top_ui_margin.add_theme_constant_override("margin_right", 24)
 	ui_layer.add_child(top_ui_margin)
 	
 	var top_ui_hbox = HBoxContainer.new()
@@ -671,8 +714,7 @@ func setup_scoreboard():
 	
 	restart_btn.custom_minimum_size = Vector2(108, 108)
 	var screen_w = get_viewport_rect().size.x
-	var screen_h = get_viewport_rect().size.y
-	restart_btn.position = Vector2((screen_w - 108.0) / 2.0, (screen_h / 2.0) + ARENA_RADIUS + 140.0)
+	restart_btn.position = Vector2((screen_w - 108.0) / 2.0, CENTER.y + ARENA_RADIUS + 40.0)
 	
 	restart_btn.visible = false
 	restart_btn.pressed.connect(func(): Global.play_click(); _on_restart_pressed())

@@ -146,18 +146,32 @@ def test_pitch_layout_and_contrast():
     with open(r"c:\Users\egebatir\Documents\futbol\pitch.gd", "r", encoding="utf-8") as f:
         p_content = f.read()
 
-    # Check top margin alignment (scoreboard and buttons both at margin_top 32)
-    if 'score_margin.add_theme_constant_override("margin_top", 240.0)' in p_content and 'top_ui_margin.add_theme_constant_override("margin_top", 120)' in p_content:
-        print("PASS: Scoreboard and top buttons aligned with margin_top = 240/120!")
+    # Check top margin alignment (scoreboard and buttons harmonized at margin_top = 64)
+    if 'score_margin.add_theme_constant_override("margin_top", 64)' in p_content and 'top_ui_margin.add_theme_constant_override("margin_top", 64)' in p_content:
+        print("PASS: Scoreboard and top buttons aligned with harmonized margin_top = 64!")
     else:
         print("FAIL: Scoreboard and top buttons top margin mismatch")
         return False
 
+    # Check Camera2D anchor_mode fixed top-left to avoid mobile bottom-right distortion
+    if 'game_camera.anchor_mode = Camera2D.ANCHOR_MODE_FIXED_TOP_LEFT' in p_content:
+        print("PASS: Camera2D anchor_mode is ANCHOR_MODE_FIXED_TOP_LEFT!")
+    else:
+        print("FAIL: Camera2D anchor_mode is not ANCHOR_MODE_FIXED_TOP_LEFT")
+        return False
+
     # Check restart_btn position below pitch
-    if '(screen_h / 2.0) + ARENA_RADIUS + 140.0' in p_content:
-        print("PASS: restart_btn is positioned below the pitch!")
+    if 'CENTER.y + ARENA_RADIUS + 40.0' in p_content:
+        print("PASS: restart_btn is positioned dynamically below the pitch!")
     else:
         print("FAIL: restart_btn position is not below the pitch")
+        return False
+
+    # Check scoreboard team crest icons
+    if 't1_icon' in p_content and 't2_icon' in p_content:
+        print("PASS: Scoreboard includes team crest icons!")
+    else:
+        print("FAIL: Scoreboard missing team crest icons")
         return False
 
     # Check event_lbl centered (no position.y -= 100 on event_lbl)
