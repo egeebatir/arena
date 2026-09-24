@@ -564,7 +564,7 @@ func _build_ui():
 	add_child(ver_margin)
 	
 	var ver_lbl = Label.new()
-	ver_lbl.text = "v1.0.27"
+	ver_lbl.text = "v1.0.28"
 	ver_lbl.add_theme_font_override("font", custom_font)
 	ver_lbl.add_theme_font_size_override("font_size", 16)
 	ver_lbl.add_theme_color_override("font_color", Color8(130, 165, 195, 130))

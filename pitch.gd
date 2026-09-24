@@ -442,9 +442,6 @@ func _ready():
 
 	ball1.init_ball(Global.home_team_name, CENTER, ARENA_RADIUS)
 	ball2.init_ball(Global.away_team_name, CENTER, ARENA_RADIUS, ball1.position)
-	var themes_list = Global.THEMES.keys()
-	var random_theme = themes_list[randi() % themes_list.size()]
-	active_theme = Global.THEMES[random_theme]
 	setup_scoreboard()
 	
 	Global.remove_all_banners()
@@ -576,8 +573,11 @@ func _clean_match_banner():
 			admob_node.disconnect("banner_ad_loaded", Callable(self, "_on_banner_ad_loaded"))
 		if admob_node.is_connected("banner_ad_failed_to_load", Callable(self, "_on_banner_ad_failed_to_load")):
 			admob_node.disconnect("banner_ad_failed_to_load", Callable(self, "_on_banner_ad_failed_to_load"))
-		if match_banner_ad_id != "" and admob_node.has_method("destroy_banner_ad"):
-			admob_node.destroy_banner_ad(match_banner_ad_id)
+		if match_banner_ad_id != "":
+			if admob_node.has_method("remove_banner_ad"):
+				admob_node.remove_banner_ad(match_banner_ad_id)
+			elif admob_node.has_method("hide_banner_ad"):
+				admob_node.hide_banner_ad(match_banner_ad_id)
 		Global.remove_all_banners()
 		match_banner_ad_id = ""
 		if admob_node.has_method("set_banner_position"):

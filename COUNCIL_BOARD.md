@@ -1,6 +1,6 @@
 # 🏛️ BOL GOL FUTBOL: ÇOKLU-AJAN MECLİSİ (COUNCIL BOARD)
 > **Ekosistem Durum ve Karar Masası (Blackboard)**  
-> *Son Güncelleme: 2026-09-24* | *Durum: v1.0.27 Ekosistem Sürümü Tamamlandı — Katı/Opak İçerikli 5 Yeni Kulüp Arması, Büyütülmüş Top İçi Logo & Arma Boyutlandırması, Akıllı Boyut Kısıtlamalı Takım Seçim Kaydırma Alanı, Şapka/Taç Boşluk Rahatlatmaları, Ferah Skorbord & Buton Mesafesi, Dokunsal Ayarlar Sliderları & Scroll Grabber, Sadeleştirilmiş Tek Buton Web Liderlik Tablosu Entegrasyonu (%100 Kusursuz QA Onayı)*
+> *Son Güncelleme: 2026-09-24* | *Durum: v1.0.28 Ekosistem Sürümü Tamamlandı — Dinamik Web Liderlik Tablosu & Skor Senkronizasyon Koruması, Sahada Kesin Tema Uyumu, Pro VIP Altın Üst Bar, Çark Tekli Çevirme Kilidi, %80 Hafifletilmiş Kusursuz 800x800 Kulüp Armaları (%100 Kusursuz QA Onayı)*
 
 ---
 
@@ -8,10 +8,10 @@
 
 | Proje | Konum / Repo | Odak Alanı | Canlı Durum |
 | :--- | :--- | :--- | :--- |
-| **⚽ Mobil Oyun (futbol)** | `c:\Users\egebatir\Documents\futbol`<br>*(arena.git - master)* | Godot 4.6 GDScript, UI/UX, AdMob, Google Play | ✅ 100% Hazır (v1.0.27 Build 27 Testleri Başarılı) |
+| **⚽ Mobil Oyun (futbol)** | `c:\Users\egebatir\Documents\futbol`<br>*(arena.git - master)* | Godot 4.6 GDScript, UI/UX, AdMob, Google Play | ✅ 100% Hazır (v1.0.28 Build 28 Testleri Başarılı) |
 | **🎬 Otomasyon (futbol_automation)** | `c:\Users\egebatir\Documents\futbol_automation`<br>*(bolgolfutbolotonom.git - main)* | 9:16 Shorts/Reels Video, AI Metadata, Rastgele Tema & Skin | ✅ 100% Hazır (Rastgele Temalar & Top Skinleri) |
-| **🌐 Web & Landing (webfutbol)** | `c:\Users\egebatir\Documents\Bol Gol Futbol\webfutbol`<br>*(webfutbol.git - main / ebstudyo.com)* | Canlı Web Sitesi (HTML5/WASM), AdSense & SEO DevLog, 136 Takım, Canlı Liderlik Tablosu | ✅ v1.0.27 Hazır (Web Liderlik Tablosu & 1-Tıkla Beta Katılım) |
-| **📱 Google Play Store** | *Console / ASO (com.ebstudyo.bolgol)* | 5 Dil (TR, EN, ES, PT, IT), İkon, Tanıtım, Güncelleme Notları | 🟢 v1.0.27 Paketi Hazır (Build 27) |
+| **🌐 Web & Landing (webfutbol)** | `c:\Users\egebatir\Documents\Bol Gol Futbol\webfutbol`<br>*(webfutbol.git - main / ebstudyo.com)* | Canlı Web Sitesi (HTML5/WASM), AdSense & SEO DevLog, 136 Takım, Canlı Liderlik Tablosu | ✅ v1.0.28 Hazır (Dinamik Canlı Liderlik & Skor Senkronizasyon API) |
+| **📱 Google Play Store** | *Console / ASO (com.ebstudyo.bolgol)* | 5 Dil (TR, EN, ES, PT, IT), İkon, Tanıtım, Güncelleme Notları | 🟢 v1.0.28 Paketi Hazır (Build 28) |
 
 ---
 
@@ -100,13 +100,26 @@
 - [x] **Liderlik Tablosu Tek Buton Sadeleştirmesi:** 2 ayrı buton yerine doğrudan web liderlik tablosuna (`https://www.ebstudyo.com/liderlik-tablosu/`) yönlendiren tek ve belirgin "KÜRESEL LİDERLİK TABLOSU ↗" butonu konumlandırıldı.
 - [x] **Versiyon Yükseltmesi (v1.0.27):** Sürüm kodu 27, sürüm adı "1.0.27" (`export_presets.cfg`, `welcome_screen.gd`, `COUNCIL_BOARD.md`).
 
+### v1.0.28 Dinamik Liderlik, Pro VIP Üst Bar & %80 Hafifletilmiş Armalar (2026-09-24):
+- [x] **Hızlı Maç Çıkışında Alt Banner Sızıntı Koruması (`main_menu.gd` & `pitch.gd`):** Maçtan hızlı çıkış yapıldığında maçın `BOTTOM` banner reklamının ana menüde görünmesi sorunu çözüldü; `_clean_match_banner()` içinde `remove_banner_ad` çağrısı düzeltildi, `main_menu.gd` banner yüklendiğinde pozisyon kontrolü yapılarak alt banner derhal imha edilip yerine üst banner istendi.
+- [x] **Web Canlı Liderlik Tablosu ve Skor Senkronizasyon Koruması:**
+  - `webfutbol/liderlik-tablosu/index.html` içindeki tüm mock/sahte oyuncu ve kulüp satırları kaldırıldı; tablo doğrudan `api/sync_score.php` (ve `leaderboard.json`) üzerinden gerçek oyuncularla dinamik dolduruldu.
+  - Oyunda favori takım seçmeden veya boş kadroyla "Skoru Senkronize Et" butonuna basan oyunculara 5 dilde (TR, ENG, ESP, POR, ITA) uyarı bildirimi (`_show_toast`) gösterildi.
+  - `webfutbol/deploy.py` içindeki `IGNORE_FILES` listesine `leaderboard.json` eklenerek canlı oyuncu verilerinin deploy sırasında silinmesi engellendi.
+- [x] **Saha Butonlarında Sabit Tema Rengi (`pitch.gd`):** Maça başlarken temanın rastgele seçilmesi (`active_theme` override) kaldırıldı; saha içi butonlar ve arayüz kesin olarak kullanıcının seçtiği aktif tema rengini benimsedi.
+- [x] **Pro VIP Özel Üst Bar (`main_menu.gd`):** Reklam alanı kapalı olan Pro üyeler için ana menünün üst boşluğuna özel etkileşimli altın kart yerleştirildi; Kaptan Adı, Favori Kulüp ve 5 dilde aktif VIP avantajları dinamik olarak gösterildi.
+- [x] **Şanslı Çark Tekli Çevirme Güvencesi (`main_menu.gd`):** Ödüllü reklam izlendikten sonra çark dönerken tekrar çevirme butonuna basılması ve hakların karışması engellendi; çark dönmeye başladığı anda buton kilitlendi ve ad spin hakkı anında tüketildi.
+- [x] **Kusursuz 800x800 Kulüp Arması Sıkıştırması (%80 Boyut Tasarrufu):** 5 yeni kulüp arması (`bar1`, `psg1`, `bay1`, `bvb1`, `mia1`) ve 300 KB üzeri ağır armalar, 800x800 tuval boyutu ve görsel keskinlik korunarak, iç şeffaflık sıfır (%100 opak) ve dış şeffaflık %100 olacak şekilde 256 renk palet optimizasyonuyla ~1 MB'tan 140-250 KB seviyesine düşürüldü.
+- [x] **Versiyon Yükseltmesi (v1.0.28):** Sürüm kodu 28, sürüm adı "1.0.28" (`export_presets.cfg`, `welcome_screen.gd`, `COUNCIL_BOARD.md`).
+
 ---
 
 ## 🛡️ ADVERSARIAL QA ONAY GÜNLÜĞÜ (AUDIT LOG)
 
-* **2026-09-24 19:20:** `futbol`: `python tests/test_backend_logic.py` çalıştırıldı — **Tüm Motor, Menü, Kontrast ve Tema Testleri Başarılı (%100 PASS)**.
-* **2026-09-24 19:20:** `futbol`: `python tests/test_ecosystem_health.py` çalıştırıldı — **4/4 Ekosistem Testi Başarılı (%100 PASS)**.
-* **2026-09-24 19:20:** `futbol`: `python tests/test_version_integrity.py` çalıştırıldı — **6/6 Sürüm ve Paket Bütünlüğü Başarılı (%100 PASS)**.
-* **2026-09-24 19:20:** 5 Kulüp Arması Şeffaflık Denetimi: `bar1`, `psg1`, `bay1`, `bvb1`, `mia1` için iç şeffaflık sıfır (0), tam katı opaklık (%100) doğrulandı.
-* **Genel QA Statüsü:** 🏛️ **YEŞİL (v1.0.27 Sıfır Hata & Sıfır Nil ile Doğrulandı)**.
+* **2026-09-24 20:03:** `futbol`: `python tests/verify_ecosystem_hard.py` çalıştırıldı — **4 GATEDE %100 BAŞARI (Zero Defects, 120 Frame Headless Godot, Web 200, Medya, Shop & Armalar PASS)**.
+* **2026-09-24 20:03:** `futbol`: `python tests/test_backend_logic.py` çalıştırıldı — **Tüm Motor, Menü, Görev, Kontrast ve Tema Testleri Başarılı (%100 PASS)**.
+* **2026-09-24 20:03:** `futbol`: `python tests/test_ecosystem_health.py` çalıştırıldı — **4/4 Ekosistem Testi Başarılı (%100 PASS)**.
+* **2026-09-24 20:03:** `futbol`: `python tests/test_version_integrity.py` çalıştırıldı — **6/6 Sürüm ve Paket Bütünlüğü Başarılı (%100 PASS)**.
+* **2026-09-24 20:03:** Kulüp Armaları Sıkıştırma Denetimi: 800x800 boyut, min iç alfa 255 (iç şeffaflık sıfır), dış alfa 0, dosya boyutları 140-255 KB (%80 tasarruf) doğrulandı.
+* **Genel QA Statüsü:** 🏛️ **YEŞİL (v1.0.28 Sıfır Hata & Sıfır Nil ile Doğrulandı, Dağıtıma Hazır)**.
 

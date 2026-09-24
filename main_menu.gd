@@ -6132,37 +6132,45 @@ func _ensure_vip_top_bar():
 	vip_margin.add_theme_constant_override("margin_top", 42)
 	vip_margin.add_theme_constant_override("margin_left", 20)
 	vip_margin.add_theme_constant_override("margin_right", 20)
-	vip_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	vip_top_bar = vip_margin
 	add_child(vip_margin)
 	move_child(vip_margin, min(2, max(0, get_child_count() - 1)))
 	
-	var vip_panel = PanelContainer.new()
-	vip_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	vip_panel.custom_minimum_size = Vector2(min(get_viewport_rect().size.x - 40, 660), 74)
-	vip_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	
+	var vip_btn = Button.new()
+	vip_btn.custom_minimum_size = Vector2(min(get_viewport_rect().size.x - 40, 660), 76)
+	vip_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var vp_style = StyleBoxFlat.new()
 	vp_style.bg_color = active_theme.bg_bottom.darkened(0.25)
-	vp_style.bg_color.a = 0.95
+	vp_style.bg_color.a = 0.96
 	vp_style.corner_radius_top_left = 16; vp_style.corner_radius_top_right = 16
 	vp_style.corner_radius_bottom_left = 16; vp_style.corner_radius_bottom_right = 16
 	vp_style.border_width_left = 2; vp_style.border_width_right = 2
 	vp_style.border_width_top = 2; vp_style.border_width_bottom = 4
 	vp_style.border_color = Color8(255, 215, 0)
-	vp_style.shadow_color = Color8(0, 0, 0, 150)
-	vp_style.shadow_size = 12
+	vp_style.shadow_color = Color8(0, 0, 0, 160)
+	vp_style.shadow_size = 14
 	vp_style.shadow_offset = Vector2(0, 3)
 	vp_style.content_margin_left = 16; vp_style.content_margin_right = 16
 	vp_style.content_margin_top = 8; vp_style.content_margin_bottom = 8
-	vip_panel.add_theme_stylebox_override("panel", vp_style)
-	vip_margin.add_child(vip_panel)
+	vip_btn.add_theme_stylebox_override("normal", vp_style)
+	
+	var vp_hover = vp_style.duplicate()
+	vp_hover.bg_color = active_theme.bg_bottom.lightened(0.08)
+	vip_btn.add_theme_stylebox_override("hover", vp_hover)
+	
+	var vp_press = vp_style.duplicate()
+	vp_press.border_width_bottom = 2
+	vp_press.content_margin_top = 10
+	vip_btn.add_theme_stylebox_override("pressed", vp_press)
+	vip_btn.add_theme_stylebox_override("focus", vp_style)
+	vip_margin.add_child(vip_btn)
 	
 	var hb = HBoxContainer.new()
 	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hb.set_anchors_preset(Control.PRESET_FULL_RECT)
 	hb.alignment = BoxContainer.ALIGNMENT_CENTER
 	hb.add_theme_constant_override("separation", 14)
-	vip_panel.add_child(hb)
+	vip_btn.add_child(hb)
 	
 	if ResourceLoader.exists("res://kings_crown.png"):
 		var crown_rect = TextureRect.new()
@@ -6179,8 +6187,16 @@ func _ensure_vip_top_bar():
 	vb.add_theme_constant_override("separation", 0)
 	hb.add_child(vb)
 	
+	var cap_name = Global.get_active_custom_player_name()
+	var fav_team = Global.favorite_team if Global.favorite_team != "" else "BOL GOL"
+	
 	var title_lbl = Label.new()
-	title_lbl.text = LANG.get(Global.current_lang, LANG["ENG"]).get("VIP_TITLE", "⭐ VIP AYRICALIKLARI AKTİF ⭐")
+	var vip_title_template = "⭐ PRO VIP: %s (%s) ⭐"
+	if Global.current_lang == "ENG": vip_title_template = "⭐ PRO VIP: %s (%s) ⭐"
+	elif Global.current_lang == "ESP": vip_title_template = "⭐ PRO VIP: %s (%s) ⭐"
+	elif Global.current_lang == "POR": vip_title_template = "⭐ PRO VIP: %s (%s) ⭐"
+	elif Global.current_lang == "ITA": vip_title_template = "⭐ PRO VIP: %s (%s) ⭐"
+	title_lbl.text = vip_title_template % [cap_name, fav_team]
 	title_lbl.add_theme_font_override("font", custom_font)
 	title_lbl.add_theme_font_size_override("font_size", 28)
 	title_lbl.add_theme_color_override("font_color", Color8(255, 220, 60))
@@ -6188,16 +6204,19 @@ func _ensure_vip_top_bar():
 	title_lbl.add_theme_constant_override("shadow_offset_y", 2)
 	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(title_lbl)
-	ui_labels.append({"node": title_lbl, "key": "VIP_TITLE", "type": "label"})
 	
 	var desc_lbl = Label.new()
-	desc_lbl.text = LANG.get(Global.current_lang, LANG["ENG"]).get("VIP_DESC", "Reklamsız • Tüm Kozmetikler Açık • Sınırsız Oyun")
+	var perks_txt = "Sıfır Reklam • Tüm Kozmetikler Açık • 2x Jeton Bonusu"
+	if Global.current_lang == "ENG": perks_txt = "Zero Ads • All Cosmetics Unlocked • 2x Coins Active"
+	elif Global.current_lang == "ESP": perks_txt = "Sin Anuncios • Cosméticos Desbloqueados • 2x Monedas"
+	elif Global.current_lang == "POR": perks_txt = "Zero Anúncios • Cosméticos Desbloqueados • 2x Moedas"
+	elif Global.current_lang == "ITA": perks_txt = "Zero Pubblicità • Cosmetici Sbloccati • 2x Monete"
+	desc_lbl.text = perks_txt
 	desc_lbl.add_theme_font_override("font", custom_font)
 	desc_lbl.add_theme_font_size_override("font_size", 18)
 	desc_lbl.add_theme_color_override("font_color", Color8(240, 245, 255, 220))
 	desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(desc_lbl)
-	ui_labels.append({"node": desc_lbl, "key": "VIP_DESC", "type": "label"})
 	
 	if ResourceLoader.exists("res://kings_crown.png"):
 		var crown_rect2 = TextureRect.new()
@@ -6208,6 +6227,11 @@ func _ensure_vip_top_bar():
 		crown_rect2.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		crown_rect2.flip_h = true
 		hb.add_child(crown_rect2)
+		
+	vip_btn.pressed.connect(func():
+		Global.play_click()
+		_switch_tab(2)
+	)
 
 func _ensure_house_ad_bar():
 	if Global.is_premium or menu_banner_ad_id != "":
@@ -6546,14 +6570,16 @@ func _on_rewarded_video_earned(_ad_info = null, _reward_data = null):
 	is_rewarded_loading = false
 	if active_reward_purpose == "wheel":
 		active_reward_purpose = "general"
-		Global.lucky_wheel_pending_ad_spins += 1
-		Global.save_progression()
 		if wheel_on_reward_callback.is_valid():
 			var cb = wheel_on_reward_callback
 			wheel_on_reward_callback = Callable()
 			cb.call()
-		elif current_wheel_status_callback.is_valid():
-			current_wheel_status_callback.call()
+		else:
+			Global.lucky_wheel_pending_ad_spins = 1
+			Global.lucky_wheel_ad_spins_used += 1
+			Global.save_progression()
+			if current_wheel_status_callback.is_valid():
+				current_wheel_status_callback.call()
 		_request_rewarded_ad()
 		return
 	
@@ -6672,13 +6698,29 @@ func _on_banner_loaded(ad_info, _response_info = null):
 	var ad_id = ad_info.get_ad_id() if ad_info else ""
 	var admob_node = Global.get_admob()
 	
-	# Guard: If banner is BOTTOM (leaked from match), reject and destroy it immediately
-	if ad_info and ad_info.has_method("get_ad_position"):
-		if ad_info.get_ad_position() == LoadAdRequest.AdPosition.BOTTOM:
-			print("[AdMob] Rejected lingering BOTTOM banner on Main Menu.")
-			if admob_node and admob_node.has_method("destroy_banner_ad") and ad_id != "":
-				admob_node.destroy_banner_ad(ad_id)
-			return
+	# Guard: If banner is BOTTOM (leaked from match), reject and remove it immediately
+	var is_bottom = false
+	if ad_info:
+		if ad_info.has_method("get_load_ad_request"):
+			var lreq = ad_info.get_load_ad_request()
+			if lreq and lreq.has_method("get_ad_position"):
+				if lreq.get_ad_position() == LoadAdRequest.AdPosition.BOTTOM:
+					is_bottom = true
+		if not is_bottom and "_data" in ad_info:
+			var raw_req = ad_info._data.get("load_ad_request", {})
+			if raw_req is Dictionary and str(raw_req.get("ad_position", "")).to_upper() == "BOTTOM":
+				is_bottom = true
+				
+	if is_bottom:
+		print("[AdMob] Rejected lingering BOTTOM banner on Main Menu.")
+		if admob_node:
+			if ad_id != "" and admob_node.has_method("remove_banner_ad"):
+				admob_node.remove_banner_ad(ad_id)
+			elif admob_node.has_method("hide_banner_ad"):
+				admob_node.hide_banner_ad(ad_id)
+			Global.remove_all_banners()
+		_ensure_menu_top_banner()
+		return
 			
 	menu_banner_ad_id = ad_id
 	print("[AdMob] Unified Menu Banner loaded. (ad_id: ", ad_id, ")")
@@ -7164,7 +7206,9 @@ func _open_lucky_wheel():
 		close_btn.disabled = true
 		
 		if not is_ad:
-			Global.lucky_wheel_free_spins_used += 1
+			Global.lucky_wheel_free_spins_used = 1
+		else:
+			Global.lucky_wheel_pending_ad_spins = 0
 		Global.save_progression()
 			
 		var res = Global.spin_lucky_wheel()
@@ -7222,13 +7266,11 @@ func _open_lucky_wheel():
 		if free_avail:
 			perform_spin.call(false)
 		elif pending_ad:
-			Global.lucky_wheel_pending_ad_spins = max(0, Global.lucky_wheel_pending_ad_spins - 1)
-			Global.save_progression()
 			perform_spin.call(true)
 		elif ad_avail:
 			var started = _show_admob_rewarded_for_wheel(func():
 				if not is_instance_valid(overlay): return
-				Global.lucky_wheel_pending_ad_spins += 1
+				Global.lucky_wheel_pending_ad_spins = 1
 				Global.lucky_wheel_ad_spins_used += 1
 				Global.save_progression()
 				spin_btn.disabled = false
@@ -7423,8 +7465,38 @@ func _open_leaderboard():
 	sync_btn.add_theme_color_override("font_color", Color8(20, 15, 0) if active_theme.accent.get_luminance() > 0.5 else Color.WHITE)
 	sync_btn.pressed.connect(func():
 		Global.play_click()
-		Global.submit_score(int(Global.favorite_team_goals_scored))
-		_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("LEADERBOARD_SYNC", "SKORU SENKRONİZE ET"))
+		var sync_team = Global.favorite_team
+		var squad_data = Global.custom_player_names.get(sync_team, {}) if sync_team != "" else {}
+		var has_squad = false
+		if typeof(squad_data) == TYPE_DICTIONARY:
+			for k in squad_data:
+				if String(squad_data[k]).strip_edges() != "":
+					has_squad = true
+					break
+		elif squad_data is Array:
+			for s in squad_data:
+				if String(s).strip_edges() != "":
+					has_squad = true
+					break
+
+		if sync_team == "" or not has_squad:
+			var warn_txt = "Skorunu senkronize etmek için önce bir favori takım ve kadro belirlemelisin!"
+			if Global.current_lang == "ENG": warn_txt = "Please select a favorite team and set up your squad before synchronizing!"
+			elif Global.current_lang == "ESP": warn_txt = "¡Selecciona un equipo favorito y configura tu plantilla antes de sincronizar!"
+			elif Global.current_lang == "POR": warn_txt = "Selecione uma equipa favorita e defina o seu plantel antes de sincronizar!"
+			elif Global.current_lang == "ITA": warn_txt = "Seleziona una squadra preferita e imposta la tua rosa prima di sincronizzare!"
+			_show_toast(warn_txt)
+			return
+
+		var goals_count = int(Global.favorite_team_goals_scored)
+		Global.submit_score(goals_count)
+		_sync_score_to_web(Global.get_active_custom_player_name(), sync_team, goals_count)
+		var succ_txt = "Skorun başarıyla eşitlendi! (%d Gol)"
+		if Global.current_lang == "ENG": succ_txt = "Score successfully synchronized! (%d Goals)"
+		elif Global.current_lang == "ESP": succ_txt = "¡Puntuación sincronizada con éxito! (%d Goles)"
+		elif Global.current_lang == "POR": succ_txt = "Pontuação sincronizada com sucesso! (%d Golos)"
+		elif Global.current_lang == "ITA": succ_txt = "Punteggio sincronizzato con successo! (%d Gol)"
+		_show_toast(succ_txt % goals_count)
 	)
 	global_vbox.add_child(sync_btn)
 	
@@ -7460,3 +7532,23 @@ func _open_leaderboard():
 		overlay.queue_free()
 	)
 	vbox.add_child(close_btn)
+
+func _sync_score_to_web(p_name: String, team: String, goals: int):
+	var http = HTTPRequest.new()
+	add_child(http)
+	http.timeout = 10.0
+	http.request_completed.connect(func(result, response_code, headers, body):
+		http.queue_free()
+		if response_code == 200:
+			print("[LeaderboardSync] Web leaderboard synced successfully: ", p_name, " (", team, "): ", goals)
+	)
+	var url = "https://www.ebstudyo.com/api/sync_score.php"
+	var headers = ["Content-Type: application/json"]
+	var payload = JSON.stringify({
+		"player_name": p_name,
+		"team_name": team,
+		"goals": goals,
+		"device_id": OS.get_unique_id()
+	})
+	http.request(url, headers, HTTPClient.METHOD_POST, payload)
+
