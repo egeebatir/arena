@@ -13,7 +13,8 @@ func _ready():
 	print("[Bol Gol Automation] Starting Match Runner...")
 	print("==================================================")
 	
-	# Rule 1: STRICTLY NO ADS - Enable Premium Mode
+	# Rule 1: STRICTLY NO ADS - Enable Premium Mode & Automation Flag
+	Global.is_automation_mode = true
 	Global.set_premium(true)
 	Global.remove_all_banners()
 
@@ -22,9 +23,10 @@ func _ready():
 		Global.bg_music_player.stop()
 		Global.bg_music_player.volume_db = -80.0
 	Global.vol_settings["menu_music"] = 0.0
-	# Enable ball bounce & goal sounds clearly (subtle bounce sound)
-	Global.vol_settings["collision"] = 0.04
-	Global.vol_settings["music"] = 1.0
+	# Enhanced Audio Dynamics for High-CTR Shorts
+	Global.vol_settings["collision"] = 0.05
+	Global.vol_settings["music"] = 1.0       # Max goal celebration & music
+	Global.vol_settings["stadium"] = 0.65     # Enhanced stadium crowd roar
 	
 	# Load automation configuration
 	var home_team = "GALATA FK"
@@ -70,18 +72,34 @@ func _ready():
 		away_dict["p" + str(i + 1)] = away_stars[i]
 	Global.custom_player_names[away_team] = away_dict
 
-	# Rule 3: Fast and exciting match duration (0 = 24s total: 12s per half)
+	# Rule 3: Fast match duration (0 = 24s standard duration)
 	Global.match_duration = 0
+	
+	# Rule 4: Visual Variety - Random Theme & Random Ball Skins
+	Global.equipped_hat = "none"
+	var available_themes = Global.THEMES.keys()
+	if available_themes.size() > 0:
+		Global.current_theme = available_themes[randi() % available_themes.size()]
 	
 	# Instance the pitch
 	pitch_inst = pitch_scene.instantiate()
 	add_child(pitch_inst)
 
+	# Enforce exact fixed added time for 100% video duration uniformity
+	pitch_inst.added_time_1 = 1
+	pitch_inst.added_time_2 = 2
+
+	var available_skins = ["default", "gold", "neon", "chrome", "lava", "ice"]
+	if pitch_inst.get("ball1"):
+		pitch_inst.ball1.ball_skin = available_skins[randi() % available_skins.size()]
+	if pitch_inst.get("ball2"):
+		pitch_inst.ball2.ball_skin = available_skins[randi() % available_skins.size()]
+
 	# Rule: Exact mobile phone proportions (1.0x native scale)
 	if pitch_inst.get("game_camera"):
 		pitch_inst.game_camera.zoom = Vector2(1.0, 1.0)
 
-	print("[Bol Gol Automation] Pitch scene instantiated with exact mobile phone proportions!")
+	print("[Bol Gol Automation] Pitch instantiated! Safe top margin, theme: ", Global.current_theme)
 
 func _process(delta: float):
 	if is_quitting or not pitch_inst:
@@ -101,17 +119,16 @@ func _process(delta: float):
 				pitch_inst.state = "FULLTIME"
 				pitch_inst.end_match_timer = 0
 
-	# Normal Fulltime Check: Record from start to the very end
+	# Uniform duration check: Total match duration locked to exactly 1800 frames (30.00s at 60 FPS)
+	# 60 (intro) + 30 (delay1) + 736 (half1) + 45 (ht) + 30 (delay2) + 752 (half2) + 147 (ft) = 1800 frames
 	if pitch_inst.state == "FULLTIME":
-		# Wait 2.2 seconds of post-match screen to show final score clearly
-		if pitch_inst.end_match_timer >= 2.2 * pitch_inst.FPS_TARGET:
-			_finish_match("Match ended normally at Full Time.")
+		if pitch_inst.end_match_timer >= 147:
+			_finish_match("Match ended normally at Full Time (Exact 1800 frames / 30.0s).")
 			return
 
 	# Safety fallback timeout
 	if elapsed_time >= max_seconds:
 		_finish_match("Safety timeout reached (" + str(max_seconds) + "s).")
-
 
 func _finish_match(reason: String):
 	is_quitting = true
@@ -121,4 +138,18 @@ func _finish_match(reason: String):
 	print("[Bol Gol Automation] " + reason)
 	print("[Bol Gol Automation] Final Score: " + str(final_s1) + " - " + str(final_s2))
 	print("==================================================")
+	
+	# Save match result to JSON for python pipeline post-match processing
+	var result_data = {
+		"home_team": Global.home_team_name,
+		"away_team": Global.away_team_name,
+		"home_score": final_s1,
+		"away_score": final_s2,
+		"elapsed_time": elapsed_time
+	}
+	var res_file = FileAccess.open("res://tools/automation_result.json", FileAccess.WRITE)
+	if res_file:
+		res_file.store_string(JSON.stringify(result_data))
+		res_file.close()
+		
 	get_tree().quit(0)

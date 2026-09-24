@@ -1,17 +1,17 @@
 {
-  "home_team": "ARSENAL SC",
-  "away_team": "CHELSEA SC",
+  "home_team": "SAMSUN FK",
+  "away_team": "TRABZON FK",
   "home_stars": [
-    "Bukayo Saka",
-    "Martin Odegaard",
-    "Kai Havertz"
+    "Marius Mouandilmadji",
+    "Olivier Ntcham",
+    "Emre Kılınç"
   ],
   "away_stars": [
-    "Cole Palmer",
-    "Nicolas Jackson",
-    "Enzo Fernandez"
+    "Simon Banza",
+    "Edin Visca",
+    "Uğurcan Çakır"
   ],
   "mode": "regular",
   "max_seconds": 45.0,
-  "lang": "ENG"
+  "lang": "TR"
 }

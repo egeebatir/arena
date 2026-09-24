@@ -28,9 +28,9 @@ var LANG = {
 # --- NEW SETTINGS & THEMES ---
 var master_vol = 1.0
 var vol_settings = {
-	"stadium": 0.3,
+	"stadium": 0.55,
 	"menu_music": 0.4,
-	"music": 0.6,
+	"music": 0.85,
 	"collision": 0.02,
 	"whistle": 0.4
 }
@@ -40,6 +40,7 @@ var shake_enabled = true
 var vibration_enabled = true
 var match_duration = 1 # 0 = Kısa (24s), 1 = Normal (36s), 2 = Uzun (48s)
 var match_history: Array = [] # [{home, away, home_score, away_score}]
+var is_automation_mode = false
 
 # --- PROGRESSION & ADS ---
 var ad_credits: int = 0
