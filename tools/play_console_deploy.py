@@ -96,11 +96,23 @@ def upload_aab(aab_path, tracks=["internal", "alpha"], release_name=None, releas
             release_notes = [
                 {
                     "language": "tr-TR",
-                    "text": "• Günlük Görevler ve Çarkıfelek (Lucky Wheel) ödül sistemi eklendi.\n• Google Play Oyunlar (Başarımlar ve Liderlik Tablosu) entegrasyonu geliştirildi.\n• Yeni top görünümleri ve taç özelleştirmeleri eklendi.\n• Performans optimizasyonları ve arayüz iyileştirmeleri yapıldı."
+                    "text": "• Küresel Canlı Liderlik Tablosu: Skorunuzu senkronize edin ve dünya sıralamasında yerinizi alın!\n• Pro VIP Ayrıcalığı: Reklamsız kullanıcılar için özel altın VIP profil kartı.\n• Yenilenen Kulüp Armaları: Barcelona, PSG, Bayern, Dortmund ve Miami Inter armaları 800x800 yüksek çözünürlükle optimize edildi.\n• Şanslı Çark Güvencesi: Tekli çevirme kilidi ve ödüllü reklam kontrolleri güçlendirildi.\n• Performans ve Arayüz: Ferahlatılmış skorbord, dokunsal ayar belirteçleri ve akıcı geçişler."
                 },
                 {
-                    "language": "en-IN",
-                    "text": "• Daily Quests and Lucky Wheel reward system added.\n• Google Play Games Services (Achievements & Leaderboards) enhanced.\n• New ball skins and crown customizations added.\n• Performance optimizations and UI enhancements."
+                    "language": "en-US",
+                    "text": "• Live Global Leaderboard: Sync your score and climb the worldwide rankings!\n• Pro VIP Experience: Exclusive Golden VIP card displaying Captain name, favorite club, and perks.\n• Enhanced Club Crests: High-definition 800x800 crests for Barcelona, PSG, Bayern, Dortmund, and Miami Inter.\n• Lucky Wheel Polish: Single-spin lock guarantee and enhanced rewarded spin flow.\n• Performance & UI: Refined scoreboard spacing, tactile settings sliders, and seamless transitions."
+                },
+                {
+                    "language": "es-ES",
+                    "text": "• Tabla de Clasificación Global: ¡Sincroniza tu puntuación y compite en el ranking mundial en vivo!\n• Experiencia Pro VIP: Tarjeta dorada exclusiva con nombre de Capitán, club favorito y ventajas VIP.\n• Nuevos Escudos de Clubes: Diseños 800x800 optimizados para Barcelona, PSG, Bayern, Dortmund e Inter Miami.\n• Ruleta de la Suerte: Control estricto de tirada única y recompensas garantizadas.\n• Rendimiento y UI: Marcador renovado, controles táctiles y transiciones de partido fluidas."
+                },
+                {
+                    "language": "pt-BR",
+                    "text": "• Classificação Global ao Vivo: Sincronize a sua pontuação e dispute o topo do ranking mundial!\n• Experiência Pro VIP: Cartão dourado exclusivo com o nome do Capitão, clube favorito e vantagens VIP.\n• Emblemas de Clubes Aprimorados: Novos emblemas 800x800 para Barcelona, PSG, Bayern, Dortmund e Miami Inter.\n• Roda da Sorte Otimizada: Bloqueio de giro único e fluxo de anúncios premiados refinado.\n• Desempenho e UI: Marcador ajustado, novos seletores táteis nas configurações e transições rápidas."
+                },
+                {
+                    "language": "it-IT",
+                    "text": "• Classifica Globale in Tempo Reale: Sincronizza il tuo punteggio e scala la classifica mondiale!\n• Esperienza Pro VIP: Esclusiva card dorata con nome Capitano, squadra del cuore e vantaggi premium.\n• Stemmi dei Club Ottimizzati: Grafiche 800x800 ad alta definizione per Barcellona, PSG, Bayern, Dortmund e Inter Miami.\n• Ruota della Fortuna Perfezionata: Blocco giro singolo garantito e gestione premi potenziata.\n• Prestazioni e UI: Spaziature tabellone raffinate, slider tattili nelle impostazioni e transizioni fluide."
                 }
             ]
 

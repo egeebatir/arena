@@ -7551,4 +7551,3 @@ func _sync_score_to_web(p_name: String, team: String, goals: int):
 		"device_id": OS.get_unique_id()
 	})
 	http.request(url, headers, HTTPClient.METHOD_POST, payload)
-
