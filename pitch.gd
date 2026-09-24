@@ -418,8 +418,8 @@ func _ready():
 	# Temporarily suspended to eliminate lag and await aesthetic overhaul
 	# add_child(stadium_crowd)
 	
-	added_time_1 = 1 if Global.is_automation_mode else _generate_added_time_1()
-	added_time_2 = 2 if Global.is_automation_mode else _generate_added_time_2()
+	added_time_1 = _generate_added_time_1()
+	added_time_2 = _generate_added_time_2()
 	target_yellow_cards = randi_range(1, 3)
 	
 	intro_timer = int(1.0 * FPS_TARGET)
@@ -1135,8 +1135,8 @@ func _reset_match_for_replay():
 	if is_instance_valid(s1_lbl): s1_lbl.text = "0"
 	if is_instance_valid(s2_lbl): s2_lbl.text = "0"
 	if is_instance_valid(time_lbl): time_lbl.text = "0'"
-	added_time_1 = 1 if Global.is_automation_mode else _generate_added_time_1()
-	added_time_2 = 2 if Global.is_automation_mode else _generate_added_time_2()
+	added_time_1 = _generate_added_time_1()
+	added_time_2 = _generate_added_time_2()
 	
 	if is_instance_valid(stadium_player):
 		stadium_player.stop()

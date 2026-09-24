@@ -1,15 +1,15 @@
 {
-  "home_team": "SAMSUN FK",
-  "away_team": "TRABZON FK",
+  "home_team": "KONYA FK",
+  "away_team": "BAŞAKŞEHIR FK",
   "home_stars": [
-    "Marius Mouandilmadji",
-    "Olivier Ntcham",
-    "Emre Kılınç"
+    "Umut Nayir",
+    "Pedrinho",
+    "Danijel Aleksic"
   ],
   "away_stars": [
-    "Simon Banza",
-    "Edin Visca",
-    "Uğurcan Çakır"
+    "Krzysztof Piatek",
+    "Deniz Türüç",
+    "Miguel Crespo"
   ],
   "mode": "regular",
   "max_seconds": 45.0,

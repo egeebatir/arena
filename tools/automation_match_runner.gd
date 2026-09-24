@@ -85,10 +85,8 @@ func _ready():
 	pitch_inst = pitch_scene.instantiate()
 	add_child(pitch_inst)
 
-	# Enforce exact fixed added time for 100% video duration uniformity
-	pitch_inst.added_time_1 = 1
-	pitch_inst.added_time_2 = 2
-
+	# Dynamic realistic added time (governed by match excitement & simulation events)
+	
 	var available_skins = ["default", "gold", "neon", "chrome", "lava", "ice"]
 	if pitch_inst.get("ball1"):
 		pitch_inst.ball1.ball_skin = available_skins[randi() % available_skins.size()]
@@ -119,12 +117,12 @@ func _process(delta: float):
 				pitch_inst.state = "FULLTIME"
 				pitch_inst.end_match_timer = 0
 
-	# Uniform duration check: Total match duration locked to exactly 1800 frames (30.00s at 60 FPS)
-	# 60 (intro) + 30 (delay1) + 736 (half1) + 45 (ht) + 30 (delay2) + 752 (half2) + 147 (ft) = 1800 frames
+	# Natural Fulltime Check: Record from start to full time + 2.2s post-match screen
 	if pitch_inst.state == "FULLTIME":
-		if pitch_inst.end_match_timer >= 147:
-			_finish_match("Match ended normally at Full Time (Exact 1800 frames / 30.0s).")
+		if pitch_inst.end_match_timer >= 2.2 * pitch_inst.FPS_TARGET:
+			_finish_match("Match ended normally at Full Time.")
 			return
+
 
 	# Safety fallback timeout
 	if elapsed_time >= max_seconds:

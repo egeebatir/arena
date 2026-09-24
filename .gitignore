@@ -8,6 +8,8 @@ build/
 *.bak
 *.zip
 tools/service_account.json
+tools/automation_config.json
+tools/automation_result.json
 .antigravity/
 convert.cs
 convert.ps1
