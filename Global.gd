@@ -56,6 +56,7 @@ func get_rewarded_ad_cooldown_left() -> float:
 func is_rewarded_ad_ready() -> bool:
 	return get_rewarded_ad_cooldown_left() <= 0.0
 
+const BALL_SKINS: Array = ["default", "gold", "neon", "chrome", "lava", "ice"]
 var unlocked_ball_skins: Array = ["default"]
 var equipped_ball_skin: String = "default"
 var unlocked_hats: Array = []
@@ -67,6 +68,8 @@ var is_premium: bool = false
 var premium_price_formatted: String = ""
 var home_selected: bool = true
 var away_selected: bool = true
+var last_selected_league_home: int = 1
+var last_selected_league_away: int = 1
 var custom_player_names: Dictionary = {}
 var unlocked_achievements: Array = []
 var favorite_team_goals_scored: int = 0
@@ -199,6 +202,10 @@ func unlock_achievement(achievement_key: String):
 			gps.unlockAchievement(ach_id)
 
 func show_achievements():
+	if not play_games_achievements_client and not Engine.has_singleton("GodotPlayGameServices"):
+		init_google_play_services()
+	if play_games_sign_in_client and play_games_sign_in_client.has_method("sign_in"):
+		play_games_sign_in_client.sign_in()
 	if play_games_achievements_client and play_games_achievements_client.has_method("show_achievements"):
 		play_games_achievements_client.show_achievements()
 	elif Engine.has_singleton("GodotPlayGameServices"):
@@ -696,34 +703,40 @@ var TEAMS = {
 	"CELTIC SC":      {"colors": [Color8(0, 128, 0), Color8(255, 255, 255)],   "short": "CLT", "league": "WORLD", "type": "club"}
 }
 
-func _ready():
-	for team_name in TEAMS:
-		var short_name = TEAMS[team_name]["short"]
-		
-		# ASSET MAPPING LAYER (Copyright/DMCA protection)
-		# Load generic logo based on team colors instead of official badges, preserving savegame keys.
-		var generic_fallback = "res://generic_logo.png"
-		var mapped_path = "res://assets/generic_" + short_name.to_lower() + ".png"
-		
-		if ResourceLoader.exists(mapped_path):
-			TEAM_LOGOS[team_name] = load(mapped_path)
-		elif ResourceLoader.exists("res://assets/" + short_name.to_lower() + ".png"):
-			TEAM_LOGOS[team_name] = load("res://assets/" + short_name.to_lower() + ".png")
-		elif ResourceLoader.exists("res://" + short_name.to_lower() + "1.png"):
-			TEAM_LOGOS[team_name] = load("res://" + short_name.to_lower() + "1.png")
-		elif (short_name == "FEN" or short_name == "FB") and ResourceLoader.exists("res://fb1.png"):
-			TEAM_LOGOS[team_name] = load("res://fb1.png")
-		elif (short_name == "GAL" or short_name == "GS") and ResourceLoader.exists("res://gs1.png"):
-			TEAM_LOGOS[team_name] = load("res://gs1.png")
-		elif (short_name == "TRA" or short_name == "TS") and ResourceLoader.exists("res://ts1.png"):
-			TEAM_LOGOS[team_name] = load("res://ts1.png")
-		elif (short_name == "MCI" or short_name == "MC") and ResourceLoader.exists("res://mc1.png"):
-			TEAM_LOGOS[team_name] = load("res://mc1.png")
-		elif ResourceLoader.exists(generic_fallback):
-			TEAM_LOGOS[team_name] = load(generic_fallback)
-		else:
-			TEAM_LOGOS[team_name] = null
+func get_team_logo(team_name: String) -> Texture2D:
+	if TEAM_LOGOS.has(team_name):
+		return TEAM_LOGOS[team_name]
+	if not TEAMS.has(team_name):
+		TEAM_LOGOS[team_name] = null
+		return null
+	var short_name = TEAMS[team_name].get("short", "")
+	var generic_fallback = "res://generic_logo.png"
+	var mapped_path = "res://assets/generic_" + short_name.to_lower() + ".png"
+	var tex: Texture2D = null
+	if ResourceLoader.exists(mapped_path):
+		tex = load(mapped_path)
+	elif ResourceLoader.exists("res://assets/" + short_name.to_lower() + ".png"):
+		tex = load("res://assets/" + short_name.to_lower() + ".png")
+	elif ResourceLoader.exists("res://" + short_name.to_lower() + "1.png"):
+		tex = load("res://" + short_name.to_lower() + "1.png")
+	elif (short_name == "FEN" or short_name == "FB") and ResourceLoader.exists("res://fb1.png"):
+		tex = load("res://fb1.png")
+	elif (short_name == "GAL" or short_name == "GS") and ResourceLoader.exists("res://gs1.png"):
+		tex = load("res://gs1.png")
+	elif (short_name == "TRA" or short_name == "TS") and ResourceLoader.exists("res://ts1.png"):
+		tex = load("res://ts1.png")
+	elif (short_name == "MCI" or short_name == "MC") and ResourceLoader.exists("res://mc1.png"):
+		tex = load("res://mc1.png")
+	elif ResourceLoader.exists(generic_fallback):
+		tex = load(generic_fallback)
+	TEAM_LOGOS[team_name] = tex
+	return tex
 
+func _ready():
+	# Strictly enforce portrait orientation on handheld and mobile devices (tablets and phones)
+	if OS.has_feature("mobile") or OS.get_name() in ["Android", "iOS"]:
+		DisplayServer.screen_set_orientation(DisplayServer.SCREEN_PORTRAIT)
+	
 	bg_music_player = AudioStreamPlayer.new()
 	bg_music_player.stream = preload("res://main_menu.mp3")
 	if bg_music_player.stream is AudioStreamMP3:
@@ -767,7 +780,7 @@ func play_click():
 
 func _update_bg_music_volume():
 	if is_instance_valid(bg_music_player):
-		var target_vol = master_vol * vol_settings.get("menu_music", 0.4) * 1.06
+		var target_vol = master_vol * vol_settings.get("menu_music", 0.4) * 1.113
 		if target_vol <= 0.01:
 			bg_music_player.volume_db = -80.0
 		else:

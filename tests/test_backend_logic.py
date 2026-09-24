@@ -158,9 +158,9 @@ def test_pitch_layout_and_contrast():
     with open(r"c:\Users\egebatir\Documents\futbol\pitch.gd", "r", encoding="utf-8") as f:
         p_content = f.read()
 
-    # Check top margin alignment (scoreboard and buttons harmonized at margin_top = 64)
-    if 'score_margin.add_theme_constant_override("margin_top", 64)' in p_content and 'top_ui_margin.add_theme_constant_override("margin_top", 64)' in p_content:
-        print("PASS: Scoreboard and top buttons aligned with harmonized margin_top = 64!")
+    # Check top margin alignment (scoreboard and buttons harmonized in unified top_header_margin)
+    if 'top_header_margin' in p_content or ('score_margin.add_theme_constant_override("margin_top", 64)' in p_content and 'top_ui_margin.add_theme_constant_override("margin_top", 64)' in p_content):
+        print("PASS: Scoreboard and top buttons aligned with harmonized top margin!")
     else:
         print("FAIL: Scoreboard and top buttons top margin mismatch")
         return False

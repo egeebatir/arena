@@ -17,6 +17,7 @@ var logo_texture: Texture2D
 var badge_texture: Texture2D  # Mascot badge drawn on top of ball
 var hat_texture: Texture2D    # Crown cosmetic worn by favorite team
 var is_favorite_team: bool = false
+var ball_skin: String = ""
 
 # Map short team names to mascot overlay images
 const BADGE_MAP = {
@@ -46,7 +47,11 @@ const BADGE_MAP = {
 	"POR": "res://por1.png",
 	"ENG": "res://eng1.png",
 	"USA": "res://usa1.png",
-	"ITA": "res://ita1.png"
+	"ITA": "res://ita1.png",
+	"PSG": "res://psg1.png",
+	"BAY": "res://bay1.png",
+	"BVB": "res://bvb1.png",
+	"MIA": "res://mia1.png"
 }
 
 var velocity = Vector2.ZERO
@@ -79,10 +84,7 @@ func init_ball(team_name: String, center_pos: Vector2, _r_limit: float, avoid_po
 	else:
 		z_index = 2
 	
-	if Global.TEAM_LOGOS.has(team_name) and Global.TEAM_LOGOS[team_name] != null:
-		logo_texture = Global.TEAM_LOGOS[team_name]
-	else:
-		logo_texture = null
+	logo_texture = Global.get_team_logo(team_name)
 	self.set("current_logo_path", team_name)
 
 	# Assign mascot badge if available for this team
@@ -196,24 +198,41 @@ func _draw():
 	draw_circle(shadow_offset, BALL_RADIUS - 2.0, shadow_color)
 	draw_circle(Vector2.ZERO, BALL_RADIUS, team_colors[0])
 
+	# Draw alternating stripes using 3 smooth curved polygons instead of 113 draw_line calls
 	var stripe_w = (BALL_RADIUS * 2.0) / 6.0
-	for x in range(int(-BALL_RADIUS), int(BALL_RADIUS)):
-		var stripe_index = int((x + BALL_RADIUS) / stripe_w)
-		if stripe_index % 2 != 0:
-			var y = sqrt(max(0, BALL_RADIUS * BALL_RADIUS - x * x))
-			draw_line(Vector2(x, -y), Vector2(x, y), team_colors[1], 1.0)
+	var c1 = team_colors[1]
+	for s_idx in [1, 3, 5]:
+		var x_start = -BALL_RADIUS + s_idx * stripe_w
+		var x_end = -BALL_RADIUS + (s_idx + 1) * stripe_w
+		var pts = PackedVector2Array()
+		var step = 4.0
+		var x = x_start
+		while x <= x_end:
+			var y = -sqrt(max(0.0, BALL_RADIUS * BALL_RADIUS - x * x))
+			pts.append(Vector2(x, y))
+			x += step
+		var y_end_top = -sqrt(max(0.0, BALL_RADIUS * BALL_RADIUS - x_end * x_end))
+		pts.append(Vector2(x_end, y_end_top))
+		x = x_end
+		while x >= x_start:
+			var y = sqrt(max(0.0, BALL_RADIUS * BALL_RADIUS - x * x))
+			pts.append(Vector2(x, y))
+			x -= step
+		var y_start_bot = sqrt(max(0.0, BALL_RADIUS * BALL_RADIUS - x_start * x_start))
+		pts.append(Vector2(x_start, y_start_bot))
+		draw_colored_polygon(pts, c1)
 			
-	var skin_id = Global.equipped_ball_skin
+	var skin_id = ball_skin if ball_skin != "" else Global.equipped_ball_skin
 	Global.draw_ball_skin(self, Vector2.ZERO, BALL_RADIUS, skin_id)
 	
 	if logo_texture:
-		var logo_size = Vector2(50, 50) 
+		var logo_size = Vector2(80, 80) 
 		var logo_rect = Rect2(-logo_size / 2.0, logo_size)
 		draw_texture_rect(logo_texture, logo_rect, false)
 
 	# Draw team mascot badge centered on ball
 	if badge_texture:
-		var badge_size = Vector2(60, 60)
+		var badge_size = Vector2(82, 82)
 		var badge_rect = Rect2(-badge_size / 2.0, badge_size)
 		draw_texture_rect(badge_texture, badge_rect, false)
 

@@ -626,7 +626,11 @@ func _ready():
 		"POR": load("res://por1.png"),
 		"ENG": load("res://eng1.png"),
 		"USA": load("res://usa1.png"),
-		"ITA": load("res://ita1.png")
+		"ITA": load("res://ita1.png"),
+		"PSG": load("res://psg1.png"),
+		"BAY": load("res://bay1.png"),
+		"BVB": load("res://bvb1.png"),
+		"MIA": load("res://mia1.png")
 	}
 	
 	var bg = TextureRect.new()
@@ -662,11 +666,9 @@ func _ready():
 	# We'll size tabs_hbox after viewport is known (call_deferred)
 	call_deferred("_init_tab_sizes")
 
-	# --- PAGE 0: STATS TAB (Lazy Loaded) ---
-	var stats_placeholder = Control.new()
+	# --- PAGE 0: STATS TAB (Lazy Loaded with Ghost Screen placeholder) ---
+	var stats_placeholder = _create_skeleton_loader("stats")
 	stats_placeholder.name = "Stats_Placeholder"
-	stats_placeholder.custom_minimum_size.x = get_viewport_rect().size.x
-	stats_placeholder.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tabs_hbox.add_child(stats_placeholder)
 
 	# --- PAGE 1: HOME TAB (existing main menu UI) ---
@@ -840,7 +842,7 @@ func _ready():
 	
 	var list_shifter_vbox = VBoxContainer.new()
 	list_shifter_vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
-	list_shifter_vbox.add_theme_constant_override("separation", 14)
+	list_shifter_vbox.add_theme_constant_override("separation", 10)
 	list_shifter_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	list_shifter_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	list_shifter.add_child(list_shifter_vbox)
@@ -871,8 +873,8 @@ func _ready():
 	main_cols_hbox.add_child(away_col)
 	
 	# --- BAŞLIKLAR & FILTRELER (Artık Sütunlara Dahil) ---
-	var s_top_h = Control.new(); s_top_h.custom_minimum_size = Vector2(0, 10); home_col.add_child(s_top_h)
-	var s_top_a = Control.new(); s_top_a.custom_minimum_size = Vector2(0, 10); away_col.add_child(s_top_a)
+	var s_top_h = Control.new(); s_top_h.custom_minimum_size = Vector2(0, 6); home_col.add_child(s_top_h)
+	var s_top_a = Control.new(); s_top_a.custom_minimum_size = Vector2(0, 6); away_col.add_child(s_top_a)
 	
 	# Headers with discrete margins
 	home_lbl = Label.new()
@@ -887,13 +889,13 @@ func _ready():
 	away_lbl.add_theme_constant_override("shadow_offset_y", 4)
 	away_col.add_child(away_lbl)
 	
-	# Spacer between HOME and preview
-	var s_hp = Control.new(); s_hp.custom_minimum_size = Vector2(0, 24); home_col.add_child(s_hp)
-	var s_ap = Control.new(); s_ap.custom_minimum_size = Vector2(0, 24); away_col.add_child(s_ap)
+	# Spacer between HOME and preview (generous clearance so hats/crowns never overlap text)
+	var s_hp = Control.new(); s_hp.custom_minimum_size = Vector2(0, 28); home_col.add_child(s_hp)
+	var s_ap = Control.new(); s_ap.custom_minimum_size = Vector2(0, 28); away_col.add_child(s_ap)
 	
 	# Preview Containers with discrete margins
 	var h_preview_cont = CenterContainer.new()
-	h_preview_cont.custom_minimum_size = Vector2(320, 110)
+	h_preview_cont.custom_minimum_size = Vector2(320, 120)
 	home_col.add_child(h_preview_cont)
 	home_preview = Control.new()
 	home_preview.custom_minimum_size = Vector2(108, 108)
@@ -901,14 +903,14 @@ func _ready():
 	h_preview_cont.add_child(home_preview)
 	
 	var a_preview_cont = CenterContainer.new()
-	a_preview_cont.custom_minimum_size = Vector2(320, 110)
+	a_preview_cont.custom_minimum_size = Vector2(320, 120)
 	away_col.add_child(a_preview_cont)
 	away_preview = Control.new()
 	away_preview.custom_minimum_size = Vector2(108, 108)
 	away_preview.draw.connect(func(): draw_ball_preview(away_preview, false))
 	a_preview_cont.add_child(away_preview)
 	
-	var s_hf_btn = Control.new(); s_hf_btn.custom_minimum_size = Vector2(0, 18); home_col.add_child(s_hf_btn)
+	var s_hf_btn = Control.new(); s_hf_btn.custom_minimum_size = Vector2(0, 14); home_col.add_child(s_hf_btn)
 	fav_h_btn = Button.new()
 	fav_h_btn.custom_minimum_size = Vector2(250, 48)
 	fav_h_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -923,7 +925,7 @@ func _ready():
 	fav_h_btn.pressed.connect(func(): _set_favorite_team(true))
 	home_col.add_child(fav_h_btn)
 	
-	var s_af_btn = Control.new(); s_af_btn.custom_minimum_size = Vector2(0, 18); away_col.add_child(s_af_btn)
+	var s_af_btn = Control.new(); s_af_btn.custom_minimum_size = Vector2(0, 14); away_col.add_child(s_af_btn)
 	fav_a_btn = Button.new()
 	fav_a_btn.custom_minimum_size = Vector2(250, 48)
 	fav_a_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -938,8 +940,8 @@ func _ready():
 	away_col.add_child(fav_a_btn)
 
 	# Gap between balls and filters
-	var s_hf2 = Control.new(); s_hf2.custom_minimum_size = Vector2(0, 22); home_col.add_child(s_hf2)
-	var s_af2 = Control.new(); s_af2.custom_minimum_size = Vector2(0, 22); away_col.add_child(s_af2)
+	var s_hf2 = Control.new(); s_hf2.custom_minimum_size = Vector2(0, 10); home_col.add_child(s_hf2)
+	var s_af2 = Control.new(); s_af2.custom_minimum_size = Vector2(0, 10); away_col.add_child(s_af2)
 	
 	var filter_style = StyleBoxFlat.new()
 	filter_style.bg_color = active_theme.bg_bottom
@@ -976,8 +978,8 @@ func _ready():
 	league_dropdown_away.item_selected.connect(_on_filter_changed)
 	
 	# Gap between league dropdown and search bar
-	var s_gap_h = Control.new(); s_gap_h.custom_minimum_size = Vector2(0, 14); home_col.add_child(s_gap_h)
-	var s_gap_a = Control.new(); s_gap_a.custom_minimum_size = Vector2(0, 14); away_col.add_child(s_gap_a)
+	var s_gap_h = Control.new(); s_gap_h.custom_minimum_size = Vector2(0, 8); home_col.add_child(s_gap_h)
+	var s_gap_a = Control.new(); s_gap_a.custom_minimum_size = Vector2(0, 8); away_col.add_child(s_gap_a)
 	
 	search_bar_home = LineEdit.new()
 	search_bar_home.custom_minimum_size = Vector2(320, 60)
@@ -1008,8 +1010,8 @@ func _ready():
 	setup_filters()
 	
 	# Spacer between Search and Randomizer
-	var s_gap_rand_h = Control.new(); s_gap_rand_h.custom_minimum_size = Vector2(0, 16); home_col.add_child(s_gap_rand_h)
-	var s_gap_rand_a = Control.new(); s_gap_rand_a.custom_minimum_size = Vector2(0, 16); away_col.add_child(s_gap_rand_a)
+	var s_gap_rand_h = Control.new(); s_gap_rand_h.custom_minimum_size = Vector2(0, 8); home_col.add_child(s_gap_rand_h)
+	var s_gap_rand_a = Control.new(); s_gap_rand_a.custom_minimum_size = Vector2(0, 8); away_col.add_child(s_gap_rand_a)
 
 	# Random buttons with discrete margins and 3D tactile feedback
 	var rand_style = StyleBoxFlat.new()
@@ -1079,18 +1081,24 @@ func _ready():
 	
 	var scroll_both = ScrollContainer.new()
 	scroll_both.name = "ScrollContainer"
-	scroll_both.custom_minimum_size = Vector2(660, 580)
+	var vp_size = get_viewport_rect().size
+	var vp_w = vp_size.x
+	var vp_h = vp_size.y
+	var max_w = min(vp_w - 32.0, 660.0)
+	# Tablet vs phone height capping: On tablet give generous space, on mobile phone cap comfortably so start button & footer breathe
+	var target_scroll_h = clamp(vp_h * 0.40, 280.0, 520.0) if vp_w >= 800.0 else clamp(vp_h * 0.34, 260.0, 360.0)
+	scroll_both.custom_minimum_size = Vector2(max_w, target_scroll_h)
 	scroll_both.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	scroll_both.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	scroll_both.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	scroll_both.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll_both.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	scroll_both.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	var v_sc = scroll_both.get_v_scroll_bar()
-	v_sc.custom_minimum_size.x = 0
+	v_sc.custom_minimum_size.x = 6
 	
 	var sb_style = StyleBoxFlat.new(); sb_style.bg_color = Color.TRANSPARENT
-	var gb_style = StyleBoxFlat.new(); gb_style.bg_color = active_theme.accent.darkened(0.2)
-	gb_style.corner_radius_top_left = 8; gb_style.corner_radius_top_right = 8
-	gb_style.corner_radius_bottom_left = 8; gb_style.corner_radius_bottom_right = 8
+	var gb_style = StyleBoxFlat.new(); gb_style.bg_color = active_theme.accent.lightened(0.1)
+	gb_style.corner_radius_top_left = 3; gb_style.corner_radius_top_right = 3
+	gb_style.corner_radius_bottom_left = 3; gb_style.corner_radius_bottom_right = 3
 	v_sc.add_theme_stylebox_override("scroll", sb_style)
 	v_sc.add_theme_stylebox_override("grabber", gb_style)
 	v_sc.add_theme_stylebox_override("grabber_highlight", gb_style)
@@ -1122,17 +1130,18 @@ func _ready():
 	away_selected = Global.away_selected
 	populate_teams()
 	
-	# --- BAŞLA BUTONU (3D Tactile Push Sensation) ---
+	# --- BAŞLA BUTONU (3D Tactile Push Sensation - Always Visible) ---
 	var start_btn = Button.new()
 	start_btn.name = "StartMatchButton"
-	start_btn.custom_minimum_size = Vector2(660, 85)
+	start_btn.custom_minimum_size = Vector2(max_w, 82)
 	start_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	start_btn.size_flags_vertical = Control.SIZE_SHRINK_END
 	
 	var start_lbl = Label.new()
 	start_lbl.name = "ButtonLabel"
 	start_lbl.text = LANG[Global.current_lang]["START_MATCH"]
 	start_lbl.add_theme_font_override("font", custom_font)
-	start_lbl.add_theme_font_size_override("font_size", 48)
+	start_lbl.add_theme_font_size_override("font_size", 46)
 	start_lbl.set_anchors_preset(Control.PRESET_FULL_RECT)
 	start_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	start_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -1158,11 +1167,9 @@ func _ready():
 	setup_settings_overlay()
 	update_theme_visuals()
 
-	# --- PAGE 2: SHOP TAB (Lazy Loaded) ---
-	var shop_placeholder = Control.new()
+	# --- PAGE 2: SHOP TAB (Lazy Loaded with Ghost Screen placeholder) ---
+	var shop_placeholder = _create_skeleton_loader("shop")
 	shop_placeholder.name = "Shop_Placeholder"
-	shop_placeholder.custom_minimum_size.x = get_viewport_rect().size.x
-	shop_placeholder.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tabs_hbox.add_child(shop_placeholder)
 
 	# --- BOTTOM NAVIGATION BAR ---
@@ -1837,7 +1844,17 @@ func setup_settings_overlay():
 	var screen_h = get_viewport_rect().size.y
 	scroll.custom_minimum_size = Vector2(600, min(800.0, screen_h * 0.65)) 
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER 
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	var v_sc_set = scroll.get_v_scroll_bar()
+	v_sc_set.custom_minimum_size.x = 6
+	var sb_style_set = StyleBoxFlat.new(); sb_style_set.bg_color = Color.TRANSPARENT
+	var gb_style_set = StyleBoxFlat.new(); gb_style_set.bg_color = active_theme.accent.lightened(0.1)
+	gb_style_set.corner_radius_top_left = 3; gb_style_set.corner_radius_top_right = 3
+	gb_style_set.corner_radius_bottom_left = 3; gb_style_set.corner_radius_bottom_right = 3
+	v_sc_set.add_theme_stylebox_override("scroll", sb_style_set)
+	v_sc_set.add_theme_stylebox_override("grabber", gb_style_set)
+	v_sc_set.add_theme_stylebox_override("grabber_highlight", gb_style_set)
+	v_sc_set.add_theme_stylebox_override("grabber_pressed", gb_style_set)
 	s_vbox.add_child(scroll)
 	
 	var scroll_vbox = VBoxContainer.new()
@@ -2018,7 +2035,7 @@ func setup_settings_overlay():
 	priv_btn.add_theme_stylebox_override("focus", priv_s)
 	priv_btn.pressed.connect(func():
 		Global.play_click()
-		OS.shell_open("https://ebstudyo.com/gizlilik-politikasi")
+		OS.shell_open("https://ebstudyo.com/privacy.html")
 	)
 	acc_vbox.add_child(priv_btn)
 	ui_labels.append({"node": priv_btn, "key": "PRIVACY_POLICY", "type": "button"})
@@ -2807,7 +2824,7 @@ func add_slider_to_grid(grid: GridContainer, id: String, lang_key: String, defau
 			temp_settings["master_vol"] = val
 			# Optional: preview the master volume bound live on menu music
 			if is_instance_valid(Global.bg_music_player):
-				var live_target = val * temp_settings["vol_settings"].get("menu_music", 0.4) * 1.06
+				var live_target = val * temp_settings["vol_settings"].get("menu_music", 0.4) * 1.113
 				if live_target <= 0.01:
 					Global.bg_music_player.volume_db = -80.0
 				else:
@@ -2824,7 +2841,7 @@ func add_slider_to_grid(grid: GridContainer, id: String, lang_key: String, defau
 			if id == "menu_music":
 				# Live preview for menu music slider
 				if is_instance_valid(Global.bg_music_player):
-					var live_target = temp_settings["master_vol"] * val * 1.06
+					var live_target = temp_settings["master_vol"] * val * 1.113
 					if live_target <= 0.01:
 						Global.bg_music_player.volume_db = -80.0
 					else:
@@ -2873,31 +2890,68 @@ func add_magnetic_slider_to_vbox(parent: Control, id: String, lang_key: String, 
 	vst.add_child(lbl_box)
 
 func apply_modern_slider(slider: HSlider):
+	var track_h = 4
 	var slider_sb = StyleBoxFlat.new()
-	slider_sb.bg_color = active_theme.bg_bottom.darkened(0.2)
-	slider_sb.corner_radius_top_left = 10; slider_sb.corner_radius_top_right = 10
-	slider_sb.corner_radius_bottom_left = 10; slider_sb.corner_radius_bottom_right = 10
-	slider_sb.expand_margin_top = 10; slider_sb.expand_margin_bottom = 10
+	slider_sb.bg_color = active_theme.bg_bottom.darkened(0.35)
+	slider_sb.corner_radius_top_left = 6; slider_sb.corner_radius_top_right = 6
+	slider_sb.corner_radius_bottom_left = 6; slider_sb.corner_radius_bottom_right = 6
+	slider_sb.expand_margin_top = track_h; slider_sb.expand_margin_bottom = track_h
+	slider_sb.border_width_left = 1; slider_sb.border_width_right = 1
+	slider_sb.border_width_top = 1; slider_sb.border_width_bottom = 1
+	slider_sb.border_color = Color8(255, 255, 255, 40)
 
 	var grabber_sb = StyleBoxFlat.new()
 	grabber_sb.bg_color = active_theme.accent
-	grabber_sb.corner_radius_top_left = 10; grabber_sb.corner_radius_top_right = 10
-	grabber_sb.corner_radius_bottom_left = 10; grabber_sb.corner_radius_bottom_right = 10
-	grabber_sb.expand_margin_top = 10; grabber_sb.expand_margin_bottom = 10
+	grabber_sb.corner_radius_top_left = 6; grabber_sb.corner_radius_bottom_left = 6
+	grabber_sb.corner_radius_top_right = 6; grabber_sb.corner_radius_bottom_right = 6
+	grabber_sb.expand_margin_top = track_h; grabber_sb.expand_margin_bottom = track_h
 
 	slider.add_theme_stylebox_override("slider", slider_sb)
 	slider.add_theme_stylebox_override("grabber_area", grabber_sb)
-	slider.add_theme_stylebox_override("grabber_area_hl", grabber_sb)
+	slider.add_theme_stylebox_override("grabber_area_highlight", grabber_sb)
 	
-	var img = Image.create(30, 30, false, Image.FORMAT_RGBA8)
+	# High-DPI tactile grabber disc (34x34) with outer ring, anti-aliased edge, and accent dot
+	var s = 34
+	var img = Image.create(s, s, false, Image.FORMAT_RGBA8)
+	var img_hl = Image.create(s, s, false, Image.FORMAT_RGBA8)
 	img.fill(Color.TRANSPARENT)
-	for x in range(30):
-		for y in range(30):
-			if Vector2(x - 15, y - 15).length() <= 14:
-				img.set_pixel(x, y, Color.WHITE)
+	img_hl.fill(Color.TRANSPARENT)
+	var c = Vector2(s / 2.0, s / 2.0)
+	var r_outer = 15.0
+	var r_border = 13.0
+	var r_inner = 5.0
+	
+	for x in range(s):
+		for y in range(s):
+			var dist = Vector2(x + 0.5, y + 0.5).distance_to(c)
+			if dist <= r_outer:
+				var alpha = clamp(r_outer - dist + 0.5, 0.0, 1.0)
+				# Normal state
+				var col = Color.WHITE
+				if dist <= r_inner:
+					col = active_theme.accent
+				elif dist > r_border:
+					col = active_theme.accent.lightened(0.2)
+				else:
+					col = Color8(240, 245, 250)
+				col.a = alpha
+				img.set_pixel(x, y, col)
+				
+				# Highlight state
+				var col_hl = Color.WHITE
+				if dist <= r_inner:
+					col_hl = Color.WHITE
+				elif dist > r_border:
+					col_hl = Color8(255, 255, 255)
+				else:
+					col_hl = active_theme.accent.lightened(0.1)
+				col_hl.a = alpha
+				img_hl.set_pixel(x, y, col_hl)
+				
 	var tex = ImageTexture.create_from_image(img)
+	var tex_hl = ImageTexture.create_from_image(img_hl)
 	slider.add_theme_icon_override("grabber", tex)
-	slider.add_theme_icon_override("grabber_highlight", tex)
+	slider.add_theme_icon_override("grabber_highlight", tex_hl)
 
 func add_dropdown_to_grid(grid: GridContainer, id: String, lang_key: String, options: Array, default_val: String):
 	var lbl = create_label_node(lang_key, white, 30)
@@ -2952,12 +3006,16 @@ func draw_ball_preview(ctrl: Control, is_home: bool = true, team_name_override: 
 	var skin_id = Global.equipped_ball_skin
 	Global.draw_ball_skin(ctrl, center, radius, skin_id)
 
-	# Draw team mascot badge if available
-	if badge_textures.has(short_name):
+	# Draw team mascot badge or team crest centered on ball preview
+	if badge_textures.has(short_name) and badge_textures[short_name]:
 		var badge_tex = badge_textures[short_name]
-		if badge_tex:
-			var bs = Vector2(54, 54)
-			ctrl.draw_texture_rect(badge_tex, Rect2(center - bs / 2.0, bs), false)
+		var bs = Vector2(78, 78)
+		ctrl.draw_texture_rect(badge_tex, Rect2(center - bs / 2.0, bs), false)
+	else:
+		var logo_tex = Global.get_team_logo(team_name)
+		if logo_tex:
+			var ls = Vector2(76, 76)
+			ctrl.draw_texture_rect(logo_tex, Rect2(center - ls / 2.0, ls), false)
 
 	# Draw favorite team crown cosmetic on top of ball preview
 	if (team_name == Global.favorite_team or (Global.favorite_team != "" and short_name == Global.TEAMS.get(Global.favorite_team, {}).get("short", ""))) and Global.equipped_hat != "none" and Global.HATS.has(Global.equipped_hat):
@@ -3412,7 +3470,7 @@ const LEAGUE_FILTER_CONFIG = [
 func setup_filters():
 	var lang = Global.current_lang
 	if league_dropdown_home:
-		var prev_sel_h = league_dropdown_home.selected if league_dropdown_home.item_count > 0 else 1
+		var prev_sel_h = Global.last_selected_league_home
 		league_dropdown_home.clear()
 		league_dropdown_home.alignment = HORIZONTAL_ALIGNMENT_CENTER
 		league_dropdown_home.add_theme_font_override("font", custom_font)
@@ -3426,7 +3484,7 @@ func setup_filters():
 		style_popup_menu(league_dropdown_home.get_popup())
 			
 	if league_dropdown_away:
-		var prev_sel_a = league_dropdown_away.selected if league_dropdown_away.item_count > 0 else 1
+		var prev_sel_a = Global.last_selected_league_away
 		league_dropdown_away.clear()
 		league_dropdown_away.alignment = HORIZONTAL_ALIGNMENT_CENTER
 		league_dropdown_away.add_theme_font_override("font", custom_font)
@@ -3450,6 +3508,10 @@ func setup_filters():
 		search_bar_away.add_theme_font_size_override("font_size", 25)
 
 func _on_filter_changed(_arg = null):
+	if league_dropdown_home and league_dropdown_home.selected >= 0:
+		Global.last_selected_league_home = league_dropdown_home.selected
+	if league_dropdown_away and league_dropdown_away.selected >= 0:
+		Global.last_selected_league_away = league_dropdown_away.selected
 	populate_teams()
 
 func _change_language(lang_code: String):
@@ -3502,8 +3564,93 @@ func _on_random_team_pressed(is_home: bool):
 	populate_teams()
 
 # ======================================================
-# TAB NAVIGATION HELPERS
+# GHOST SCREEN (SKELETON LOADER) & TAB NAVIGATION HELPERS
 # ======================================================
+
+func _create_skeleton_loader(tab_type: String = "stats") -> Control:
+	var sw = get_viewport_rect().size.x
+	var sh = get_viewport_rect().size.y
+	var skeleton = MarginContainer.new()
+	skeleton.custom_minimum_size = Vector2(sw, sh)
+	skeleton.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	skeleton.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	skeleton.add_theme_constant_override("margin_top", 145)
+	skeleton.add_theme_constant_override("margin_bottom", 95)
+	skeleton.add_theme_constant_override("margin_left", 20)
+	skeleton.add_theme_constant_override("margin_right", 20)
+	
+	var vbox = VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 14)
+	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	skeleton.add_child(vbox)
+	
+	var cur_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
+	var box_color = cur_theme.bg_bottom.lightened(0.12)
+	box_color.a = 0.55
+	var border_col = cur_theme.accent.darkened(0.3)
+	border_col.a = 0.35
+	
+	var make_skel_box = func(w: float, h: float, radius: int = 14) -> Panel:
+		var p = Panel.new()
+		var st = StyleBoxFlat.new()
+		st.bg_color = box_color
+		st.corner_radius_top_left = radius; st.corner_radius_top_right = radius
+		st.corner_radius_bottom_left = radius; st.corner_radius_bottom_right = radius
+		st.border_width_left = 1; st.border_width_top = 1
+		st.border_width_right = 1; st.border_width_bottom = 1
+		st.border_color = border_col
+		p.add_theme_stylebox_override("panel", st)
+		p.custom_minimum_size = Vector2(w, h)
+		if w <= 0:
+			p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		return p
+	
+	# Header title skeleton pill
+	var header_center = CenterContainer.new()
+	header_center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header_center.add_child(make_skel_box.call(260, 48, 14))
+	vbox.add_child(header_center)
+	
+	if tab_type == "stats":
+		# Hero / Career Card skeleton
+		vbox.add_child(make_skel_box.call(0, 140, 18))
+		# 2 Grid stats cards
+		var grid_hbox = HBoxContainer.new()
+		grid_hbox.add_theme_constant_override("separation", 12)
+		grid_hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var c1 = make_skel_box.call(0, 80, 14); c1.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var c2 = make_skel_box.call(0, 80, 14); c2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		grid_hbox.add_child(c1); grid_hbox.add_child(c2)
+		vbox.add_child(grid_hbox)
+		# 2 Recent matches row skeletons
+		for i in range(2):
+			vbox.add_child(make_skel_box.call(0, 68, 14))
+	else:
+		# Shop Banner skeleton
+		vbox.add_child(make_skel_box.call(0, 120, 18))
+		# Cosmetics rows skeletons
+		for i in range(3):
+			var row = HBoxContainer.new()
+			row.add_theme_constant_override("separation", 12)
+			row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			row.add_child(make_skel_box.call(64, 64, 16))
+			var lines_vbox = VBoxContainer.new()
+			lines_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			lines_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+			lines_vbox.add_theme_constant_override("separation", 8)
+			lines_vbox.add_child(make_skel_box.call(0, 20, 6))
+			lines_vbox.add_child(make_skel_box.call(120, 16, 6))
+			row.add_child(lines_vbox)
+			vbox.add_child(row)
+		
+	# Subtle shimmer pulse animation
+	var tw = skeleton.create_tween()
+	tw.set_loops()
+	tw.tween_property(skeleton, "modulate:a", 0.40, 0.7).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_property(skeleton, "modulate:a", 0.95, 0.7).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	return skeleton
 
 func _init_tab_sizes():
 	# Set each page's minimum width and height to screen dimensions
@@ -3537,6 +3684,9 @@ func _switch_tab(idx: int, instant: bool = false):
 				tabs_hbox.move_child(real_page, idx)
 				_connect_all_buttons(real_page)
 				update_theme_visuals()
+				real_page.modulate.a = 0.0
+				var fade_tw = create_tween()
+				fade_tw.tween_property(real_page, "modulate:a", 1.0, 0.15)
 		elif idx == 0:
 			_refresh_stats_tab()
 
@@ -5953,7 +6103,7 @@ func _ensure_menu_top_banner():
 		var req = admob_node.create_banner_ad_request()
 		req.set_ad_unit_id(target_ad_unit)
 		req.set_ad_position(LoadAdRequest.AdPosition.TOP)
-		req.set_ad_size(LoadAdRequest.RequestedAdSize.BANNER)
+		req.set_ad_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
 		if req.has_method("set_collapsible_position"):
 			req.set_collapsible_position(LoadAdRequest.CollapsiblePosition.DISABLED)
 		if req.has_method("set_anchor_to_safe_area"):
@@ -6087,15 +6237,15 @@ func _ensure_house_ad_bar():
 	var ad_btn = Button.new()
 	ad_btn.flat = true
 	ad_btn.focus_mode = Control.FOCUS_NONE
-	ad_btn.custom_minimum_size = Vector2(min(get_viewport_rect().size.x - 40, 660), 68)
-	ad_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	ad_btn.custom_minimum_size = Vector2(0, 68)
+	ad_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ad_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	ad_btn.pressed.connect(_on_house_ad_clicked)
 	ad_margin.add_child(ad_btn)
 	
 	var ad_panel = PanelContainer.new()
 	ad_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	ad_panel.custom_minimum_size = Vector2(min(get_viewport_rect().size.x - 40, 660), 68)
+	ad_panel.custom_minimum_size = Vector2(0, 68)
 	ad_panel.set_anchors_preset(Control.PRESET_FULL_RECT)
 	ad_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ad_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -6516,13 +6666,24 @@ func _on_rewarded_failed_to_show(_ad_info = null, _error_data = null):
 func _on_banner_loaded(ad_info, _response_info = null):
 	is_banner_loading = false
 	menu_banner_retry_count = 0
-	if Global.is_premium: return
+	if not is_inside_tree() or Global.is_premium: return
+	if get_tree().current_scene != self: return
+	
 	var ad_id = ad_info.get_ad_id() if ad_info else ""
+	var admob_node = Global.get_admob()
+	
+	# Guard: If banner is BOTTOM (leaked from match), reject and destroy it immediately
+	if ad_info and ad_info.has_method("get_ad_position"):
+		if ad_info.get_ad_position() == LoadAdRequest.AdPosition.BOTTOM:
+			print("[AdMob] Rejected lingering BOTTOM banner on Main Menu.")
+			if admob_node and admob_node.has_method("destroy_banner_ad") and ad_id != "":
+				admob_node.destroy_banner_ad(ad_id)
+			return
+			
 	menu_banner_ad_id = ad_id
 	print("[AdMob] Unified Menu Banner loaded. (ad_id: ", ad_id, ")")
 	_set_house_ad_visible(false)
 	
-	var admob_node = Global.get_admob()
 	if admob_node and admob_node.has_method("show_banner_ad"):
 		if ad_id != "":
 			admob_node.show_banner_ad(ad_id)
@@ -7268,16 +7429,21 @@ func _open_leaderboard():
 	global_vbox.add_child(sync_btn)
 	
 	var open_lead_btn = Button.new()
-	open_lead_btn.text = LANG.get(Global.current_lang, LANG["ENG"]).get("LEADERBOARD_OPEN", "LİDERLİK SIRALAMASINI GÖR")
+	var lead_btn_text = "KÜRESEL LİDERLİK TABLOSU ↗"
+	if Global.current_lang == "ENG": lead_btn_text = "GLOBAL LEADERBOARD ↗"
+	elif Global.current_lang == "ESP": lead_btn_text = "CLASIFICACIÓN GLOBAL ↗"
+	elif Global.current_lang == "POR": lead_btn_text = "TABELA GLOBAL ↗"
+	elif Global.current_lang == "ITA": lead_btn_text = "CLASSIFICA GLOBALE ↗"
+	open_lead_btn.text = lead_btn_text
 	open_lead_btn.add_theme_font_override("font", custom_font)
 	open_lead_btn.add_theme_font_size_override("font_size", 22)
-	open_lead_btn.custom_minimum_size = Vector2(320, 52)
+	open_lead_btn.custom_minimum_size = Vector2(340, 54)
 	open_lead_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	apply_3d_style_to_button(open_lead_btn, active_theme.bg_bottom.darkened(0.12), active_theme.bg_bottom.darkened(0.45), 14, 4.5, 20, 10)
-	open_lead_btn.add_theme_color_override("font_color", Color.WHITE)
+	apply_3d_style_to_button(open_lead_btn, active_theme.accent, active_theme.accent.darkened(0.45), 14, 4.5, 20, 10)
+	open_lead_btn.add_theme_color_override("font_color", Color8(20, 15, 0) if active_theme.accent.get_luminance() > 0.5 else Color.WHITE)
 	open_lead_btn.pressed.connect(func():
 		Global.play_click()
-		Global.show_leaderboards()
+		OS.shell_open("https://www.ebstudyo.com/liderlik-tablosu/")
 	)
 	global_vbox.add_child(open_lead_btn)
 		

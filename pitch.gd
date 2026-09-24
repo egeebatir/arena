@@ -117,6 +117,7 @@ class StadiumCrowd extends Node2D:
 	var arena_radius: float = 279.0
 	var spectators: Array = []
 	var anim_time: float = 0.0
+	var redraw_timer: float = 0.0
 	var cheer_team: int = 0  # 0: none, 1: home, 2: away
 	var cheer_timer: float = 0.0
 
@@ -137,9 +138,10 @@ class StadiumCrowd extends Node2D:
 			Color8(92, 56, 24)
 		]
 		
+		# Scaled 1.8x, placed safely beyond arena_radius + 38.0 so no pitch intrusion
 		var rings = [
-			{"count": 30, "base_r": arena_radius + 37.0, "jitter_r": 4.0},
-			{"count": 26, "base_r": arena_radius + 65.0, "jitter_r": 5.0}
+			{"count": 28, "base_r": arena_radius + 40.0, "jitter_r": 3.0},
+			{"count": 24, "base_r": arena_radius + 68.0, "jitter_r": 4.0}
 		]
 		
 		for r_idx in range(rings.size()):
@@ -152,7 +154,7 @@ class StadiumCrowd extends Node2D:
 			
 			for i in range(count):
 				var base_angle = float(i) * angle_step + ring_offset
-				var angle_jitter = (randf() - 0.5) * (angle_step * 0.45)
+				var angle_jitter = (randf() - 0.5) * (angle_step * 0.40)
 				var final_angle = base_angle + angle_jitter
 				var r_dist = base_r + (randf() - 0.5) * jitter_r * 2.0
 				
@@ -161,31 +163,34 @@ class StadiumCrowd extends Node2D:
 				var jersey_col = Color.WHITE
 				var secondary_col = Color8(200, 200, 200)
 				
-				if cos_a > 0.12:
-					team = 1 # Home
+				# Stand division: Right = Home (cos_a > 0.08), Left = Away (cos_a < -0.08), Center = Buffer (|cos_a| <= 0.08)
+				if cos_a > 0.08:
+					team = 1 # Home end
 					jersey_col = home_primary if (i % 3 != 0) else home_secondary
 					secondary_col = home_secondary if (i % 3 != 0) else home_primary
-				elif cos_a < -0.12:
-					team = 2 # Away
+				elif cos_a < -0.08:
+					team = 2 # Away end
 					jersey_col = away_primary if (i % 3 != 0) else away_secondary
 					secondary_col = away_secondary if (i % 3 != 0) else away_primary
 				else:
-					team = 0
-					if randf() > 0.5:
-						jersey_col = Color8(235, 240, 250)
-						secondary_col = Color8(100, 115, 135)
-					else:
-						jersey_col = Color8(45, 55, 75)
-						secondary_col = Color8(180, 190, 205)
+					team = 0 # Neutral security marshal buffer
+					jersey_col = Color8(250, 210, 0) # Hi-vis security yellow vest
+					secondary_col = Color8(40, 50, 65) # Dark security trousers
 				
 				var skin = skin_tones[randi() % skin_tones.size()]
 				var sway_phase = randf() * TAU
-				var sway_speed = 1.6 + randf() * 0.8
-				var body_width = 8.5 + randf() * 2.0
-				var body_height = 6.5 + randf() * 1.5
-				var head_radius = 3.6 + randf() * 0.6
-				var has_hat = (randf() < 0.35)
-				var has_scarf = (randf() < 0.40)
+				var sway_speed = 1.4 + randf() * 0.8
+				# 1.8x enlarged spectator proportions
+				var body_width = 15.5 + randf() * 2.5
+				var body_height = 11.5 + randf() * 2.0
+				var head_radius = 6.4 + randf() * 1.0
+				
+				# Props: Scarf or Waving Flag or Cap
+				var prop_roll = randf()
+				var has_scarf = (team != 0 and prop_roll < 0.35)
+				var has_flag = (team != 0 and not has_scarf and prop_roll < 0.68)
+				var has_hat = (team != 0 and randf() < 0.30)
+				var flag_tilt = randf_range(-0.4, 0.4)
 				
 				spectators.append({
 					"angle": final_angle,
@@ -200,7 +205,9 @@ class StadiumCrowd extends Node2D:
 					"h": body_height,
 					"head_r": head_radius,
 					"has_hat": has_hat,
-					"has_scarf": has_scarf
+					"has_scarf": has_scarf,
+					"has_flag": has_flag,
+					"flag_tilt": flag_tilt
 				})
 		queue_redraw()
 
@@ -210,54 +217,135 @@ class StadiumCrowd extends Node2D:
 			cheer_timer = max(0.0, cheer_timer - delta)
 			if cheer_timer <= 0.0:
 				cheer_team = 0
-		queue_redraw()
+			redraw_timer += delta
+			# High-frequency celebration animation (~30 FPS)
+			if redraw_timer >= 0.033:
+				redraw_timer = 0.0
+				queue_redraw()
+		else:
+			redraw_timer += delta
+			# Throttled ambient sway animation (~11 FPS) saves over 80% CPU draw calls
+			if redraw_timer >= 0.09:
+				redraw_timer = 0.0
+				queue_redraw()
 
 	func trigger_cheer(team_idx: int):
 		cheer_team = team_idx
-		cheer_timer = 3.2
+		cheer_timer = 3.5
+		queue_redraw()
 
 	func _draw():
-		var shadow_col = Color8(0, 0, 0, 60)
+		# 1. DRAW STAND SEPARATION BARRIERS AT 12 O'CLOCK & 6 O'CLOCK
+		var barrier_angles = [-PI / 2.0, PI / 2.0]
+		var steel_color = Color8(130, 145, 160)
+		var steel_dark = Color8(70, 80, 95)
+		for b_ang in barrier_angles:
+			var r_dir = Vector2(cos(b_ang), sin(b_ang))
+			var t_dir = Vector2(-sin(b_ang), cos(b_ang))
+			var start_p = r_dir * (arena_radius + 26.0)
+			var end_p = r_dir * (arena_radius + 78.0)
+			# Steel safety fence posts
+			draw_line(start_p - t_dir * 10.0, end_p - t_dir * 10.0, steel_color, 2.5, true)
+			draw_line(start_p + t_dir * 10.0, end_p + t_dir * 10.0, steel_color, 2.5, true)
+			# Cross-bars
+			for step_f in [0.2, 0.45, 0.7, 0.95]:
+				var cross_mid = start_p.lerp(end_p, step_f)
+				draw_line(cross_mid - t_dir * 12.0, cross_mid + t_dir * 12.0, steel_dark, 2.0, true)
+
+		# 2. DRAW SPECTATORS
+		var shadow_col = Color8(0, 0, 0, 75)
 		for spec in spectators:
 			var ang = spec["angle"]
 			var r = spec["radius"]
 			var is_cheering = (cheer_team != 0 and cheer_team == spec["team"])
 			
-			var ambient_sway = sin(anim_time * spec["sway_speed"] + spec["sway_phase"]) * 1.5
+			var ambient_sway = sin(anim_time * spec["sway_speed"] + spec["sway_phase"]) * 1.8
 			var jump_y = 0.0
 			var hand_up = false
 			
 			if is_cheering:
-				var jump_cycle = fmod((anim_time * 6.0 + spec["sway_phase"]), TAU)
-				jump_y = -abs(sin(jump_cycle)) * 7.5
+				var jump_cycle = fmod((anim_time * 6.5 + spec["sway_phase"]), TAU)
+				jump_y = -abs(sin(jump_cycle)) * 10.0
 				hand_up = true
 			elif cheer_team != 0 and spec["team"] != 0 and cheer_team != spec["team"]:
-				jump_y = 1.5
+				jump_y = 2.0
 			
 			var radial_dir = Vector2(cos(ang), sin(ang))
 			var tang_dir = Vector2(-sin(ang), cos(ang))
 			var base_pos = radial_dir * (r + ambient_sway)
 			var pos = base_pos + Vector2(0, jump_y)
 			
-			draw_circle(base_pos + Vector2(0, 2.5), spec["w"] * 0.65, shadow_col)
-			draw_line(pos - tang_dir * (spec["w"] * 0.45), pos + tang_dir * (spec["w"] * 0.45), spec["jersey"], spec["h"], true)
+			# Contact shadow
+			draw_circle(base_pos + Vector2(0, 4.0), spec["w"] * 0.60, shadow_col)
 			
+			# Body / Torso (with team jersey)
+			var half_w = spec["w"] * 0.50
+			var p_left = pos - tang_dir * half_w
+			var p_right = pos + tang_dir * half_w
+			draw_line(p_left, p_right, spec["jersey"], spec["h"], true)
+			# Jersey vertical stripe accent
+			if spec["team"] != 0:
+				draw_line(pos - radial_dir * (spec["h"] * 0.4), pos + radial_dir * (spec["h"] * 0.4), spec["secondary"], 3.0, true)
+			else:
+				# Security marshal reflective stripe
+				draw_line(pos - tang_dir * (half_w * 0.7), pos + tang_dir * (half_w * 0.7), Color8(230, 240, 255), 2.2, true)
+			
+			# Hands & Props
 			if hand_up:
 				var hand_col = spec["skin"]
-				var left_hand = pos - tang_dir * (spec["w"] * 0.65) - radial_dir * 5.0
-				var right_hand = pos + tang_dir * (spec["w"] * 0.65) - radial_dir * 5.0
-				draw_circle(left_hand, 2.0, hand_col)
-				draw_circle(right_hand, 2.0, hand_col)
+				var left_hand = pos - tang_dir * (spec["w"] * 0.7) - radial_dir * 8.0
+				var right_hand = pos + tang_dir * (spec["w"] * 0.7) - radial_dir * 8.0
+				draw_circle(left_hand, 3.2, hand_col)
+				draw_circle(right_hand, 3.2, hand_col)
 			
+			# SCARF (Atkı) - stretched overhead or held horizontally
 			if spec["has_scarf"]:
-				draw_line(pos - tang_dir * (spec["w"] * 0.35), pos + tang_dir * (spec["w"] * 0.35), spec["secondary"], 2.5, true)
+				var scarf_offset = (radial_dir * -8.0) if (is_cheering or hand_up) else Vector2.ZERO
+				var s_left = pos - tang_dir * (spec["w"] * 0.85) + scarf_offset
+				var s_right = pos + tang_dir * (spec["w"] * 0.85) + scarf_offset
+				# Scarf body in team primary and secondary stripes
+				draw_line(s_left, s_right, spec["jersey"], 4.5, true)
+				var s_mid1 = s_left.lerp(s_right, 0.3)
+				var s_mid2 = s_left.lerp(s_right, 0.7)
+				draw_line(s_mid1, s_mid2, spec["secondary"], 3.5, true)
+				# Hands holding scarf
+				draw_circle(s_left, 2.8, spec["skin"])
+				draw_circle(s_right, 2.8, spec["skin"])
 			
-			var head_pos = pos - radial_dir * 1.0
+			# WAVING FLAG (Takım Bayrağı)
+			if spec["has_flag"]:
+				var pole_hand = pos + tang_dir * (spec["w"] * 0.65)
+				var wave_flutter = sin(anim_time * 5.0 + spec["sway_phase"]) * 3.5
+				var pole_top = pole_hand - radial_dir * (18.0 + (5.0 if is_cheering else 0.0)) + tang_dir * (spec["flag_tilt"] * 10.0)
+				# Flag pole
+				draw_line(pole_hand, pole_top, Color8(200, 205, 215), 2.0, true)
+				draw_circle(pole_hand, 2.8, spec["skin"])
+				# Flag banner cloth (bicolor polygon waving)
+				var flag_w = 14.0
+				var flag_h = 9.0
+				var flag_dir = tang_dir * (1.0 if spec["team"] == 1 else -1.0)
+				var f_c1 = pole_top
+				var f_c2 = pole_top + flag_dir * flag_w + Vector2(wave_flutter, wave_flutter * 0.5)
+				var f_c3 = pole_top + flag_dir * flag_w + radial_dir * flag_h + Vector2(wave_flutter * 0.7, 0)
+				var f_c4 = pole_top + radial_dir * flag_h
+				var flag_pts = PackedVector2Array([f_c1, f_c2, f_c3, f_c4])
+				draw_colored_polygon(flag_pts, spec["jersey"])
+				# Secondary color chevron/stripe on flag
+				var f_half1 = f_c1.lerp(f_c2, 0.5)
+				var f_half2 = f_c4.lerp(f_c3, 0.5)
+				var sub_pts = PackedVector2Array([f_half1, f_c2, f_c3, f_half2])
+				draw_colored_polygon(sub_pts, spec["secondary"])
+			
+			# Head
+			var head_pos = pos - radial_dir * 2.0
 			draw_circle(head_pos, spec["head_r"], spec["skin"])
 			
+			# Hat / Cap
 			if spec["has_hat"]:
-				var cap_pos = head_pos - radial_dir * 1.2
-				draw_circle(cap_pos, spec["head_r"] * 0.75, spec["jersey"])
+				var cap_pos = head_pos - radial_dir * 2.0
+				draw_circle(cap_pos, spec["head_r"] * 0.78, spec["jersey"])
+				var visor_tip = cap_pos - radial_dir * (spec["head_r"] * 0.9)
+				draw_line(cap_pos, visor_tip, spec["secondary"], 2.4, true)
 
 var static_pitch_node: StaticPitch
 var stadium_crowd: StadiumCrowd
@@ -307,7 +395,7 @@ func _ready():
 	# Bottom safe boundary: top of bottom AdMob banner safe zone (screen_size.y - 130px)
 	var top_limit = 195.0
 	var bottom_limit = screen_size.y - 130.0
-	CENTER = Vector2(screen_size.x / 2.0, (top_limit + bottom_limit) / 2.0 - 24.0)
+	CENTER = Vector2(screen_size.x / 2.0, (top_limit + bottom_limit) / 2.0 - 58.0)
 	
 	static_pitch_node = StaticPitch.new()
 	static_pitch_node.arena_radius = ARENA_RADIUS
@@ -327,7 +415,8 @@ func _ready():
 	stadium_crowd.setup_crowd(h_cols[0], h_cols[1] if h_cols.size() > 1 else Color.WHITE, a_cols[0], a_cols[1] if a_cols.size() > 1 else Color.WHITE, ARENA_RADIUS)
 	stadium_crowd.position = CENTER
 	stadium_crowd.z_index = -1
-	add_child(stadium_crowd)
+	# Temporarily suspended to eliminate lag and await aesthetic overhaul
+	# add_child(stadium_crowd)
 	
 	added_time_1 = _generate_added_time_1()
 	added_time_2 = _generate_added_time_2()
@@ -418,7 +507,7 @@ func _request_match_bottom_banner():
 	if admob_node.has_method("set_banner_position"):
 		admob_node.set_banner_position(LoadAdRequest.AdPosition.BOTTOM)
 	if admob_node.has_method("set_banner_size"):
-		admob_node.set_banner_size(LoadAdRequest.RequestedAdSize.BANNER)
+		admob_node.set_banner_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
 	if admob_node.has_method("set_banner_collapsible_position"):
 		admob_node.set_banner_collapsible_position(LoadAdRequest.CollapsiblePosition.DISABLED)
 	if admob_node.has_method("set_banner_anchor_to_safe_area"):
@@ -428,7 +517,7 @@ func _request_match_bottom_banner():
 		var req = admob_node.create_banner_ad_request()
 		req.set_ad_unit_id(ad_unit)
 		req.set_ad_position(LoadAdRequest.AdPosition.BOTTOM)
-		req.set_ad_size(LoadAdRequest.RequestedAdSize.BANNER)
+		req.set_ad_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
 		if req.has_method("set_collapsible_position"):
 			req.set_collapsible_position(LoadAdRequest.CollapsiblePosition.DISABLED)
 		if req.has_method("set_anchor_to_safe_area"):
@@ -442,7 +531,11 @@ func _on_admob_ready_for_banner(_status = null):
 		_request_match_bottom_banner()
 
 func _on_banner_ad_loaded(ad_info, _response_info = null):
-	if not is_inside_tree() or Global.is_premium: return
+	if not is_inside_tree() or Global.is_premium or get_tree().current_scene != self:
+		var admob_node = Global.get_admob()
+		if admob_node and ad_info and admob_node.has_method("destroy_banner_ad"):
+			admob_node.destroy_banner_ad(ad_info.get_ad_id())
+		return
 	var admob_node = Global.get_admob()
 	match_banner_retry_count = 0
 	if admob_node and ad_info:
@@ -455,13 +548,13 @@ func _on_banner_ad_failed_to_load(ad_info, error_data):
 	var err_code = error_data.get_code() if error_data and error_data.has_method("get_code") else -1
 	var err_msg = error_data.get_message() if error_data and error_data.has_method("get_message") else ""
 	print("[Pitch] Match bottom banner failed to load. Code: ", err_code, " Msg: ", err_msg)
-	if not is_inside_tree() or Global.is_premium: return
+	if not is_inside_tree() or Global.is_premium or get_tree().current_scene != self: return
 	
 	match_banner_retry_count += 1
 	var delay = min(20.0 + float(match_banner_retry_count * 15), 60.0)
 	print("[Pitch] Scheduling match banner retry #", match_banner_retry_count, " in ", delay, " seconds...")
 	await get_tree().create_timer(delay).timeout
-	if not is_inside_tree() or Global.is_premium or match_banner_ad_id != "": return
+	if not is_inside_tree() or Global.is_premium or get_tree().current_scene != self or match_banner_ad_id != "": return
 	
 	var admob_node = Global.get_admob()
 	if admob_node and admob_node.has_method("create_banner_ad_request") and admob_node.has_method("load_banner_ad"):
@@ -469,7 +562,7 @@ func _on_banner_ad_failed_to_load(ad_info, error_data):
 		var req = admob_node.create_banner_ad_request()
 		req.set_ad_unit_id(ad_unit)
 		req.set_ad_position(LoadAdRequest.AdPosition.BOTTOM)
-		req.set_ad_size(LoadAdRequest.RequestedAdSize.BANNER)
+		req.set_ad_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
 		if req.has_method("set_collapsible_position"):
 			req.set_collapsible_position(LoadAdRequest.CollapsiblePosition.DISABLED)
 		if req.has_method("set_anchor_to_safe_area"):
@@ -483,12 +576,14 @@ func _clean_match_banner():
 			admob_node.disconnect("banner_ad_loaded", Callable(self, "_on_banner_ad_loaded"))
 		if admob_node.is_connected("banner_ad_failed_to_load", Callable(self, "_on_banner_ad_failed_to_load")):
 			admob_node.disconnect("banner_ad_failed_to_load", Callable(self, "_on_banner_ad_failed_to_load"))
+		if match_banner_ad_id != "" and admob_node.has_method("destroy_banner_ad"):
+			admob_node.destroy_banner_ad(match_banner_ad_id)
 		Global.remove_all_banners()
 		match_banner_ad_id = ""
 		if admob_node.has_method("set_banner_position"):
 			admob_node.set_banner_position(LoadAdRequest.AdPosition.TOP)
 		if admob_node.has_method("set_banner_size"):
-			admob_node.set_banner_size(LoadAdRequest.RequestedAdSize.BANNER)
+			admob_node.set_banner_size(LoadAdRequest.RequestedAdSize.ADAPTIVE)
 		if "banner_anchor_to_safe_area" in admob_node:
 			admob_node.banner_anchor_to_safe_area = false
 
@@ -505,32 +600,87 @@ func setup_scoreboard():
 	main_ui_layer = ui_layer
 	add_child(ui_layer)
 	
-	var score_margin = MarginContainer.new()
-	score_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	score_margin.add_theme_constant_override("margin_top", 64)
-	score_margin.add_theme_constant_override("margin_left", 16)
-	score_margin.add_theme_constant_override("margin_right", 16)
-	ui_layer.add_child(score_margin)
+	var top_header_margin = MarginContainer.new()
+	top_header_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	top_header_margin.add_theme_constant_override("margin_top", 58)
+	top_header_margin.add_theme_constant_override("margin_left", 16)
+	top_header_margin.add_theme_constant_override("margin_right", 16)
+	ui_layer.add_child(top_header_margin)
+	
+	var top_header_hbox = HBoxContainer.new()
+	top_header_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	top_header_hbox.add_theme_constant_override("separation", 24)
+	top_header_margin.add_child(top_header_hbox)
+	
+	# --- ÇIKIŞ BUTONU (Tightened to scoreboard, 72x72) ---
+	abandon_btn = Button.new()
+	abandon_btn.text = "<"
+	abandon_btn.add_theme_font_override("font", custom_font)
+	abandon_btn.add_theme_font_size_override("font_size", 42)
+	abandon_btn.add_theme_color_override("font_color", Color.WHITE)
+	var abnd_style = StyleBoxFlat.new()
+	abnd_style.bg_color = active_theme.bg_bottom.darkened(0.2)
+	abnd_style.corner_radius_top_left = 18; abnd_style.corner_radius_top_right = 18
+	abnd_style.corner_radius_bottom_left = 18; abnd_style.corner_radius_bottom_right = 18
+	abnd_style.border_width_left = 2.0; abnd_style.border_width_top = 2.0; abnd_style.border_width_right = 2.0
+	abnd_style.border_width_bottom = 4.0; abnd_style.border_color = active_theme.accent
+	abnd_style.shadow_color = Color8(0, 0, 0, 140)
+	abnd_style.shadow_size = 6
+	abnd_style.shadow_offset = Vector2(0, 3)
+	abnd_style.content_margin_left = 14; abnd_style.content_margin_right = 14
+	abnd_style.content_margin_top = 8; abnd_style.content_margin_bottom = 8
+	var abnd_hover = abnd_style.duplicate(); abnd_hover.bg_color = active_theme.bg_bottom.lightened(0.1)
+	var abnd_pressed = abnd_style.duplicate(); abnd_pressed.border_width_bottom = 2.0; abnd_pressed.content_margin_top = 10
+	abandon_btn.add_theme_stylebox_override("normal", abnd_style)
+	abandon_btn.add_theme_stylebox_override("hover", abnd_hover)
+	abandon_btn.add_theme_stylebox_override("pressed", abnd_pressed)
+	abandon_btn.add_theme_stylebox_override("focus", abnd_style)
+	abandon_btn.custom_minimum_size = Vector2(72, 72)
+	abandon_btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	abandon_btn.pressed.connect(func():
+		Global.play_click()
+		set_physics_process(false)
+		set_process(false)
+		Engine.time_scale = 1.0
+		if is_instance_valid(ball1): ball1.velocity = Vector2.ZERO
+		if is_instance_valid(ball2): ball2.velocity = Vector2.ZERO
+		if state == "FULLTIME":
+			Global.increment_matches_played()
+		if is_instance_valid(stadium_player):
+			stadium_player.stop()
+		if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
+			Global.bg_music_player.play()
+		abandon_btn.disabled = true
+		_clean_match_banner()
+		if state == "FIRST_HALF" or state == "INTRO":
+			get_tree().change_scene_to_file("res://main_menu.tscn")
+		else:
+			Global.show_interstitial_ad(func():
+				Engine.time_scale = 1.0
+				get_tree().change_scene_to_file("res://main_menu.tscn")
+			)
+	)
+	top_header_hbox.add_child(abandon_btn)
 	
 	var center_cont = VBoxContainer.new()
 	center_cont.alignment = BoxContainer.ALIGNMENT_CENTER
 	center_cont.add_theme_constant_override("separation", -2)
-	score_margin.add_child(center_cont)
+	top_header_hbox.add_child(center_cont)
 	
 	var top_panel = PanelContainer.new()
 	top_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var style = StyleBoxFlat.new()
 	style.bg_color = active_theme.bg_bottom.darkened(0.28)
-	style.bg_color.a = 0.92
+	style.bg_color.a = 0.94
 	style.corner_radius_top_left = 22; style.corner_radius_top_right = 22
 	style.corner_radius_bottom_left = 22; style.corner_radius_bottom_right = 22
-	style.border_width_left = 2; style.border_width_right = 2
-	style.border_width_top = 2; style.border_width_bottom = 4
-	style.border_color = active_theme.accent.darkened(0.15)
+	style.border_width_left = 2.0; style.border_width_right = 2.0
+	style.border_width_top = 2.0; style.border_width_bottom = 4.0
+	style.border_color = active_theme.accent
 	style.shadow_color = Color8(0, 0, 0, 160)
 	style.shadow_size = 8
 	style.shadow_offset = Vector2(0, 3)
-	style.content_margin_left = 20; style.content_margin_right = 20
+	style.content_margin_left = 28; style.content_margin_right = 28
 	style.content_margin_top = 6; style.content_margin_bottom = 8
 	top_panel.add_theme_stylebox_override("panel", style)
 	center_cont.add_child(top_panel)
@@ -542,7 +692,7 @@ func setup_scoreboard():
 	
 	var score_hbox = HBoxContainer.new()
 	score_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	score_hbox.add_theme_constant_override("separation", 14)
+	score_hbox.add_theme_constant_override("separation", 18)
 	main_vbox.add_child(score_hbox)
 	
 	t1_yellow_box = Control.new()
@@ -551,7 +701,8 @@ func setup_scoreboard():
 	var c1 = ball1.team_colors[0]
 	var lum1 = c1.get_luminance()
 	var t1_col = c1.lightened(0.35) if lum1 < 0.3 else (c1.darkened(0.2) if lum1 > 0.85 else c1)
-	var t1_outline = Color.BLACK if lum1 > 0.45 else Color.WHITE
+	var dark_outline = Color8(12, 18, 28, 240)
+	var t1_outline = dark_outline
 	
 	var t1 = Label.new()
 	t1.text = ball1.team_short_name
@@ -581,7 +732,7 @@ func setup_scoreboard():
 	dash.text = "-"
 	dash.add_theme_font_override("font", custom_font)
 	dash.add_theme_font_size_override("font_size", 40)
-	dash.add_theme_color_override("font_color", Color(1, 1, 1, 0.6))
+	dash.add_theme_color_override("font_color", Color(1, 1, 1, 0.7))
 	dash.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	dash.add_theme_constant_override("shadow_offset_y", 2)
 	score_hbox.add_child(dash)
@@ -589,7 +740,7 @@ func setup_scoreboard():
 	var c2 = ball2.team_colors[0]
 	var lum2 = c2.get_luminance()
 	var t2_col = c2.lightened(0.35) if lum2 < 0.3 else (c2.darkened(0.2) if lum2 > 0.85 else c2)
-	var t2_outline = Color.BLACK if lum2 > 0.45 else Color.WHITE
+	var t2_outline = dark_outline
 	
 	s2_lbl = Label.new()
 	s2_lbl.add_theme_font_override("font", custom_font)
@@ -621,12 +772,12 @@ func setup_scoreboard():
 	var time_pill = PanelContainer.new()
 	time_pill.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var time_style = StyleBoxFlat.new()
-	time_style.bg_color = Color(0, 0, 0, 0.40)
+	time_style.bg_color = Color(0, 0, 0, 0.45)
 	time_style.corner_radius_top_left = 10; time_style.corner_radius_top_right = 10
 	time_style.corner_radius_bottom_left = 10; time_style.corner_radius_bottom_right = 10
 	time_style.border_width_left = 1; time_style.border_width_top = 1
 	time_style.border_width_right = 1; time_style.border_width_bottom = 1
-	time_style.border_color = Color(1, 1, 1, 0.12)
+	time_style.border_color = active_theme.accent.darkened(0.25)
 	time_style.content_margin_left = 16; time_style.content_margin_right = 16
 	time_style.content_margin_top = 2; time_style.content_margin_bottom = 2
 	time_pill.add_theme_stylebox_override("panel", time_style)
@@ -650,7 +801,7 @@ func setup_scoreboard():
 	g_style.bg_color = active_theme.bg_bottom.darkened(0.2)
 	g_style.corner_radius_bottom_left = 14; g_style.corner_radius_bottom_right = 14
 	g_style.border_width_left = 1.5; g_style.border_width_right = 1.5; g_style.border_width_bottom = 2.5
-	g_style.border_color = active_theme.accent.darkened(0.2)
+	g_style.border_color = active_theme.accent
 	g_style.content_margin_left = 22; g_style.content_margin_right = 22
 	g_style.content_margin_top = 5; g_style.content_margin_bottom = 5
 	goal_banner_panel.add_theme_stylebox_override("panel", g_style)
@@ -667,6 +818,35 @@ func setup_scoreboard():
 	goal_banner_panel.modulate.a = 0.0
 	banner_margin.add_child(goal_banner_panel)
 	center_cont.add_child(banner_margin)
+	
+	# --- DURDURMA BUTONU (Tightened to scoreboard, 72x72) ---
+	pause_btn = Button.new()
+	pause_btn.text = ""
+	pause_btn.icon = preload("res://pauseicon.svg")
+	pause_btn.expand_icon = true
+	pause_btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pause_btn.add_theme_constant_override("icon_max_width", 38)
+	var p_btn_style = StyleBoxFlat.new()
+	p_btn_style.bg_color = active_theme.bg_bottom.darkened(0.2)
+	p_btn_style.corner_radius_top_left = 18; p_btn_style.corner_radius_top_right = 18
+	p_btn_style.corner_radius_bottom_left = 18; p_btn_style.corner_radius_bottom_right = 18
+	p_btn_style.border_width_left = 2.0; p_btn_style.border_width_top = 2.0; p_btn_style.border_width_right = 2.0
+	p_btn_style.border_width_bottom = 4.0; p_btn_style.border_color = active_theme.accent
+	p_btn_style.shadow_color = Color8(0, 0, 0, 140)
+	p_btn_style.shadow_size = 6
+	p_btn_style.shadow_offset = Vector2(0, 3)
+	p_btn_style.content_margin_left = 14; p_btn_style.content_margin_right = 14
+	p_btn_style.content_margin_top = 8; p_btn_style.content_margin_bottom = 8
+	var p_btn_hover = p_btn_style.duplicate(); p_btn_hover.bg_color = active_theme.bg_bottom.lightened(0.1)
+	var p_btn_pressed = p_btn_style.duplicate(); p_btn_pressed.border_width_bottom = 2.0; p_btn_pressed.content_margin_top = 10
+	pause_btn.add_theme_stylebox_override("normal", p_btn_style)
+	pause_btn.add_theme_stylebox_override("hover", p_btn_hover)
+	pause_btn.add_theme_stylebox_override("pressed", p_btn_pressed)
+	pause_btn.add_theme_stylebox_override("focus", p_btn_style)
+	pause_btn.custom_minimum_size = Vector2(72, 72)
+	pause_btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	pause_btn.pressed.connect(func(): Global.play_click(); _toggle_pause())
+	top_header_hbox.add_child(pause_btn)
 	
 	event_lbl = Label.new()
 	event_lbl.add_theme_font_override("font", custom_font)
@@ -726,101 +906,7 @@ func setup_scoreboard():
 	intro_t2.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	intro_vbox.add_child(intro_t2)
 
-	var top_ui_margin = MarginContainer.new()
-	top_ui_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	top_ui_margin.add_theme_constant_override("margin_top", 64)
-	top_ui_margin.add_theme_constant_override("margin_left", 24)
-	top_ui_margin.add_theme_constant_override("margin_right", 24)
-	ui_layer.add_child(top_ui_margin)
-	
-	var top_ui_hbox = HBoxContainer.new()
-	top_ui_hbox.alignment = BoxContainer.ALIGNMENT_BEGIN
-	top_ui_margin.add_child(top_ui_hbox)
-	
-	# --- ÇIKIŞ BUTONU (Modernize & Standardize 72x72) ---
-	abandon_btn = Button.new()
-	abandon_btn.text = "<"
-	abandon_btn.add_theme_font_override("font", custom_font)
-	abandon_btn.add_theme_font_size_override("font_size", 42)
-	abandon_btn.add_theme_color_override("font_color", Color.WHITE)
-	var abnd_style = StyleBoxFlat.new()
-	abnd_style.bg_color = active_theme.bg_bottom.darkened(0.2)
-	abnd_style.corner_radius_top_left = 18; abnd_style.corner_radius_top_right = 18
-	abnd_style.corner_radius_bottom_left = 18; abnd_style.corner_radius_bottom_right = 18
-	abnd_style.border_width_left = 1.5; abnd_style.border_width_top = 1.5; abnd_style.border_width_right = 1.5
-	abnd_style.border_width_bottom = 3.5; abnd_style.border_color = active_theme.accent.darkened(0.25)
-	abnd_style.shadow_color = Color8(0, 0, 0, 120)
-	abnd_style.shadow_size = 6
-	abnd_style.shadow_offset = Vector2(0, 3)
-	abnd_style.content_margin_left = 12; abnd_style.content_margin_right = 12
-	abnd_style.content_margin_top = 8; abnd_style.content_margin_bottom = 8
-	var abnd_hover = abnd_style.duplicate(); abnd_hover.bg_color = active_theme.bg_bottom.lightened(0.1)
-	var abnd_pressed = abnd_style.duplicate(); abnd_pressed.border_width_bottom = 1.5; abnd_pressed.content_margin_top = 11
-	abandon_btn.add_theme_stylebox_override("normal", abnd_style)
-	abandon_btn.add_theme_stylebox_override("hover", abnd_hover)
-	abandon_btn.add_theme_stylebox_override("pressed", abnd_pressed)
-	abandon_btn.add_theme_stylebox_override("focus", abnd_style)
-	abandon_btn.custom_minimum_size = Vector2(72, 72)
-	abandon_btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	abandon_btn.pressed.connect(func():
-		Global.play_click()
-		set_physics_process(false)
-		set_process(false)
-		Engine.time_scale = 1.0
-		if is_instance_valid(ball1): ball1.velocity = Vector2.ZERO
-		if is_instance_valid(ball2): ball2.velocity = Vector2.ZERO
-		if state == "FULLTIME":
-			Global.increment_matches_played()
-		if is_instance_valid(stadium_player):
-			stadium_player.stop()
-		if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
-			Global.bg_music_player.play()
-		abandon_btn.disabled = true
-		_clean_match_banner()
-		if state == "FIRST_HALF" or state == "INTRO":
-			get_tree().change_scene_to_file("res://main_menu.tscn")
-		else:
-			Global.show_interstitial_ad(func():
-				Engine.time_scale = 1.0
-				get_tree().change_scene_to_file("res://main_menu.tscn")
-			)
-	)
-	top_ui_hbox.add_child(abandon_btn)
-	
-	var spacer = Control.new()
-	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	top_ui_hbox.add_child(spacer)
-	
-	# --- DURDURMA BUTONU (Modernize & Standardize 72x72) ---
-	pause_btn = Button.new()
-	pause_btn.text = ""
-	pause_btn.icon = preload("res://pauseicon.svg")
-	pause_btn.expand_icon = true
-	pause_btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	pause_btn.add_theme_constant_override("icon_max_width", 38)
-	var p_btn_style = StyleBoxFlat.new()
-	p_btn_style.bg_color = active_theme.bg_bottom.darkened(0.2)
-	p_btn_style.corner_radius_top_left = 18; p_btn_style.corner_radius_top_right = 18
-	p_btn_style.corner_radius_bottom_left = 18; p_btn_style.corner_radius_bottom_right = 18
-	p_btn_style.border_width_left = 1.5; p_btn_style.border_width_top = 1.5; p_btn_style.border_width_right = 1.5
-	p_btn_style.border_width_bottom = 3.5; p_btn_style.border_color = active_theme.accent.darkened(0.25)
-	p_btn_style.shadow_color = Color8(0, 0, 0, 120)
-	p_btn_style.shadow_size = 6
-	p_btn_style.shadow_offset = Vector2(0, 3)
-	p_btn_style.content_margin_left = 12; p_btn_style.content_margin_right = 12
-	p_btn_style.content_margin_top = 8; p_btn_style.content_margin_bottom = 8
-	var p_btn_hover = p_btn_style.duplicate(); p_btn_hover.bg_color = active_theme.bg_bottom.lightened(0.1)
-	var p_btn_pressed = p_btn_style.duplicate(); p_btn_pressed.border_width_bottom = 1.5; p_btn_pressed.content_margin_top = 11
-	pause_btn.add_theme_stylebox_override("normal", p_btn_style)
-	pause_btn.add_theme_stylebox_override("hover", p_btn_hover)
-	pause_btn.add_theme_stylebox_override("pressed", p_btn_pressed)
-	pause_btn.add_theme_stylebox_override("focus", p_btn_style)
-	pause_btn.custom_minimum_size = Vector2(72, 72)
-	pause_btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	pause_btn.pressed.connect(func(): Global.play_click(); _toggle_pause())
-	top_ui_hbox.add_child(pause_btn)
-
-	# --- YENIDEN OYNA BUTONU (Enlarged 108x108 & Lowered) ---
+	# --- YENIDEN OYNA BUTONU (Enlarged 108x108 & Lowered with extra clearance) ---
 	restart_btn = Button.new()
 	restart_btn.text = ""
 	restart_btn.icon = preload("res://replayicon.svg")
@@ -835,7 +921,7 @@ func setup_scoreboard():
 	rest_style.bg_color = active_theme.accent
 	rest_style.corner_radius_top_left = 28; rest_style.corner_radius_top_right = 28
 	rest_style.corner_radius_bottom_left = 28; rest_style.corner_radius_bottom_right = 28
-	rest_style.border_width_bottom = 6; rest_style.border_color = active_theme.accent.darkened(0.4)
+	rest_style.border_width_bottom = 6; rest_style.border_color = active_theme.accent.darkened(0.35)
 	rest_style.shadow_color = Color8(0, 0, 0, 180)
 	rest_style.shadow_size = 18
 	rest_style.shadow_offset = Vector2(0, 5)
@@ -850,7 +936,7 @@ func setup_scoreboard():
 	
 	restart_btn.custom_minimum_size = Vector2(108, 108)
 	var screen_w = get_viewport_rect().size.x
-	restart_btn.position = Vector2((screen_w - 108.0) / 2.0, CENTER.y + ARENA_RADIUS + 75.0)
+	restart_btn.position = Vector2((screen_w - 108.0) / 2.0, CENTER.y + ARENA_RADIUS + 115.0)
 	
 	restart_btn.visible = false
 	restart_btn.pressed.connect(func(): Global.play_click(); _on_restart_pressed())
@@ -1554,7 +1640,10 @@ func trigger_popup(msg: String, color: Color = Color.WHITE, outline_col: Color =
 	event_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 240))
 	event_lbl.add_theme_constant_override("shadow_offset_y", 6)
 	event_lbl.add_theme_constant_override("shadow_offset_x", 0)
-	event_lbl.pivot_offset = Vector2(300, 80)
+	event_lbl.reset_size()
+	var act_size = event_lbl.get_combined_minimum_size()
+	event_lbl.size = act_size
+	event_lbl.pivot_offset = act_size / 2.0
 	event_lbl.position = CENTER - event_lbl.pivot_offset
 	event_lbl.scale = Vector2(0.35, 0.35)
 	event_lbl.modulate.a = 1.0
