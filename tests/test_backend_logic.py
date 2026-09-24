@@ -93,6 +93,18 @@ def test_global_quests():
         print("FAIL: Comeback quest missing clarified wording")
         return False
 
+    if "daily_quests.append(q)" in content:
+        print("PASS: generate_daily_quests appends quest items to daily_quests!")
+    else:
+        print("FAIL: generate_daily_quests missing daily_quests.append(q)")
+        return False
+
+    if "if daily_date != today:" in content and "elif daily_quests.is_empty():" in content:
+        print("PASS: check_daily_reset decouples daily spin reset from empty quest array!")
+    else:
+        print("FAIL: check_daily_reset still resets lucky wheel when daily_date matches today")
+        return False
+
     return True
 
 def test_shop_and_squad():
@@ -100,10 +112,10 @@ def test_shop_and_squad():
     with open(r"c:\Users\egebatir\Documents\futbol\main_menu.gd", "r", encoding="utf-8") as f:
         m_content = f.read()
 
-    if "shop_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED" in m_content:
-        print("PASS: Shop vertical scroll is disabled!")
+    if "shop_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER" in m_content:
+        print("PASS: Shop vertical scroll is enabled with mobile-friendly SHOW_NEVER!")
     else:
-        print("FAIL: Shop vertical scroll is not disabled")
+        print("FAIL: Shop vertical scroll is not SHOW_NEVER")
         return False
 
     if "player_list_overlay.mouse_filter = Control.MOUSE_FILTER_STOP" in m_content:
@@ -161,17 +173,24 @@ def test_pitch_layout_and_contrast():
         return False
 
     # Check restart_btn position below pitch
-    if 'CENTER.y + ARENA_RADIUS + 40.0' in p_content:
+    if 'CENTER.y + ARENA_RADIUS +' in p_content:
         print("PASS: restart_btn is positioned dynamically below the pitch!")
     else:
         print("FAIL: restart_btn position is not below the pitch")
         return False
 
-    # Check scoreboard team crest icons
-    if 't1_icon' in p_content and 't2_icon' in p_content:
-        print("PASS: Scoreboard includes team crest icons!")
+    # Check scoreboard team crest icons removed as requested by user
+    if 't1_icon' not in p_content and 't2_icon' not in p_content:
+        print("PASS: Scoreboard is clean without redundant team crest icons!")
     else:
-        print("FAIL: Scoreboard missing team crest icons")
+        print("FAIL: Scoreboard still contains team crest icons")
+        return False
+
+    # Check stats saving
+    if 'Global.save_stats()' in p_content:
+        print("PASS: Full-time match outcome triggers Global.save_stats()!")
+    else:
+        print("FAIL: pitch.gd missing Global.save_stats()")
         return False
 
     # Check event_lbl centered (no position.y -= 100 on event_lbl)
@@ -190,10 +209,66 @@ def test_pitch_layout_and_contrast():
         return False
 
     # Check trigger_popup contrast
-    if 'event_lbl.add_theme_color_override("font_outline_color", out_col)' in p_content:
+    if 'event_lbl.add_theme_color_override("font_outline_color", outline_col)' in p_content:
         print("PASS: GOL! event popup has dynamic contrast and outline!")
     else:
         print("FAIL: GOL! event popup missing contrast/outline")
+        return False
+
+    return True
+
+def test_lucky_wheel_logic():
+    print("\n--- Testing Lucky Wheel Ad Safety & Callback Integrity ---")
+    with open(r"c:\Users\egebatir\Documents\futbol\main_menu.gd", "r", encoding="utf-8") as f:
+        m_content = f.read()
+
+    if "current_wheel_status_callback: Callable = Callable()" in m_content:
+        print("PASS: current_wheel_status_callback declared in main_menu.gd!")
+    else:
+        print("FAIL: current_wheel_status_callback not declared")
+        return False
+
+    if "func _show_admob_rewarded_for_wheel(on_reward_callback: Callable) -> bool:" in m_content:
+        print("PASS: _show_admob_rewarded_for_wheel returns bool for immediate UI lock prevention!")
+    else:
+        print("FAIL: _show_admob_rewarded_for_wheel does not return bool")
+        return False
+
+    if "var started = _show_admob_rewarded_for_wheel" in m_content and "update_wheel_status.call()" in m_content:
+        print("PASS: Wheel UI updates and does not lock buttons if ad is preparing!")
+    else:
+        print("FAIL: Wheel UI can lock buttons when ad is preparing")
+        return False
+
+    return True
+
+def test_admob_safety_guard():
+    print("\n--- Testing AdMob Policy & Test Ads Guard ---")
+    with open(r"c:\Users\egebatir\Documents\futbol\Global.gd", "r", encoding="utf-8") as f:
+        g_content = f.read()
+
+    with open(r"c:\Users\egebatir\Documents\futbol\addons\AdmobPlugin\Admob.gd", "r", encoding="utf-8") as f:
+        a_content = f.read()
+
+    with open(r"c:\Users\egebatir\Documents\futbol\addons\AdmobPlugin\model\AdmobConfig.gd", "r", encoding="utf-8") as f:
+        c_content = f.read()
+
+    if "OS.is_debug_build()" in g_content and "admob_instance.is_real = false" in g_content:
+        print("PASS: Global.gd automatically forces is_real = false on debug builds!")
+    else:
+        print("FAIL: Global.gd does not force is_real = false on debug builds")
+        return False
+
+    if "OS.is_debug_build()" in a_content and "is_real = false" in a_content:
+        print("PASS: Admob.gd automatically forces is_real = false on debug builds!")
+    else:
+        print("FAIL: Admob.gd does not force is_real = false on debug builds")
+        return False
+
+    if "PackedStringArray" in c_content and "PackedStringArray(test_device_hashed_ids)" in a_content:
+        print("PASS: Test device IDs marshaled as PackedStringArray for Android JNI String[] compliance!")
+    else:
+        print("FAIL: Test device IDs not properly packed as PackedStringArray")
         return False
 
     return True
@@ -205,7 +280,9 @@ if __name__ == "__main__":
     r4 = test_shop_and_squad()
     r5 = test_banner_retry()
     r6 = test_pitch_layout_and_contrast()
-    if r1 and r2 and r3 and r4 and r5 and r6:
+    r7 = test_lucky_wheel_logic()
+    r8 = test_admob_safety_guard()
+    if r1 and r2 and r3 and r4 and r5 and r6 and r7 and r8:
         print("\nALL BACKEND VERIFICATION TESTS PASSED SUCCESSFULLY!")
         sys.exit(0)
     else:

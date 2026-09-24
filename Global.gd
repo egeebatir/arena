@@ -238,7 +238,7 @@ func get_admob() -> Node:
 	return admob_instance
 
 func init_admob() -> Node:
-	if not Engine.has_singleton("PoingGodotAdMob") and not (OS.get_name() in ["Android", "iOS"]):
+	if not Engine.has_singleton("PoingGodotAdMob") and not Engine.has_singleton("AdmobPlugin") and not (OS.get_name() in ["Android", "iOS"]):
 		return null
 	if admob_instance and is_instance_valid(admob_instance):
 		return admob_instance
@@ -249,6 +249,9 @@ func init_admob() -> Node:
 	if admob_scene:
 		admob_instance = admob_scene.instantiate()
 		admob_instance.name = "Admob"
+		if OS.is_debug_build():
+			admob_instance.is_real = false
+			print("[Global] DEBUG BUILD detected: AdMob is_real zorla FALSE yapildi (Gecersiz Trafik ve Ban Korumasi Aktif).")
 		add_child(admob_instance)
 		admob_instance.initialization_completed.connect(_on_admob_initialized)
 		admob_instance.initialize()
@@ -485,9 +488,9 @@ var TEAMS = {
 	"TÜRKİYE":        {"colors": [Color8(227, 10, 23), Color8(255, 255, 255)], "short": "TUR", "league": "NATIONAL", "type": "national"},
 	"ARJANTİN":       {"colors": [Color8(116, 172, 223), Color8(255, 255, 255)], "short": "ARG", "league": "NATIONAL", "type": "national"},
 	"PORTEKİZ":       {"colors": [Color8(255, 0, 0), Color8(0, 102, 0)], "short": "POR", "league": "NATIONAL", "type": "national"},
-	"İNGİLTERE":      {"colors": [Color8(255, 255, 255), Color8(206, 17, 38)], "short": "ENG", "league": "NATIONAL", "type": "national"},
-	"ABD":            {"colors": [Color8(10, 49, 97), Color8(255, 255, 255)],   "short": "USA", "league": "NATIONAL", "type": "national"},
-	"İTALYA":         {"colors": [Color8(0, 102, 204), Color8(255, 255, 255)], "short": "ITA", "league": "NATIONAL", "type": "national"},
+	"İNGİLTERE":      {"colors": [Color8(250, 250, 250), Color8(12, 35, 75)],   "short": "ENG", "league": "NATIONAL", "type": "national"},
+	"ABD":            {"colors": [Color8(10, 30, 80), Color8(218, 41, 28)],     "short": "USA", "league": "NATIONAL", "type": "national"},
+	"İTALYA":         {"colors": [Color8(0, 85, 175), Color8(255, 255, 255)],   "short": "ITA", "league": "NATIONAL", "type": "national"},
 	# --- TÜRKİYE LİGİ ---
 	"GALATA FK":      {"colors": [Color8(169, 4, 50), Color8(253, 185, 18)], "short": "GAL", "league": "TURKEY", "type": "club"},
 	"FENER FK":       {"colors": [Color8(255, 255, 0), Color8(0, 0, 128)],   "short": "FEN", "league": "TURKEY", "type": "club"},
@@ -930,11 +933,14 @@ func load_progression():
 
 func check_daily_reset():
 	var today = Time.get_date_string_from_system()
-	if daily_date != today or daily_quests.is_empty():
+	if daily_date != today:
 		daily_date = today
 		lucky_wheel_free_spins_used = 0
 		lucky_wheel_ad_spins_used = 0
 		lucky_wheel_pending_ad_spins = 0
+		generate_daily_quests()
+		save_progression()
+	elif daily_quests.is_empty():
 		generate_daily_quests()
 		save_progression()
 
@@ -1269,6 +1275,7 @@ func generate_daily_quests():
 			s = s.replace("{target}", str(q.get("target", 1)))
 			formatted_desc[lang_key] = s
 		q["desc"] = formatted_desc
+		daily_quests.append(q)
 
 func is_team_match(t1: String, t2: String) -> bool:
 	if t1 == "" or t2 == "": return false
@@ -1399,6 +1406,7 @@ func record_match_result(home: String, away: String, home_score: int, away_score
 					q["progress"] = max(cur_p, goal_margin)
 					
 	save_progression()
+	save_stats()
 
 func record_quest_wheel_spin():
 	for q in daily_quests:

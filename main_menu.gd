@@ -78,7 +78,16 @@ var LANG = {
 		"DUR_SHORT": "Kısa", "DUR_NORMAL": "Normal", "DUR_LONG": "Uzun",
 		"EARNED_REWARD": "+%s %s Kazandın!",
 		"SQUAD_SUFFIX": "KADROSU", "TAP_TO_SWITCH_TEAM": "Takım değiştirmek için dokun",
-		"SELECT_TEAM": "TAKIM SEÇ", "SEARCH_TEAM": "Takım ara..."
+		"SELECT_TEAM": "TAKIM SEÇ", "SEARCH_TEAM": "Takım ara...",
+		"VIP_TITLE": "⭐ VIP AYRICALIKLARI AKTİF ⭐", "VIP_DESC": "Reklamsız • Tüm Kozmetikler Açık • Sınırsız Oyun",
+		"HOUSE_AD_WHEEL_TITLE": "🎡 ŞANS ÇARKI",
+		"HOUSE_AD_WHEEL_DESC": "Günün ücretsiz çevirmesini al, altınları kap! Hemen Çevir ➔",
+		"HOUSE_AD_FAV_TITLE": "⚽ FAVORİ TAKIM & KARİYER",
+		"HOUSE_AD_FAV_DESC": "Takımını seç, kupa ve gol istatistiklerini takip et! İncele ➔",
+		"HOUSE_AD_PRO_TITLE": "👑 BOL GOL PRO ÜYELİK",
+		"HOUSE_AD_PRO_DESC": "Sıfır reklam, tüm kozmetikler açık & sınırsız oyun! Keşfet ➔",
+		"HOUSE_AD_QUEST_TITLE": "📋 GÜNLÜK GÖREVLER",
+		"HOUSE_AD_QUEST_DESC": "Günün görevlerini tamamla, bonus altınları topla! Görevler ➔"
 	},
 	"ENG": {
 		"TEAM_SELECTION": "TEAM SELECTION", "SETTINGS": "SETTINGS",
@@ -152,7 +161,16 @@ var LANG = {
 		"DUR_SHORT": "Short", "DUR_NORMAL": "Normal", "DUR_LONG": "Long",
 		"EARNED_REWARD": "Earned +%s %s!",
 		"SQUAD_SUFFIX": "SQUAD", "TAP_TO_SWITCH_TEAM": "Tap to switch team",
-		"SELECT_TEAM": "SELECT TEAM", "SEARCH_TEAM": "Search team..."
+		"SELECT_TEAM": "SELECT TEAM", "SEARCH_TEAM": "Search team...",
+		"VIP_TITLE": "⭐ VIP MEMBER ACTIVE ⭐", "VIP_DESC": "Ad-Free • All Cosmetics Unlocked • Unlimited Play",
+		"HOUSE_AD_WHEEL_TITLE": "🎡 LUCKY WHEEL",
+		"HOUSE_AD_WHEEL_DESC": "Claim your daily free spin and collect coins! Spin Now ➔",
+		"HOUSE_AD_FAV_TITLE": "⚽ FAVORITE TEAM & STATS",
+		"HOUSE_AD_FAV_DESC": "Pick your favorite team, track deep stats & records! View ➔",
+		"HOUSE_AD_PRO_TITLE": "👑 BOL GOL PRO MEMBER",
+		"HOUSE_AD_PRO_DESC": "Zero ads, all cosmetics unlocked & unlimited play! Unlock ➔",
+		"HOUSE_AD_QUEST_TITLE": "📋 DAILY QUESTS",
+		"HOUSE_AD_QUEST_DESC": "Complete daily quests and earn bonus coins! Quests ➔"
 	},
 	"ESP": {
 		"TEAM_SELECTION": "SELECCIÓN DE EQUIPO", "SETTINGS": "AJUSTES",
@@ -226,7 +244,16 @@ var LANG = {
 		"DUR_SHORT": "Corto", "DUR_NORMAL": "Normal", "DUR_LONG": "Largo",
 		"EARNED_REWARD": "¡Ganaste +%s %s!",
 		"SQUAD_SUFFIX": "PLANTILLA", "TAP_TO_SWITCH_TEAM": "Toca para cambiar de equipo",
-		"SELECT_TEAM": "SELECCIONAR EQUIPO", "SEARCH_TEAM": "Buscar equipo..."
+		"SELECT_TEAM": "SELECCIONAR EQUIPO", "SEARCH_TEAM": "Buscar equipo...",
+		"VIP_TITLE": "⭐ MIEMBRO VIP ACTIVO ⭐", "VIP_DESC": "Sin Anuncios • Todos los Cosméticos • Juego Ilimitado",
+		"HOUSE_AD_WHEEL_TITLE": "🎡 RULETA DE LA SUERTE",
+		"HOUSE_AD_WHEEL_DESC": "¡Reclama tu giro gratis diario y gana monedas! Girar Ahora ➔",
+		"HOUSE_AD_FAV_TITLE": "⚽ EQUIPO FAVORITO Y RÉCORDS",
+		"HOUSE_AD_FAV_DESC": "¡Elige tu equipo favorito y sigue tus estadísticas! Ver ➔",
+		"HOUSE_AD_PRO_TITLE": "👑 MIEMBRO PRO BOL GOL",
+		"HOUSE_AD_PRO_DESC": "¡Sin anuncios, cosméticos desbloqueados y juego libre! Descubrir ➔",
+		"HOUSE_AD_QUEST_TITLE": "📋 MISIONES DIARIAS",
+		"HOUSE_AD_QUEST_DESC": "¡Completa las misiones de hoy y gana monedas extra! Misiones ➔"
 	},
 	"POR": {
 		"TEAM_SELECTION": "SELEÇÃO DE EQUIPA", "SETTINGS": "DEFINIÇÕES",
@@ -300,7 +327,16 @@ var LANG = {
 		"DUR_SHORT": "Curto", "DUR_NORMAL": "Normal", "DUR_LONG": "Longo",
 		"EARNED_REWARD": "Ganhou +%s %s!",
 		"SQUAD_SUFFIX": "PLANTEL", "TAP_TO_SWITCH_TEAM": "Toque para mudar de equipa",
-		"SELECT_TEAM": "SELECIONAR EQUIPA", "SEARCH_TEAM": "Pesquisar equipa..."
+		"SELECT_TEAM": "SELECIONAR EQUIPA", "SEARCH_TEAM": "Pesquisar equipa...",
+		"VIP_TITLE": "⭐ MEMBRO VIP ATIVO ⭐", "VIP_DESC": "Sem Anúncios • Todos os Cosméticos • Jogo Ilimitado",
+		"HOUSE_AD_WHEEL_TITLE": "🎡 RODA DA SORTE",
+		"HOUSE_AD_WHEEL_DESC": "Resgate o seu giro grátis diário e ganhe moedas! Girar Agora ➔",
+		"HOUSE_AD_FAV_TITLE": "⚽ EQUIPA FAVORITA E RECORDES",
+		"HOUSE_AD_FAV_DESC": "Escolha a sua equipa favorita e acompanhe estatísticas! Ver ➔",
+		"HOUSE_AD_PRO_TITLE": "👑 MEMBRO PRO BOL GOL",
+		"HOUSE_AD_PRO_DESC": "Sem anúncios, cosméticos desbloqueados e jogo ilimitado! Ativar ➔",
+		"HOUSE_AD_QUEST_TITLE": "📋 MISSÕES DIÁRIAS",
+		"HOUSE_AD_QUEST_DESC": "Complete as missões de hoje e ganhe moedas extras! Missões ➔"
 	},
 	"ITA": {
 		"TEAM_SELECTION": "SELEZIONE SQUADRA", "SETTINGS": "IMPOSTAZIONI",
@@ -374,7 +410,16 @@ var LANG = {
 		"DUR_SHORT": "Breve", "DUR_NORMAL": "Normale", "DUR_LONG": "Lunga",
 		"EARNED_REWARD": "Hai guadagnato +%s %s!",
 		"SQUAD_SUFFIX": "ROSA", "TAP_TO_SWITCH_TEAM": "Tocca per cambiare squadra",
-		"SELECT_TEAM": "SELEZIONA SQUADRA", "SEARCH_TEAM": "Cerca squadra..."
+		"SELECT_TEAM": "SELEZIONA SQUADRA", "SEARCH_TEAM": "Cerca squadra...",
+		"VIP_TITLE": "⭐ MEMBRO VIP ATTIVO ⭐", "VIP_DESC": "Senza Pubblicità • Tutti i Cosmetici • Gioco Illimitato",
+		"HOUSE_AD_WHEEL_TITLE": "🎡 RUOTA DELLA FORTUNA",
+		"HOUSE_AD_WHEEL_DESC": "Riscatta il tuo giro gratis giornaliero e vinci monete! Gira Ora ➔",
+		"HOUSE_AD_FAV_TITLE": "⚽ SQUADRA PREFERITA E STATS",
+		"HOUSE_AD_FAV_DESC": "Scegli la tua squadra e segui le tue statistiche! Vedi ➔",
+		"HOUSE_AD_PRO_TITLE": "👑 MEMBRO PRO BOL GOL",
+		"HOUSE_AD_PRO_DESC": "Zero pubblicità, cosmetici sbloccati e gioco illimitato! Scopri ➔",
+		"HOUSE_AD_QUEST_TITLE": "📋 MISSIONI GIORNALIERE",
+		"HOUSE_AD_QUEST_DESC": "Completa le missioni di oggi e guadagna monete! Missioni ➔"
 	}
 }
 
@@ -435,6 +480,14 @@ var shop_hats_scroll: ScrollContainer = null
 var badge_textures: Dictionary = {}  # Preloaded at _ready() for badge overlay on preview balls
 var burger_btn: Button
 var is_refreshing_stats: bool = false
+var vip_top_bar: Control = null
+var house_ad_bar: Control = null
+var house_ad_timer: Timer = null
+var house_ad_idx: int = 0
+var house_ad_icon_lbl: Label = null
+var house_ad_title_lbl: Label = null
+var house_ad_desc_lbl: Label = null
+var house_ad_panel: PanelContainer = null
 
 const MENU_BANNER_ID = "ca-app-pub-7323450546679743/4717442614"
 var menu_banner_ad_id: String = ""
@@ -489,6 +542,7 @@ func _ready():
 	
 	# Load progression
 	Global.load_progression()
+	active_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
 	
 	# Initialize Google Play Billing
 	if Engine.has_singleton("GodotGooglePlayBilling"):
@@ -535,6 +589,10 @@ func _ready():
 		Global.preload_interstitial_ad()
 		if not Global.is_premium:
 			_ensure_menu_top_banner()
+		else:
+			_ensure_vip_top_bar()
+	elif Global.is_premium:
+		_ensure_vip_top_bar()
 	_update_shop_notification()
 
 	if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
@@ -565,7 +623,10 @@ func _ready():
 		"LIV": load("res://liv1.png"),
 		"TUR": load("res://tur1.png"),
 		"ARG": load("res://arg1.png"),
-		"POR": load("res://por1.png")
+		"POR": load("res://por1.png"),
+		"ENG": load("res://eng1.png"),
+		"USA": load("res://usa1.png"),
+		"ITA": load("res://ita1.png")
 	}
 	
 	var bg = TextureRect.new()
@@ -1379,6 +1440,14 @@ func update_theme_visuals():
 	for btn_data in nav_bar_btns:
 		var ind: Control = btn_data["indicator"]
 		ind.queue_redraw()
+
+	if is_instance_valid(house_ad_panel):
+		var ad_s = house_ad_panel.get_theme_stylebox("panel")
+		if ad_s is StyleBoxFlat:
+			ad_s.bg_color = active_theme.bg_bottom.darkened(0.28)
+			ad_s.bg_color.a = 0.94
+			ad_s.border_color = active_theme.accent.lightened(0.15)
+			house_ad_panel.add_theme_stylebox_override("panel", ad_s)
 
 	var filter_style = StyleBoxFlat.new()
 	filter_style.bg_color = active_theme.bg_bottom
@@ -2887,7 +2956,7 @@ func draw_ball_preview(ctrl: Control, is_home: bool = true, team_name_override: 
 	if badge_textures.has(short_name):
 		var badge_tex = badge_textures[short_name]
 		if badge_tex:
-			var bs = Vector2(72, 72)
+			var bs = Vector2(54, 54)
 			ctrl.draw_texture_rect(badge_tex, Rect2(center - bs / 2.0, bs), false)
 
 	# Draw favorite team crown cosmetic on top of ball preview
@@ -2898,7 +2967,12 @@ func draw_ball_preview(ctrl: Control, is_home: bool = true, team_name_override: 
 			if h_tex:
 				var hw = 50.0
 				var hh = 35.0
-				var hr = Rect2(center.x - hw / 2.0, center.y - radius - hh + 12.0, hw, hh)
+				var y_overlap = 12.0
+				if Global.equipped_hat == "viking_helmet":
+					hw = 72.0
+					hh = 48.0
+					y_overlap = 16.0
+				var hr = Rect2(center.x - hw / 2.0, center.y - radius - hh + y_overlap, hw, hh)
 				ctrl.draw_texture_rect(h_tex, hr, false)
 
 func add_centered_toggle_to_vbox(parent: Control, id: String, lang_key: String, default_val: bool):
@@ -3389,6 +3463,7 @@ func _change_language(lang_code: String):
 	_update_fav_buttons()
 	_refresh_stats_tab()
 	_refresh_shop_tab()
+	_update_house_ad_content()
 	
 	if is_instance_valid(tabs_hbox):
 		var sw = get_viewport_rect().size.x
@@ -3407,6 +3482,7 @@ func _on_start_match():
 		Global.bg_music_player.stop()
 	Global.remove_all_banners()
 	menu_banner_ad_id = ""
+	_set_house_ad_visible(false)
 	get_tree().change_scene_to_file("res://pitch.tscn")
 
 func _on_random_team_pressed(is_home: bool):
@@ -3461,6 +3537,8 @@ func _switch_tab(idx: int, instant: bool = false):
 				tabs_hbox.move_child(real_page, idx)
 				_connect_all_buttons(real_page)
 				update_theme_visuals()
+		elif idx == 0:
+			_refresh_stats_tab()
 
 	current_tab = idx
 	var target_x = -idx * sw
@@ -3713,7 +3791,7 @@ func _build_stats_tab() -> Control:
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	main_vbox.add_child(scroll)
 
 	var vbox = VBoxContainer.new()
@@ -4587,7 +4665,7 @@ func _build_shop_tab() -> Control:
 	var shop_scroll = ScrollContainer.new()
 	shop_scroll.set_anchors_preset(Control.PRESET_FULL_RECT)
 	shop_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	shop_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	shop_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	margin.add_child(shop_scroll)
 
 	var vbox = VBoxContainer.new()
@@ -5135,6 +5213,9 @@ func _build_shop_tab() -> Control:
 			if h_icon != null:
 				var cr_w = 54.0
 				var cr_h = 38.0
+				if h_id == "viking_helmet":
+					cr_w = 68.0
+					cr_h = 46.0
 				var cr_rect = Rect2(c.x - cr_w / 2.0, c.y - r - cr_h + 8.0, cr_w, cr_h)
 				preview_box.draw_texture_rect(h_icon, cr_rect, false)
 			else:
@@ -5805,6 +5886,7 @@ func _get_menu_banner_id() -> String:
 
 func _ensure_menu_top_banner():
 	if Global.is_premium:
+		_set_house_ad_visible(false)
 		var admob_node = Global.get_admob()
 		if admob_node:
 			if admob_node.has_method("remove_banner_ad"):
@@ -5812,16 +5894,27 @@ func _ensure_menu_top_banner():
 			elif admob_node.has_method("hide_banner_ad"):
 				admob_node.hide_banner_ad()
 		menu_banner_ad_id = ""
+		_ensure_vip_top_bar()
 		return
 	
+	if is_instance_valid(vip_top_bar):
+		vip_top_bar.visible = false
+	
+	_ensure_house_ad_bar()
+	
 	var admob_node = Global.get_admob()
-	if not admob_node: return
+	if not admob_node:
+		_set_house_ad_visible(true)
+		return
 
 	# If already loaded and active for menu, ensure it is shown
 	if menu_banner_ad_id != "":
+		_set_house_ad_visible(false)
 		if admob_node.has_method("show_banner_ad"):
 			admob_node.show_banner_ad(menu_banner_ad_id)
 		return
+	
+	_set_house_ad_visible(true)
 	
 	if is_banner_loading:
 		return
@@ -5870,6 +5963,262 @@ func _ensure_menu_top_banner():
 		is_banner_loading = false
 		admob_node.show_banner_ad()
 
+func _ensure_vip_top_bar():
+	if not Global.is_premium:
+		if is_instance_valid(vip_top_bar):
+			vip_top_bar.visible = false
+		return
+	
+	if is_instance_valid(vip_top_bar):
+		vip_top_bar.visible = true
+		return
+	
+	if active_theme.is_empty():
+		active_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
+	
+	var vip_margin = MarginContainer.new()
+	vip_margin.name = "VIP_Top_Bar"
+	vip_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	vip_margin.add_theme_constant_override("margin_top", 42)
+	vip_margin.add_theme_constant_override("margin_left", 20)
+	vip_margin.add_theme_constant_override("margin_right", 20)
+	vip_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vip_top_bar = vip_margin
+	add_child(vip_margin)
+	move_child(vip_margin, min(2, max(0, get_child_count() - 1)))
+	
+	var vip_panel = PanelContainer.new()
+	vip_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vip_panel.custom_minimum_size = Vector2(min(get_viewport_rect().size.x - 40, 660), 74)
+	vip_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	
+	var vp_style = StyleBoxFlat.new()
+	vp_style.bg_color = active_theme.bg_bottom.darkened(0.25)
+	vp_style.bg_color.a = 0.95
+	vp_style.corner_radius_top_left = 16; vp_style.corner_radius_top_right = 16
+	vp_style.corner_radius_bottom_left = 16; vp_style.corner_radius_bottom_right = 16
+	vp_style.border_width_left = 2; vp_style.border_width_right = 2
+	vp_style.border_width_top = 2; vp_style.border_width_bottom = 4
+	vp_style.border_color = Color8(255, 215, 0)
+	vp_style.shadow_color = Color8(0, 0, 0, 150)
+	vp_style.shadow_size = 12
+	vp_style.shadow_offset = Vector2(0, 3)
+	vp_style.content_margin_left = 16; vp_style.content_margin_right = 16
+	vp_style.content_margin_top = 8; vp_style.content_margin_bottom = 8
+	vip_panel.add_theme_stylebox_override("panel", vp_style)
+	vip_margin.add_child(vip_panel)
+	
+	var hb = HBoxContainer.new()
+	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hb.alignment = BoxContainer.ALIGNMENT_CENTER
+	hb.add_theme_constant_override("separation", 14)
+	vip_panel.add_child(hb)
+	
+	if ResourceLoader.exists("res://kings_crown.png"):
+		var crown_rect = TextureRect.new()
+		crown_rect.texture = load("res://kings_crown.png")
+		crown_rect.custom_minimum_size = Vector2(36, 26)
+		crown_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		crown_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		crown_rect.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		hb.add_child(crown_rect)
+	
+	var vb = VBoxContainer.new()
+	vb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vb.alignment = BoxContainer.ALIGNMENT_CENTER
+	vb.add_theme_constant_override("separation", 0)
+	hb.add_child(vb)
+	
+	var title_lbl = Label.new()
+	title_lbl.text = LANG.get(Global.current_lang, LANG["ENG"]).get("VIP_TITLE", "⭐ VIP AYRICALIKLARI AKTİF ⭐")
+	title_lbl.add_theme_font_override("font", custom_font)
+	title_lbl.add_theme_font_size_override("font_size", 28)
+	title_lbl.add_theme_color_override("font_color", Color8(255, 220, 60))
+	title_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
+	title_lbl.add_theme_constant_override("shadow_offset_y", 2)
+	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vb.add_child(title_lbl)
+	ui_labels.append({"node": title_lbl, "key": "VIP_TITLE", "type": "label"})
+	
+	var desc_lbl = Label.new()
+	desc_lbl.text = LANG.get(Global.current_lang, LANG["ENG"]).get("VIP_DESC", "Reklamsız • Tüm Kozmetikler Açık • Sınırsız Oyun")
+	desc_lbl.add_theme_font_override("font", custom_font)
+	desc_lbl.add_theme_font_size_override("font_size", 18)
+	desc_lbl.add_theme_color_override("font_color", Color8(240, 245, 255, 220))
+	desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vb.add_child(desc_lbl)
+	ui_labels.append({"node": desc_lbl, "key": "VIP_DESC", "type": "label"})
+	
+	if ResourceLoader.exists("res://kings_crown.png"):
+		var crown_rect2 = TextureRect.new()
+		crown_rect2.texture = load("res://kings_crown.png")
+		crown_rect2.custom_minimum_size = Vector2(36, 26)
+		crown_rect2.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		crown_rect2.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		crown_rect2.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		crown_rect2.flip_h = true
+		hb.add_child(crown_rect2)
+
+func _ensure_house_ad_bar():
+	if Global.is_premium or menu_banner_ad_id != "":
+		if is_instance_valid(house_ad_bar):
+			house_ad_bar.visible = false
+		return
+	
+	if is_instance_valid(house_ad_bar):
+		house_ad_bar.visible = true
+		_update_house_ad_content()
+		return
+	
+	if active_theme.is_empty():
+		active_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
+	
+	var ad_margin = MarginContainer.new()
+	ad_margin.name = "House_Ad_Top_Bar"
+	ad_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	ad_margin.add_theme_constant_override("margin_top", 42)
+	ad_margin.add_theme_constant_override("margin_left", 20)
+	ad_margin.add_theme_constant_override("margin_right", 20)
+	ad_margin.mouse_filter = Control.MOUSE_FILTER_PASS
+	house_ad_bar = ad_margin
+	add_child(ad_margin)
+	move_child(ad_margin, min(2, max(0, get_child_count() - 1)))
+	
+	var ad_btn = Button.new()
+	ad_btn.flat = true
+	ad_btn.focus_mode = Control.FOCUS_NONE
+	ad_btn.custom_minimum_size = Vector2(min(get_viewport_rect().size.x - 40, 660), 68)
+	ad_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	ad_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	ad_btn.pressed.connect(_on_house_ad_clicked)
+	ad_margin.add_child(ad_btn)
+	
+	var ad_panel = PanelContainer.new()
+	ad_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ad_panel.custom_minimum_size = Vector2(min(get_viewport_rect().size.x - 40, 660), 68)
+	ad_panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	ad_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	ad_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	house_ad_panel = ad_panel
+	ad_btn.add_child(ad_panel)
+	
+	var ad_style = StyleBoxFlat.new()
+	ad_style.bg_color = active_theme.bg_bottom.darkened(0.28)
+	ad_style.bg_color.a = 0.94
+	ad_style.corner_radius_top_left = 16; ad_style.corner_radius_top_right = 16
+	ad_style.corner_radius_bottom_left = 16; ad_style.corner_radius_bottom_right = 16
+	ad_style.border_width_left = 1.5; ad_style.border_width_right = 1.5
+	ad_style.border_width_top = 1.5; ad_style.border_width_bottom = 3.5
+	ad_style.border_color = active_theme.accent.lightened(0.15)
+	ad_style.shadow_color = Color8(0, 0, 0, 130)
+	ad_style.shadow_size = 10
+	ad_style.shadow_offset = Vector2(0, 2)
+	ad_style.content_margin_left = 16; ad_style.content_margin_right = 16
+	ad_style.content_margin_top = 6; ad_style.content_margin_bottom = 6
+	ad_panel.add_theme_stylebox_override("panel", ad_style)
+	
+	var hb = HBoxContainer.new()
+	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hb.alignment = BoxContainer.ALIGNMENT_CENTER
+	hb.add_theme_constant_override("separation", 12)
+	hb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	ad_panel.add_child(hb)
+	
+	house_ad_icon_lbl = Label.new()
+	house_ad_icon_lbl.text = "🎡"
+	house_ad_icon_lbl.add_theme_font_override("font", custom_font)
+	house_ad_icon_lbl.add_theme_font_size_override("font_size", 30)
+	house_ad_icon_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	hb.add_child(house_ad_icon_lbl)
+	
+	var vb = VBoxContainer.new()
+	vb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vb.alignment = BoxContainer.ALIGNMENT_CENTER
+	vb.add_theme_constant_override("separation", -2)
+	vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hb.add_child(vb)
+	
+	house_ad_title_lbl = Label.new()
+	house_ad_title_lbl.add_theme_font_override("font", custom_font)
+	house_ad_title_lbl.add_theme_font_size_override("font_size", 24)
+	house_ad_title_lbl.add_theme_color_override("font_color", Color8(255, 235, 120))
+	house_ad_title_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
+	house_ad_title_lbl.add_theme_constant_override("shadow_offset_y", 1)
+	house_ad_title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	vb.add_child(house_ad_title_lbl)
+	
+	house_ad_desc_lbl = Label.new()
+	house_ad_desc_lbl.add_theme_font_override("font", custom_font)
+	house_ad_desc_lbl.add_theme_font_size_override("font_size", 17)
+	house_ad_desc_lbl.add_theme_color_override("font_color", Color8(230, 240, 255, 220))
+	house_ad_desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	house_ad_desc_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	vb.add_child(house_ad_desc_lbl)
+	
+	var chevron_lbl = Label.new()
+	chevron_lbl.text = "➔"
+	chevron_lbl.add_theme_font_override("font", custom_font)
+	chevron_lbl.add_theme_font_size_override("font_size", 22)
+	chevron_lbl.add_theme_color_override("font_color", active_theme.accent.lightened(0.2))
+	chevron_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	hb.add_child(chevron_lbl)
+	
+	_update_house_ad_content()
+	
+	if not house_ad_timer:
+		house_ad_timer = Timer.new()
+		house_ad_timer.wait_time = 7.0
+		house_ad_timer.one_shot = false
+		house_ad_timer.timeout.connect(_on_house_ad_timer_timeout)
+		add_child(house_ad_timer)
+		house_ad_timer.start()
+
+func _update_house_ad_content():
+	if not is_instance_valid(house_ad_title_lbl) or not is_instance_valid(house_ad_desc_lbl):
+		return
+	var lang_data = LANG.get(Global.current_lang, LANG["ENG"])
+	match house_ad_idx:
+		0:
+			house_ad_icon_lbl.text = "🎡"
+			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_WHEEL_TITLE", "🎡 ŞANS ÇARKI")
+			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_WHEEL_DESC", "Günün ücretsiz çevirmesini al, altınları kap! Hemen Çevir ➔")
+		1:
+			house_ad_icon_lbl.text = "⚽"
+			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_FAV_TITLE", "⚽ FAVORİ TAKIM & KARİYER")
+			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_FAV_DESC", "Takımını seç, kupa ve gol istatistiklerini takip et! İncele ➔")
+		2:
+			house_ad_icon_lbl.text = "👑"
+			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_PRO_TITLE", "👑 BOL GOL PRO ÜYELİK")
+			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_PRO_DESC", "Sıfır reklam, tüm kozmetikler açık & sınırsız oyun! Keşfet ➔")
+		3:
+			house_ad_icon_lbl.text = "📋"
+			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_QUEST_TITLE", "📋 GÜNLÜK GÖREVLER")
+			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_QUEST_DESC", "Günün görevlerini tamamla, bonus altınları topla! Görevler ➔")
+
+func _on_house_ad_timer_timeout():
+	if not is_instance_valid(house_ad_bar) or not house_ad_bar.visible:
+		return
+	house_ad_idx = (house_ad_idx + 1) % 4
+	_update_house_ad_content()
+
+func _on_house_ad_clicked():
+	Global.play_click()
+	match house_ad_idx:
+		0:
+			_open_lucky_wheel()
+		1:
+			_switch_tab(0)
+		2:
+			_switch_tab(2)
+		3:
+			_open_daily_quests()
+
+func _set_house_ad_visible(is_vis: bool):
+	if Global.is_premium or menu_banner_ad_id != "":
+		is_vis = false
+	if is_instance_valid(house_ad_bar):
+		house_ad_bar.visible = is_vis
+
 func _request_rewarded_ad():
 	if is_rewarded_loading: return
 	var admob_node = Global.get_admob()
@@ -5881,6 +6230,7 @@ func _request_rewarded_ad():
 
 var active_reward_purpose: String = "general"
 var wheel_on_reward_callback: Callable = Callable()
+var current_wheel_status_callback: Callable = Callable()
 
 func _show_admob_rewarded():
 	Global.play_click()
@@ -6052,6 +6402,8 @@ func _on_rewarded_video_earned(_ad_info = null, _reward_data = null):
 			var cb = wheel_on_reward_callback
 			wheel_on_reward_callback = Callable()
 			cb.call()
+		elif current_wheel_status_callback.is_valid():
+			current_wheel_status_callback.call()
 		_request_rewarded_ad()
 		return
 	
@@ -6146,18 +6498,19 @@ func _on_rewarded_dismissed(_ad_info = null):
 	is_rewarded_loading = false
 	if active_reward_purpose == "wheel":
 		active_reward_purpose = "general"
-		if Global.lucky_wheel_pending_ad_spins == 0:
-			Global.lucky_wheel_pending_ad_spins += 1
-			Global.save_progression()
-		if wheel_on_reward_callback.is_valid():
-			var cb = wheel_on_reward_callback
-			wheel_on_reward_callback = Callable()
-			cb.call()
+		wheel_on_reward_callback = Callable()
+		if current_wheel_status_callback.is_valid():
+			current_wheel_status_callback.call()
 	_request_rewarded_ad()
 
 func _on_rewarded_failed_to_show(_ad_info = null, _error_data = null):
 	is_rewarded_loading = false
 	print("[AdMob] Rewarded ad failed to show.")
+	if active_reward_purpose == "wheel":
+		active_reward_purpose = "general"
+		wheel_on_reward_callback = Callable()
+		if current_wheel_status_callback.is_valid():
+			current_wheel_status_callback.call()
 	_request_rewarded_ad()
 
 func _on_banner_loaded(ad_info, _response_info = null):
@@ -6167,6 +6520,7 @@ func _on_banner_loaded(ad_info, _response_info = null):
 	var ad_id = ad_info.get_ad_id() if ad_info else ""
 	menu_banner_ad_id = ad_id
 	print("[AdMob] Unified Menu Banner loaded. (ad_id: ", ad_id, ")")
+	_set_house_ad_visible(false)
 	
 	var admob_node = Global.get_admob()
 	if admob_node and admob_node.has_method("show_banner_ad"):
@@ -6181,6 +6535,8 @@ func _on_banner_failed_to_load(ad_info, error_data):
 	var err_msg = error_data.get_message() if error_data and error_data.has_method("get_message") else ""
 	print("[AdMob] Unified Menu Banner failed to load. Code: ", err_code, " Message: ", err_msg)
 	if not is_inside_tree() or Global.is_premium: return
+	
+	_set_house_ad_visible(true)
 	
 	menu_banner_retry_count += 1
 	var delay = min(25.0 + float(menu_banner_retry_count * 15), 60.0)
@@ -6530,8 +6886,15 @@ func _open_lucky_wheel():
 	vbox.add_child(spin_btn)
 	
 	var is_spinning = false
+	var close_btn = Button.new()
 	
 	var update_wheel_status = func():
+		if is_spinning:
+			spin_btn.disabled = true
+			close_btn.disabled = true
+			return
+		close_btn.disabled = false
+		
 		var free_avail = (Global.lucky_wheel_free_spins_used < 1)
 		var pending_ad = (Global.lucky_wheel_pending_ad_spins > 0)
 		var ad_avail = (Global.lucky_wheel_ad_spins_used < 3)
@@ -6552,6 +6915,7 @@ func _open_lucky_wheel():
 			if Global.current_lang == "ENG": ready_txt = "Free spin is available!"
 			elif Global.current_lang == "ESP": ready_txt = "¡Giro gratis disponible!"
 			elif Global.current_lang == "POR": ready_txt = "Rodada grátis disponível!"
+			elif Global.current_lang == "ITA": ready_txt = "Giro gratis disponibile!"
 			timer_lbl.text = ready_txt
 			timer_lbl.add_theme_color_override("font_color", Color8(120, 255, 140))
 			
@@ -6567,6 +6931,7 @@ func _open_lucky_wheel():
 			if Global.current_lang == "ENG": next_spin_prefix = "Next Free Spin in: "
 			elif Global.current_lang == "ESP": next_spin_prefix = "Próximo giro gratis en: "
 			elif Global.current_lang == "POR": next_spin_prefix = "Próxima rodada grátis em: "
+			elif Global.current_lang == "ITA": next_spin_prefix = "Prossimo giro gratis tra: "
 			timer_lbl.text = next_spin_prefix + time_str
 			timer_lbl.add_theme_color_override("font_color", Color8(200, 220, 245))
 			
@@ -6574,6 +6939,7 @@ func _open_lucky_wheel():
 			if Global.current_lang == "ENG": spin_now_txt = "SPIN NOW!"
 			elif Global.current_lang == "ESP": spin_now_txt = "¡GIRAR AHORA!"
 			elif Global.current_lang == "POR": spin_now_txt = "RODAR AGORA!"
+			elif Global.current_lang == "ITA": spin_now_txt = "GIRA ORA!"
 			spin_btn.text = spin_now_txt
 			spin_btn.disabled = false
 			apply_3d_style_to_button(spin_btn, Color8(40, 155, 75), Color8(20, 90, 40), 16, 4.5, 30, 10)
@@ -6588,6 +6954,7 @@ func _open_lucky_wheel():
 			if Global.current_lang == "ENG": next_spin_prefix = "Next Free Spin in: "
 			elif Global.current_lang == "ESP": next_spin_prefix = "Próximo giro gratis en: "
 			elif Global.current_lang == "POR": next_spin_prefix = "Próxima rodada grátis em: "
+			elif Global.current_lang == "ITA": next_spin_prefix = "Prossimo giro gratis tra: "
 			timer_lbl.text = next_spin_prefix + time_str
 			timer_lbl.add_theme_color_override("font_color", Color8(200, 220, 245))
 			
@@ -6603,6 +6970,7 @@ func _open_lucky_wheel():
 			if Global.current_lang == "ENG": next_spin_prefix = "Next Free Spin in: "
 			elif Global.current_lang == "ESP": next_spin_prefix = "Próximo giro gratis en: "
 			elif Global.current_lang == "POR": next_spin_prefix = "Próxima rodada grátis em: "
+			elif Global.current_lang == "ITA": next_spin_prefix = "Prossimo giro gratis tra: "
 			timer_lbl.text = next_spin_prefix + time_str
 			timer_lbl.add_theme_color_override("font_color", Color8(255, 215, 0))
 			
@@ -6612,6 +6980,10 @@ func _open_lucky_wheel():
 			spin_btn.add_theme_color_override("font_color", Color.WHITE)
 	
 	update_wheel_status.call()
+	current_wheel_status_callback = update_wheel_status
+	overlay.tree_exiting.connect(func():
+		current_wheel_status_callback = Callable()
+	)
 	
 	var live_clock_timer = Timer.new()
 	live_clock_timer.wait_time = 1.0
@@ -6628,13 +7000,11 @@ func _open_lucky_wheel():
 		if is_spinning: return
 		is_spinning = true
 		spin_btn.disabled = true
+		close_btn.disabled = true
 		
-		if is_ad:
-			Global.lucky_wheel_ad_spins_used += 1
-		else:
+		if not is_ad:
 			Global.lucky_wheel_free_spins_used += 1
 		Global.save_progression()
-		update_wheel_status.call()
 			
 		var res = Global.spin_lucky_wheel()
 		var chosen_idx = int(res.get("index", 0))
@@ -6654,12 +7024,15 @@ func _open_lucky_wheel():
 		tw.set_trans(Tween.TRANS_CUBIC)
 		tw.set_ease(Tween.EASE_OUT)
 		tw.tween_method(func(val):
+			if not is_instance_valid(wheel_view): return
 			cur_rotation["angle"] = val
 			wheel_view.queue_redraw()
 		, cur_rotation["angle"], final_rot, 3.5)
 		
 		tw.finished.connect(func():
+			if not is_instance_valid(overlay): return
 			is_spinning = false
+			close_btn.disabled = false
 			var title_txt = "ŞANS ÇARKI ÖDÜLÜ"
 			var bal_prefix = "Güncel Bakiye: "
 			if Global.current_lang == "ENG":
@@ -6688,23 +7061,34 @@ func _open_lucky_wheel():
 		if free_avail:
 			perform_spin.call(false)
 		elif pending_ad:
-			Global.lucky_wheel_pending_ad_spins -= 1
+			Global.lucky_wheel_pending_ad_spins = max(0, Global.lucky_wheel_pending_ad_spins - 1)
 			Global.save_progression()
 			perform_spin.call(true)
 		elif ad_avail:
-			_show_admob_rewarded_for_wheel(func():
+			var started = _show_admob_rewarded_for_wheel(func():
+				if not is_instance_valid(overlay): return
+				Global.lucky_wheel_pending_ad_spins += 1
+				Global.lucky_wheel_ad_spins_used += 1
+				Global.save_progression()
+				spin_btn.disabled = false
+				close_btn.disabled = false
 				update_wheel_status.call()
-				var toast_txt = "Çevirme hakkı hazır! Çarkı şimdi çevirebilirsiniz."
-				if Global.current_lang == "ENG": toast_txt = "Spin ready! You can now spin the wheel."
-				elif Global.current_lang == "ESP": toast_txt = "¡Giro listo! Ahora puedes girar la ruleta."
-				elif Global.current_lang == "POR": toast_txt = "Giro pronto! Agora você pode girar a roda."
-				_show_toast(toast_txt)
+				var earned_txt = "Tebrikler! 1 Çevirme Hakkı Kazandın!"
+				if Global.current_lang == "ENG": earned_txt = "Congratulations! You earned 1 Spin Ticket!"
+				elif Global.current_lang == "ESP": earned_txt = "¡Enhorabuena! ¡Ganaste 1 Tirada!"
+				elif Global.current_lang == "POR": earned_txt = "Parabéns! Ganhaste 1 Rodada!"
+				elif Global.current_lang == "ITA": earned_txt = "Congratulazioni! Hai vinto 1 Giro!"
+				_show_toast(earned_txt)
 			)
+			if started:
+				spin_btn.disabled = true
+				close_btn.disabled = true
+			else:
+				update_wheel_status.call()
 		else:
 			overlay.queue_free()
 	)
 	
-	var close_btn = Button.new()
 	close_btn.text = LANG.get(Global.current_lang, LANG["ENG"])["CLOSE"]
 	close_btn.add_theme_font_override("font", custom_font)
 	close_btn.add_theme_font_size_override("font_size", 22)
@@ -6716,24 +7100,30 @@ func _open_lucky_wheel():
 	close_btn.add_theme_color_override("font_color", Color.WHITE)
 	close_btn.pressed.connect(func():
 		Global.play_click()
+		if is_spinning: return
 		overlay.queue_free()
 	)
 	vbox.add_child(close_btn)
 
-func _show_admob_rewarded_for_wheel(on_reward_callback: Callable):
-	active_reward_purpose = "wheel"
-	wheel_on_reward_callback = on_reward_callback
+func _show_admob_rewarded_for_wheel(on_reward_callback: Callable) -> bool:
 	var admob_node = Global.get_admob()
 	if admob_node and admob_node.has_method("show_rewarded_ad"):
 		if admob_node.has_method("is_rewarded_ad_loaded") and admob_node.is_rewarded_ad_loaded():
+			active_reward_purpose = "wheel"
+			wheel_on_reward_callback = on_reward_callback
 			admob_node.show_rewarded_ad()
+			return true
 		else:
 			_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("AD_PREPARING", "Reklam hazırlanıyor, lütfen birkaç saniye sonra tekrar deneyin..."))
 			_request_rewarded_ad()
+			return false
 	else:
 		# Fallback / editor test mode: trigger wheel reward callback immediately!
 		print("[AdMob] Rewarded ad fallback for Lucky Wheel...")
+		active_reward_purpose = "wheel"
+		wheel_on_reward_callback = on_reward_callback
 		_on_rewarded_video_earned()
+		return true
 
 # ======================================================
 # LEADERBOARD MODAL

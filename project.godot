@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Bol Gol Futbol"
-run/main_scene="uid://bcqrx4abdqiiq"
+run/main_scene="uid://b1lcuwix1xu2p"
 config/features=PackedStringArray("4.6", "Mobile")
 boot_splash/bg_color=Color(0, 0.054902, 0.133333, 1)
 boot_splash/stretch_mode=0

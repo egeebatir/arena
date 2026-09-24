@@ -2,7 +2,7 @@ extends Node2D
 
 const POST_RADIUS = 4.0
 const POST_ELASTICITY = 1.04
-const BALL_RADIUS = 47
+const BALL_RADIUS = 56.5
 const SPEED = 7.8
 const MIN_SPEED = 5.8
 const GRAVITY = 0.001
@@ -213,7 +213,7 @@ func _draw():
 
 	# Draw team mascot badge centered on ball
 	if badge_texture:
-		var badge_size = Vector2(92, 92)
+		var badge_size = Vector2(60, 60)
 		var badge_rect = Rect2(-badge_size / 2.0, badge_size)
 		draw_texture_rect(badge_texture, badge_rect, false)
 
@@ -244,9 +244,9 @@ func _draw():
 		var hat_h = 32.0
 		var y_overlap = 10.0
 		if Global.equipped_hat == "viking_helmet":
-			hat_w = 54.0
-			hat_h = 38.0
-			y_overlap = 16.0
+			hat_w = 78.0
+			hat_h = 52.0
+			y_overlap = 18.0
 		elif Global.equipped_hat == "magic_hat":
 			hat_w = 50.0
 			hat_h = 42.0

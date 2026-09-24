@@ -42,7 +42,7 @@ var _data: Dictionary
 
 func _init():
 	_data = {
-		DATA_KEY_TEST_DEVICE_IDS: []
+		DATA_KEY_TEST_DEVICE_IDS: PackedStringArray()
 	}
 
 
@@ -76,15 +76,17 @@ func set_personalization_state(a_value: PersonalizationState) -> AdmobConfig:
 	return self
 
 
-func set_test_device_ids(a_value: Array) -> AdmobConfig:
+func set_test_device_ids(a_value) -> AdmobConfig:
 	if a_value == null:
-		_data[DATA_KEY_TEST_DEVICE_IDS] = []
+		_data[DATA_KEY_TEST_DEVICE_IDS] = PackedStringArray()
 	else:
-		_data[DATA_KEY_TEST_DEVICE_IDS] = a_value
+		_data[DATA_KEY_TEST_DEVICE_IDS] = PackedStringArray(a_value)
 	return self
 
 
 func add_test_device_id(a_value: String) -> AdmobConfig:
+	if not _data[DATA_KEY_TEST_DEVICE_IDS] is PackedStringArray:
+		_data[DATA_KEY_TEST_DEVICE_IDS] = PackedStringArray(_data[DATA_KEY_TEST_DEVICE_IDS])
 	_data[DATA_KEY_TEST_DEVICE_IDS].append(a_value)
 	return self
 

@@ -1,10 +1,10 @@
 extends Node2D
 
-const ARENA_RADIUS = 264.0
+const ARENA_RADIUS = 279.0
 var CENTER = Vector2.ZERO
-const GOAL_WIDTH_RADIANS = 0.5
+const GOAL_WIDTH_RADIANS = 0.505
 const POST_RADIUS = 4.8
-const GOAL_DEPTH = 70
+const GOAL_DEPTH = 74
 const INWARD_OFFSET = 30 
 const ELASTICITY = 1.01 
 
@@ -109,7 +109,158 @@ class StaticPitch extends Node2D:
 		# Center kick-off spot
 		draw_circle(Vector2.ZERO, 5.0, swhite)
 
+class StadiumCrowd extends Node2D:
+	var home_primary: Color = Color.RED
+	var home_secondary: Color = Color.WHITE
+	var away_primary: Color = Color.BLUE
+	var away_secondary: Color = Color.WHITE
+	var arena_radius: float = 279.0
+	var spectators: Array = []
+	var anim_time: float = 0.0
+	var cheer_team: int = 0  # 0: none, 1: home, 2: away
+	var cheer_timer: float = 0.0
+
+	func setup_crowd(h_col1: Color, h_col2: Color, a_col1: Color, a_col2: Color, radius: float):
+		home_primary = h_col1
+		home_secondary = h_col2
+		away_primary = a_col1
+		away_secondary = a_col2
+		arena_radius = radius
+		spectators.clear()
+		
+		var skin_tones = [
+			Color8(255, 219, 172),
+			Color8(241, 194, 125),
+			Color8(224, 172, 105),
+			Color8(198, 134, 66),
+			Color8(141, 85, 36),
+			Color8(92, 56, 24)
+		]
+		
+		var rings = [
+			{"count": 30, "base_r": arena_radius + 37.0, "jitter_r": 4.0},
+			{"count": 26, "base_r": arena_radius + 65.0, "jitter_r": 5.0}
+		]
+		
+		for r_idx in range(rings.size()):
+			var ring = rings[r_idx]
+			var count = ring["count"]
+			var base_r = ring["base_r"]
+			var jitter_r = ring["jitter_r"]
+			var angle_step = TAU / float(count)
+			var ring_offset = (PI / float(count)) * float(r_idx)
+			
+			for i in range(count):
+				var base_angle = float(i) * angle_step + ring_offset
+				var angle_jitter = (randf() - 0.5) * (angle_step * 0.45)
+				var final_angle = base_angle + angle_jitter
+				var r_dist = base_r + (randf() - 0.5) * jitter_r * 2.0
+				
+				var cos_a = cos(final_angle)
+				var team = 0
+				var jersey_col = Color.WHITE
+				var secondary_col = Color8(200, 200, 200)
+				
+				if cos_a > 0.12:
+					team = 1 # Home
+					jersey_col = home_primary if (i % 3 != 0) else home_secondary
+					secondary_col = home_secondary if (i % 3 != 0) else home_primary
+				elif cos_a < -0.12:
+					team = 2 # Away
+					jersey_col = away_primary if (i % 3 != 0) else away_secondary
+					secondary_col = away_secondary if (i % 3 != 0) else away_primary
+				else:
+					team = 0
+					if randf() > 0.5:
+						jersey_col = Color8(235, 240, 250)
+						secondary_col = Color8(100, 115, 135)
+					else:
+						jersey_col = Color8(45, 55, 75)
+						secondary_col = Color8(180, 190, 205)
+				
+				var skin = skin_tones[randi() % skin_tones.size()]
+				var sway_phase = randf() * TAU
+				var sway_speed = 1.6 + randf() * 0.8
+				var body_width = 8.5 + randf() * 2.0
+				var body_height = 6.5 + randf() * 1.5
+				var head_radius = 3.6 + randf() * 0.6
+				var has_hat = (randf() < 0.35)
+				var has_scarf = (randf() < 0.40)
+				
+				spectators.append({
+					"angle": final_angle,
+					"radius": r_dist,
+					"team": team,
+					"jersey": jersey_col,
+					"secondary": secondary_col,
+					"skin": skin,
+					"sway_phase": sway_phase,
+					"sway_speed": sway_speed,
+					"w": body_width,
+					"h": body_height,
+					"head_r": head_radius,
+					"has_hat": has_hat,
+					"has_scarf": has_scarf
+				})
+		queue_redraw()
+
+	func _process(delta: float):
+		anim_time += delta
+		if cheer_timer > 0.0:
+			cheer_timer = max(0.0, cheer_timer - delta)
+			if cheer_timer <= 0.0:
+				cheer_team = 0
+		queue_redraw()
+
+	func trigger_cheer(team_idx: int):
+		cheer_team = team_idx
+		cheer_timer = 3.2
+
+	func _draw():
+		var shadow_col = Color8(0, 0, 0, 60)
+		for spec in spectators:
+			var ang = spec["angle"]
+			var r = spec["radius"]
+			var is_cheering = (cheer_team != 0 and cheer_team == spec["team"])
+			
+			var ambient_sway = sin(anim_time * spec["sway_speed"] + spec["sway_phase"]) * 1.5
+			var jump_y = 0.0
+			var hand_up = false
+			
+			if is_cheering:
+				var jump_cycle = fmod((anim_time * 6.0 + spec["sway_phase"]), TAU)
+				jump_y = -abs(sin(jump_cycle)) * 7.5
+				hand_up = true
+			elif cheer_team != 0 and spec["team"] != 0 and cheer_team != spec["team"]:
+				jump_y = 1.5
+			
+			var radial_dir = Vector2(cos(ang), sin(ang))
+			var tang_dir = Vector2(-sin(ang), cos(ang))
+			var base_pos = radial_dir * (r + ambient_sway)
+			var pos = base_pos + Vector2(0, jump_y)
+			
+			draw_circle(base_pos + Vector2(0, 2.5), spec["w"] * 0.65, shadow_col)
+			draw_line(pos - tang_dir * (spec["w"] * 0.45), pos + tang_dir * (spec["w"] * 0.45), spec["jersey"], spec["h"], true)
+			
+			if hand_up:
+				var hand_col = spec["skin"]
+				var left_hand = pos - tang_dir * (spec["w"] * 0.65) - radial_dir * 5.0
+				var right_hand = pos + tang_dir * (spec["w"] * 0.65) - radial_dir * 5.0
+				draw_circle(left_hand, 2.0, hand_col)
+				draw_circle(right_hand, 2.0, hand_col)
+			
+			if spec["has_scarf"]:
+				draw_line(pos - tang_dir * (spec["w"] * 0.35), pos + tang_dir * (spec["w"] * 0.35), spec["secondary"], 2.5, true)
+			
+			var head_pos = pos - radial_dir * 1.0
+			draw_circle(head_pos, spec["head_r"], spec["skin"])
+			
+			if spec["has_hat"]:
+				var cap_pos = head_pos - radial_dir * 1.2
+				draw_circle(cap_pos, spec["head_r"] * 0.75, spec["jersey"])
+
 var static_pitch_node: StaticPitch
+var stadium_crowd: StadiumCrowd
 
 @onready var ball1 = $Ball1
 @onready var ball2 = $Ball2
@@ -156,7 +307,7 @@ func _ready():
 	# Bottom safe boundary: top of bottom AdMob banner safe zone (screen_size.y - 130px)
 	var top_limit = 195.0
 	var bottom_limit = screen_size.y - 130.0
-	CENTER = Vector2(screen_size.x / 2.0, (top_limit + bottom_limit) / 2.0)
+	CENTER = Vector2(screen_size.x / 2.0, (top_limit + bottom_limit) / 2.0 - 24.0)
 	
 	static_pitch_node = StaticPitch.new()
 	static_pitch_node.arena_radius = ARENA_RADIUS
@@ -167,6 +318,16 @@ func _ready():
 	static_pitch_node.z_index = -1
 	add_child(static_pitch_node)
 	static_pitch_node.queue_redraw()
+	
+	stadium_crowd = StadiumCrowd.new()
+	var h_data = Global.TEAMS.get(Global.home_team_name, {})
+	var a_data = Global.TEAMS.get(Global.away_team_name, {})
+	var h_cols = h_data.get("colors", [Color.RED, Color.WHITE])
+	var a_cols = a_data.get("colors", [Color.BLUE, Color.WHITE])
+	stadium_crowd.setup_crowd(h_cols[0], h_cols[1] if h_cols.size() > 1 else Color.WHITE, a_cols[0], a_cols[1] if a_cols.size() > 1 else Color.WHITE, ARENA_RADIUS)
+	stadium_crowd.position = CENTER
+	stadium_crowd.z_index = -1
+	add_child(stadium_crowd)
 	
 	added_time_1 = _generate_added_time_1()
 	added_time_2 = _generate_added_time_2()
@@ -384,18 +545,6 @@ func setup_scoreboard():
 	score_hbox.add_theme_constant_override("separation", 14)
 	main_vbox.add_child(score_hbox)
 	
-	# Team 1 Crest Badge
-	var t1_icon = TextureRect.new()
-	t1_icon.custom_minimum_size = Vector2(34, 34)
-	t1_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	t1_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	t1_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	if ball1.badge_texture:
-		t1_icon.texture = ball1.badge_texture
-	elif ball1.logo_texture:
-		t1_icon.texture = ball1.logo_texture
-	score_hbox.add_child(t1_icon)
-	
 	t1_yellow_box = Control.new()
 	score_hbox.add_child(t1_yellow_box)
 	
@@ -469,18 +618,6 @@ func setup_scoreboard():
 	t2_yellow_box = Control.new()
 	score_hbox.add_child(t2_yellow_box)
 	
-	# Team 2 Crest Badge
-	var t2_icon = TextureRect.new()
-	t2_icon.custom_minimum_size = Vector2(34, 34)
-	t2_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	t2_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	t2_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	if ball2.badge_texture:
-		t2_icon.texture = ball2.badge_texture
-	elif ball2.logo_texture:
-		t2_icon.texture = ball2.logo_texture
-	score_hbox.add_child(t2_icon)
-	
 	var time_pill = PanelContainer.new()
 	time_pill.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var time_style = StyleBoxFlat.new()
@@ -543,10 +680,9 @@ func setup_scoreboard():
 	event_lbl.custom_minimum_size = Vector2(600, 160)
 	event_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	event_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	event_lbl.set_anchors_preset(Control.PRESET_CENTER)
-	event_lbl.grow_horizontal = Control.GROW_DIRECTION_BOTH 
-	event_lbl.grow_vertical = Control.GROW_DIRECTION_BOTH
+	event_lbl.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	event_lbl.pivot_offset = Vector2(300, 80)
+	event_lbl.position = CENTER - event_lbl.pivot_offset
 	event_lbl.modulate.a = 0.0
 	ui_layer.add_child(event_lbl)
 	
@@ -714,7 +850,7 @@ func setup_scoreboard():
 	
 	restart_btn.custom_minimum_size = Vector2(108, 108)
 	var screen_w = get_viewport_rect().size.x
-	restart_btn.position = Vector2((screen_w - 108.0) / 2.0, CENTER.y + ARENA_RADIUS + 40.0)
+	restart_btn.position = Vector2((screen_w - 108.0) / 2.0, CENTER.y + ARENA_RADIUS + 75.0)
 	
 	restart_btn.visible = false
 	restart_btn.pressed.connect(func(): Global.play_click(); _on_restart_pressed())
@@ -1119,6 +1255,7 @@ func _physics_process(delta):
 					"is_comeback": (score1 > score2 and team1_trailed) or (score2 > score1 and team2_trailed)
 				}
 			)
+			Global.save_stats()
 			
 			# --- GOOGLE PLAY ACHIEVEMENTS TRIGGERS ---
 			var total_matches = Global.match_history.size()
@@ -1215,11 +1352,12 @@ func _physics_process(delta):
 func resolve_collisions(b1, b2) -> bool:
 	var d = b2.position - b1.position
 	var dist = d.length()
+	var combined_r = b1.BALL_RADIUS + b2.BALL_RADIUS
 	
-	if dist < 52.0 + 52.0:
+	if dist < combined_r:
 		if dist == 0: dist = 0.1
 		var n = d.normalized() if dist > 0.001 else Vector2(1, 0)
-		var overlap = (52.0 + 52.0) - dist
+		var overlap = combined_r - dist
 		var total_mass = b1.mass + b2.mass
 		var m1_ratio = b2.mass / total_mass
 		var m2_ratio = b1.mass / total_mass
@@ -1239,7 +1377,7 @@ func resolve_collisions(b1, b2) -> bool:
 		b1.velocity.x -= impulse_x / b1.mass; b1.velocity.y -= impulse_y / b1.mass
 		b2.velocity.x += impulse_x / b2.mass; b2.velocity.y += impulse_y / b2.mass
 		
-		var hit_pos = b1.position + n * 52.0
+		var hit_pos = b1.position + n * b1.BALL_RADIUS
 		for _i in range(5): create_particle(hit_pos, -n * 4.0, b1.team_colors[randi() % b1.team_colors.size()])
 		for _i in range(5): create_particle(hit_pos, n * 4.0, b2.team_colors[randi() % b2.team_colors.size()])
 		return true
@@ -1247,7 +1385,7 @@ func resolve_collisions(b1, b2) -> bool:
 
 func check_goal(b, team_id):
 	var dist = b.position.distance_to(CENTER)
-	if dist > ARENA_RADIUS - 52.0 - 5.0:
+	if dist > ARENA_RADIUS - b.BALL_RADIUS - 5.0:
 		var ball_ang = (b.position - CENTER).angle()
 		var goal_n = fposmod(goal_angle, TAU)
 		var ball_n = fposmod(ball_ang, TAU)
@@ -1261,24 +1399,27 @@ func trigger_goal(b, team_id):
 	Global.trigger_vibration(500)
 	
 	var goal_str = Global.LANG[Global.current_lang]["GOAL"]
-	var team_color = ball1.team_colors[0] if team_id == 1 else ball2.team_colors[0]
+	var scoring_ball = ball1 if team_id == 1 else ball2
+	var primary_col = scoring_ball.team_colors[0]
+	var secondary_col = scoring_ball.team_colors[1] if scoring_ball.team_colors.size() > 1 else Color.WHITE
+	
+	var lum = primary_col.get_luminance()
+	var outline_col = Color.WHITE if lum < 0.35 else Color.BLACK
+	if abs(secondary_col.get_luminance() - lum) > 0.38:
+		outline_col = secondary_col
 	
 	if team_id == 1:
 		score1 += 1
 		if score1 < score2:
 			team1_trailed = true
-		elif score1 > score2 and score2 > 0:
-			# Team 1 took the lead after conceding
-			pass
-		trigger_popup(goal_str, team_color, get_readable_outline(team_color))
 	else:
 		score2 += 1
 		if score2 < score1:
 			team2_trailed = true
-		elif score2 > score1 and score1 > 0:
-			# Team 2 took the lead after conceding
-			pass
-		trigger_popup(goal_str, team_color, get_readable_outline(team_color))
+		
+	trigger_popup(goal_str, primary_col, outline_col)
+	if is_instance_valid(stadium_crowd):
+		stadium_crowd.trigger_cheer(team_id)
 		
 	if score1 < score2: team1_trailed = true
 	if score2 < score1: team2_trailed = true
@@ -1310,6 +1451,12 @@ func trigger_goal(b, team_id):
 				if pname != "":
 					custom_names.append(pname)
 	
+	var scorer_team = ball1 if team_id == 1 else ball2
+	var scorer_col = scorer_team.team_colors[0]
+	var s_lum = scorer_col.get_luminance()
+	var scorer_display_col = scorer_col.lightened(0.35) if s_lum < 0.25 else (scorer_col.darkened(0.15) if s_lum > 0.85 else scorer_col)
+	var s_outline = Color.BLACK if s_lum > 0.45 else Color.WHITE
+
 	if custom_names.size() > 0:
 		var chosen_name = custom_names[randi() % custom_names.size()]
 		goal_banner_lbl.text = chosen_name + " (" + time_str + "')"
@@ -1317,9 +1464,9 @@ func trigger_goal(b, team_id):
 		var available_nums = [7, 8, 9, 10, 11, 14, 17, 19, 21, 23]
 		var scorer_num = available_nums[randi() % available_nums.size()]
 		goal_banner_lbl.text = "#" + str(scorer_num) + " (" + time_str + "')"
-	goal_banner_lbl.add_theme_color_override("font_color", Color.WHITE)
-	goal_banner_lbl.remove_theme_color_override("font_outline_color")
-	goal_banner_lbl.remove_theme_constant_override("outline_size")
+	goal_banner_lbl.add_theme_color_override("font_color", scorer_display_col)
+	goal_banner_lbl.add_theme_color_override("font_outline_color", s_outline)
+	goal_banner_lbl.add_theme_constant_override("outline_size", 3)
 	goal_banner_timer = 5.0
 
 	if score1 + score2 >= 1: goal_rotating = true
@@ -1399,18 +1546,16 @@ func _draw():
 		var c = p.color; c.a = alpha
 		draw_circle(p.pos, p.radius, c)
 	
-func trigger_popup(msg: String, color: Color = Color.WHITE, _outline_col: Color = Color.BLACK):
+func trigger_popup(msg: String, color: Color = Color.WHITE, outline_col: Color = Color.BLACK):
 	event_lbl.text = msg
-	var lum = color.get_luminance()
-	var display_col = color.lightened(0.35) if lum < 0.3 else (color.darkened(0.15) if lum > 0.85 else color)
-	var out_col = Color.BLACK if lum > 0.45 else Color.WHITE
-	event_lbl.add_theme_color_override("font_color", display_col)
-	event_lbl.add_theme_color_override("font_outline_color", out_col)
-	event_lbl.add_theme_constant_override("outline_size", 8)
-	event_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 230))
+	event_lbl.add_theme_color_override("font_color", color)
+	event_lbl.add_theme_color_override("font_outline_color", outline_col)
+	event_lbl.add_theme_constant_override("outline_size", 10)
+	event_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 240))
 	event_lbl.add_theme_constant_override("shadow_offset_y", 6)
 	event_lbl.add_theme_constant_override("shadow_offset_x", 0)
 	event_lbl.pivot_offset = Vector2(300, 80)
+	event_lbl.position = CENTER - event_lbl.pivot_offset
 	event_lbl.scale = Vector2(0.35, 0.35)
 	event_lbl.modulate.a = 1.0
 	var tw = create_tween()

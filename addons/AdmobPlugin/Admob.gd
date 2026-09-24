@@ -349,6 +349,10 @@ func _validate_property(property: Dictionary) -> void:
 
 
 func _ready() -> void:
+	if OS.is_debug_build():
+		is_real = false
+		Admob.log_info("DEBUG BUILD detected: is_real forced to FALSE to protect AdMob account from Invalid Traffic violations.")
+
 	if OS.has_feature("ios"):
 		if is_real:
 			_banner_id = ios_real_banner_id
@@ -577,7 +581,7 @@ func create_request_configuration() -> AdmobConfig:
 			.set_first_party_id_enabled(first_party_id_enabled)
 			.set_personalization_state(personalization_state))
 	if test_device_hashed_ids != null and not test_device_hashed_ids.is_empty():
-		__config.set_test_device_ids(test_device_hashed_ids)
+		__config.set_test_device_ids(PackedStringArray(test_device_hashed_ids))
 	return __config
 
 

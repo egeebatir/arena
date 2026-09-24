@@ -31,12 +31,13 @@ var privacy_modal: Control = null
 var particles: Array = []
 var particle_canvas: Control
 
-const LANG_CYCLE: Array = ["TR", "ENG", "ESP", "POR"]
+const LANG_CYCLE: Array = ["TR", "ENG", "ESP", "POR", "ITA"]
 const LANG_DISPLAY: Dictionary = {
 	"TR": "TR",
 	"ENG": "EN",
 	"ESP": "ES",
-	"POR": "PT"
+	"POR": "PT",
+	"ITA": "IT"
 }
 
 var LANG = {
@@ -563,7 +564,7 @@ func _build_ui():
 	add_child(ver_margin)
 	
 	var ver_lbl = Label.new()
-	ver_lbl.text = "v12.4"
+	ver_lbl.text = "v1.0.24"
 	ver_lbl.add_theme_font_override("font", custom_font)
 	ver_lbl.add_theme_font_size_override("font_size", 16)
 	ver_lbl.add_theme_color_override("font_color", Color8(130, 165, 195, 130))
