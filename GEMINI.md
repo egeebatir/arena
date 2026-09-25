@@ -68,6 +68,6 @@ This workspace is part of the 3-project Bol Gol Futbol ecosystem:
    - Every match video must be scheduled strictly on its **ACTUAL MATCH DAY, exactly 2 hours prior to kickoff** (`publishAt = match_kickoff - 2 hours UTC`) to capture the organic search surge and recommendation spike leading into the real match.
 
 7. **Fixture Scope & European Coverage:**
-   - Fixture queues must maintain all Turkish Big 4 European clashes (UEFA Europa League & Champions League), UEFA Champions League marquee matches, National Team games (Türkiye, Portekiz, Arjantin, İtalya, İngiltere, ABD), Marquee European Showcase games (e.g. Barcelona vs Galatasaray, Real Madrid vs Fenerbahçe), and weekly Süper Lig wildcards.
+   - Fixture queues must maintain all Turkish Big 4 European clashes (UEFA Europa League & Champions League), UEFA Champions League marquee matches, 46 National Team games (Türkiye, Portekiz, Arjantin, İtalya, İngiltere, ABD, Fransa, İspanya, Almanya, Brezilya vb. - UEFA Nations League & FIFA World Cup Qualifiers), Marquee European Showcase games (e.g. Barcelona vs Galatasaray, Real Madrid vs Fenerbahçe), and weekly Süper Lig wildcards.
 
 
