@@ -51,6 +51,9 @@ def upload_aab(aab_path, tracks=["internal", "alpha"], release_name=None, releas
     if isinstance(tracks, str):
         tracks = [t.strip() for t in tracks.split(",") if t.strip()]
 
+    import socket
+    socket.setdefaulttimeout(300)
+
     print(f"[Play Console] Starting deployment of '{aab_path}' to tracks: {tracks} for package: {PACKAGE_NAME}...")
     credentials = service_account.Credentials.from_service_account_file(
         key,
@@ -66,7 +69,7 @@ def upload_aab(aab_path, tracks=["internal", "alpha"], release_name=None, releas
 
     try:
         # 2. Upload bundle
-        chunk_size = 5 * 1024 * 1024  # 5MB chunks
+        chunk_size = 10 * 1024 * 1024  # 10MB chunks
         media = MediaFileUpload(aab_path, mimetype="application/octet-stream", chunksize=chunk_size, resumable=True)
         request = service.edits().bundles().upload(
             packageName=PACKAGE_NAME,
@@ -96,27 +99,27 @@ def upload_aab(aab_path, tracks=["internal", "alpha"], release_name=None, releas
             release_notes = [
                 {
                     "language": "tr-TR",
-                    "text": "• Küresel Canlı Liderlik Tablosu: Skorunu eşitle ve dünya sıralamasında yerini al!\n• Pro VIP Kartı: Reklamsız oyunculara özel altın VIP profil kartı ve ayrıcalıklar.\n• Yeni Kulüp Armaları: Barcelona, PSG, Bayern, Dortmund ve Miami Inter armaları optimize edildi.\n• Şanslı Çark Güvencesi: Tekli çevirme kilidi ve ödüllü reklam kontrolleri güçlendirildi.\n• Arayüz ve Performans: Skorbord düzeni ve dokunsal ayarlar yenilendi."
+                    "text": "• Maç Jeton Ekonomisi: Günlük 5 ücretsiz maç sonrası 50 jeton ücreti ve bakiye senkronizasyonu düzeltildi.\n• Resmi Jeton Tasarımı: Maç ücreti rozetinde oyunun resmi jeton grafiği entegre edildi.\n• Sabit Mağaza Başlığı: Başlık ve jeton göstergesi sabitlendi, içerik akıcı kaydırılabilir hale getirildi.\n• Gelişmiş Tablet Deneyimi: İstatistikler ve Mağaza ekranlarına dokunsal kaydırma çubukları, yön kilidi ve hızlı gezinme butonları eklendi."
                 },
                 {
                     "language": "en-US",
-                    "text": "• Live Global Leaderboard: Sync your score and climb worldwide rankings!\n• Pro VIP Experience: Exclusive Golden VIP card displaying Captain name, club, and perks.\n• Enhanced Club Crests: HD 800x800 crests for Barcelona, PSG, Bayern, Dortmund, and Miami Inter.\n• Lucky Wheel Polish: Single-spin lock guarantee and enhanced rewarded flow.\n• Performance & UI: Refined scoreboard spacing and tactile settings sliders."
+                    "text": "• Match Token Economy: Fixed 50 token fee per match after 5 daily free matches with instant balance sync.\n• Authentic Token Design: Replaced generic icon with the official in-game token artwork.\n• Pinned Shop Header: Pinned shop title and coin balance at the top with smooth scrolling underneath.\n• Enhanced Tablet & Scroll UX: Equipped Stats and Shop with tactile scrollbars, directional gesture locks, and carousel arrow controls."
                 },
                 {
                     "language": "es-ES",
-                    "text": "• Clasificación Global: ¡Sincroniza tu puntuación y compite en el ranking mundial!\n• Experiencia Pro VIP: Tarjeta dorada exclusiva con nombre de Capitán, club y ventajas VIP.\n• Nuevos Escudos: Diseños 800x800 para Barcelona, PSG, Bayern, Dortmund e Inter Miami.\n• Ruleta de la Suerte: Control estricto de tirada única y recompensas garantizadas.\n• Rendimiento y UI: Marcador renovado y controles táctiles más fluidos."
+                    "text": "• Economía de Partidos: Corrección del cobro de 50 fichas tras agotar los 5 partidos gratis diarios.\n• Diseño Oficial de Ficha: Icono oficial integrado en el botón de inicio de partido.\n• Encabezado de Tienda Fijo: Título y saldo de fichas fijos en la parte superior con desplazamiento fluido.\n• Mejoras de Tablet: Barras táctiles visibles en Estadísticas y Tienda con bloqueo direccional de gestos."
                 },
                 {
                     "language": "pt-BR",
-                    "text": "• Classificação Global: Sincronize a sua pontuação e dispute o topo do ranking mundial!\n• Experiência Pro VIP: Cartão dourado exclusivo com nome do Capitão, clube e vantagens VIP.\n• Emblemas de Clubes: Novos emblemas para Barcelona, PSG, Bayern, Dortmund e Miami Inter.\n• Roda da Sorte: Bloqueio de giro único e fluxo de anúncios premiados refinado.\n• Desempenho e UI: Marcador ajustado e seletores táteis aprimorados."
+                    "text": "• Economia de Partidas: Correção na cobrança de 50 fichas após usar as 5 partidas grátis diárias.\n• Design Oficial de Ficha: Ícone oficial do jogo integrado no aviso de custo da partida.\n• Cabeçalho Fixo na Loja: Título e saldo fixados no topo com rolagem suave de conteúdo.\n• Melhorias para Tablet: Barras de rolagem visíveis nas Estatísticas e Loja com bloqueio direcional de gestos."
                 },
                 {
                     "language": "it-IT",
-                    "text": "• Classifica Globale: Sincronizza il tuo punteggio e scala la classifica mondiale!\n• Esperienza Pro VIP: Esclusiva card dorata con nome Capitano, squadra e vantaggi premium.\n• Stemmi dei Club: Grafiche HD per Barcellona, PSG, Bayern, Dortmund e Inter Miami.\n• Ruota della Fortuna: Blocco giro singolo garantito e gestione premi potenziata.\n• Prestazioni e UI: Spaziature tabellone rifinite e slider tattili fluidi."
+                    "text": "• Economia Partite: Corretto il costo di 50 gettoni dopo le 5 partite gratuite giornaliere.\n• Grafica Ufficiale Gettoni: Icona ufficiale del gioco integrata nel badge di ingresso partita.\n• Intestazione Negozio Fissa: Titolo e saldo fissati in alto con scorrimento fluido dei contenuti.\n• Esperienza Tablet: Barre di scorrimento visibili per Statistiche e Negozio con blocco direzionale dei gesti."
                 }
             ]
 
-        rel_name = release_name or f"{version_code} (1.0.{version_code})"
+        rel_name = release_name or f"{version_code} (1.1.2)"
 
         # 3. Assign bundle to each requested track
         for track in tracks:

@@ -891,13 +891,11 @@ func trigger_vibration(duration_ms: int = 500):
 func save_stats():
 	if match_history.size() > 100:
 		match_history = match_history.slice(match_history.size() - 100)
-	var tmp_path = "user://stats.json.tmp"
 	var final_path = "user://stats.json"
-	var file = FileAccess.open(tmp_path, FileAccess.WRITE)
+	var file = FileAccess.open(final_path, FileAccess.WRITE)
 	if file:
 		file.store_string(JSON.stringify(match_history))
 		file.close()
-		DirAccess.rename_absolute(tmp_path, final_path)
 
 func load_stats():
 	if OS.get_name() == "Web":
@@ -921,9 +919,8 @@ func generate_save_hash(data_str: String) -> String:
 	return (data_str + SAVE_SALT).sha256_text()
 
 func save_progression():
-	var tmp_path = "user://progression.json.tmp"
 	var final_path = "user://progression.json"
-	var file = FileAccess.open(tmp_path, FileAccess.WRITE)
+	var file = FileAccess.open(final_path, FileAccess.WRITE)
 	if file:
 		var data = {
 			"ad_credits": ad_credits,
@@ -966,7 +963,6 @@ func save_progression():
 		}
 		file.store_string(JSON.stringify(secure_data))
 		file.close()
-		DirAccess.rename_absolute(tmp_path, final_path)
 
 func load_progression():
 	if not FileAccess.file_exists("user://progression.json"):

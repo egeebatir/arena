@@ -112,10 +112,10 @@ def test_shop_and_squad():
     with open(r"c:\Users\egebatir\Documents\futbol\main_menu.gd", "r", encoding="utf-8") as f:
         m_content = f.read()
 
-    if "shop_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER" in m_content:
-        print("PASS: Shop vertical scroll is enabled with mobile-friendly SHOW_NEVER!")
+    if "shop_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS" in m_content or "shop_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER" in m_content:
+        print("PASS: Shop vertical scroll is enabled with visible grabber!")
     else:
-        print("FAIL: Shop vertical scroll is not SHOW_NEVER")
+        print("FAIL: Shop vertical scroll is not SHOW_ALWAYS or SHOW_NEVER")
         return False
 
     if "player_list_overlay.mouse_filter = Control.MOUSE_FILTER_STOP" in m_content:

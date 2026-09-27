@@ -1100,6 +1100,10 @@ func _on_restart_pressed():
 	yes_btn.pressed.connect(func():
 		Global.play_click()
 		overlay.queue_free()
+		Global.check_daily_reset()
+		if not Global.has_match_right() or not Global.consume_match_right():
+			Global.change_scene_with_loading("res://main_menu.tscn")
+			return
 		_reset_match_for_replay()
 	)
 	hbox.add_child(yes_btn)
@@ -1343,7 +1347,6 @@ func _physics_process(delta):
 				}
 			)
 			Global.save_stats()
-			Global.consume_match_right()
 			Global.increment_matches_played()
 			Global.came_from_completed_match = true
 			

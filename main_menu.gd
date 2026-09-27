@@ -460,6 +460,7 @@ var temp_settings = {}
 var start_match_btn: Button
 var match_fee_badge: PanelContainer = null
 var match_fee_lbl: Label = null
+var match_fee_icon: TextureRect = null
 var rand_h_btn: Button
 var rand_a_btn: Button
 var top_stripe_panel: PanelContainer
@@ -473,6 +474,7 @@ var nav_bar_panel: PanelContainer
 var nav_bar_btns: Array = []
 var swipe_start: Vector2 = Vector2.ZERO
 var swipe_active: bool = false
+var gesture_direction: String = "none"
 var is_rewarded_loading: bool = false
 var is_refreshing_shop: bool = false
 var shop_cosmetic_category: int = 0
@@ -1126,9 +1128,25 @@ func _ready():
 	mfb_style.corner_radius_bottom_left = 13; mfb_style.corner_radius_bottom_right = 13
 	mfb_style.border_width_left = 1.5; mfb_style.border_width_right = 1.5
 	mfb_style.border_width_top = 1.5; mfb_style.border_width_bottom = 2.5
-	mfb_style.content_margin_left = 16; mfb_style.content_margin_right = 16
-	mfb_style.content_margin_top = 3; mfb_style.content_margin_bottom = 3
+	mfb_style.content_margin_left = 14; mfb_style.content_margin_right = 14
+	mfb_style.content_margin_top = 4; mfb_style.content_margin_bottom = 4
 	match_fee_badge.add_theme_stylebox_override("panel", mfb_style)
+	
+	var mfb_hbox = HBoxContainer.new()
+	mfb_hbox.name = "MatchFeeHBox"
+	mfb_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	mfb_hbox.add_theme_constant_override("separation", 6)
+	match_fee_badge.add_child(mfb_hbox)
+	
+	match_fee_icon = TextureRect.new()
+	match_fee_icon.name = "MatchFeeIcon"
+	match_fee_icon.texture = preload("res://jeton_icon.svg")
+	match_fee_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	match_fee_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	match_fee_icon.custom_minimum_size = Vector2(20, 20) if is_tablet else Vector2(22, 22)
+	match_fee_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	match_fee_icon.visible = false
+	mfb_hbox.add_child(match_fee_icon)
 	
 	match_fee_lbl = Label.new()
 	match_fee_lbl.name = "MatchFeeLabel"
@@ -1136,7 +1154,7 @@ func _ready():
 	match_fee_lbl.add_theme_font_size_override("font_size", 20 if is_tablet else 22)
 	match_fee_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	match_fee_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	match_fee_badge.add_child(match_fee_lbl)
+	mfb_hbox.add_child(match_fee_lbl)
 	list_shifter_vbox.add_child(match_fee_badge)
 	
 	var badge_gap = Control.new()
@@ -3610,6 +3628,7 @@ func _update_start_button_display():
 	if Global.is_premium:
 		sb.bg_color = Color8(36, 28, 10, 220)
 		sb.border_color = Color8(255, 215, 0)
+		if is_instance_valid(match_fee_icon): match_fee_icon.visible = false
 		match_fee_lbl.add_theme_color_override("font_color", Color8(255, 225, 90))
 		var vip_txt = "👑 PRO PASS: SINIRSIZ MAÇ"
 		if Global.current_lang == "ENG": vip_txt = "👑 PRO PASS: UNLIMITED MATCHES"
@@ -3622,6 +3641,7 @@ func _update_start_button_display():
 		if rem_free > 0:
 			sb.bg_color = Color8(12, 40, 24, 220)
 			sb.border_color = Color8(34, 197, 94)
+			if is_instance_valid(match_fee_icon): match_fee_icon.visible = false
 			match_fee_lbl.add_theme_color_override("font_color", Color8(130, 255, 170))
 			var free_txt = "⚽ ÜCRETSİZ MAÇ: %d/5" % rem_free
 			if Global.current_lang == "ENG": free_txt = "⚽ FREE MATCHES: %d/5" % rem_free
@@ -3632,20 +3652,25 @@ func _update_start_button_display():
 		else:
 			sb.bg_color = Color8(38, 26, 12, 220)
 			sb.border_color = Color8(245, 158, 11)
+			if is_instance_valid(match_fee_icon):
+				match_fee_icon.visible = true
+				match_fee_icon.texture = preload("res://jeton_icon.svg")
 			match_fee_lbl.add_theme_color_override("font_color", Color8(255, 215, 100))
 			var curr = LANG.get(Global.current_lang, LANG["ENG"]).get("CURRENCY", "Jeton")
-			var cost_txt = "🪙 MAÇ ÜCRETİ: 50 " + curr.to_upper()
-			if Global.current_lang == "ENG": cost_txt = "🪙 MATCH ENTRY: 50 COINS"
-			elif Global.current_lang == "ESP": cost_txt = "🪙 ENTRADA: 50 MONEDAS"
-			elif Global.current_lang == "POR": cost_txt = "🪙 ENTRADA: 50 MOEDAS"
-			elif Global.current_lang == "ITA": cost_txt = "🪙 INGRESSO: 50 MONETE"
+			var cost_txt = "MAÇ ÜCRETİ: 50 " + curr.to_upper()
+			if Global.current_lang == "ENG": cost_txt = "MATCH ENTRY: 50 COINS"
+			elif Global.current_lang == "ESP": cost_txt = "ENTRADA: 50 MONEDAS"
+			elif Global.current_lang == "POR": cost_txt = "ENTRADA: 50 MOEDAS"
+			elif Global.current_lang == "ITA": cost_txt = "INGRESSO: 50 MONETE"
 			match_fee_lbl.text = cost_txt
 
 func _on_start_match():
 	Global.check_daily_reset()
-	if not Global.has_match_right():
+	if not Global.has_match_right() or not Global.consume_match_right():
 		_show_insufficient_tokens_dialog()
 		return
+
+	_update_start_button_display()
 
 	if is_instance_valid(Global.bg_music_player):
 		Global.bg_music_player.stop()
@@ -4236,7 +4261,29 @@ func _build_stats_tab() -> Control:
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS
+	var v_sc_stats = scroll.get_v_scroll_bar()
+	v_sc_stats.custom_minimum_size.x = 8
+	
+	var sb_style_s = StyleBoxFlat.new()
+	sb_style_s.bg_color = Color8(255, 255, 255, 12)
+	sb_style_s.corner_radius_top_left = 4; sb_style_s.corner_radius_top_right = 4
+	sb_style_s.corner_radius_bottom_left = 4; sb_style_s.corner_radius_bottom_right = 4
+	
+	var gb_style_s = StyleBoxFlat.new()
+	gb_style_s.bg_color = active_theme.accent.lightened(0.2)
+	gb_style_s.corner_radius_top_left = 4; gb_style_s.corner_radius_top_right = 4
+	gb_style_s.corner_radius_bottom_left = 4; gb_style_s.corner_radius_bottom_right = 4
+	gb_style_s.expand_margin_top = -8
+	gb_style_s.expand_margin_bottom = -8
+	
+	var gb_hover_s = gb_style_s.duplicate()
+	gb_hover_s.bg_color = active_theme.accent.lightened(0.4)
+	
+	v_sc_stats.add_theme_stylebox_override("scroll", sb_style_s)
+	v_sc_stats.add_theme_stylebox_override("grabber", gb_style_s)
+	v_sc_stats.add_theme_stylebox_override("grabber_highlight", gb_hover_s)
+	v_sc_stats.add_theme_stylebox_override("grabber_pressed", gb_hover_s)
 	main_vbox.add_child(scroll)
 
 	var vbox = VBoxContainer.new()
@@ -5107,25 +5154,20 @@ func _build_shop_tab() -> Control:
 	margin.add_theme_constant_override("margin_right", 16)
 	page.add_child(margin)
 
-	var shop_scroll = ScrollContainer.new()
-	shop_scroll.set_anchors_preset(Control.PRESET_FULL_RECT)
-	shop_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	shop_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
-	margin.add_child(shop_scroll)
+	var main_vbox = VBoxContainer.new()
+	main_vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
+	main_vbox.add_theme_constant_override("separation", 8)
+	main_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	main_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	margin.add_child(main_vbox)
 
-	var vbox = VBoxContainer.new()
-	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
-	vbox.add_theme_constant_override("separation", 10 if is_tablet else 14)
-	shop_scroll.add_child(vbox)
-
-	# --- 1. SHOP TITLE & BALANCED CREDITS HEADER ---
+	# --- 1. SHOP TITLE & BALANCED CREDITS HEADER (Pinned at Top) ---
 	var top_hbox = HBoxContainer.new()
 	top_hbox.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	top_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	top_hbox.custom_minimum_size = Vector2(660, 60)
 	top_hbox.add_theme_constant_override("separation", 10)
-	vbox.add_child(top_hbox)
+	main_vbox.add_child(top_hbox)
 
 	# Left: Theme-Interactive Token Button (Matches Leaderboard & Top Button Standard: 130x60 container, 125x56 button)
 	var cred_box = HBoxContainer.new()
@@ -5220,14 +5262,75 @@ func _build_shop_tab() -> Control:
 	right_box.custom_minimum_size = Vector2(130, 60)
 	top_hbox.add_child(right_box)
 
-	# Main Menu & Stats Style Horizontal Separator Line
+	# Main Menu & Stats Style Horizontal Separator Line (Pinned at Top)
 	var shop_sep = HSeparator.new()
 	var sep_style = StyleBoxLine.new()
 	sep_style.color = active_theme.bg_bottom
 	sep_style.thickness = 3
 	shop_sep.add_theme_stylebox_override("separator", sep_style)
-	vbox.add_child(shop_sep)
+	main_vbox.add_child(shop_sep)
 	ui_separators.append(shop_sep)
+
+	# --- SCROLL CONTAINER FOR SHOP CONTENT (Scrolls smoothly underneath pinned header) ---
+	var shop_scroll = ScrollContainer.new()
+	shop_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	shop_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	shop_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	shop_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS
+	var v_sc_shop = shop_scroll.get_v_scroll_bar()
+	v_sc_shop.custom_minimum_size.x = 8
+	
+	var sb_style_sh = StyleBoxFlat.new()
+	sb_style_sh.bg_color = Color8(255, 255, 255, 12)
+	sb_style_sh.corner_radius_top_left = 4; sb_style_sh.corner_radius_top_right = 4
+	sb_style_sh.corner_radius_bottom_left = 4; sb_style_sh.corner_radius_bottom_right = 4
+	
+	var gb_style_sh = StyleBoxFlat.new()
+	gb_style_sh.bg_color = active_theme.accent.lightened(0.2)
+	gb_style_sh.corner_radius_top_left = 4; gb_style_sh.corner_radius_top_right = 4
+	gb_style_sh.corner_radius_bottom_left = 4; gb_style_sh.corner_radius_bottom_right = 4
+	gb_style_sh.expand_margin_top = -8
+	gb_style_sh.expand_margin_bottom = -8
+	
+	var gb_hover_sh = gb_style_sh.duplicate()
+	gb_hover_sh.bg_color = active_theme.accent.lightened(0.4)
+	
+	v_sc_shop.add_theme_stylebox_override("scroll", sb_style_sh)
+	v_sc_shop.add_theme_stylebox_override("grabber", gb_style_sh)
+	v_sc_shop.add_theme_stylebox_override("grabber_highlight", gb_hover_sh)
+	v_sc_shop.add_theme_stylebox_override("grabber_pressed", gb_hover_sh)
+	main_vbox.add_child(shop_scroll)
+
+	var vbox = VBoxContainer.new()
+	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
+	vbox.add_theme_constant_override("separation", 10 if is_tablet else 14)
+	shop_scroll.add_child(vbox)
+
+	# Helper to create carousel navigation arrow buttons
+	var create_carousel_arrow = func(arrow_txt: String, scroll_target: ScrollContainer, step: int) -> Button:
+		var ab = Button.new()
+		ab.text = arrow_txt
+		ab.custom_minimum_size = Vector2(36, 32)
+		ab.add_theme_font_override("font", custom_font)
+		ab.add_theme_font_size_override("font_size", 18)
+		ab.add_theme_color_override("font_color", Color.WHITE)
+		var abs = StyleBoxFlat.new()
+		abs.bg_color = active_theme.bg_bottom.darkened(0.2)
+		abs.corner_radius_top_left = 8; abs.corner_radius_top_right = 8
+		abs.corner_radius_bottom_left = 8; abs.corner_radius_bottom_right = 8
+		abs.border_width_left = 1; abs.border_width_right = 1
+		abs.border_width_top = 1; abs.border_width_bottom = 2
+		abs.border_color = active_theme.accent.lightened(0.1)
+		ab.add_theme_stylebox_override("normal", abs)
+		ab.add_theme_stylebox_override("hover", abs)
+		ab.add_theme_stylebox_override("pressed", abs)
+		ab.pressed.connect(func():
+			Global.play_click()
+			var tw = scroll_target.create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+			tw.tween_property(scroll_target, "scroll_horizontal", max(0, scroll_target.scroll_horizontal + step), 0.22)
+		)
+		return ab
 
 	# --- 2. QUICK REWARDS & FEATURES ROW (3 Buttons) ---
 	var rewards_hbox = HBoxContainer.new()
@@ -5428,6 +5531,14 @@ func _build_shop_tab() -> Control:
 	balls_vbox.add_theme_constant_override("separation", 8)
 	balls_panel.add_child(balls_vbox)
 
+	balls_panel.mouse_filter = Control.MOUSE_FILTER_PASS
+	balls_vbox.mouse_filter = Control.MOUSE_FILTER_PASS
+
+	var balls_header_hb = HBoxContainer.new()
+	balls_header_hb.alignment = BoxContainer.ALIGNMENT_BEGIN
+	balls_header_hb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	balls_vbox.add_child(balls_header_hb)
+
 	var balls_title = Label.new()
 	balls_title.text = LANG[Global.current_lang]["SHOP_BALL_SKINS"]
 	balls_title.add_theme_font_override("font", custom_font)
@@ -5435,14 +5546,42 @@ func _build_shop_tab() -> Control:
 	balls_title.add_theme_color_override("font_color", Color.WHITE)
 	balls_title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
 	balls_title.add_theme_constant_override("shadow_offset_y", 2)
+	balls_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ui_labels.append({"node": balls_title, "key": "SHOP_BALL_SKINS", "type": "label"})
-	balls_vbox.add_child(balls_title)
+	balls_header_hb.add_child(balls_title)
+
+	var balls_arrows_hb = HBoxContainer.new()
+	balls_arrows_hb.add_theme_constant_override("separation", 8)
+	balls_header_hb.add_child(balls_arrows_hb)
 
 	var balls_scroll = ScrollContainer.new()
 	balls_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	balls_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	balls_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS
 	balls_scroll.custom_minimum_size = Vector2(0, 240)
 	balls_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	
+	var h_sc_b = balls_scroll.get_h_scroll_bar()
+	h_sc_b.custom_minimum_size.y = 6
+	var h_sb_b = StyleBoxFlat.new()
+	h_sb_b.bg_color = Color8(255, 255, 255, 12)
+	h_sb_b.corner_radius_top_left = 3; h_sb_b.corner_radius_top_right = 3
+	h_sb_b.corner_radius_bottom_left = 3; h_sb_b.corner_radius_bottom_right = 3
+	var h_gb_b = StyleBoxFlat.new()
+	h_gb_b.bg_color = active_theme.accent.lightened(0.2)
+	h_gb_b.corner_radius_top_left = 3; h_gb_b.corner_radius_top_right = 3
+	h_gb_b.corner_radius_bottom_left = 3; h_gb_b.corner_radius_bottom_right = 3
+	h_sc_b.add_theme_stylebox_override("scroll", h_sb_b)
+	h_sc_b.add_theme_stylebox_override("grabber", h_gb_b)
+	
+	balls_arrows_hb.add_child(create_carousel_arrow.call("◀", balls_scroll, -200))
+	balls_arrows_hb.add_child(create_carousel_arrow.call("▶", balls_scroll, 200))
+
+	balls_scroll.gui_input.connect(func(event: InputEvent):
+		if event is InputEventScreenDrag or event is InputEventMouseMotion:
+			if abs(event.relative.y) > abs(event.relative.x) * 1.15:
+				shop_scroll.scroll_vertical -= int(event.relative.y)
+	)
+
 	balls_vbox.add_child(balls_scroll)
 	shop_balls_scroll = balls_scroll
 
@@ -5576,6 +5715,14 @@ func _build_shop_tab() -> Control:
 	hats_vbox.add_theme_constant_override("separation", 8)
 	hats_panel.add_child(hats_vbox)
 
+	hats_panel.mouse_filter = Control.MOUSE_FILTER_PASS
+	hats_vbox.mouse_filter = Control.MOUSE_FILTER_PASS
+
+	var hats_header_hb = HBoxContainer.new()
+	hats_header_hb.alignment = BoxContainer.ALIGNMENT_BEGIN
+	hats_header_hb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hats_vbox.add_child(hats_header_hb)
+
 	var hats_title = Label.new()
 	hats_title.text = LANG[Global.current_lang]["SHOP_HATS"]
 	hats_title.add_theme_font_override("font", custom_font)
@@ -5583,14 +5730,42 @@ func _build_shop_tab() -> Control:
 	hats_title.add_theme_color_override("font_color", Color.WHITE)
 	hats_title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
 	hats_title.add_theme_constant_override("shadow_offset_y", 2)
+	hats_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ui_labels.append({"node": hats_title, "key": "SHOP_HATS", "type": "label"})
-	hats_vbox.add_child(hats_title)
+	hats_header_hb.add_child(hats_title)
+
+	var hats_arrows_hb = HBoxContainer.new()
+	hats_arrows_hb.add_theme_constant_override("separation", 8)
+	hats_header_hb.add_child(hats_arrows_hb)
 
 	var hats_scroll = ScrollContainer.new()
 	hats_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	hats_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	hats_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS
 	hats_scroll.custom_minimum_size = Vector2(0, 240)
 	hats_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	
+	var h_sc_h = hats_scroll.get_h_scroll_bar()
+	h_sc_h.custom_minimum_size.y = 6
+	var h_sb_h = StyleBoxFlat.new()
+	h_sb_h.bg_color = Color8(255, 255, 255, 12)
+	h_sb_h.corner_radius_top_left = 3; h_sb_h.corner_radius_top_right = 3
+	h_sb_h.corner_radius_bottom_left = 3; h_sb_h.corner_radius_bottom_right = 3
+	var h_gb_h = StyleBoxFlat.new()
+	h_gb_h.bg_color = active_theme.accent.lightened(0.2)
+	h_gb_h.corner_radius_top_left = 3; h_gb_h.corner_radius_top_right = 3
+	h_gb_h.corner_radius_bottom_left = 3; h_gb_h.corner_radius_bottom_right = 3
+	h_sc_h.add_theme_stylebox_override("scroll", h_sb_h)
+	h_sc_h.add_theme_stylebox_override("grabber", h_gb_h)
+	
+	hats_arrows_hb.add_child(create_carousel_arrow.call("◀", hats_scroll, -200))
+	hats_arrows_hb.add_child(create_carousel_arrow.call("▶", hats_scroll, 200))
+
+	hats_scroll.gui_input.connect(func(event: InputEvent):
+		if event is InputEventScreenDrag or event is InputEventMouseMotion:
+			if abs(event.relative.y) > abs(event.relative.x) * 1.15:
+				shop_scroll.scroll_vertical -= int(event.relative.y)
+	)
+
 	hats_vbox.add_child(hats_scroll)
 	shop_hats_scroll = hats_scroll
 
@@ -6049,32 +6224,45 @@ func _input(event: InputEvent):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
-				if _is_pos_in_shop_carousels(event.position):
-					swipe_active = false
-				else:
-					swipe_start = event.position
-					swipe_active = true
-			else:
-				swipe_active = false
-	elif event is InputEventScreenTouch:
-		if event.pressed:
-			if _is_pos_in_shop_carousels(event.position):
-				swipe_active = false
-			else:
 				swipe_start = event.position
 				swipe_active = true
+				gesture_direction = "none"
+			else:
+				swipe_active = false
+				gesture_direction = "none"
+	elif event is InputEventScreenTouch:
+		if event.pressed:
+			swipe_start = event.position
+			swipe_active = true
+			gesture_direction = "none"
 		else:
 			swipe_active = false
+			gesture_direction = "none"
 	elif swipe_active and (event is InputEventMouseMotion or event is InputEventScreenDrag):
 		var pos = event.position
 		var delta_x = pos.x - swipe_start.x
-		var delta_y = abs(pos.y - swipe_start.y)
-		if abs(delta_x) > swipe_threshold and abs(delta_x) > delta_y * 1.5:
-			swipe_active = false
-			if delta_x < 0 and current_tab < 2:
-				_switch_tab(current_tab + 1)
-			elif delta_x > 0 and current_tab > 0:
-				_switch_tab(current_tab - 1)
+		var delta_y = pos.y - swipe_start.y
+		var abs_dx = abs(delta_x)
+		var abs_dy = abs(delta_y)
+		
+		# Deadzone evaluation for directional gesture locking
+		if gesture_direction == "none":
+			if abs_dx > 14.0 or abs_dy > 14.0:
+				if abs_dx > abs_dy * 1.35 and not _is_pos_in_shop_carousels(swipe_start):
+					gesture_direction = "horizontal"
+				else:
+					# Vertical scrolling motion detected - immediately lock out tab switching for this gesture
+					gesture_direction = "vertical"
+					swipe_active = false
+					
+		if gesture_direction == "horizontal" and swipe_active:
+			if abs_dx > swipe_threshold:
+				swipe_active = false
+				gesture_direction = "locked"
+				if delta_x < 0 and current_tab < 2:
+					_switch_tab(current_tab + 1)
+				elif delta_x > 0 and current_tab > 0:
+					_switch_tab(current_tab - 1)
 
 # ======================================================
 # ADMOB & SHOP LOGIC

@@ -40,13 +40,22 @@ with open('pitch.gd', 'r', encoding='utf-8') as f:
     p_code = f.read()
 assert 'Global.consume_match_right()' in p_code
 assert 'Global.came_from_completed_match = true' in p_code
-print('PASS 5: pitch.gd consumes match right and sets came_from_completed_match at FULLTIME')
+print('PASS 5: pitch.gd handles match right consumption and came_from_completed_match properly')
 
 # 6. Test welcome_screen.gd
 with open('welcome_screen.gd', 'r', encoding='utf-8') as f:
     w_code = f.read()
 assert 'func _set_gp_btn_connected(animate: bool = false):' in w_code
 assert 'Color8(100, 255, 140)' in w_code
-print('PASS 6: welcome_screen.gd has polished GP connected feedback and animation')
+assert 'v1.1.2' in w_code
+print('PASS 6: welcome_screen.gd has polished GP connected feedback, animation, and v1.1.2 badge')
 
-print('\nALL 6 REQUIREMENTS VERIFIED CLEAN AND PASSING!')
+# 7. Test v1.1.2 UI/UX and Economy enhancements in main_menu.gd
+assert 'match_fee_icon' in m_code
+assert 'res://jeton_icon.svg' in m_code
+assert 'gesture_direction' in m_code
+assert 'Global.consume_match_right()' in m_code
+assert 'create_carousel_arrow' in m_code
+print('PASS 7: main_menu.gd has official jeton icon, directional gesture lock, and carousel controls')
+
+print('\nALL VERIFICATIONS CLEAN AND PASSING!')
