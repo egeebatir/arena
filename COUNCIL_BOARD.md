@@ -1,6 +1,6 @@
 # 🏛️ BOL GOL FUTBOL: ÇOKLU-AJAN MECLİSİ (COUNCIL BOARD)
 > **Ekosistem Durum ve Karar Masası (Blackboard)**  
-> *Son Güncelleme: 2026-09-24* | *Durum: v1.0.28 Ekosistem Sürümü Tamamlandı — Dinamik Web Liderlik Tablosu & Skor Senkronizasyon Koruması, Sahada Kesin Tema Uyumu, Pro VIP Altın Üst Bar, Çark Tekli Çevirme Kilidi, %80 Hafifletilmiş Kusursuz 800x800 Kulüp Armaları (%100 Kusursuz QA Onayı)*
+> *Son Güncelleme: 2026-09-27* | *Durum: v1.1.2 (Build 32) Ekosistem Sürümü Google Play & Git'e Dağıtıldı — Jeton Tüketimi, Resmi Jeton İkonu, Sabit Mağaza Başlığı, Tablet Kaydırma & Yön Kilidi*
 
 ---
 
@@ -8,10 +8,10 @@
 
 | Proje | Konum / Repo | Odak Alanı | Canlı Durum |
 | :--- | :--- | :--- | :--- |
-| **⚽ Mobil Oyun (futbol)** | `c:\Users\egebatir\Documents\futbol`<br>*(arena.git - master)* | Godot 4.6 GDScript, UI/UX, AdMob, Google Play | ✅ 100% Hazır (v1.0.28 Build 28 Testleri Başarılı) |
-| **🎬 Otomasyon (futbol_automation)** | `c:\Users\egebatir\Documents\futbol_automation`<br>*(bolgolfutbolotonom.git - main)* | 9:16 Shorts/Reels Video, AI Metadata, Rastgele Tema & Skin | ✅ 100% Hazır (Rastgele Temalar & Top Skinleri) |
-| **🌐 Web & Landing (webfutbol)** | `c:\Users\egebatir\Documents\Bol Gol Futbol\webfutbol`<br>*(webfutbol.git - main / ebstudyo.com)* | Canlı Web Sitesi (HTML5/WASM), AdSense & SEO DevLog, 136 Takım, Canlı Liderlik Tablosu | ✅ v1.0.28 Hazır (Dinamik Canlı Liderlik & Skor Senkronizasyon API) |
-| **📱 Google Play Store** | *Console / ASO (com.ebstudyo.bolgol)* | 5 Dil (TR, EN, ES, PT, IT), İkon, Tanıtım, Güncelleme Notları | 🟢 v1.0.28 Paketi Hazır (Build 28) |
+| **⚽ Mobil Oyun (futbol)** | `c:\Users\egebatir\Documents\futbol`<br>*(arena.git - master)* | Godot 4.6 GDScript, UI/UX, AdMob, Google Play | ✅ 100% Hazır (v1.1.2 Build 32 Dağıtıldı) |
+| **🎬 Otomasyon (futbol_automation)** | `c:\Users\egebatir\Documents\futbol_automation`<br>*(bolgolfutbolotonom.git - main)* | 9:16 Shorts/Reels Video, AI Metadata, Rastgele Tema & Skin | ✅ 100% Hazır (46 Milli Takım, 232 Takım Eşleşmesi) |
+| **🌐 Web & Landing (webfutbol)** | `c:\Users\egebatir\Documents\Bol Gol Futbol\webfutbol`<br>*(webfutbol.git - main / ebstudyo.com)* | Canlı Web Sitesi (HTML5/WASM), On-Demand Yükleme, Kapalı Beta Hunisi & SEO | ✅ v1.1.0 Hazır (Canlı Sunucuya Dağıtıldı) |
+| **📱 Google Play Store** | *Console / ASO (com.ebstudyo.bolgol)* | 5 Dil (TR, EN, ES, PT, IT), İkon, Tanıtım, Güncelleme Notları | 🟢 v1.1.2 Paketi Yayında (Build 32) |
 
 ---
 
@@ -112,6 +112,30 @@
 - [x] **Kusursuz 800x800 Kulüp Arması Sıkıştırması (%80 Boyut Tasarrufu):** 5 yeni kulüp arması (`bar1`, `psg1`, `bay1`, `bvb1`, `mia1`) ve 300 KB üzeri ağır armalar, 800x800 tuval boyutu ve görsel keskinlik korunarak, iç şeffaflık sıfır (%100 opak) ve dış şeffaflık %100 olacak şekilde 256 renk palet optimizasyonuyla ~1 MB'tan 140-250 KB seviyesine düşürüldü.
 - [x] **Versiyon Yükseltmesi (v1.0.28):** Sürüm kodu 28, sürüm adı "1.0.28" (`export_presets.cfg`, `welcome_screen.gd`, `COUNCIL_BOARD.md`).
 
+### v1.0.29 Web SEO Güçlendirmesi, Kapalı Beta Test Dönüşümü & On-Demand Web Oyun Yükleme (2026-09-25):
+- [x] **Web Sitesi SEO & App Indexing Güçlendirmesi:**
+  - Google App Indexing için `.well-known/assetlinks.json` eklendi; `deploy.py` FTP filtrelemesi `.well-known` dizinini aktaracak şekilde güncellendi.
+  - Tüm subpageler (`/liderlik-tablosu/`, `/devlog/`, `/hakkimizda/`, `/nasil-oynanir/`, `/gizlilik-politikasi/` vb.) taranabilir `sitemap.xml` haritasına eklendi.
+  - 5 dilli hreflang etiketleri (`tr`, `en`, `es`, `x-default`) ve dürüst `MobileApplication` Schema.org yapılandırılmış verisi entegre edildi.
+- [x] **50 MB WASM/PCK On-Demand Yükleme (Site Hafifletme):**
+  - Sayfa açılışında otomatik 50 MB indiren `engine.startGame` çağrısı, tuval üzeri "Web Sürümünü Başlat" etkileşimine bağlandı; ilk sayfa yükleme boyutu %99 hafifletildi (<500 KB).
+  - `#game-wrap`, canvas, fullscreen ve mobil dokunmatik kontroller hiçbir özellik kaybı yaşanmadan %100 korundu.
+- [x] **Ana Ekran (Hero) ve Navigasyon Kapalı Beta Dönüşümü:**
+  - Birincil odak Google Play 14 günlük kapalı beta sürecine (12 testçi gereksinimi) çevrildi.
+  - 1. Test Grubuna Katıl (`bol-gol-futbol-test`) ve 2. Google Play'de İndir (`play.google.com/apps/testing/...`) 2 adımlı net başvuru kurgulandı; webde oynama seçeneği ikincil buton olarak korundu.
+- [x] **Versiyon Yükseltmesi (v1.0.29):** Sürüm kodu 29, sürüm adı "1.0.29" (`export_presets.cfg`, `welcome_screen.gd`, `webfutbol`, `COUNCIL_BOARD.md`).
+### v1.1.0 40 Yeni Milli Takım, Küresel Fikstür Uyumu & v1.1.0 Sürüm Yükseltmesi (2026-09-25):
+- [x] **40 Yeni Milli Takım Entegrasyonu (Toplam 46 Milli Takım):**
+  - Fransa, İspanya, Almanya, Belçika, Hollanda, Hırvatistan, Danimarka, İsviçre, Avusturya, Polonya, Sırbistan, Çekya, İskoçya, Norveç, Brezilya, Uruguay, Kolombiya, Şili, Paraguay, Ekvador, Nijerya, Fas, Mısır, Senegal, Cezayir, Kamerun, Gana, Japonya, Güney Kore, Suudi Arabistan, İran, Avustralya, Katar, Meksika, Kanada, Gürcistan, İsveç, Yunanistan, Romanya, Galler oyuna dahil edildi.
+  - Her takımın orijinal bayrak ve forma renk kombinasyonları `Global.gd` içine `Color8()` paletleriyle tanımlandı; armasız toplarda olduğu gibi dinamik şeritli ve estetik renklerle çizilmesi sağlandı.
+  - Takım seçim ekranında (`main_menu.gd`) "Milli Takımlar" (`NATIONAL`) filtresi seçildiğinde 46 milli takımın tamamı dinamik olarak listelenip hem Ev Sahibi hem Deplasman tarafında seçilebilir hale geldi.
+- [x] **Otomasyon & Veritabanı Eşleşmesi (`team_mapping.json` & `star_players.json`):**
+  - `team_mapping.json` içine 40 yeni milli takımın tüm uluslararası takma adları, resmi kodları ve yerel adları (Fransa/France/Les Bleus, Brezilya/Brazil/Seleção, vb.) eklendi; toplam takım sayısı 232'ye ulaştı.
+  - `star_players.json` ve `fixtures.json` içine 40 ülkenin en güncel 3 yıldız oyuncusu ve kaptanları mühürlendi (Mbappé, Yamal, Musiala, De Bruyne, Haaland, Vinícius Jr., Salah, Osimhen, Son Heung-min vb.).
+- [x] **Kalıcı Kurallar Güncellemesi (`rules.md` & `GEMINI.md`):**
+  - UEFA Uluslar Ligi ve Dünya Kupası Elemeleri için 46 milli takımın tüm maçları zorunlu kapsam haline getirildi.
+- [x] **Versiyon Yükseltmesi (v1.1.0):** Sürüm kodu 30, sürüm adı "1.1.0" (`export_presets.cfg`, `welcome_screen.gd`, `COUNCIL_BOARD.md`).
+
 ---
 
 ## 🛡️ ADVERSARIAL QA ONAY GÜNLÜĞÜ (AUDIT LOG)
@@ -120,6 +144,102 @@
 * **2026-09-24 20:03:** `futbol`: `python tests/test_backend_logic.py` çalıştırıldı — **Tüm Motor, Menü, Görev, Kontrast ve Tema Testleri Başarılı (%100 PASS)**.
 * **2026-09-24 20:03:** `futbol`: `python tests/test_ecosystem_health.py` çalıştırıldı — **4/4 Ekosistem Testi Başarılı (%100 PASS)**.
 * **2026-09-24 20:03:** `futbol`: `python tests/test_version_integrity.py` çalıştırıldı — **6/6 Sürüm ve Paket Bütünlüğü Başarılı (%100 PASS)**.
-* **2026-09-24 20:03:** Kulüp Armaları Sıkıştırma Denetimi: 800x800 boyut, min iç alfa 255 (iç şeffaflık sıfır), dış alfa 0, dosya boyutları 140-255 KB (%80 tasarruf) doğrulandı.
-* **Genel QA Statüsü:** 🏛️ **YEŞİL (v1.0.28 Sıfır Hata & Sıfır Nil ile Doğrulandı, Dağıtıma Hazır)**.
+* **2026-09-24 23:55:** `futbol_automation`: Sentetik ve kaydırılmış fikstür kalıntıları tamamen çöpe atıldı. 2026-09-24 sonrası tamamen oynanmamış, doğrudan ESPN REST API scoreboard takvimlerinden (Game ID onaylı) çekilen kesin 30 maçlık fikstür kuyruğu oluşturuldu (11 Yıldız Kulüp, Milli Takımlar, UCL/UEL ve Süper Lig Wildcard kuralları %100 uygulandı).
+* **2026-09-25 00:28:** `futbol_automation`: Sıralı arşiv kodlama sistemi (`0001` - `0030`) devreye alındı. İlk maç olan Inter Miami maçı `0001` kodu ile simüle edildi, arşive işlendi ve sistem otomatik olarak sıradaki maçı `0002` (Galatasaray vs Kasımpaşa) olarak sıraya aldı (%100 End-to-End PASS).
+* **2026-09-25 00:32:** `futbol_automation`: Yeni fikstürün ilk iki maçı (`0001` Columbus Crew vs Inter Miami & `0002` Galatasaray vs Kasımpaşa) başarıyla simüle edildi; 60 FPS reklamsız Godot kayıtları, 9:16 dikey dinamik zoom hook video kurguları, özel kapak görselleri ve AI metadataları üretilip arşive mühürlendi (%100 PASS).
+* **2026-09-25 01:40:** `futbol_automation`: 6 maç simüle edilip YouTube'a yüklendi (`0003` - `0008`).
+* **2026-09-25 01:55:** `futbol_automation`: Fikstür mimarisi ve etiket/yayın kuralları revize edildi:
+  - **Eksik Avrupa & Milli Maçlar Giderildi:** ESPN scraper'ının sadece 5 yerel lig çekip 30 maçta durması sorunu çözüldü; UEFA Champions League, UEFA Europa League, Türk Milli Takımı ve Avrupa Marquee Gösteri maçları (Barcelona vs Galatasaray & Real Madrid vs Fenerbahçe) dahil 124 maçlık kusursuz master fikstür takvimi oluşturuldu (`0009` - `0124`).
+  - **Maç Günü Maç Öncesi Yayın Kuralı (Kickoff - 2 Saat):** Videoların rastgele günlere yayılması durduruldu; tüm yayınlar resmi maç günü başlama düdüğünden tam 2 saat önce (`kickoff - 2 saat`) yayına girecek şekilde otomatik kurgulandı.
+  - **Maç-Öncelikli Etiket Hiyerarşisi:** Açıklamalardan ve YouTube etiketlerinden silinen takım, golcü ve turnuva etiketleri en başa alındı; jenerik stüdyo etiketleri en sona taşındı ve spamsizleştirildi.
+  - `sync_uploaded_videos.py` hazırlandı; `GEMINI.md` ve `config/rules.md` belgelerine yeni kurallar işlendi.
+* **2026-09-26 00:53:** `webfutbol`: `v1.0.30` Akıllı Köprü Basitleştirmesi, Kalıcı Durum Takibi (localStorage) & GitHub Senkronizasyonu — **%100 BAŞARI (PASS)**:
+  - **Sıfır Bilişsel Yük & Basitleştirilmiş Akış:** Kullanıcıların adımları tekrar tekrar görmemesi için `localStorage` tabanlı kalıcı durum yönetimi (`eb_beta_step1_done`) eklendi. Kullanıcı bir kez 1. Adımı tamamladığında veya geri döndüğünde 1. Adım otomatik olarak `✓ YETKİLENDİRİLDİ` durumunda kalır ve 2. Adım ("Hemen Google Play'den İndir ➔") doğrudan parlak yeşil odakla sunulur.
+  - **Kutlama ve Doğrudan İndirme Kartı:** 1-tıkla Gmail kayıt formu gönderildiğinde form kaybolur; yerine büyük yeşil onay kartı ve doğrudan `Google Play'de Aç ve İndir ➔` butonu çıkar.
+  - **Hero Rozet Entegrasyonu:** `founder-reward-badge` ("🎁 İlk 50 Testçiye Özel: 'Öncü Testçi' Altın Topu & Kurucu Rozeti Hediye!") Hero DOM yapısına tam entegre edildi.
+  - **Tüm Doğrulamalar Tamam:** `validate_js.js` (4/4 script bloğu geçerli), `validate_html.py` (0 açık etiket), `verify_translations.py` (111/111 anahtar tam), canlı güvenlik ve DOM denetimleri %100 başarılı.
+* **2026-09-26 01:20:** `futbol`: **Kritik Çökme Onarımı, Tablet/Mobil Responsive Mimari, 40 Milli Takım Bayrağı, Obsidyen Topu, Hızlı Yükleme & Web Senkronizasyon Revizyonu — %100 BAŞARI (PASS)**:
+  - **Ödül Toplama Çökmesi Giderildi (Tween SIGSEGV Fix):** `main_menu.gd` `_show_prize_dialog` içinde oluşturulan coin döngü ve pop tween'leri `overlay.create_tween()` ile bağlanıp `coin_img` ve `overlay.tree_exiting` sinyallerine bağlandı; "HARİKA!" butonuna basıldığında tween'ler güvenle imha edilerek C++ `SceneTreeTween` null-pointer çökmesi sıfırlandı.
+  - **Tablet & Mobil Responsive Düzen (Kökten Çözüm):** Samsung Galaxy Tab S6 Lite (16:10 / 5:3) ve dikey mobil cihazlar için dinamik oran denetimi (`is_tablet = vp_h / vp_w < 1.9`) getirildi. `scroll_both` kapsayıcısı `SIZE_EXPAND_FILL` ile dinamik esnetildi, takım seçim butonları 76px'den 52px (tablet) ve 64px (mobil) yüksekliğe çekildi. "MAÇI BAŞLAT" butonu `SIZE_SHRINK_END` ile alt navigasyon barının hemen üzerine sabitlendi; ekrandan taşma ve gizlenme sorunu tamamen ortadan kaldırıldı.
+  - **İstatistik Ekranı Kaydırma Kilidi & Kart Orantısı:** `_build_stats_tab` içindeki `SCROLL_MODE_DISABLED` hatası `SCROLL_MODE_SHOW_NEVER` ile değiştirilerek dikey kaydırma aktif edildi. İstatistik kutucukları, font boyutları ve padding değerleri küçültülerek tek ekranda favori takım ve genel istatistiklerin bir arada görünmesi sağlandı.
+  - **Mağaza Ekranı Carousel ve Kart Boyutlandırması:** Mağazadaki devasa 215x290 boyutundaki top ve taç kartları 168x225'e, önizleme topları 80x80'e küçültüldü. Pro Pass paneli ve hızlı ödül butonları optimize edildi; birden fazla ürün tek bakışta görünür hale getirildi.
+  - **40 Yeni Milli Takım Bayrak Rozeti:** 40 ülkenin bayrakları FlagCDN üzerinden indirilip 512x512 antialiased yuvarlak alfa maskeli PNG olarak üretildi (`fra1.png`, `esp1.png`, ..., `wal1.png`). `ball.gd` `BADGE_MAP` ve menü önizlemelerine bağlandı.
+  - **Açılış Hızlandırması & Yumuşak Sahne Geçişleri:** Açılışta 31 senkron `load()` çağrısı on-demand `get_badge_texture` önbelleği ile değiştirilerek 3-4 saniyelik açılış gecikmesi sıfırlandı. Sahneler arası neon futbol topu animasyonlu `Global.change_scene_with_loading` yükleme ekranı entegre edildi.
+  - **Yeni Top Görünümü ("Obsidyen"):** Prosedürel mor lav/kristal parıltılı obsidyen topu `Global.gd` içine eklendi; 5 dilde (TR, ENG, ESP, POR, ITA) mağaza ve dil sözlüklerine kaydedildi.
+  - **Google Play Pro Pass Satın Alım Geri Bildirimi & Debug Test Modu:** Satın alma penceresinde yanıt vermeme sorunu çözüldü; `ITEM_UNAVAILABLE` ve bağlantı hataları için bilgilendirici toast'lar eklendi, `OS.is_debug_build()` modunda test amaçlı tek tıkla Pro Pass açma butonu sunuldu.
+  - **Web Liderlik Tablosu Senkronizasyonu:** Oyuncunun kadro düzenlemesi yapmamış olsa dahi favori takımıyla attığı golleri eşitleyebilmesi sağlandı; `recalculate_favorite_team_goals()` çağrısı, `User-Agent: BolGolFutbol-Android/1.1.0` başlığı ve başarılı/başarısız senkronizasyon toast bildirimleri eklendi.
+  - **Tablet Debug Aracı:** `debug_tablet.bat` scripti oluşturuldu; USB ve Wi-Fi ADB durumu, cihaz yetkilendirme ve Godot Remote Deploy tek tıkla kullanıma hazırlandı.
+  - **Doğrulamalar:** `python tests/test_backend_logic.py` (5 dil, 155 anahtar, AdMob, motor testleri %100 PASS) ve Godot 4.6.1 headless syntax kontrolü (0 hata) başarıyla tamamlandı.
+* **2026-09-26 03:36:** `webfutbol`: `v1.0.30` Ses İzolasyonu (Sıfır İstenmeyen Ses), Görsel Sadeleştirme & Tek Parça VIP Test Merkezi — **%100 BAŞARI (PASS)**:
+  - **Kaydırırken Ses Çalma Hatası Kökten Çözüldü:** `weboyun1.js` (315 KB) `<head>` etiketinden tamamen kaldırıldı. Sayfa açılışında Godot motoru veya ses nesnesi kesinlikle yüklenmez; oyun motoru yalnızca `#oyna` bölümündeki "Web Sürümünü Başlat" butonuna tıklandığında dinamik olarak yüklenir. Sayfada kaydırma veya dokunma esnasında `AudioContext` tetikleyen tüm olay dinleyicileri kaldırıldı.
+  - **Hero Alanı Temizlendi & Profesyonelleştirildi:** Sayfanın üst kısmını amatör gösteren 6 gri platform hap etiketi (`.hero-badges`) tamamen çöpe atıldı. 3 kafa karıştırıcı buton yerine 2 net ve kararlı buton (`[Test Sürümünü İndir]` ve `[Web'de Dene]`) bırakıldı. Alt başlık bürokratik dilden kurtarılıp oyuncu odaklı ve akıcı hale getirildi.
+  - **Tek Parça VIP Beta İndirme Merkezi (`.gp-hub-card`):** Sayfada üst üste binen 2 ayrı form kutusu, devasa kafa karıştırıcı kartlar ve modal zorunluluğu kaldırıldı. Bunun yerine tek bir cam dokulu modern merkez kartı tasarlandı:
+    - Kullanıcı tek satırda Gmail'ini yazıp **`Teste Katıl & İndir ➔`** butonuna basarak anında kaydolabiliyor.
+    - Doğrudan link tercih edenler için alt kısımda zarif `[1. Gruba Katıl]` ve `[2. Google Play'den İndir]` butonları konumlandırıldı.
+  - **Canlı Dağıtım & Git Push:** `deploy.py` ile canlı `ebstudyo.com` sunucusuna yüklendi; `861aaaa` commit'i GitHub `origin/main` deposuna başarıyla pushlandı. Canlı üretim denetimi (`verify_live_declutter.py`) %100 yeşil onaylandı.
+* **2026-09-27 00:30:** `futbol`: **6 Milli Takım Bayrağı, Scroll Grabber Revizyonu, Şans Çarkı Reklam Koruması, Maç Token Ekonomisi & Mağaza Standardizasyonu — %100 BAŞARI (PASS)**:
+  - **İlk 6 Milli Takım Bayrak Standardizasyonu:** Türkiye, Arjantin, Portekiz, İngiltere, ABD ve İtalya'nın eski kulüp tarzı armaları arşiv klasörüne (`archive/legacy_national_crests/`) yedeklendi; yerlerine 256x256 antialiased dairesel bayrak grafikleri entegre edildi. `ball.gd` ve `main_menu.gd` içindeki `is_original_national` istisnası kaldırılarak tüm 46 milli takımın aynı kural ve dairesel bayrakla topu kaplaması sağlandı.
+  - **Scroll Grabber Küçültme:** Ana menü takım seçim listesi (`scroll_both`) ve Ayarlar menüsü (`v_sc_set`) kaydırma tutamaçları (grabber pill), negatif expand marjinleri (`expand_margin_top/bottom: -14` ve `-18`) ve inceltilmiş ray yapısı ile daha kompakt, zarif ve modern mobil standartlara getirildi.
+  - **Şans Çarkı Döndürme & Reklam Çakışma Koruması:** GDScript lambda kapanımında ilkel tip kopyalama hatası (`is_spinning`) sözlük referans nesnesine (`spin_state["is_spinning"]`) dönüştürülerek çözüldü. Çark dönerken buton kilitlenip "ÇARK DÖNÜYOR..." durumuna geçer; ödül teslim edilip çark durana kadar asla yeni bir reklam tetiklenemez.
+  - **Maç Token Ekonomisi & Günlük 5 Ücretsiz Hak:** Günlük 5 ücretsiz maç hakkı getirildi (her gece 00.00'da sıfırlanır). 5 hak bittikten sonraki her maç için 50 jeton istenir. Pro Pass üyelerine sınırsız ücretsiz maç hakkı tanınır. Maç hakkı/jeton tüketimi, maça giriş anında değil; oyuncunun mağdur olmaması adına **yalnızca maç sonuna kadar oynanıp FULLTIME düdüğü çaldığında** gerçekleşir.
+  - **Mağaza Ekranı Jeton Butonu ve Ayırıcı Çizgi Standardizasyonu:** Sol üstteki jeton butonu, İstatistikler ve Takım Seçim menülerindeki buton mimarisine (`active_theme.bg_bottom.darkened(0.2)`, `active_theme.accent`, 125x56 boyut) uygun hale getirilerek temayla dinamik etkileşimli yapıldı. Mağaza başlığı ile alt butonlar arasına tema uyumlu `shop_sep` ayırıcı çizgisi eklendi; ekranlar arası görsel ritim eşitlendi.
+  - **Ana Ekran Maçı Başlat Butonu & Nav Bar Mesafesi:** `post_start_spacer` mesafesi 16px'den 24px'e (mobilde) ve 12px'den 18px'e (tablette) çıkarılarak alt gezinme çubuğu ile buton arasındaki dokunma ve görüş mesafesi ferahlatıldı.
+  - **Tüm Doğrulamalar:** `verify_ecosystem_hard.py` (4 Kapı %100 PASS, 120 Frame Godot simülasyonu, 0 NIL hatası), `test_backend_logic.py` (%100 PASS), `test_ecosystem_health.py` (%100 PASS) ve `test_version_integrity.py` (%100 PASS) eksiksiz onaylandı.
+* **2026-09-27 01:20:** `webfutbol`: **Agar.io Esinlenmeli Canlı Arena Arkaplanı, Hero Metin Temizliği, Sadeleştirilmiş Navbar, Sürtünmesiz Google Play Akışı, PC Dikey Telefon Mockup'ı & Sosyal Medya/Simülasyon Trafik Hub'ı — %100 BAŞARI (PASS)**:
+  - **Agar.io Tarzı Canlı Arena Simülatörü (`hero-arena-canvas`):**
+    - Arka planda rastgele durağan görsel yerine oyunun gerçek dairesel sahalarından oluşan, takımların (GS, FB, BJK, TS, RMA, BAR, MCI, TUR, POR, BRA, ARG) birbirine karşı gerçek 2D elastik fizik ve top fiziğiyle maç yaptığı ultra hafif bir simülasyon motoru kodlandı.
+    - Mobilde 2 arena, masaüstünde 4 arena konumlandırıldı; gol olduğunda şok dalgası ve mini skorbord güncellemesi entegre edildi.
+    - **Sıfır Hantallık & Pil Tasarrufu:** 30 FPS kilit (`requestAnimationFrame`), `IntersectionObserver` ile hero ekrandan çıktığında anında durma ve sekme gizlendiğinde sıfır CPU tüketimi garantilendi.
+  - **Hero Alanı Temizliği & Güncel Tanıtım:**
+    - "İlk 50 testçi..." rozet bloku hem ana sayfadan hem de modal'dan tamamen temizlendi.
+    - Üstteki `Google Play Kapalı Beta · 14 Günlük Test Süreci` ibaresinden 14 günlük test süreci atıldı; sadece `Google Play Kapalı Beta` bırakıldı.
+    - Tanıtım metni son v1.1 sürümüne göre güncellendi: "232 takım, 46 milli takım, 7 dünya ligi ve yenilenen fizik motoruyla arcade futbol keyfi parmaklarınızın ucunda. Hemen Android erken erişime katılın veya tarayıcıda doğrudan deneyin!"
+    - `translations.js` içinde TR, EN, ES dilleri tam senkronize edildi.
+  - **Üst Bar (Navbar) Sadeleştirme:**
+    - Kafa karıştıran ve kalabalık yapan "Özellikler", "Dev Log", "İletişim" ve "Web Oyunu" linkleri masaüstü üst bardan kaldırıldı.
+    - Üst bar sadece: Logo, Liderlik Tablosu, Hakkımızda, parlayan "Erken Erişim" butonu ve Dil Seçici ile elit bir stüdyo görünümüne kavuşturuldu.
+  - **Sürtünmesiz (Frictionless) 1-Tık Google Play İndirme Akışı:**
+    - Kullanıcıları korkutan 2 adımlı "1. Gruba Katıl" jargonları yerine doğrudan büyük, güven verici `Google Play Üzerinden Hemen İndir & Teste Başla` birincil butonu ve alternatif tek tıkla Gmail yetkilendirme formu (`api/join_test.php`) yerleştirildi.
+    - Güven rozetleri (Resmi Google Play, Sıfır Bekleme, Android 8.0+, %100 Ücretsiz) eklendi.
+  - **Web Oyunu PC Smartphone Figürü (Mockup Frame) & Mobil Tam Ekran:**
+    - PC ekranında oyunun yatay bozulması sorunu çözüldü; `aspect-ratio: 16/9` kaldırılarak oyun şık bir dikey amiral gemisi akıllı telefon gövdesi (`.phone-mockup-frame`, Dynamic Island, hoparlör ızgarası, kamera lensi, home indicator) içine oturtuldu.
+    - Godot 450x900 (9:18.5) dikey portrait formatı masaüstünde kusursuz oranla çalışır hale geldi.
+    - Mobilde telefon çerçevesi gizlenerek tek tıkla tüm ekranı dolduran `Tam Ekran Oyna (Sıfır Kayıp)` araç çubuğu ve `toggleFS()` API'si entegre edildi.
+  - **Trafik & Büyüme: Sosyal Medya Sahnesi & Maç Simülasyonu Merkezi:**
+    - Ana sayfaya YouTube TR (`@EB_Studyoo`), YouTube Global (`@EB_Studioo`), Instagram Reels (`@eb_studyo`) ve TikTok (`@eb_studyo`) canlı vitrin kartları (`#topluluk`) eklendi.
+    - SEO odaklı `simulasyon/index.html` (Maç Simülasyonu & Skor Tahmin Merkezi) oluşturuldu; ziyaretçilerin derbi simülasyonları yapıp web oyununu başlatması ve Google Play'e yönlendirilmesi sağlandı. `sitemap.xml` güncellendi.
+  - **Doğrulamalar:** Tüm HTML ve JS blokları Node.js ve Python syntax validator ile test edildi (%100 geçerli).
+* **Genel QA Statüsü:** 🏛️ **YEŞİL (Web Modernizasyonu Tamamlandı, Agar.io Arkaplan Arenaları Aktif, PC Telefon Mockup Hazır, Trafik Hub Yayında)**.
+
+### ⚽ v1.1.1 Mobil UI/UX ve Jeton Ekonomisi Ergonomi Paketi (2026-09-27):
+- [x] **Türkiye Bayrağı Optik Merkezleme:** Hilal ve yıldız motifi, hilalin sol taraftaki kütle ağırlığı hesaba katılarak optik merkez dengesiyle `x = 131.0` noktasına oturtuldu; top üstünde sola basık durma sorunu tamamen giderildi.
+- [x] **Google Play Bağlanma İstemi (Prompt) Zamanlaması:** Karşılama ekranından ana menüye geçer geçmez çıkan haksız Google Play penceresi engellendi; istem yalnızca misafir oyuncular en az 3 tamamlanmış maç oynayıp maçtan ana menüye döndüğünde (`came_from_completed_match`) devreye girecek şekilde revize edildi.
+- [x] **Kadro Düzenleme Penceresi Top Önizleme & Kayıt Düzeltmesi:** GDScript 4 yerel değişkenlerinin closure/lambda içinde değere göre kopyalanması sebebiyle önizleme topunun ve kayıt hedefinin ev sahibi takımda kilitli kalması sorunu `squad_state` sözlüğüyle kökten çözüldü; seçilen takımın topu anında güncelleniyor ve kadro o takıma eksiksiz kaydediliyor.
+- [x] **Giriş Ekranı Logo Köşe Temizliği:** `game_logo.png` dosyasındaki beyaz opak köşeler SciPy & Pillow de-matte matrisleriyle %100 şeffaf anti-aliased RGBA'ya dönüştürüldü; koyu cam zemin üzerindeki amatör beyaz köşe lekeleri tamamen sıfırlandı.
+- [x] **Giriş Ekranı Google Play Bağlantı Geri Bildirimi:** Karşılama ekranı açılışında arayüz önce derlenerek butonun oturum kontrolüne hazır olması sağlandı; Google Play bağlıyken buton yeşil arkaplan, `checkmark_icon.svg` ve dokunsal ölçekleme animasyonuyla net onay sunar hale getirildi. Manuel tıklandığında kullanıcıya onayı görmesi için 0.85s pay tanındı.
+- [x] **"MAÇI BAŞLAT" Metin Sadeleştirmesi & Statü Rozeti:** Tehditkar ve amatör duran `(50 Jeton)` ibaresi butondan kaldırıldı; buton saf ve iddialı `MAÇI BAŞLAT` metnini korurken, üstüne zarif bir maç hakkı rozeti (`⚽ 5/5 ÜCRETSİZ MAÇ` / `🪙 50 JETON` / `👑 PRO PASS`) eklendi. Alt nav bar ile aradaki mesafe 34px'e çıkarıldı.
+- [x] **Kullanıcı Dostu "Daha Fazla Maç Oyna" Modalı:** Jetonu yetmeyen oyunculara doğrudan video izleyerek (+50 jeton), şans çarkını çevirerek veya mağazayı ziyaret ederek maça girme imkanı tanıyan şık bir diyalog entegre edildi.
+- [x] **Doğrulamalar:** `test_latest_fixes.py`, `test_backend_logic.py`, `verify_ecosystem_hard.py` (tüm 4 kapı) ve Godot 120-frame runtime simülasyonları 0 hata ile %100 başarıyla tamamlandı.
+
+### ⚽ v1.1.2 Jeton Tüketimi, Resmi Jeton İkonu, Sabit Mağaza Başlığı & Tablet Kaydırma Revizyonu (2026-09-27):
+- [x] **50 Jeton Tüketim Senkronizasyonu:** Günlük 5 ücretsiz maç hakkı tükendikten sonra `_on_start_match()` ve `pitch.gd` replay adımlarında maç hakkının anında ve garantili olarak tüketilmesi sağlandı (`Global.consume_match_right()`). `Global.gd` içindeki `save_progression()` ve `save_stats()` fonksiyonları `user://` dosyalarını doğrudan yazacak şekilde optimize edilerek rename çarpışmaları ve gecikmeler sıfırlandı.
+- [x] **Resmi Jeton Tasarımı Rozeti:** "MAÇI BAŞLAT" butonu üzerindeki maç ücreti rozetinde sistem yazı tipi emojisi (`🪙`) tamamen kaldırıldı; yerine oyunun resmi şık vektör jeton ikonu (`res://jeton_icon.svg`, 22x22) ve temayla uyumlu `HBoxContainer` mimarisi entegre edildi.
+- [x] **Sabit Mağaza Başlığı (Pinned Header):** Mağaza sekmesi (`_build_shop_tab`) İstatistikler sekmesi standartlarına getirildi; Mağaza başlığı, jeton gösterge butonu ve ayırıcı çizgi ekranın en üstünde sabitlendi. Altındaki ürünler ve görevler bu başlığın altından bağımsız ve akıcı bir şekilde kaydırılabilir hale getirildi.
+- [x] **Tablet & Geniş Ekran Dokunsal Kaydırma Çubukları:** İstatistikler ve Mağaza ekranlarındaki dikey `ScrollContainer` bileşenleri `SCROLL_MODE_SHOW_ALWAYS` moduna ve 8px genişliğinde zarif, yuvarlatılmış tema aksan renginde scroll grabber pill tutamaçlarına kavuşturuldu; listenin kaydırılabilirliği belirginleştirildi.
+- [x] **Çift Yönlü Dokunmatik Kilit (Directional Gesture Lock):** Dikey kaydırma esnasında sekme değişimini tetikleyen yatay kaydırma çakışması çözüldü; 14px'lik ilk hareket eksenine göre dikey hareket tespit edildiğinde sekme geçişi anında kilitleniyor, oyuncu güvenle sayfayı yukarı-aşağı kaydırabiliyor.
+- [x] **Top ve Taç Carousel Kaydırma Öğeleri:** Top görünümleri ve taçlar panellerine görünür yatay scrollbar'lar, başlık yanına tek tıkla kaydıran `◀` ve `▶` butonları eklendi; dikey kaydırma olayları ana mağaza kaydırma alanına yönlendirildi.
+- [x] **Doğrulamalar & Dağıtım:** 
+  - `python tests/test_latest_fixes.py` (%100 PASS)
+  - `python tests/test_backend_logic.py` (%100 PASS)
+  - `python tests/verify_ecosystem_hard.py` (4 Kapı %100 PASS, 120 Frame Godot simülasyonu)
+  - `bol_gol_v32_1.1.2.aab` üretildi (100.6 MB)
+  - Google Play Console `internal` ve `alpha` kanallarına 5 dilde (TR, ENG, ESP, POR, ITA) release notes ile yüklendi ve yayınlandı (Commit ID: `16644697819937373798`).
+
+
+
+
+
+
+
+
 

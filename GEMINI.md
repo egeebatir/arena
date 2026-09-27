@@ -29,9 +29,9 @@ This workspace is part of the 3-project Bol Gol Futbol ecosystem:
 3. `futbol-web` (Web & Landing Page)
 
 **Governance Principles:**
-- **Central Blackboard:** Always consult and maintain `c:\Users\egebatir\Documents\COUNCIL_BOARD.md` for live task statuses, milestones, and active roadmaps.
+- **Central Blackboard:** Always consult and maintain `COUNCIL_BOARD.md` (at repo root `futbol/COUNCIL_BOARD.md` or `c:\Users\egebatir\Documents\COUNCIL_BOARD.md`) for live task statuses, milestones, and active roadmaps.
 - **Context Window Conservation:** Delegate heavy implementation, research, and test runs to subagents defined in `.agents/council/` using the `multi-agent-council` skill. Keep the main conversation clean and focused on user decisions.
-- **Adversarial QA Gatekeeper:** Never mark a task complete or push a release without verification from the `adversarial_qa` role (`python test_backend_logic.py`, syntax checks, 5-language cross-checks).
+- **Adversarial QA Gatekeeper:** Never mark a task complete or push a release without verification from the `adversarial_qa` role (`python tests/test_backend_logic.py`, syntax checks, 5-language cross-checks).
 - **Safe Push Protocol:** Never run git push or publish releases without explicit user confirmation.
 
 # Video Automation & YouTube Publishing Standards
