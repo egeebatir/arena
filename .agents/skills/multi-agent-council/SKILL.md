@@ -43,15 +43,15 @@ Always keep `c:\Users\egebatir\Documents\COUNCIL_BOARD.md` and `c:\Users\egebati
 
 When delegating tasks, use `invoke_subagent` with the personas defined in `.agents/council/`:
 
-| Agent | TypeName | Role | Focus |
+| Agent | TypeName | Role | Focus & Associated Skills |
 | :--- | :--- | :--- | :--- |
-| **01** | `orchestrator` | Üst Akıl / Genel Koordinatör | Global strategy, task dispatch, ecosystem cohesion |
-| **02** | `engine_master` | Mobile Game Core Master | Godot 4.6, GDScript, UI/UX, AdMob, Android AAB |
-| **03** | `viral_growth` | Viral Growth & Automation Lead | `futbol_automation`, OBS, 9:16 editing, AI hooks |
-| **04** | `web_architect` | Web & Distribution Architect | `webfutbol` (`ebstudyo.com`) HTML5, landing page, store conversion |
-| **05** | `adversarial_qa` | Kusur Avcıları Meclisi (4 Müfettiş) | 4 Bağımsız Müfettiş (Engine, Media, Localization, Sync) |
-| **06** | `aso_specialist` | ASO & Storefront Specialist | Google Play 5-language copy, keywords, release notes |
-| **07** | `version_release_controller` | Sürüm & Dağıtım Bütünlük Lideri | 7 Adımlı versiyon senkronizasyonu, şema ve geriye dönük uyumluluk |
+| **01** | `orchestrator` | Üst Akıl / Genel Koordinatör | Global strategy, task dispatch (`agent-orchestration-multi-agent-optimize`, `antigravity-skills-manager`) |
+| **02** | `engine_master` | Mobile Game Core Master | Godot 4.6, GDScript, UI/UX, AdMob, Android AAB (`mobile-developer`, `android-ui-dev`, `mobile-security-coder`) |
+| **03** | `viral_growth` | Viral Growth & Automation Lead | `futbol_automation`, 9:16 Shorts/Reels/TikTok (`content-marketer`, `workflow-orchestration-patterns`, `kpi-dashboard-design`) |
+| **04** | `web_architect` | Web & Distribution Architect | `webfutbol` (`ebstudyo.com`) HTML5, landing page (`ui-ux-designer`, `ui-visual-validator`, `seo-structure-architect`, `seo-authority-builder`) |
+| **05** | `adversarial_qa` | Kusur Avcıları Meclisi (4 Müfettiş) | 4 Bağımsız Müfettiş (`accessibility-compliance-accessibility-audit`, `wcag-audit-patterns`, `python-performance-optimization`) |
+| **06** | `aso_specialist` | ASO & Storefront Specialist | Google Play 5-language copy, keywords, release notes (`seo-keyword-strategist`, `seo-meta-optimizer`, `competitive-landscape`) |
+| **07** | `version_release_controller` | Sürüm & Dağıtım Bütünlük Lideri | 7 Adımlı versiyon senkronizasyonu, şema ve geriye dönük uyumluluk (`cicd-automation-workflow-automate`, `github-actions-templates`) |
 
 ---
 

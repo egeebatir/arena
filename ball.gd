@@ -51,7 +51,18 @@ const BADGE_MAP = {
 	"PSG": "res://psg1.png",
 	"BAY": "res://bay1.png",
 	"BVB": "res://bvb1.png",
-	"MIA": "res://mia1.png"
+	"MIA": "res://mia1.png",
+	# 40 National Teams
+	"FRA": "res://fra1.png", "ESP": "res://esp1.png", "GER": "res://ger1.png", "BEL": "res://bel1.png",
+	"NED": "res://ned1.png", "CRO": "res://cro1.png", "DEN": "res://den1.png", "SUI": "res://sui1.png",
+	"AUT": "res://aut1.png", "POL": "res://pol1.png", "SRB": "res://srb1.png", "CZE": "res://cze1.png",
+	"SCO": "res://sco1.png", "NOR": "res://nor1.png", "BRA": "res://bra1.png", "URU": "res://uru1.png",
+	"COL": "res://col1.png", "CHI": "res://chi1.png", "PAR": "res://par1.png", "ECU": "res://ecu1.png",
+	"NGA": "res://nga1.png", "MAR": "res://mar1.png", "EGY": "res://egy1.png", "SEN": "res://sen1.png",
+	"ALG": "res://alg1.png", "CMR": "res://cmr1.png", "GHA": "res://gha1.png", "JPN": "res://jpn1.png",
+	"KOR": "res://kor1.png", "KSA": "res://ksa1.png", "IRN": "res://irn1.png", "AUS": "res://aus1.png",
+	"QAT": "res://qat1.png", "MEX": "res://mex1.png", "CAN": "res://can1.png", "GEO": "res://geo1.png",
+	"SWE": "res://swe1.png", "GRE": "res://gre1.png", "ROU": "res://rou1.png", "WAL": "res://wal1.png"
 }
 
 var velocity = Vector2.ZERO
@@ -91,6 +102,8 @@ func init_ball(team_name: String, center_pos: Vector2, _r_limit: float, avoid_po
 	badge_texture = null
 	if BADGE_MAP.has(team_short_name):
 		badge_texture = load(BADGE_MAP[team_short_name])
+	elif ResourceLoader.exists("res://" + team_short_name.to_lower() + "1.png"):
+		badge_texture = load("res://" + team_short_name.to_lower() + "1.png")
 	
 	var valid_spawn = false
 	var attempts = 0
@@ -196,45 +209,57 @@ func _draw():
 			draw_circle(history[i] - position, trail_radius, trail_color)
 
 	draw_circle(shadow_offset, BALL_RADIUS - 2.0, shadow_color)
-	draw_circle(Vector2.ZERO, BALL_RADIUS, team_colors[0])
 
-	# Draw alternating stripes using 3 smooth curved polygons instead of 113 draw_line calls
-	var stripe_w = (BALL_RADIUS * 2.0) / 6.0
-	var c1 = team_colors[1]
-	for s_idx in [1, 3, 5]:
-		var x_start = -BALL_RADIUS + s_idx * stripe_w
-		var x_end = -BALL_RADIUS + (s_idx + 1) * stripe_w
-		var pts = PackedVector2Array()
-		var step = 4.0
-		var x = x_start
-		while x <= x_end:
-			var y = -sqrt(max(0.0, BALL_RADIUS * BALL_RADIUS - x * x))
-			pts.append(Vector2(x, y))
-			x += step
-		var y_end_top = -sqrt(max(0.0, BALL_RADIUS * BALL_RADIUS - x_end * x_end))
-		pts.append(Vector2(x_end, y_end_top))
-		x = x_end
-		while x >= x_start:
-			var y = sqrt(max(0.0, BALL_RADIUS * BALL_RADIUS - x * x))
-			pts.append(Vector2(x, y))
-			x -= step
-		var y_start_bot = sqrt(max(0.0, BALL_RADIUS * BALL_RADIUS - x_start * x_start))
-		pts.append(Vector2(x_start, y_start_bot))
-		draw_colored_polygon(pts, c1)
-			
+	var team_data = Global.TEAMS.get(current_team_name, {})
+	var is_national = team_data.get("type", "") == "national"
+	var is_flag_ball = is_national and badge_texture != null
+
+	if is_flag_ball:
+		# National team flag completely covers the inside of the ball
+		var flag_rect = Rect2(-BALL_RADIUS, -BALL_RADIUS, BALL_RADIUS * 2.0, BALL_RADIUS * 2.0)
+		draw_texture_rect(badge_texture, flag_rect, false)
+		draw_arc(Vector2.ZERO, BALL_RADIUS - 0.5, 0, TAU, 48, Color(0, 0, 0, 0.25), 1.2, true)
+	else:
+		draw_circle(Vector2.ZERO, BALL_RADIUS, team_colors[0])
+
+		# Draw alternating stripes using 3 smooth curved polygons instead of 113 draw_line calls
+		var stripe_w = (BALL_RADIUS * 2.0) / 6.0
+		var c1 = team_colors[1]
+		for s_idx in [1, 3, 5]:
+			var x_start = -BALL_RADIUS + s_idx * stripe_w
+			var x_end = -BALL_RADIUS + (s_idx + 1) * stripe_w
+			var pts = PackedVector2Array()
+			var step = 4.0
+			var x = x_start
+			while x <= x_end:
+				var y = -sqrt(max(0.0, BALL_RADIUS * BALL_RADIUS - x * x))
+				pts.append(Vector2(x, y))
+				x += step
+			var y_end_top = -sqrt(max(0.0, BALL_RADIUS * BALL_RADIUS - x_end * x_end))
+			pts.append(Vector2(x_end, y_end_top))
+			x = x_end
+			while x >= x_start:
+				var y = sqrt(max(0.0, BALL_RADIUS * BALL_RADIUS - x * x))
+				pts.append(Vector2(x, y))
+				x -= step
+			var y_start_bot = sqrt(max(0.0, BALL_RADIUS * BALL_RADIUS - x_start * x_start))
+			pts.append(Vector2(x_start, y_start_bot))
+			draw_colored_polygon(pts, c1)
+
 	var skin_id = ball_skin if ball_skin != "" else Global.equipped_ball_skin
 	Global.draw_ball_skin(self, Vector2.ZERO, BALL_RADIUS, skin_id)
 	
-	if logo_texture:
-		var logo_size = Vector2(80, 80) 
-		var logo_rect = Rect2(-logo_size / 2.0, logo_size)
-		draw_texture_rect(logo_texture, logo_rect, false)
+	if not is_flag_ball:
+		if logo_texture:
+			var logo_size = Vector2(80, 80) 
+			var logo_rect = Rect2(-logo_size / 2.0, logo_size)
+			draw_texture_rect(logo_texture, logo_rect, false)
 
-	# Draw team mascot badge centered on ball
-	if badge_texture:
-		var badge_size = Vector2(82, 82)
-		var badge_rect = Rect2(-badge_size / 2.0, badge_size)
-		draw_texture_rect(badge_texture, badge_rect, false)
+		# Draw team mascot badge centered on ball
+		if badge_texture:
+			var badge_size = Vector2(82, 82)
+			var badge_rect = Rect2(-badge_size / 2.0, badge_size)
+			draw_texture_rect(badge_texture, badge_rect, false)
 
 	if nerf_timer > 0 or yellow_nerf_timer > 0:
 		var crd_w = 12

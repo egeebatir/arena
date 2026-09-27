@@ -26,7 +26,7 @@ var LANG = {
 		"AD_COOLDOWN_WAIT": "Lütfen bekle: %02d:%02d",
 		"SHOP_WATCH_AD": "VİDEO İZLE (+50 Jeton)", "SHOP_EQUIPPED": "SEÇİLİ", "SHOP_EQUIP": "KULLAN",
 		"SKIN_CLASSIC": "Klasik", "SKIN_GOLD": "Altın", "SKIN_NEON": "Neon", 
-		"SKIN_CHROME": "Krom", "SKIN_LAVA": "Lav", "SKIN_ICE": "Buz",
+		"SKIN_CHROME": "Krom", "SKIN_LAVA": "Lav", "SKIN_ICE": "Buz", "SKIN_OBSIDIAN": "Obsidyen",
 		"FAV_YOURS": "Favori Takım", "FAV_MAKE": "Favorim Yap",
 		"FAV_CONFIRM_TITLE": "Favori Takımı Değiştir",
 		"FAV_CONFIRM_DESC": "Favori takımını \"%s\" olarak değiştirmek istediğine emin misin?",
@@ -109,7 +109,7 @@ var LANG = {
 		"AD_COOLDOWN_WAIT": "Please wait: %02d:%02d",
 		"SHOP_WATCH_AD": "WATCH VIDEO (+50 Coins)", "SHOP_EQUIPPED": "EQUIPPED", "SHOP_EQUIP": "EQUIP",
 		"SKIN_CLASSIC": "Classic", "SKIN_GOLD": "Gold", "SKIN_NEON": "Neon", 
-		"SKIN_CHROME": "Chrome", "SKIN_LAVA": "Lava", "SKIN_ICE": "Ice",
+		"SKIN_CHROME": "Chrome", "SKIN_LAVA": "Lava", "SKIN_ICE": "Ice", "SKIN_OBSIDIAN": "Obsidian",
 		"FAV_YOURS": "Your Favorite", "FAV_MAKE": "Make Favorite",
 		"FAV_CONFIRM_TITLE": "Change Favorite Team",
 		"FAV_CONFIRM_DESC": "Are you sure you want to change your favorite team to \"%s\"?",
@@ -192,7 +192,7 @@ var LANG = {
 		"AD_COOLDOWN_WAIT": "Por favor espera: %02d:%02d",
 		"SHOP_WATCH_AD": "VER VIDEO (+50 Monedas)", "SHOP_EQUIPPED": "EQUIPADO", "SHOP_EQUIP": "EQUIPAR",
 		"SKIN_CLASSIC": "Clásico", "SKIN_GOLD": "Oro", "SKIN_NEON": "Neón", 
-		"SKIN_CHROME": "Cromo", "SKIN_LAVA": "Lava", "SKIN_ICE": "Hielo",
+		"SKIN_CHROME": "Cromo", "SKIN_LAVA": "Lava", "SKIN_ICE": "Hielo", "SKIN_OBSIDIAN": "Obsidiana",
 		"FAV_YOURS": "Tu Favorito", "FAV_MAKE": "Hacer Favorito",
 		"FAV_CONFIRM_TITLE": "Cambiar Equipo Favorito",
 		"FAV_CONFIRM_DESC": "¿Estás seguro de que quieres cambiar tu equipo favorito a \"%s\"?",
@@ -275,7 +275,7 @@ var LANG = {
 		"AD_COOLDOWN_WAIT": "Por favor aguarde: %02d:%02d",
 		"SHOP_WATCH_AD": "VER VÍDEO (+50 Moedas)", "SHOP_EQUIPPED": "EQUIPADO", "SHOP_EQUIP": "EQUIPAR",
 		"SKIN_CLASSIC": "Clássico", "SKIN_GOLD": "Ouro", "SKIN_NEON": "Neon", 
-		"SKIN_CHROME": "Cromo", "SKIN_LAVA": "Lava", "SKIN_ICE": "Gelo",
+		"SKIN_CHROME": "Cromo", "SKIN_LAVA": "Lava", "SKIN_ICE": "Gelo", "SKIN_OBSIDIAN": "Obsidiana",
 		"FAV_YOURS": "O Seu Favorito", "FAV_MAKE": "Tornar Favorito",
 		"FAV_CONFIRM_TITLE": "Alterar Equipa Favorita",
 		"FAV_CONFIRM_DESC": "Tem certeza de que deseja alterar a sua equipa favorita para \"%s\"?",
@@ -358,7 +358,7 @@ var LANG = {
 		"AD_COOLDOWN_WAIT": "Attendi: %02d:%02d",
 		"SHOP_WATCH_AD": "GUARDA VIDEO (+50 Monete)", "SHOP_EQUIPPED": "IN USO", "SHOP_EQUIP": "USA",
 		"SKIN_CLASSIC": "Classico", "SKIN_GOLD": "Oro", "SKIN_NEON": "Neon", 
-		"SKIN_CHROME": "Cromo", "SKIN_LAVA": "Lava", "SKIN_ICE": "Ghiaccio",
+		"SKIN_CHROME": "Cromo", "SKIN_LAVA": "Lava", "SKIN_ICE": "Ghiaccio", "SKIN_OBSIDIAN": "Ossidiana",
 		"FAV_YOURS": "La Tua Preferita", "FAV_MAKE": "Imposta Preferita",
 		"FAV_CONFIRM_TITLE": "Cambia Squadra Preferita",
 		"FAV_CONFIRM_DESC": "Sei sicuro di voler cambiare la tua squadra preferita in \"%s\"?",
@@ -458,6 +458,8 @@ var fav_a_btn: Button
 
 var temp_settings = {}
 var start_match_btn: Button
+var match_fee_badge: PanelContainer = null
+var match_fee_lbl: Label = null
 var rand_h_btn: Button
 var rand_a_btn: Button
 var top_stripe_panel: PanelContainer
@@ -495,6 +497,7 @@ var shop_notification_dot: Panel
 
 var is_banner_loading: bool = false
 var menu_banner_retry_count: int = 0
+var is_tablet: bool = false
 
 # ======================================================
 # 3D TACTILE BUTTON STYLING HELPER
@@ -598,40 +601,8 @@ func _ready():
 	if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
 		Global.bg_music_player.play()
 	Global.load_stats()  # Load persisted match history from disk
-	# Pre-load badge overlay textures so draw_ball_preview doesn't block per frame
-	badge_textures = {
-		"FB": load("res://fb1.png"),
-		"FEN": load("res://fb1.png"),
-		"TS": load("res://ts1.png"),
-		"TRA": load("res://ts1.png"),
-		"GS": load("res://gs1.png"),
-		"GAL": load("res://gs1.png"),
-		"BJK": load("res://bjk1.png"),
-		"BAR": load("res://bar1.png"),
-		"RMA": load("res://rma1.png"),
-		"ATM": load("res://atm1.png"),
-		"JUV": load("res://juv1.png"),
-		"INT": load("res://int1.png"),
-		"MIL": load("res://mil1.png"),
-		"NAP": load("res://nap1.png"),
-		"TOR": load("res://tor1.png"),
-		"MC": load("res://mc1.png"),
-		"MCI": load("res://mc1.png"),
-		"MUN": load("res://mun1.png"),
-		"CHE": load("res://che1.png"),
-		"ARS": load("res://ars1.png"),
-		"LIV": load("res://liv1.png"),
-		"TUR": load("res://tur1.png"),
-		"ARG": load("res://arg1.png"),
-		"POR": load("res://por1.png"),
-		"ENG": load("res://eng1.png"),
-		"USA": load("res://usa1.png"),
-		"ITA": load("res://ita1.png"),
-		"PSG": load("res://psg1.png"),
-		"BAY": load("res://bay1.png"),
-		"BVB": load("res://bvb1.png"),
-		"MIA": load("res://mia1.png")
-	}
+	# Badge overlay textures loaded on-demand and cached in badge_textures for instant startup
+	badge_textures = {}
 	
 	var bg = TextureRect.new()
 	bg_grad = Gradient.new()
@@ -672,12 +643,18 @@ func _ready():
 	tabs_hbox.add_child(stats_placeholder)
 
 	# --- PAGE 1: HOME TAB (existing main menu UI) ---
+	var vp_size = get_viewport_rect().size
+	var vp_w = vp_size.x
+	var vp_h = vp_size.y
+	is_tablet = (vp_h / vp_w) < 1.9
+	var max_w = min(vp_w - 32.0, 660.0)
+
 	var main_margin = MarginContainer.new()
 	main_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
 	main_margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	main_margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	main_margin.add_theme_constant_override("margin_top", 145)
-	main_margin.add_theme_constant_override("margin_bottom", 95)
+	main_margin.add_theme_constant_override("margin_top", 135 if is_tablet else 145)
+	main_margin.add_theme_constant_override("margin_bottom", 110 if is_tablet else 118)
 	main_margin.add_theme_constant_override("margin_left", 20)
 	main_margin.add_theme_constant_override("margin_right", 20)
 	tabs_hbox.add_child(main_margin)
@@ -890,29 +867,29 @@ func _ready():
 	away_col.add_child(away_lbl)
 	
 	# Spacer between HOME and preview (generous clearance so hats/crowns never overlap text)
-	var s_hp = Control.new(); s_hp.custom_minimum_size = Vector2(0, 28); home_col.add_child(s_hp)
-	var s_ap = Control.new(); s_ap.custom_minimum_size = Vector2(0, 28); away_col.add_child(s_ap)
+	var s_hp = Control.new(); s_hp.custom_minimum_size = Vector2(0, 16 if is_tablet else 28); home_col.add_child(s_hp)
+	var s_ap = Control.new(); s_ap.custom_minimum_size = Vector2(0, 16 if is_tablet else 28); away_col.add_child(s_ap)
 	
 	# Preview Containers with discrete margins
 	var h_preview_cont = CenterContainer.new()
-	h_preview_cont.custom_minimum_size = Vector2(320, 120)
+	h_preview_cont.custom_minimum_size = Vector2(320, 96 if is_tablet else 120)
 	home_col.add_child(h_preview_cont)
 	home_preview = Control.new()
-	home_preview.custom_minimum_size = Vector2(108, 108)
+	home_preview.custom_minimum_size = Vector2(92, 92) if is_tablet else Vector2(108, 108)
 	home_preview.draw.connect(func(): draw_ball_preview(home_preview, true))
 	h_preview_cont.add_child(home_preview)
 	
 	var a_preview_cont = CenterContainer.new()
-	a_preview_cont.custom_minimum_size = Vector2(320, 120)
+	a_preview_cont.custom_minimum_size = Vector2(320, 96 if is_tablet else 120)
 	away_col.add_child(a_preview_cont)
 	away_preview = Control.new()
-	away_preview.custom_minimum_size = Vector2(108, 108)
+	away_preview.custom_minimum_size = Vector2(92, 92) if is_tablet else Vector2(108, 108)
 	away_preview.draw.connect(func(): draw_ball_preview(away_preview, false))
 	a_preview_cont.add_child(away_preview)
 	
-	var s_hf_btn = Control.new(); s_hf_btn.custom_minimum_size = Vector2(0, 14); home_col.add_child(s_hf_btn)
+	var s_hf_btn = Control.new(); s_hf_btn.custom_minimum_size = Vector2(0, 8 if is_tablet else 14); home_col.add_child(s_hf_btn)
 	fav_h_btn = Button.new()
-	fav_h_btn.custom_minimum_size = Vector2(250, 48)
+	fav_h_btn.custom_minimum_size = Vector2(250, 44 if is_tablet else 48)
 	fav_h_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	fav_h_btn.add_theme_font_override("font", custom_font)
 	fav_h_btn.add_theme_font_size_override("font_size", 24)
@@ -925,9 +902,9 @@ func _ready():
 	fav_h_btn.pressed.connect(func(): _set_favorite_team(true))
 	home_col.add_child(fav_h_btn)
 	
-	var s_af_btn = Control.new(); s_af_btn.custom_minimum_size = Vector2(0, 14); away_col.add_child(s_af_btn)
+	var s_af_btn = Control.new(); s_af_btn.custom_minimum_size = Vector2(0, 8 if is_tablet else 14); away_col.add_child(s_af_btn)
 	fav_a_btn = Button.new()
-	fav_a_btn.custom_minimum_size = Vector2(250, 48)
+	fav_a_btn.custom_minimum_size = Vector2(250, 44 if is_tablet else 48)
 	fav_a_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	fav_a_btn.add_theme_font_override("font", custom_font)
 	fav_a_btn.add_theme_font_size_override("font_size", 24)
@@ -940,8 +917,8 @@ func _ready():
 	away_col.add_child(fav_a_btn)
 
 	# Gap between balls and filters
-	var s_hf2 = Control.new(); s_hf2.custom_minimum_size = Vector2(0, 10); home_col.add_child(s_hf2)
-	var s_af2 = Control.new(); s_af2.custom_minimum_size = Vector2(0, 10); away_col.add_child(s_af2)
+	var s_hf2 = Control.new(); s_hf2.custom_minimum_size = Vector2(0, 6 if is_tablet else 10); home_col.add_child(s_hf2)
+	var s_af2 = Control.new(); s_af2.custom_minimum_size = Vector2(0, 6 if is_tablet else 10); away_col.add_child(s_af2)
 	
 	var filter_style = StyleBoxFlat.new()
 	filter_style.bg_color = active_theme.bg_bottom
@@ -954,10 +931,10 @@ func _ready():
 	var arrow_empty = ImageTexture.create_from_image(Image.create_empty(1, 1, false, Image.FORMAT_RGBA8))
 	
 	league_dropdown_home = OptionButton.new()
-	league_dropdown_home.custom_minimum_size = Vector2(320, 60)
+	league_dropdown_home.custom_minimum_size = Vector2(320, 48 if is_tablet else 56)
 	league_dropdown_home.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	league_dropdown_home.add_theme_font_override("font", custom_font)
-	league_dropdown_home.add_theme_font_size_override("font_size", 32)
+	league_dropdown_home.add_theme_font_size_override("font_size", 26 if is_tablet else 30)
 	league_dropdown_home.add_theme_stylebox_override("normal", filter_style)
 	league_dropdown_home.add_theme_stylebox_override("hover", filter_style)
 	league_dropdown_home.add_theme_stylebox_override("pressed", filter_style)
@@ -966,10 +943,10 @@ func _ready():
 	league_dropdown_home.item_selected.connect(_on_filter_changed)
 	
 	league_dropdown_away = OptionButton.new()
-	league_dropdown_away.custom_minimum_size = Vector2(320, 60)
+	league_dropdown_away.custom_minimum_size = Vector2(320, 48 if is_tablet else 56)
 	league_dropdown_away.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	league_dropdown_away.add_theme_font_override("font", custom_font)
-	league_dropdown_away.add_theme_font_size_override("font_size", 32)
+	league_dropdown_away.add_theme_font_size_override("font_size", 26 if is_tablet else 30)
 	league_dropdown_away.add_theme_stylebox_override("normal", filter_style)
 	league_dropdown_away.add_theme_stylebox_override("hover", filter_style)
 	league_dropdown_away.add_theme_stylebox_override("pressed", filter_style)
@@ -978,16 +955,16 @@ func _ready():
 	league_dropdown_away.item_selected.connect(_on_filter_changed)
 	
 	# Gap between league dropdown and search bar
-	var s_gap_h = Control.new(); s_gap_h.custom_minimum_size = Vector2(0, 8); home_col.add_child(s_gap_h)
-	var s_gap_a = Control.new(); s_gap_a.custom_minimum_size = Vector2(0, 8); away_col.add_child(s_gap_a)
+	var s_gap_h = Control.new(); s_gap_h.custom_minimum_size = Vector2(0, 6 if is_tablet else 8); home_col.add_child(s_gap_h)
+	var s_gap_a = Control.new(); s_gap_a.custom_minimum_size = Vector2(0, 6 if is_tablet else 8); away_col.add_child(s_gap_a)
 	
 	search_bar_home = LineEdit.new()
-	search_bar_home.custom_minimum_size = Vector2(320, 60)
+	search_bar_home.custom_minimum_size = Vector2(320, 48 if is_tablet else 56)
 	search_bar_home.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	search_bar_home.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	search_bar_home.clear_button_enabled = true
 	search_bar_home.add_theme_font_override("font", custom_font)
-	search_bar_home.add_theme_font_size_override("font_size", 32)
+	search_bar_home.add_theme_font_size_override("font_size", 26 if is_tablet else 30)
 	search_bar_home.add_theme_stylebox_override("normal", filter_style)
 	search_bar_home.add_theme_stylebox_override("focus", filter_style)
 	search_bar_home.text_changed.connect(_on_filter_changed)
@@ -995,12 +972,12 @@ func _ready():
 	home_col.add_child(search_bar_home)
 	
 	search_bar_away = LineEdit.new()
-	search_bar_away.custom_minimum_size = Vector2(320, 60)
+	search_bar_away.custom_minimum_size = Vector2(320, 48 if is_tablet else 56)
 	search_bar_away.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	search_bar_away.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	search_bar_away.clear_button_enabled = true
 	search_bar_away.add_theme_font_override("font", custom_font)
-	search_bar_away.add_theme_font_size_override("font_size", 32)
+	search_bar_away.add_theme_font_size_override("font_size", 26 if is_tablet else 30)
 	search_bar_away.add_theme_stylebox_override("normal", filter_style)
 	search_bar_away.add_theme_stylebox_override("focus", filter_style)
 	search_bar_away.text_changed.connect(_on_filter_changed)
@@ -1010,8 +987,8 @@ func _ready():
 	setup_filters()
 	
 	# Spacer between Search and Randomizer
-	var s_gap_rand_h = Control.new(); s_gap_rand_h.custom_minimum_size = Vector2(0, 8); home_col.add_child(s_gap_rand_h)
-	var s_gap_rand_a = Control.new(); s_gap_rand_a.custom_minimum_size = Vector2(0, 8); away_col.add_child(s_gap_rand_a)
+	var s_gap_rand_h = Control.new(); s_gap_rand_h.custom_minimum_size = Vector2(0, 6 if is_tablet else 8); home_col.add_child(s_gap_rand_h)
+	var s_gap_rand_a = Control.new(); s_gap_rand_a.custom_minimum_size = Vector2(0, 6 if is_tablet else 8); away_col.add_child(s_gap_rand_a)
 
 	# Random buttons with discrete margins and 3D tactile feedback
 	var rand_style = StyleBoxFlat.new()
@@ -1039,9 +1016,9 @@ func _ready():
 
 	rand_h_btn = Button.new()
 	rand_h_btn.text = LANG[Global.current_lang]["RANDOM"]
-	rand_h_btn.custom_minimum_size = Vector2(320, 60)
+	rand_h_btn.custom_minimum_size = Vector2(320, 48 if is_tablet else 56)
 	rand_h_btn.add_theme_font_override("font", custom_font)
-	rand_h_btn.add_theme_font_size_override("font_size", 32)
+	rand_h_btn.add_theme_font_size_override("font_size", 26 if is_tablet else 30)
 	rand_h_btn.add_theme_stylebox_override("normal", rand_style)
 	rand_h_btn.add_theme_stylebox_override("hover", rand_hover)
 	rand_h_btn.add_theme_stylebox_override("pressed", rand_pressed)
@@ -1060,9 +1037,9 @@ func _ready():
 	
 	rand_a_btn = Button.new()
 	rand_a_btn.text = LANG[Global.current_lang]["RANDOM"]
-	rand_a_btn.custom_minimum_size = Vector2(320, 60)
+	rand_a_btn.custom_minimum_size = Vector2(320, 48 if is_tablet else 56)
 	rand_a_btn.add_theme_font_override("font", custom_font)
-	rand_a_btn.add_theme_font_size_override("font_size", 32)
+	rand_a_btn.add_theme_font_size_override("font_size", 26 if is_tablet else 30)
 	rand_a_btn.add_theme_stylebox_override("normal", rand_style)
 	rand_a_btn.add_theme_stylebox_override("hover", rand_hover)
 	rand_a_btn.add_theme_stylebox_override("pressed", rand_pressed)
@@ -1081,28 +1058,33 @@ func _ready():
 	
 	var scroll_both = ScrollContainer.new()
 	scroll_both.name = "ScrollContainer"
-	var vp_size = get_viewport_rect().size
-	var vp_w = vp_size.x
-	var vp_h = vp_size.y
-	var max_w = min(vp_w - 32.0, 660.0)
-	# Tablet vs phone height capping: On tablet give generous space, on mobile phone cap comfortably so start button & footer breathe
-	var target_scroll_h = clamp(vp_h * 0.40, 280.0, 520.0) if vp_w >= 800.0 else clamp(vp_h * 0.34, 260.0, 360.0)
-	scroll_both.custom_minimum_size = Vector2(max_w, target_scroll_h)
+	scroll_both.custom_minimum_size = Vector2(max_w, 140 if is_tablet else 200)
 	scroll_both.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	scroll_both.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	scroll_both.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll_both.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll_both.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	scroll_both.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS
 	var v_sc = scroll_both.get_v_scroll_bar()
 	v_sc.custom_minimum_size.x = 6
 	
-	var sb_style = StyleBoxFlat.new(); sb_style.bg_color = Color.TRANSPARENT
-	var gb_style = StyleBoxFlat.new(); gb_style.bg_color = active_theme.accent.lightened(0.1)
+	var sb_style = StyleBoxFlat.new()
+	sb_style.bg_color = Color8(255, 255, 255, 12)
+	sb_style.corner_radius_top_left = 3; sb_style.corner_radius_top_right = 3
+	sb_style.corner_radius_bottom_left = 3; sb_style.corner_radius_bottom_right = 3
+	
+	var gb_style = StyleBoxFlat.new()
+	gb_style.bg_color = active_theme.accent.lightened(0.2)
 	gb_style.corner_radius_top_left = 3; gb_style.corner_radius_top_right = 3
 	gb_style.corner_radius_bottom_left = 3; gb_style.corner_radius_bottom_right = 3
+	gb_style.expand_margin_top = -14
+	gb_style.expand_margin_bottom = -14
+	
+	var gb_hover = gb_style.duplicate()
+	gb_hover.bg_color = active_theme.accent.lightened(0.38)
+	
 	v_sc.add_theme_stylebox_override("scroll", sb_style)
 	v_sc.add_theme_stylebox_override("grabber", gb_style)
-	v_sc.add_theme_stylebox_override("grabber_highlight", gb_style)
-	v_sc.add_theme_stylebox_override("grabber_pressed", gb_style)
+	v_sc.add_theme_stylebox_override("grabber_highlight", gb_hover)
+	v_sc.add_theme_stylebox_override("grabber_pressed", gb_hover)
 	
 	list_shifter_vbox.add_child(scroll_both)
 	main_scroll = scroll_both
@@ -1116,13 +1098,13 @@ func _ready():
 	home_list = VBoxContainer.new()
 	home_list.mouse_filter = Control.MOUSE_FILTER_PASS
 	home_list.custom_minimum_size = Vector2(320, 0)
-	home_list.add_theme_constant_override("separation", 8)
+	home_list.add_theme_constant_override("separation", 6 if is_tablet else 8)
 	lists_hbox.add_child(home_list)
 	
 	away_list = VBoxContainer.new()
 	away_list.mouse_filter = Control.MOUSE_FILTER_PASS
 	away_list.custom_minimum_size = Vector2(320, 0)
-	away_list.add_theme_constant_override("separation", 8)
+	away_list.add_theme_constant_override("separation", 6 if is_tablet else 8)
 	lists_hbox.add_child(away_list)
 	
 	TEAM_NAMES = Global.TEAMS.keys()
@@ -1130,10 +1112,40 @@ func _ready():
 	away_selected = Global.away_selected
 	populate_teams()
 	
-	# --- BAŞLA BUTONU (3D Tactile Push Sensation - Always Visible) ---
+	# --- BAŞLA BUTONU & MAÇ HAKKI BİLGİ ROZETİ (3D Tactile Push Sensation) ---
+	var pre_start_spacer = Control.new()
+	pre_start_spacer.custom_minimum_size = Vector2(0, 4 if is_tablet else 6)
+	list_shifter_vbox.add_child(pre_start_spacer)
+	
+	# Sleek floating match fee / energy status pill
+	match_fee_badge = PanelContainer.new()
+	match_fee_badge.name = "MatchFeeBadge"
+	match_fee_badge.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	var mfb_style = StyleBoxFlat.new()
+	mfb_style.corner_radius_top_left = 13; mfb_style.corner_radius_top_right = 13
+	mfb_style.corner_radius_bottom_left = 13; mfb_style.corner_radius_bottom_right = 13
+	mfb_style.border_width_left = 1.5; mfb_style.border_width_right = 1.5
+	mfb_style.border_width_top = 1.5; mfb_style.border_width_bottom = 2.5
+	mfb_style.content_margin_left = 16; mfb_style.content_margin_right = 16
+	mfb_style.content_margin_top = 3; mfb_style.content_margin_bottom = 3
+	match_fee_badge.add_theme_stylebox_override("panel", mfb_style)
+	
+	match_fee_lbl = Label.new()
+	match_fee_lbl.name = "MatchFeeLabel"
+	match_fee_lbl.add_theme_font_override("font", custom_font)
+	match_fee_lbl.add_theme_font_size_override("font_size", 20 if is_tablet else 22)
+	match_fee_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	match_fee_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	match_fee_badge.add_child(match_fee_lbl)
+	list_shifter_vbox.add_child(match_fee_badge)
+	
+	var badge_gap = Control.new()
+	badge_gap.custom_minimum_size = Vector2(0, 4)
+	list_shifter_vbox.add_child(badge_gap)
+	
 	var start_btn = Button.new()
 	start_btn.name = "StartMatchButton"
-	start_btn.custom_minimum_size = Vector2(max_w, 82)
+	start_btn.custom_minimum_size = Vector2(max_w, 68 if is_tablet else 76)
 	start_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	start_btn.size_flags_vertical = Control.SIZE_SHRINK_END
 	
@@ -1141,7 +1153,7 @@ func _ready():
 	start_lbl.name = "ButtonLabel"
 	start_lbl.text = LANG[Global.current_lang]["START_MATCH"]
 	start_lbl.add_theme_font_override("font", custom_font)
-	start_lbl.add_theme_font_size_override("font_size", 46)
+	start_lbl.add_theme_font_size_override("font_size", 40 if is_tablet else 46)
 	start_lbl.set_anchors_preset(Control.PRESET_FULL_RECT)
 	start_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	start_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -1156,6 +1168,10 @@ func _ready():
 	list_shifter_vbox.add_child(start_btn)
 	ui_labels.append({"node": start_lbl, "key": "START_MATCH", "type": "label"})
 	start_match_btn = start_btn
+	
+	var post_start_spacer = Control.new()
+	post_start_spacer.custom_minimum_size = Vector2(0, 26 if is_tablet else 34)
+	list_shifter_vbox.add_child(post_start_spacer)
 	
 	temp_settings["master_vol"] = Global.master_vol
 	temp_settings["vol_settings"] = Global.vol_settings.duplicate()
@@ -1177,13 +1193,17 @@ func _ready():
 
 	# Start on Home (tab index 1), instantly, no tween
 	_switch_tab(1, true)
+	_update_start_button_display()
 	
 	_setup_admob()
 	
 	_connect_all_buttons(self)
 	
-	if Global.login_method == "guest" and Global.matches_played_since_prompt >= 3:
+	if Global.came_from_completed_match and Global.login_method == "guest" and Global.matches_played_since_prompt >= 3:
+		Global.came_from_completed_match = false
 		call_deferred("show_google_play_prompt")
+	else:
+		Global.came_from_completed_match = false
 
 func _connect_all_buttons(node: Node):
 	if node is Button:
@@ -1497,6 +1517,7 @@ func update_theme_visuals():
 				btn_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
 				btn_lbl.add_theme_constant_override("shadow_offset_x", 0)
 				btn_lbl.add_theme_constant_override("shadow_offset_y", 3)
+		_update_start_button_display()
 
 	if is_instance_valid(rand_h_btn):
 		var rh_style = rand_h_btn.get_theme_stylebox("normal")
@@ -1617,6 +1638,8 @@ func update_theme_visuals():
 		var gb_style = v_sc.get_theme_stylebox("grabber")
 		if gb_style is StyleBoxFlat:
 			gb_style.bg_color = active_theme.accent.darkened(0.2)
+			gb_style.expand_margin_top = -14
+			gb_style.expand_margin_bottom = -14
 			v_sc.add_theme_stylebox_override("grabber", gb_style)
 			v_sc.add_theme_stylebox_override("grabber_highlight", gb_style)
 			v_sc.add_theme_stylebox_override("grabber_pressed", gb_style)
@@ -1846,11 +1869,13 @@ func setup_settings_overlay():
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	var v_sc_set = scroll.get_v_scroll_bar()
-	v_sc_set.custom_minimum_size.x = 6
+	v_sc_set.custom_minimum_size.x = 5
 	var sb_style_set = StyleBoxFlat.new(); sb_style_set.bg_color = Color.TRANSPARENT
 	var gb_style_set = StyleBoxFlat.new(); gb_style_set.bg_color = active_theme.accent.lightened(0.1)
 	gb_style_set.corner_radius_top_left = 3; gb_style_set.corner_radius_top_right = 3
 	gb_style_set.corner_radius_bottom_left = 3; gb_style_set.corner_radius_bottom_right = 3
+	gb_style_set.expand_margin_top = -18
+	gb_style_set.expand_margin_bottom = -18
 	v_sc_set.add_theme_stylebox_override("scroll", sb_style_set)
 	v_sc_set.add_theme_stylebox_override("grabber", gb_style_set)
 	v_sc_set.add_theme_stylebox_override("grabber_highlight", gb_style_set)
@@ -2201,9 +2226,10 @@ func setup_player_list_overlay():
 	panel.add_child(s_vbox)
 	
 	# Target team state
-	var target_team = Global.home_team_name
-	if target_team == "" or not Global.TEAMS.has(target_team):
-		target_team = Global.TEAMS.keys()[0]
+	var initial_target_team = Global.home_team_name
+	if initial_target_team == "" or not Global.TEAMS.has(initial_target_team):
+		initial_target_team = Global.TEAMS.keys()[0]
+	var squad_state = {"target_team": initial_target_team}
 
 	# Window title: "[TEAM] SQUAD" / "[TAKIM] KADROSU"
 	var window_title_bg = PanelContainer.new()
@@ -2218,7 +2244,7 @@ func setup_player_list_overlay():
 	s_vbox.add_child(window_title_bg)
 	
 	var s_title = Label.new()
-	s_title.text = (target_team + " " + LANG.get(Global.current_lang, LANG["ENG"]).get("SQUAD_SUFFIX", "KADROSU")).to_upper()
+	s_title.text = (squad_state["target_team"] + " " + LANG.get(Global.current_lang, LANG["ENG"]).get("SQUAD_SUFFIX", "KADROSU")).to_upper()
 	s_title.add_theme_font_override("font", custom_font)
 	s_title.add_theme_font_size_override("font_size", 38)
 	s_title.add_theme_color_override("font_color", Color.WHITE)
@@ -2249,13 +2275,13 @@ func setup_player_list_overlay():
 	ball_preview.set_anchors_preset(Control.PRESET_FULL_RECT)
 	ball_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ball_preview.draw.connect(func():
-		draw_ball_preview(ball_preview, true, target_team)
+		draw_ball_preview(ball_preview, true, squad_state["target_team"])
 	)
 	ball_btn.add_child(ball_preview)
 	header_vbox.add_child(ball_btn)
 	
 	var team_btn = Button.new()
-	team_btn.text = target_team + " ▾"
+	team_btn.text = squad_state["target_team"] + " ▾"
 	team_btn.custom_minimum_size = Vector2(0, 48)
 	team_btn.add_theme_font_override("font", custom_font)
 	team_btn.add_theme_font_size_override("font_size", 32)
@@ -2503,9 +2529,9 @@ func setup_player_list_overlay():
 
 	# Dynamic loader for any selected team
 	var load_team_players = func(t_name: String):
-		target_team = t_name
-		s_title.text = (target_team + " " + LANG.get(Global.current_lang, LANG["ENG"]).get("SQUAD_SUFFIX", "KADROSU")).to_upper()
-		team_btn.text = target_team + " ▾"
+		squad_state["target_team"] = t_name
+		s_title.text = (squad_state["target_team"] + " " + LANG.get(Global.current_lang, LANG["ENG"]).get("SQUAD_SUFFIX", "KADROSU")).to_upper()
+		team_btn.text = squad_state["target_team"] + " ▾"
 		ball_preview.queue_redraw()
 		
 		for r in player_rows:
@@ -2514,8 +2540,8 @@ func setup_player_list_overlay():
 		player_rows.clear()
 		
 		var existing_names = {}
-		if Global.custom_player_names.has(target_team):
-			var raw = Global.custom_player_names[target_team]
+		if Global.custom_player_names.has(squad_state["target_team"]):
+			var raw = Global.custom_player_names[squad_state["target_team"]]
 			if typeof(raw) == TYPE_DICTIONARY:
 				existing_names = raw
 				
@@ -2553,7 +2579,7 @@ func setup_player_list_overlay():
 		update_all_row_roles.call()
 
 	# Initial squad populate
-	load_team_players.call(target_team)
+	load_team_players.call(squad_state["target_team"])
 
 	# Interactive Team Picker Modal
 	var open_team_picker = func():
@@ -2647,7 +2673,7 @@ func setup_player_list_overlay():
 				b.add_theme_font_override("font", custom_font)
 				b.add_theme_font_size_override("font_size", 26)
 				b.add_theme_color_override("font_color", Color.WHITE)
-				if tm == target_team:
+				if tm == squad_state["target_team"]:
 					apply_3d_style_to_button(b, active_theme.accent, active_theme.accent.darkened(0.4), 12, 3.5, 12, 8)
 					b.add_theme_color_override("font_color", Color8(20, 15, 0) if active_theme.accent.get_luminance() > 0.5 else Color.WHITE)
 				else:
@@ -2758,7 +2784,8 @@ func setup_player_list_overlay():
 	save_btn.add_theme_color_override("font_color", Color.WHITE)
 	
 	save_btn.pressed.connect(func():
-		if target_team != "":
+		var editing_team = squad_state["target_team"]
+		if editing_team != "":
 			var team_saved_names = {}
 			var used_saved_nums = {}
 			for r in player_rows:
@@ -2777,7 +2804,7 @@ func setup_player_list_overlay():
 							dupe_idx += 1
 						used_saved_nums[final_n] = true
 						team_saved_names[final_n] = txt
-			Global.custom_player_names[target_team] = team_saved_names
+			Global.custom_player_names[editing_team] = team_saved_names
 			Global.save_progression()
 		Global.play_click()
 		player_list_overlay.visible = false
@@ -2993,29 +3020,38 @@ func draw_ball_preview(ctrl: Control, is_home: bool = true, team_name_override: 
 	
 	var colors = team_data["colors"]
 	var short_name = team_data.get("short", "")
-	
-	ctrl.draw_circle(center, radius, colors[0])
-	
-	var stripe_w = (radius * 2.0) / 6.0
-	for x in range(int(-radius), int(radius)):
-		var stripe_index = int((x + radius) / stripe_w)
-		if stripe_index % 2 != 0:
-			var y = sqrt(max(0, radius * radius - x * x))
-			ctrl.draw_line(center + Vector2(x, -y), center + Vector2(x, y), colors[1], 1.0)
+	var is_national = team_data.get("type", "") == "national"
+	var badge_tex = get_badge_texture(short_name)
+	var is_flag_ball = is_national and badge_tex != null
+
+	if is_flag_ball:
+		# Circular flag completely covering the inside of the ball
+		var flag_rect = Rect2(center - Vector2(radius, radius), Vector2(radius * 2.0, radius * 2.0))
+		ctrl.draw_texture_rect(badge_tex, flag_rect, false)
+		ctrl.draw_arc(center, radius - 0.5, 0, TAU, 64, Color(0, 0, 0, 0.25), 1.2, true)
+	else:
+		ctrl.draw_circle(center, radius, colors[0])
+		
+		var stripe_w = (radius * 2.0) / 6.0
+		for x in range(int(-radius), int(radius)):
+			var stripe_index = int((x + radius) / stripe_w)
+			if stripe_index % 2 != 0:
+				var y = sqrt(max(0, radius * radius - x * x))
+				ctrl.draw_line(center + Vector2(x, -y), center + Vector2(x, y), colors[1], 1.0)
 			
 	var skin_id = Global.equipped_ball_skin
 	Global.draw_ball_skin(ctrl, center, radius, skin_id)
 
-	# Draw team mascot badge or team crest centered on ball preview
-	if badge_textures.has(short_name) and badge_textures[short_name]:
-		var badge_tex = badge_textures[short_name]
-		var bs = Vector2(78, 78)
-		ctrl.draw_texture_rect(badge_tex, Rect2(center - bs / 2.0, bs), false)
-	else:
-		var logo_tex = Global.get_team_logo(team_name)
-		if logo_tex:
-			var ls = Vector2(76, 76)
-			ctrl.draw_texture_rect(logo_tex, Rect2(center - ls / 2.0, ls), false)
+	if not is_flag_ball:
+		# Draw team mascot badge or team crest centered on ball preview
+		if badge_tex:
+			var bs = Vector2(78, 78)
+			ctrl.draw_texture_rect(badge_tex, Rect2(center - bs / 2.0, bs), false)
+		else:
+			var logo_tex = Global.get_team_logo(team_name)
+			if logo_tex:
+				var ls = Vector2(76, 76)
+				ctrl.draw_texture_rect(logo_tex, Rect2(center - ls / 2.0, ls), false)
 
 	# Draw favorite team crown cosmetic on top of ball preview
 	if (team_name == Global.favorite_team or (Global.favorite_team != "" and short_name == Global.TEAMS.get(Global.favorite_team, {}).get("short", ""))) and Global.equipped_hat != "none" and Global.HATS.has(Global.equipped_hat):
@@ -3032,6 +3068,17 @@ func draw_ball_preview(ctrl: Control, is_home: bool = true, team_name_override: 
 					y_overlap = 16.0
 				var hr = Rect2(center.x - hw / 2.0, center.y - radius - hh + y_overlap, hw, hh)
 				ctrl.draw_texture_rect(h_tex, hr, false)
+
+func get_badge_texture(short_name: String) -> Texture2D:
+	if badge_textures.has(short_name):
+		return badge_textures[short_name]
+	var path = "res://" + short_name.to_lower() + "1.png"
+	if ResourceLoader.exists(path):
+		var tex = load(path)
+		badge_textures[short_name] = tex
+		return tex
+	badge_textures[short_name] = null
+	return null
 
 func add_centered_toggle_to_vbox(parent: Control, id: String, lang_key: String, default_val: bool):
 	var cont = VBoxContainer.new()
@@ -3112,7 +3159,7 @@ func populate_teams():
 	var create_team_btn = func(team: String, is_home_col: bool) -> Button:
 		var btn = Button.new()
 		btn.mouse_filter = Control.MOUSE_FILTER_PASS
-		btn.custom_minimum_size = Vector2(320, 76)
+		btn.custom_minimum_size = Vector2(320, 52 if is_tablet else 64)
 		
 		var is_active = (team == Global.home_team_name) if is_home_col else (team == Global.away_team_name)
 		var btn_style = shared_btn_style
@@ -3150,7 +3197,7 @@ func populate_teams():
 		var lbl = Label.new()
 		lbl.text = team
 		lbl.add_theme_font_override("font", custom_font)
-		lbl.add_theme_font_size_override("font_size", 28)
+		lbl.add_theme_font_size_override("font_size", 24 if is_tablet else 28)
 		
 		if is_active:
 			lbl.add_theme_color_override("font_color", active_theme.accent)
@@ -3523,6 +3570,7 @@ func _change_language(lang_code: String):
 	setup_filters()
 	populate_teams()
 	_update_fav_buttons()
+	_update_start_button_display()
 	_refresh_stats_tab()
 	_refresh_shop_tab()
 	_update_house_ad_content()
@@ -3539,13 +3587,258 @@ func _on_lang_dropdown_selected(idx: int):
 	var lang_map = {0: "TR", 1: "ENG", 2: "ESP", 3: "POR", 4: "ITA"}
 	_change_language(lang_map.get(idx, "TR"))
 
+func _update_start_button_display():
+	if not is_instance_valid(start_match_btn): return
+	var btn_lbl = start_match_btn.get_node_or_null("ButtonLabel")
+	if btn_lbl:
+		# Main CTA is always clean, confident action verb without ugly numbers or parentheses
+		btn_lbl.text = LANG.get(Global.current_lang, LANG["ENG"]).get("START_MATCH", "MAÇI BAŞLAT")
+	
+	if not is_instance_valid(match_fee_badge) or not is_instance_valid(match_fee_lbl): return
+	
+	var sb = match_fee_badge.get_theme_stylebox("panel") as StyleBoxFlat
+	if not sb:
+		sb = StyleBoxFlat.new()
+		sb.corner_radius_top_left = 13; sb.corner_radius_top_right = 13
+		sb.corner_radius_bottom_left = 13; sb.corner_radius_bottom_right = 13
+		sb.border_width_left = 1.5; sb.border_width_right = 1.5
+		sb.border_width_top = 1.5; sb.border_width_bottom = 2.5
+		sb.content_margin_left = 16; sb.content_margin_right = 16
+		sb.content_margin_top = 3; sb.content_margin_bottom = 3
+		match_fee_badge.add_theme_stylebox_override("panel", sb)
+
+	if Global.is_premium:
+		sb.bg_color = Color8(36, 28, 10, 220)
+		sb.border_color = Color8(255, 215, 0)
+		match_fee_lbl.add_theme_color_override("font_color", Color8(255, 225, 90))
+		var vip_txt = "👑 PRO PASS: SINIRSIZ MAÇ"
+		if Global.current_lang == "ENG": vip_txt = "👑 PRO PASS: UNLIMITED MATCHES"
+		elif Global.current_lang == "ESP": vip_txt = "👑 PASE PRO: PARTIDOS ILIMITADOS"
+		elif Global.current_lang == "POR": vip_txt = "👑 PASSE PRO: PARTIDAS ILIMITADAS"
+		elif Global.current_lang == "ITA": vip_txt = "👑 PASS PRO: PARTITE ILLIMITATE"
+		match_fee_lbl.text = vip_txt
+	else:
+		var rem_free = Global.get_remaining_free_matches()
+		if rem_free > 0:
+			sb.bg_color = Color8(12, 40, 24, 220)
+			sb.border_color = Color8(34, 197, 94)
+			match_fee_lbl.add_theme_color_override("font_color", Color8(130, 255, 170))
+			var free_txt = "⚽ ÜCRETSİZ MAÇ: %d/5" % rem_free
+			if Global.current_lang == "ENG": free_txt = "⚽ FREE MATCHES: %d/5" % rem_free
+			elif Global.current_lang == "ESP": free_txt = "⚽ PARTIDOS GRATIS: %d/5" % rem_free
+			elif Global.current_lang == "POR": free_txt = "⚽ PARTIDAS GRÁTIS: %d/5" % rem_free
+			elif Global.current_lang == "ITA": free_txt = "⚽ PARTITE GRATUITE: %d/5" % rem_free
+			match_fee_lbl.text = free_txt
+		else:
+			sb.bg_color = Color8(38, 26, 12, 220)
+			sb.border_color = Color8(245, 158, 11)
+			match_fee_lbl.add_theme_color_override("font_color", Color8(255, 215, 100))
+			var curr = LANG.get(Global.current_lang, LANG["ENG"]).get("CURRENCY", "Jeton")
+			var cost_txt = "🪙 MAÇ ÜCRETİ: 50 " + curr.to_upper()
+			if Global.current_lang == "ENG": cost_txt = "🪙 MATCH ENTRY: 50 COINS"
+			elif Global.current_lang == "ESP": cost_txt = "🪙 ENTRADA: 50 MONEDAS"
+			elif Global.current_lang == "POR": cost_txt = "🪙 ENTRADA: 50 MOEDAS"
+			elif Global.current_lang == "ITA": cost_txt = "🪙 INGRESSO: 50 MONETE"
+			match_fee_lbl.text = cost_txt
+
 func _on_start_match():
+	Global.check_daily_reset()
+	if not Global.has_match_right():
+		_show_insufficient_tokens_dialog()
+		return
+
 	if is_instance_valid(Global.bg_music_player):
 		Global.bg_music_player.stop()
 	Global.remove_all_banners()
 	menu_banner_ad_id = ""
 	_set_house_ad_visible(false)
-	get_tree().change_scene_to_file("res://pitch.tscn")
+	Global.change_scene_with_loading("res://pitch.tscn")
+
+func _show_insufficient_tokens_dialog():
+	Global.play_click()
+	var overlay = ColorRect.new()
+	overlay.color = Color(0, 0, 0, 0.88)
+	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(overlay)
+	
+	var center = CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.add_child(center)
+	
+	var panel = PanelContainer.new()
+	var p_style = StyleBoxFlat.new()
+	p_style.bg_color = active_theme.bg_bottom.darkened(0.25)
+	p_style.corner_radius_top_left = 24; p_style.corner_radius_top_right = 24
+	p_style.corner_radius_bottom_left = 24; p_style.corner_radius_bottom_right = 24
+	p_style.border_width_left = 2.0; p_style.border_width_right = 2.0
+	p_style.border_width_top = 2.0; p_style.border_width_bottom = 5.0
+	p_style.border_color = active_theme.accent
+	p_style.shadow_color = Color8(0, 0, 0, 200)
+	p_style.shadow_size = 35
+	p_style.content_margin_left = 32; p_style.content_margin_right = 32
+	p_style.content_margin_top = 28; p_style.content_margin_bottom = 26
+	panel.add_theme_stylebox_override("panel", p_style)
+	panel.custom_minimum_size = Vector2(min(get_viewport_rect().size.x * 0.90, 480), 0)
+	center.add_child(panel)
+	
+	panel.pivot_offset = Vector2(min(get_viewport_rect().size.x * 0.90, 480) / 2.0, 180)
+	panel.scale = Vector2(0.85, 0.85)
+	panel.modulate.a = 0.0
+	var pop_tw = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT).set_parallel()
+	pop_tw.tween_property(panel, "scale", Vector2.ONE, 0.25)
+	pop_tw.tween_property(panel, "modulate:a", 1.0, 0.20)
+	
+	var vbox = VBoxContainer.new()
+	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	vbox.add_theme_constant_override("separation", 14)
+	panel.add_child(vbox)
+	
+	var coin_icon = TextureRect.new()
+	coin_icon.texture = preload("res://jeton_icon.svg")
+	coin_icon.custom_minimum_size = Vector2(64, 64)
+	coin_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	coin_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	coin_icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	vbox.add_child(coin_icon)
+	
+	var title_lbl = Label.new()
+	var t_txt = "DAHA FAZLA MAÇ OYNA!"
+	if Global.current_lang == "ENG": t_txt = "PLAY MORE MATCHES!"
+	elif Global.current_lang == "ESP": t_txt = "¡JUGAR MÁS PARTIDOS!"
+	elif Global.current_lang == "POR": t_txt = "JOGAR MAIS PARTIDAS!"
+	elif Global.current_lang == "ITA": t_txt = "GIOCA ALTRE PARTITE!"
+	title_lbl.text = t_txt
+	title_lbl.add_theme_font_override("font", custom_font)
+	title_lbl.add_theme_font_size_override("font_size", 38)
+	title_lbl.add_theme_color_override("font_color", Color.WHITE)
+	title_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
+	title_lbl.add_theme_constant_override("shadow_offset_y", 2)
+	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(title_lbl)
+	
+	var desc_lbl = Label.new()
+	var d_txt = "Günlük 5 ücretsiz maç hakkın doldu. Yeni maça başlamak için 50 jeton gerekiyor.\nReklam izleyerek veya şans çarkından hemen jeton kazanabilirsin!"
+	if Global.current_lang == "ENG":
+		d_txt = "You've used your 5 free matches for today. 50 coins are required to play.\nWatch a video or spin the Lucky Wheel to earn coins instantly!"
+	elif Global.current_lang == "ESP":
+		d_txt = "¡Has usado tus 5 partidos gratis de hoy! Se necesitan 50 monedas para jugar.\n¡Mira un video o gira la Ruleta para ganar monedas al instante!"
+	elif Global.current_lang == "POR":
+		d_txt = "Usaste as tuas 5 partidas grátis de hoje! São necessárias 50 moedas para jogar.\nAssiste a um vídeo ou gira a Roleta para ganhar moedas instantaneamente!"
+	elif Global.current_lang == "ITA":
+		d_txt = "Hai usato le tue 5 partite gratuite per oggi! Servono 50 monete per giocare.\nGuarda un video o gira la Ruota per guadagnare subito monete!"
+	desc_lbl.text = d_txt
+	desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	desc_lbl.add_theme_font_override("font", custom_font)
+	desc_lbl.add_theme_font_size_override("font_size", 21)
+	desc_lbl.add_theme_color_override("font_color", Color8(210, 225, 240))
+	desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(desc_lbl)
+	
+	var bal_panel = PanelContainer.new()
+	var bal_sb = StyleBoxFlat.new()
+	bal_sb.bg_color = active_theme.bg_top.darkened(0.4)
+	bal_sb.corner_radius_top_left = 12; bal_sb.corner_radius_top_right = 12
+	bal_sb.corner_radius_bottom_left = 12; bal_sb.corner_radius_bottom_right = 12
+	bal_sb.content_margin_left = 16; bal_sb.content_margin_right = 16
+	bal_sb.content_margin_top = 4; bal_sb.content_margin_bottom = 4
+	bal_panel.add_theme_stylebox_override("panel", bal_sb)
+	bal_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	var bal_lbl = Label.new()
+	var bal_word = "Güncel Bakiye: %d Jeton" % Global.ad_credits
+	if Global.current_lang == "ENG": bal_word = "Current Balance: %d Coins" % Global.ad_credits
+	elif Global.current_lang == "ESP": bal_word = "Saldo Actual: %d Monedas" % Global.ad_credits
+	elif Global.current_lang == "POR": bal_word = "Saldo Atual: %d Moedas" % Global.ad_credits
+	elif Global.current_lang == "ITA": bal_word = "Saldo Attuale: %d Monete" % Global.ad_credits
+	bal_lbl.text = bal_word
+	bal_lbl.add_theme_font_override("font", custom_font)
+	bal_lbl.add_theme_font_size_override("font_size", 22)
+	bal_lbl.add_theme_color_override("font_color", Color8(255, 215, 0))
+	bal_panel.add_child(bal_lbl)
+	vbox.add_child(bal_panel)
+	
+	var btn_vbox = VBoxContainer.new()
+	btn_vbox.add_theme_constant_override("separation", 10)
+	btn_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vbox.add_child(btn_vbox)
+	
+	var ad_btn = Button.new()
+	var ad_txt = "🎬 VİDEO İZLE (+50 JETON)"
+	if Global.current_lang == "ENG": ad_txt = "🎬 WATCH VIDEO (+50 COINS)"
+	elif Global.current_lang == "ESP": ad_txt = "🎬 VER VIDEO (+50 MONEDAS)"
+	elif Global.current_lang == "POR": ad_txt = "🎬 ASSISTIR VÍDEO (+50 MOEDAS)"
+	elif Global.current_lang == "ITA": ad_txt = "🎬 GUARDA VIDEO (+50 MONETE)"
+	ad_btn.text = ad_txt
+	ad_btn.custom_minimum_size = Vector2(0, 56)
+	ad_btn.add_theme_font_override("font", custom_font)
+	ad_btn.add_theme_font_size_override("font_size", 28)
+	ad_btn.add_theme_color_override("font_color", Color.WHITE)
+	apply_3d_style_to_button(ad_btn, Color8(34, 197, 94), Color8(20, 130, 60), 14, 4)
+	ad_btn.pressed.connect(func():
+		Global.play_click()
+		overlay.queue_free()
+		_show_admob_rewarded()
+	)
+	btn_vbox.add_child(ad_btn)
+	
+	var wheel_btn = Button.new()
+	var wheel_txt = "🎡 ŞANS ÇARKI"
+	if Global.current_lang == "ENG": wheel_txt = "🎡 LUCKY WHEEL"
+	elif Global.current_lang == "ESP": wheel_txt = "🎡 RULETA DE LA SUERTE"
+	elif Global.current_lang == "POR": wheel_txt = "🎡 ROLETA DA SORTE"
+	elif Global.current_lang == "ITA": wheel_txt = "🎡 RUOTA DELLA FORTUNA"
+	wheel_btn.text = wheel_txt
+	wheel_btn.custom_minimum_size = Vector2(0, 52)
+	wheel_btn.add_theme_font_override("font", custom_font)
+	wheel_btn.add_theme_font_size_override("font_size", 26)
+	wheel_btn.add_theme_color_override("font_color", Color.WHITE)
+	apply_3d_style_to_button(wheel_btn, active_theme.accent.darkened(0.2), active_theme.accent.darkened(0.5), 14, 3.5)
+	wheel_btn.pressed.connect(func():
+		Global.play_click()
+		overlay.queue_free()
+		_open_lucky_wheel()
+	)
+	btn_vbox.add_child(wheel_btn)
+	
+	var shop_btn = Button.new()
+	var shop_txt = "🛒 MAĞAZAYA GİT"
+	if Global.current_lang == "ENG": shop_txt = "🛒 VISIT SHOP"
+	elif Global.current_lang == "ESP": shop_txt = "🛒 IR A LA TIENDA"
+	elif Global.current_lang == "POR": shop_txt = "🛒 IR PARA A LOJA"
+	elif Global.current_lang == "ITA": shop_txt = "🛒 VAI AL NEGOZIO"
+	shop_btn.text = shop_txt
+	shop_btn.custom_minimum_size = Vector2(0, 50)
+	shop_btn.add_theme_font_override("font", custom_font)
+	shop_btn.add_theme_font_size_override("font_size", 24)
+	shop_btn.add_theme_color_override("font_color", Color8(255, 230, 140))
+	apply_3d_style_to_button(shop_btn, active_theme.bg_bottom.darkened(0.2), active_theme.bg_bottom.darkened(0.45), 14, 3.5)
+	shop_btn.pressed.connect(func():
+		Global.play_click()
+		overlay.queue_free()
+		_switch_tab(2)
+	)
+	btn_vbox.add_child(shop_btn)
+	
+	var close_btn = Button.new()
+	close_btn.text = LANG.get(Global.current_lang, LANG["ENG"])["CLOSE"]
+	close_btn.custom_minimum_size = Vector2(0, 46)
+	close_btn.add_theme_font_override("font", custom_font)
+	close_btn.add_theme_font_size_override("font_size", 24)
+	close_btn.add_theme_color_override("font_color", Color8(200, 210, 225))
+	apply_3d_style_to_button(close_btn, Color8(70, 75, 90), Color8(45, 50, 60), 12, 3)
+	close_btn.pressed.connect(func():
+		Global.play_click()
+		overlay.queue_free()
+	)
+	btn_vbox.add_child(close_btn)
+
+	if is_instance_valid(Global.bg_music_player):
+		Global.bg_music_player.stop()
+	Global.remove_all_banners()
+	menu_banner_ad_id = ""
+	_set_house_ad_visible(false)
+	Global.change_scene_with_loading("res://pitch.tscn")
 
 func _on_random_team_pressed(is_home: bool):
 	Global.play_click()
@@ -3689,6 +3982,8 @@ func _switch_tab(idx: int, instant: bool = false):
 				fade_tw.tween_property(real_page, "modulate:a", 1.0, 0.15)
 		elif idx == 0:
 			_refresh_stats_tab()
+		elif idx == 1:
+			_update_start_button_display()
 
 	current_tab = idx
 	var target_x = -idx * sw
@@ -3853,13 +4148,13 @@ func _build_stats_tab() -> Control:
 	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	margin.add_theme_constant_override("margin_left", 20)
 	margin.add_theme_constant_override("margin_right", 20)
-	margin.add_theme_constant_override("margin_top", 145)
-	margin.add_theme_constant_override("margin_bottom", 90)
+	margin.add_theme_constant_override("margin_top", 135 if is_tablet else 145)
+	margin.add_theme_constant_override("margin_bottom", 90 if is_tablet else 95)
 	page.add_child(margin)
 
 	var main_vbox = VBoxContainer.new()
 	main_vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
-	main_vbox.add_theme_constant_override("separation", 10)
+	main_vbox.add_theme_constant_override("separation", 8)
 	main_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	main_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	margin.add_child(main_vbox)
@@ -3878,7 +4173,7 @@ func _build_stats_tab() -> Control:
 	var sp1 = Control.new(); sp1.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top_hbox.add_child(sp1)
 
-	var title = create_label_node("STATS_TITLE", white, 55)
+	var title = create_label_node("STATS_TITLE", white, 48 if is_tablet else 55)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 150))
 	title.add_theme_constant_override("shadow_offset_y", 4)
@@ -3941,12 +4236,12 @@ func _build_stats_tab() -> Control:
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	main_vbox.add_child(scroll)
 
 	var vbox = VBoxContainer.new()
 	vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
-	vbox.add_theme_constant_override("separation", 12)
+	vbox.add_theme_constant_override("separation", 8)
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(vbox)
 
@@ -3968,8 +4263,8 @@ func _build_stats_tab() -> Control:
 		cs.shadow_color = Color8(0, 0, 0, 80)
 		cs.shadow_size = 8
 		cs.shadow_offset = Vector2(0, 4)
-		cs.content_margin_left = 16; cs.content_margin_right = 16
-		cs.content_margin_top = 10; cs.content_margin_bottom = 10
+		cs.content_margin_left = 14; cs.content_margin_right = 14
+		cs.content_margin_top = 8; cs.content_margin_bottom = 8
 		card.add_theme_stylebox_override("panel", cs)
 		return card
 
@@ -3984,8 +4279,8 @@ func _build_stats_tab() -> Control:
 		ps.border_width_left = 1.0; ps.border_width_right = 1.0
 		ps.border_width_top = 1.0; ps.border_width_bottom = 2.5
 		ps.border_color = active_theme.accent.darkened(0.4)
-		ps.content_margin_left = 12; ps.content_margin_right = 12
-		ps.content_margin_top = 8; ps.content_margin_bottom = 8
+		ps.content_margin_left = 10; ps.content_margin_right = 10
+		ps.content_margin_top = 6; ps.content_margin_bottom = 6
 		p.add_theme_stylebox_override("panel", ps)
 		p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
@@ -4011,7 +4306,7 @@ func _build_stats_tab() -> Control:
 		var l = Label.new()
 		l.text = LANG[lang].get(label_key, label_key)
 		l.add_theme_font_override("font", custom_font)
-		l.add_theme_font_size_override("font_size", 22)
+		l.add_theme_font_size_override("font_size", 18)
 		l.add_theme_color_override("font_color", Color.WHITE)
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		ui_labels.append({"node": l, "key": label_key, "type": "label"})
@@ -4020,7 +4315,7 @@ func _build_stats_tab() -> Control:
 		var v = Label.new()
 		v.text = val_str
 		v.add_theme_font_override("font", custom_font)
-		v.add_theme_font_size_override("font_size", 30)
+		v.add_theme_font_size_override("font_size", 24)
 		v.add_theme_color_override("font_color", active_theme.accent)
 		v.add_theme_color_override("font_shadow_color", active_theme.accent.darkened(0.55))
 		v.add_to_group("ThemeStatValueNodes")
@@ -4032,7 +4327,7 @@ func _build_stats_tab() -> Control:
 			var sub_lbl = Label.new()
 			sub_lbl.text = sub_str
 			sub_lbl.add_theme_font_override("font", custom_font)
-			sub_lbl.add_theme_font_size_override("font_size", 18)
+			sub_lbl.add_theme_font_size_override("font_size", 15)
 			sub_lbl.add_theme_color_override("font_color", sub_color)
 			sub_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			inner_vb.add_child(sub_lbl)
@@ -4050,8 +4345,8 @@ func _build_stats_tab() -> Control:
 		ps.border_width_left = 1.0; ps.border_width_right = 1.0
 		ps.border_width_top = 1.0; ps.border_width_bottom = 2.5
 		ps.border_color = (Color8(50, 225, 110) if is_win else Color8(255, 85, 95)).darkened(0.3)
-		ps.content_margin_left = 12; ps.content_margin_right = 12
-		ps.content_margin_top = 8; ps.content_margin_bottom = 8
+		ps.content_margin_left = 10; ps.content_margin_right = 10
+		ps.content_margin_top = 6; ps.content_margin_bottom = 6
 		p.add_theme_stylebox_override("panel", ps)
 		p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
@@ -4063,7 +4358,7 @@ func _build_stats_tab() -> Control:
 		var hdr_lbl = Label.new()
 		hdr_lbl.text = LANG[lang].get(title_key, title_key)
 		hdr_lbl.add_theme_font_override("font", custom_font)
-		hdr_lbl.add_theme_font_size_override("font_size", 20)
+		hdr_lbl.add_theme_font_size_override("font_size", 18)
 		hdr_lbl.add_theme_color_override("font_color", Color.WHITE)
 		hdr_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		ui_labels.append({"node": hdr_lbl, "key": title_key, "type": "label"})
@@ -4072,7 +4367,7 @@ func _build_stats_tab() -> Control:
 		var val_lbl = Label.new()
 		val_lbl.text = score_str
 		val_lbl.add_theme_font_override("font", custom_font)
-		val_lbl.add_theme_font_size_override("font_size", 28)
+		val_lbl.add_theme_font_size_override("font_size", 24)
 		if score_str == "-":
 			val_lbl.add_theme_color_override("font_color", Color.WHITE)
 		elif is_win:
@@ -4089,7 +4384,7 @@ func _build_stats_tab() -> Control:
 			var opp_lbl = Label.new()
 			opp_lbl.text = opp_str
 			opp_lbl.add_theme_font_override("font", custom_font)
-			opp_lbl.add_theme_font_size_override("font_size", 18)
+			opp_lbl.add_theme_font_size_override("font_size", 15)
 			opp_lbl.add_theme_color_override("font_color", Color.WHITE)
 			opp_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			inner_vbox.add_child(opp_lbl)
@@ -4806,8 +5101,8 @@ func _build_shop_tab() -> Control:
 
 	var margin = MarginContainer.new()
 	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
-	margin.add_theme_constant_override("margin_top", 130)
-	margin.add_theme_constant_override("margin_bottom", 95)
+	margin.add_theme_constant_override("margin_top", 135 if is_tablet else 145)
+	margin.add_theme_constant_override("margin_bottom", 90 if is_tablet else 95)
 	margin.add_theme_constant_override("margin_left", 16)
 	margin.add_theme_constant_override("margin_right", 16)
 	page.add_child(margin)
@@ -4821,42 +5116,45 @@ func _build_shop_tab() -> Control:
 	var vbox = VBoxContainer.new()
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
-	vbox.add_theme_constant_override("separation", 18)
+	vbox.add_theme_constant_override("separation", 10 if is_tablet else 14)
 	shop_scroll.add_child(vbox)
 
 	# --- 1. SHOP TITLE & BALANCED CREDITS HEADER ---
 	var top_hbox = HBoxContainer.new()
+	top_hbox.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	top_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	top_hbox.custom_minimum_size = Vector2(660, 50)
+	top_hbox.custom_minimum_size = Vector2(660, 60)
+	top_hbox.add_theme_constant_override("separation", 10)
 	vbox.add_child(top_hbox)
 
-	# Left: Jeton Sayaç Kapsülü ([ 🪙 300 (+) ]) - Modern M3 Tactile Pill with Action Badge
+	# Left: Theme-Interactive Token Button (Matches Leaderboard & Top Button Standard: 130x60 container, 125x56 button)
 	var cred_box = HBoxContainer.new()
 	cred_box.alignment = BoxContainer.ALIGNMENT_BEGIN
-	cred_box.custom_minimum_size = Vector2(185, 60)
+	cred_box.custom_minimum_size = Vector2(130, 60)
 	
 	var cred_btn = Button.new()
-	cred_btn.custom_minimum_size = Vector2(185, 54)
+	cred_btn.custom_minimum_size = Vector2(125, 56)
 	cred_btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	
 	var cp_style = StyleBoxFlat.new()
-	cp_style.bg_color = active_theme.bg_bottom.darkened(0.28)
-	cp_style.corner_radius_top_left = 27; cp_style.corner_radius_top_right = 27
-	cp_style.corner_radius_bottom_left = 27; cp_style.corner_radius_bottom_right = 27
+	cp_style.bg_color = active_theme.bg_bottom.darkened(0.2)
+	cp_style.corner_radius_top_left = 16; cp_style.corner_radius_top_right = 16
+	cp_style.corner_radius_bottom_left = 16; cp_style.corner_radius_bottom_right = 16
 	cp_style.border_width_left = 1.5; cp_style.border_width_right = 1.5
 	cp_style.border_width_top = 1.5; cp_style.border_width_bottom = 3.5
-	cp_style.border_color = Color8(255, 215, 0, 210)
-	cp_style.shadow_color = Color8(0, 0, 0, 110)
+	cp_style.border_color = active_theme.accent
+	cp_style.shadow_color = Color8(0, 0, 0, 100)
 	cp_style.shadow_size = 6
-	cp_style.shadow_offset = Vector2(0, 3)
+	cp_style.content_margin_left = 10; cp_style.content_margin_right = 10
+	cp_style.content_margin_top = 6; cp_style.content_margin_bottom = 6
 	
 	var cp_hover = cp_style.duplicate()
-	cp_hover.bg_color = active_theme.bg_bottom.darkened(0.18)
-	cp_hover.border_color = Color8(255, 230, 80, 255)
+	cp_hover.bg_color = active_theme.bg_bottom.darkened(0.1)
+	cp_hover.border_color = active_theme.accent.lightened(0.2)
 	
 	var cp_pressed = cp_style.duplicate()
 	cp_pressed.border_width_bottom = 1.5
-	cp_pressed.content_margin_top = 2
+	cp_pressed.content_margin_top = 8
 	
 	cred_btn.add_theme_stylebox_override("normal", cp_style)
 	cred_btn.add_theme_stylebox_override("hover", cp_hover)
@@ -4864,7 +5162,6 @@ func _build_shop_tab() -> Control:
 	cred_btn.add_theme_stylebox_override("focus", cp_style)
 	cred_btn.pressed.connect(_show_admob_rewarded)
 	
-	# Layout Fix: Margin container anchored to full rect of button
 	var cred_margin = MarginContainer.new()
 	cred_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
 	cred_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -4875,25 +5172,23 @@ func _build_shop_tab() -> Control:
 	var cred_inner = HBoxContainer.new()
 	cred_inner.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	cred_inner.alignment = BoxContainer.ALIGNMENT_CENTER
-	cred_inner.add_theme_constant_override("separation", 8)
+	cred_inner.add_theme_constant_override("separation", 6)
 	cred_margin.add_child(cred_inner)
 	
-	# 1. 3D Gold Coin Icon
 	var coin_icon = TextureRect.new()
 	coin_icon.texture = preload("res://jeton_icon.svg")
-	coin_icon.custom_minimum_size = Vector2(34, 34)
+	coin_icon.custom_minimum_size = Vector2(26, 26)
 	coin_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	coin_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	coin_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	coin_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	cred_inner.add_child(coin_icon)
 	
-	# 2. Token Counter Value
 	var cred_lbl = Label.new()
 	cred_lbl.name = "AdCreditsLabel"
 	cred_lbl.text = str(Global.ad_credits)
 	cred_lbl.add_theme_font_override("font", custom_font)
-	cred_lbl.add_theme_font_size_override("font_size", 32)
+	cred_lbl.add_theme_font_size_override("font_size", 28)
 	cred_lbl.add_theme_color_override("font_color", Color8(255, 225, 60))
 	cred_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
 	cred_lbl.add_theme_constant_override("shadow_offset_y", 2)
@@ -4904,38 +5199,14 @@ func _build_shop_tab() -> Control:
 	cred_inner.add_child(cred_lbl)
 	ui_labels.append({"node": cred_lbl, "key": "CURRENCY_VAL", "type": "currency_val"})
 	
-	# 3. Dedicated Tactile (+) Action Badge
-	var plus_badge = PanelContainer.new()
-	plus_badge.custom_minimum_size = Vector2(28, 28)
-	plus_badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	plus_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var pb_style = StyleBoxFlat.new()
-	pb_style.bg_color = Color8(34, 197, 94)
-	pb_style.corner_radius_top_left = 14; pb_style.corner_radius_top_right = 14
-	pb_style.corner_radius_bottom_left = 14; pb_style.corner_radius_bottom_right = 14
-	pb_style.border_width_bottom = 2.0
-	pb_style.border_color = Color8(20, 130, 60)
-	plus_badge.add_theme_stylebox_override("panel", pb_style)
-	
-	var plus_ic = TextureRect.new()
-	plus_ic.texture = preload("res://plus_icon.svg")
-	plus_ic.custom_minimum_size = Vector2(16, 16)
-	plus_ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	plus_ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	plus_ic.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	plus_ic.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	plus_ic.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	plus_badge.add_child(plus_ic)
-	cred_inner.add_child(plus_badge)
-	
 	cred_box.add_child(cred_btn)
 	top_hbox.add_child(cred_box)
 
 	var sp1 = Control.new(); sp1.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top_hbox.add_child(sp1)
 
-	# Center Title: Exact 55px matching Home and Stats!
-	var title = create_label_node("SHOP_TITLE", white, 55)
+	# Center Title
+	var title = create_label_node("SHOP_TITLE", white, 48 if is_tablet else 55)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 150))
 	title.add_theme_constant_override("shadow_offset_y", 4)
@@ -4944,16 +5215,25 @@ func _build_shop_tab() -> Control:
 	var sp2 = Control.new(); sp2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top_hbox.add_child(sp2)
 
-	# Right dummy balancer
+	# Right dummy balancer matching left box (130px) for pixel-perfect centering
 	var right_box = Control.new()
-	right_box.custom_minimum_size = Vector2(185, 60)
+	right_box.custom_minimum_size = Vector2(130, 60)
 	top_hbox.add_child(right_box)
+
+	# Main Menu & Stats Style Horizontal Separator Line
+	var shop_sep = HSeparator.new()
+	var sep_style = StyleBoxLine.new()
+	sep_style.color = active_theme.bg_bottom
+	sep_style.thickness = 3
+	shop_sep.add_theme_stylebox_override("separator", sep_style)
+	vbox.add_child(shop_sep)
+	ui_separators.append(shop_sep)
 
 	# --- 2. QUICK REWARDS & FEATURES ROW (3 Buttons) ---
 	var rewards_hbox = HBoxContainer.new()
 	rewards_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	rewards_hbox.add_theme_constant_override("separation", 10)
-	rewards_hbox.custom_minimum_size = Vector2(0, 54)
+	rewards_hbox.custom_minimum_size = Vector2(0, 48)
 	rewards_hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.add_child(rewards_hbox)
 
@@ -4961,16 +5241,16 @@ func _build_shop_tab() -> Control:
 	ad_btn.text = LANG[Global.current_lang]["SHOP_WATCH_AD"]
 	ad_btn.icon = load("res://video.svg")
 	ad_btn.expand_icon = true
-	ad_btn.add_theme_constant_override("icon_max_width", 28)
-	ad_btn.add_theme_constant_override("h_separation", 8)
+	ad_btn.add_theme_constant_override("icon_max_width", 24)
+	ad_btn.add_theme_constant_override("h_separation", 6)
 	ui_labels.append({"node": ad_btn, "key": "SHOP_WATCH_AD", "type": "button"})
 	ad_btn.add_theme_font_override("font", custom_font)
-	ad_btn.add_theme_font_size_override("font_size", 25)
+	ad_btn.add_theme_font_size_override("font_size", 21)
 	ad_btn.add_theme_color_override("font_color", Color.WHITE)
 	ad_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	ad_btn.add_theme_constant_override("shadow_offset_y", 2)
-	apply_3d_style_to_button(ad_btn, Color8(245, 155, 20), Color8(175, 90, 10), 14, 3.5, 12, 8)
-	ad_btn.custom_minimum_size = Vector2(210, 58)
+	apply_3d_style_to_button(ad_btn, Color8(245, 155, 20), Color8(175, 90, 10), 12, 3.0, 10, 6)
+	ad_btn.custom_minimum_size = Vector2(200, 48)
 	ad_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ad_btn.pressed.connect(_show_admob_rewarded)
 
@@ -4998,12 +5278,12 @@ func _build_shop_tab() -> Control:
 	var wheel_btn = Button.new()
 	wheel_btn.text = LANG[Global.current_lang]["LUCKY_WHEEL_BTN"]
 	wheel_btn.add_theme_font_override("font", custom_font)
-	wheel_btn.add_theme_font_size_override("font_size", 25)
+	wheel_btn.add_theme_font_size_override("font_size", 21)
 	wheel_btn.add_theme_color_override("font_color", Color.WHITE)
 	wheel_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
 	wheel_btn.add_theme_constant_override("shadow_offset_y", 2)
-	apply_3d_style_to_button(wheel_btn, active_theme.accent, active_theme.accent.darkened(0.35), 14, 3.5, 10, 8)
-	wheel_btn.custom_minimum_size = Vector2(170, 58)
+	apply_3d_style_to_button(wheel_btn, active_theme.accent, active_theme.accent.darkened(0.35), 12, 3.0, 10, 6)
+	wheel_btn.custom_minimum_size = Vector2(150, 48)
 	wheel_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	wheel_btn.pressed.connect(_open_lucky_wheel)
 	rewards_hbox.add_child(wheel_btn)
@@ -5011,12 +5291,12 @@ func _build_shop_tab() -> Control:
 	var quests_btn = Button.new()
 	quests_btn.text = LANG[Global.current_lang]["DAILY_QUESTS_BTN"]
 	quests_btn.add_theme_font_override("font", custom_font)
-	quests_btn.add_theme_font_size_override("font_size", 25)
+	quests_btn.add_theme_font_size_override("font_size", 21)
 	quests_btn.add_theme_color_override("font_color", Color.WHITE)
 	quests_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
 	quests_btn.add_theme_constant_override("shadow_offset_y", 2)
-	apply_3d_style_to_button(quests_btn, active_theme.bg_top.lightened(0.18), active_theme.bg_bottom.darkened(0.3), 14, 3.5, 10, 8)
-	quests_btn.custom_minimum_size = Vector2(170, 58)
+	apply_3d_style_to_button(quests_btn, active_theme.bg_top.lightened(0.18), active_theme.bg_bottom.darkened(0.3), 12, 3.0, 10, 6)
+	quests_btn.custom_minimum_size = Vector2(150, 48)
 	quests_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	quests_btn.pressed.connect(_open_daily_quests)
 	rewards_hbox.add_child(quests_btn)
@@ -5025,21 +5305,21 @@ func _build_shop_tab() -> Control:
 	var prem_panel = PanelContainer.new()
 	var prem_style = StyleBoxFlat.new()
 	prem_style.bg_color = Color8(25, 14, 42, 250)
-	prem_style.corner_radius_top_left = 18; prem_style.corner_radius_top_right = 18
-	prem_style.corner_radius_bottom_left = 18; prem_style.corner_radius_bottom_right = 18
-	prem_style.border_width_top = 2.0; prem_style.border_width_bottom = 4.5
-	prem_style.border_width_left = 2.0; prem_style.border_width_right = 2.0
+	prem_style.corner_radius_top_left = 16; prem_style.corner_radius_top_right = 16
+	prem_style.corner_radius_bottom_left = 16; prem_style.corner_radius_bottom_right = 16
+	prem_style.border_width_top = 2.0; prem_style.border_width_bottom = 4.0
+	prem_style.border_width_left = 1.5; prem_style.border_width_right = 1.5
 	prem_style.border_color = Color8(255, 210, 60, 230)
 	prem_style.shadow_color = Color8(255, 180, 0, 40)
-	prem_style.shadow_size = 16
-	prem_style.content_margin_left = 18; prem_style.content_margin_right = 18
-	prem_style.content_margin_top = 14; prem_style.content_margin_bottom = 14
+	prem_style.shadow_size = 12
+	prem_style.content_margin_left = 14; prem_style.content_margin_right = 14
+	prem_style.content_margin_top = 10; prem_style.content_margin_bottom = 10
 	prem_panel.add_theme_stylebox_override("panel", prem_style)
 	vbox.add_child(prem_panel)
 
 	var prem_hbox = HBoxContainer.new()
 	prem_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	prem_hbox.add_theme_constant_override("separation", 16)
+	prem_hbox.add_theme_constant_override("separation", 14)
 	prem_panel.add_child(prem_hbox)
 
 	var prem_left_vb = VBoxContainer.new()
@@ -5055,7 +5335,7 @@ func _build_shop_tab() -> Control:
 
 	var crown_icon = TextureRect.new()
 	crown_icon.texture = preload("res://crownicon.svg")
-	crown_icon.custom_minimum_size = Vector2(36, 36)
+	crown_icon.custom_minimum_size = Vector2(28, 28)
 	crown_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	crown_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	crown_icon.modulate = Color8(255, 215, 0)
@@ -5064,7 +5344,7 @@ func _build_shop_tab() -> Control:
 	var prem_icon_lbl = Label.new()
 	prem_icon_lbl.text = "PRO PASS"
 	prem_icon_lbl.add_theme_font_override("font", custom_font)
-	prem_icon_lbl.add_theme_font_size_override("font_size", 38)
+	prem_icon_lbl.add_theme_font_size_override("font_size", 30)
 	prem_icon_lbl.add_theme_color_override("font_color", Color8(255, 235, 140))
 	prem_icon_lbl.add_theme_color_override("font_shadow_color", Color8(180, 100, 0, 200))
 	prem_icon_lbl.add_theme_constant_override("shadow_offset_y", 2)
@@ -5073,7 +5353,7 @@ func _build_shop_tab() -> Control:
 	var prem_desc = Label.new()
 	prem_desc.text = LANG[Global.current_lang]["SHOP_PRO_DESC"]
 	prem_desc.add_theme_font_override("font", custom_font)
-	prem_desc.add_theme_font_size_override("font_size", 22)
+	prem_desc.add_theme_font_size_override("font_size", 18)
 	prem_desc.add_theme_color_override("font_color", Color8(230, 220, 245))
 	prem_desc.autowrap_mode = TextServer.AUTOWRAP_WORD
 	ui_labels.append({"node": prem_desc, "key": "SHOP_PRO_DESC", "type": "label"})
@@ -5081,7 +5361,7 @@ func _build_shop_tab() -> Control:
 
 	var prem_right_vb = VBoxContainer.new()
 	prem_right_vb.alignment = BoxContainer.ALIGNMENT_CENTER
-	prem_right_vb.add_theme_constant_override("separation", 6)
+	prem_right_vb.add_theme_constant_override("separation", 4)
 	prem_hbox.add_child(prem_right_vb)
 
 	var buy_btn = Button.new()
@@ -5090,10 +5370,10 @@ func _build_shop_tab() -> Control:
 		if ResourceLoader.exists("res://checkmark_icon.svg"):
 			buy_btn.icon = load("res://checkmark_icon.svg")
 			buy_btn.expand_icon = true
-			buy_btn.add_theme_constant_override("icon_max_width", 22)
+			buy_btn.add_theme_constant_override("icon_max_width", 20)
 			buy_btn.add_theme_constant_override("h_separation", 6)
 		buy_btn.disabled = true
-		apply_3d_style_to_button(buy_btn, Color8(34, 140, 60, 230), Color8(18, 75, 30), 14, 3.5, 18, 10)
+		apply_3d_style_to_button(buy_btn, Color8(34, 140, 60, 230), Color8(18, 75, 30), 12, 3.0, 14, 8)
 		buy_btn.add_theme_color_override("font_disabled_color", Color.WHITE)
 	else:
 		var price_str = Global.get_formatted_premium_price()
@@ -5107,20 +5387,20 @@ func _build_shop_tab() -> Control:
 			buy_text = price_str + " — BUY NOW"
 		buy_btn.text = buy_text
 		ui_labels.append({"node": buy_btn, "key": "SHOP_BUY", "type": "button_buy_premium"})
-		apply_3d_style_to_button(buy_btn, Color8(255, 185, 0), Color8(185, 100, 0), 14, 4.5, 16, 10)
+		apply_3d_style_to_button(buy_btn, Color8(255, 185, 0), Color8(185, 100, 0), 12, 3.5, 14, 8)
 		buy_btn.add_theme_color_override("font_color", Color8(20, 10, 0))
 		buy_btn.pressed.connect(_on_buy_premium_pressed)
 	buy_btn.add_theme_font_override("font", custom_font)
-	buy_btn.add_theme_font_size_override("font_size", 23)
-	buy_btn.custom_minimum_size = Vector2(215, 58)
+	buy_btn.add_theme_font_size_override("font_size", 20)
+	buy_btn.custom_minimum_size = Vector2(185, 48)
 	prem_right_vb.add_child(buy_btn)
 
 	var rest_shop_btn = Button.new()
 	rest_shop_btn.text = LANG[Global.current_lang].get("RESTORE_PURCHASES", "Satın Alımları Geri Yükle")
 	rest_shop_btn.add_theme_font_override("font", custom_font)
-	rest_shop_btn.add_theme_font_size_override("font_size", 18)
+	rest_shop_btn.add_theme_font_size_override("font_size", 16)
 	rest_shop_btn.add_theme_color_override("font_color", Color8(230, 220, 245))
-	rest_shop_btn.custom_minimum_size = Vector2(215, 48)
+	rest_shop_btn.custom_minimum_size = Vector2(185, 36)
 	var rest_shop_style = StyleBoxFlat.new()
 	rest_shop_style.bg_color = Color(0, 0, 0, 0)
 	rest_shop_btn.add_theme_stylebox_override("normal", rest_shop_style)
@@ -5132,26 +5412,26 @@ func _build_shop_tab() -> Control:
 	var balls_p_style = StyleBoxFlat.new()
 	var balls_bg = active_theme.bg_bottom.darkened(0.18)
 	balls_p_style.bg_color = Color(balls_bg.r, balls_bg.g, balls_bg.b, 0.95)
-	balls_p_style.corner_radius_top_left = 18; balls_p_style.corner_radius_top_right = 18
-	balls_p_style.corner_radius_bottom_left = 18; balls_p_style.corner_radius_bottom_right = 18
+	balls_p_style.corner_radius_top_left = 16; balls_p_style.corner_radius_top_right = 16
+	balls_p_style.corner_radius_bottom_left = 16; balls_p_style.corner_radius_bottom_right = 16
 	balls_p_style.border_width_left = 1.5; balls_p_style.border_width_right = 1.5
-	balls_p_style.border_width_top = 1.5; balls_p_style.border_width_bottom = 4.0
+	balls_p_style.border_width_top = 1.5; balls_p_style.border_width_bottom = 3.5
 	balls_p_style.border_color = active_theme.accent.darkened(0.25)
-	balls_p_style.content_margin_left = 14; balls_p_style.content_margin_right = 14
-	balls_p_style.content_margin_top = 16; balls_p_style.content_margin_bottom = 16
+	balls_p_style.content_margin_left = 12; balls_p_style.content_margin_right = 12
+	balls_p_style.content_margin_top = 10; balls_p_style.content_margin_bottom = 10
 	balls_panel.add_theme_stylebox_override("panel", balls_p_style)
 	balls_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.add_child(balls_panel)
 
 	var balls_vbox = VBoxContainer.new()
 	balls_vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
-	balls_vbox.add_theme_constant_override("separation", 10)
+	balls_vbox.add_theme_constant_override("separation", 8)
 	balls_panel.add_child(balls_vbox)
 
 	var balls_title = Label.new()
 	balls_title.text = LANG[Global.current_lang]["SHOP_BALL_SKINS"]
 	balls_title.add_theme_font_override("font", custom_font)
-	balls_title.add_theme_font_size_override("font_size", 30)
+	balls_title.add_theme_font_size_override("font_size", 24)
 	balls_title.add_theme_color_override("font_color", Color.WHITE)
 	balls_title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
 	balls_title.add_theme_constant_override("shadow_offset_y", 2)
@@ -5161,13 +5441,13 @@ func _build_shop_tab() -> Control:
 	var balls_scroll = ScrollContainer.new()
 	balls_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	balls_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
-	balls_scroll.custom_minimum_size = Vector2(0, 310)
+	balls_scroll.custom_minimum_size = Vector2(0, 240)
 	balls_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	balls_vbox.add_child(balls_scroll)
 	shop_balls_scroll = balls_scroll
 
 	var balls_hbox = HBoxContainer.new()
-	balls_hbox.add_theme_constant_override("separation", 14)
+	balls_hbox.add_theme_constant_override("separation", 12)
 	balls_scroll.add_child(balls_hbox)
 
 	var ball_skin_names = [
@@ -5176,7 +5456,8 @@ func _build_shop_tab() -> Control:
 		{"id": "neon", "name_key": "SKIN_NEON", "price": 300, "color": Color8(90,255,50)},
 		{"id": "chrome", "name_key": "SKIN_CHROME", "price": 400, "color": Color8(255,255,255)},
 		{"id": "lava", "name_key": "SKIN_LAVA", "price": 500, "color": Color8(255,80,20)},
-		{"id": "ice", "name_key": "SKIN_ICE", "price": 500, "color": Color8(100,230,255)}
+		{"id": "ice", "name_key": "SKIN_ICE", "price": 500, "color": Color8(100,230,255)},
+		{"id": "obsidian", "name_key": "SKIN_OBSIDIAN", "price": 600, "color": Color8(140, 60, 220)}
 	]
 
 	for skin_data in ball_skin_names:
@@ -5189,46 +5470,46 @@ func _build_shop_tab() -> Control:
 		card.mouse_filter = Control.MOUSE_FILTER_PASS
 		var card_style = StyleBoxFlat.new()
 		card_style.bg_color = active_theme.bg_bottom.darkened(0.35)
-		card_style.corner_radius_top_left = 16; card_style.corner_radius_top_right = 16
-		card_style.corner_radius_bottom_left = 16; card_style.corner_radius_bottom_right = 16
-		card_style.border_width_bottom = 4.0
+		card_style.corner_radius_top_left = 14; card_style.corner_radius_top_right = 14
+		card_style.corner_radius_bottom_left = 14; card_style.corner_radius_bottom_right = 14
+		card_style.border_width_bottom = 3.5
 		card_style.border_width_top = 1.5; card_style.border_width_left = 1.5; card_style.border_width_right = 1.5
 		var bcolor_dark = bcolor.darkened(0.2) if s_id != "chrome" else Color8(180, 190, 210)
 		card_style.border_color = bcolor_dark
-		card_style.content_margin_top = 12; card_style.content_margin_bottom = 12
-		card_style.content_margin_left = 12; card_style.content_margin_right = 12
+		card_style.content_margin_top = 8; card_style.content_margin_bottom = 8
+		card_style.content_margin_left = 8; card_style.content_margin_right = 8
 		card.add_theme_stylebox_override("panel", card_style)
-		card.custom_minimum_size = Vector2(215, 290)
+		card.custom_minimum_size = Vector2(168, 225)
 
 		var card_vbox = VBoxContainer.new()
 		card_vbox.mouse_filter = Control.MOUSE_FILTER_PASS
 		card_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-		card_vbox.add_theme_constant_override("separation", 8)
+		card_vbox.add_theme_constant_override("separation", 6)
 		card.add_child(card_vbox)
 
 		var ball_preview = Control.new()
 		ball_preview.mouse_filter = Control.MOUSE_FILTER_PASS
-		ball_preview.custom_minimum_size = Vector2(110, 110)
+		ball_preview.custom_minimum_size = Vector2(80, 80)
 		ball_preview.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		ball_preview.draw.connect(func():
 			var c = ball_preview.size / 2.0
-			var r = 46.0
+			var r = 34.0
 			ball_preview.draw_circle(c, r, Color.WHITE)
 			Global.draw_ball_skin(ball_preview, c, r, s_id)
 		)
 		card_vbox.add_child(ball_preview)
 
-		var name_lbl = create_label_node(s_name_key, Color.WHITE, 28)
+		var name_lbl = create_label_node(s_name_key, Color.WHITE, 22)
 		name_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		card_vbox.add_child(name_lbl)
 
 		var action_btn = Button.new()
 		action_btn.add_theme_font_override("font", custom_font)
-		action_btn.add_theme_font_size_override("font_size", 26)
+		action_btn.add_theme_font_size_override("font_size", 20)
 		action_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
 		action_btn.add_theme_constant_override("shadow_offset_y", 2)
-		action_btn.custom_minimum_size = Vector2(185, 54)
+		action_btn.custom_minimum_size = Vector2(148, 44)
 		action_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 
 		if Global.is_skin_unlocked(s_id):
@@ -5236,12 +5517,12 @@ func _build_shop_tab() -> Control:
 				action_btn.text = LANG[Global.current_lang]["SHOP_EQUIPPED"]
 				ui_labels.append({"node": action_btn, "key": "SHOP_EQUIPPED", "type": "button"})
 				action_btn.add_theme_color_override("font_color", Color8(100, 255, 120))
-				apply_3d_style_to_button(action_btn, Color8(30, 80, 40, 220), Color8(15, 50, 25), 12, 3.0, 10, 6)
+				apply_3d_style_to_button(action_btn, Color8(30, 80, 40, 220), Color8(15, 50, 25), 10, 2.5, 8, 4)
 			else:
 				action_btn.text = LANG[Global.current_lang]["SHOP_EQUIP"]
 				ui_labels.append({"node": action_btn, "key": "SHOP_EQUIP", "type": "button"})
 				action_btn.add_theme_color_override("font_color", Color.WHITE)
-				apply_3d_style_to_button(action_btn, active_theme.bg_top.lightened(0.15), active_theme.bg_bottom.darkened(0.25), 12, 3.0, 10, 6)
+				apply_3d_style_to_button(action_btn, active_theme.bg_top.lightened(0.15), active_theme.bg_bottom.darkened(0.25), 10, 2.5, 8, 4)
 				action_btn.pressed.connect(func():
 					Global.play_click()
 					Global.equipped_ball_skin = s_id
@@ -5253,10 +5534,10 @@ func _build_shop_tab() -> Control:
 			if ResourceLoader.exists("res://jeton_icon.svg"):
 				action_btn.icon = load("res://jeton_icon.svg")
 				action_btn.expand_icon = true
-				action_btn.add_theme_constant_override("icon_max_width", 24)
-				action_btn.add_theme_constant_override("h_separation", 8)
+				action_btn.add_theme_constant_override("icon_max_width", 20)
+				action_btn.add_theme_constant_override("h_separation", 6)
 			action_btn.add_theme_color_override("font_color", Color.WHITE)
-			apply_3d_style_to_button(action_btn, active_theme.accent, active_theme.accent.darkened(0.35), 12, 3.5, 10, 6)
+			apply_3d_style_to_button(action_btn, active_theme.accent, active_theme.accent.darkened(0.35), 10, 3.0, 8, 4)
 			action_btn.pressed.connect(func():
 				Global.play_click()
 				if Global.ad_credits >= price:
@@ -5279,26 +5560,26 @@ func _build_shop_tab() -> Control:
 	var hats_p_style = StyleBoxFlat.new()
 	var hats_bg = active_theme.bg_bottom.darkened(0.18)
 	hats_p_style.bg_color = Color(hats_bg.r, hats_bg.g, hats_bg.b, 0.95)
-	hats_p_style.corner_radius_top_left = 18; hats_p_style.corner_radius_top_right = 18
-	hats_p_style.corner_radius_bottom_left = 18; hats_p_style.corner_radius_bottom_right = 18
+	hats_p_style.corner_radius_top_left = 16; hats_p_style.corner_radius_top_right = 16
+	hats_p_style.corner_radius_bottom_left = 16; hats_p_style.corner_radius_bottom_right = 16
 	hats_p_style.border_width_left = 1.5; hats_p_style.border_width_right = 1.5
-	hats_p_style.border_width_top = 1.5; hats_p_style.border_width_bottom = 4.0
+	hats_p_style.border_width_top = 1.5; hats_p_style.border_width_bottom = 3.5
 	hats_p_style.border_color = active_theme.accent.darkened(0.25)
-	hats_p_style.content_margin_left = 14; hats_p_style.content_margin_right = 14
-	hats_p_style.content_margin_top = 16; hats_p_style.content_margin_bottom = 16
+	hats_p_style.content_margin_left = 12; hats_p_style.content_margin_right = 12
+	hats_p_style.content_margin_top = 10; hats_p_style.content_margin_bottom = 10
 	hats_panel.add_theme_stylebox_override("panel", hats_p_style)
 	hats_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.add_child(hats_panel)
 
 	var hats_vbox = VBoxContainer.new()
 	hats_vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
-	hats_vbox.add_theme_constant_override("separation", 10)
+	hats_vbox.add_theme_constant_override("separation", 8)
 	hats_panel.add_child(hats_vbox)
 
 	var hats_title = Label.new()
 	hats_title.text = LANG[Global.current_lang]["SHOP_HATS"]
 	hats_title.add_theme_font_override("font", custom_font)
-	hats_title.add_theme_font_size_override("font_size", 30)
+	hats_title.add_theme_font_size_override("font_size", 24)
 	hats_title.add_theme_color_override("font_color", Color.WHITE)
 	hats_title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
 	hats_title.add_theme_constant_override("shadow_offset_y", 2)
@@ -5308,13 +5589,13 @@ func _build_shop_tab() -> Control:
 	var hats_scroll = ScrollContainer.new()
 	hats_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	hats_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
-	hats_scroll.custom_minimum_size = Vector2(0, 310)
+	hats_scroll.custom_minimum_size = Vector2(0, 240)
 	hats_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hats_vbox.add_child(hats_scroll)
 	shop_hats_scroll = hats_scroll
 
 	var hats_hbox = HBoxContainer.new()
-	hats_hbox.add_theme_constant_override("separation", 14)
+	hats_hbox.add_theme_constant_override("separation", 12)
 	hats_scroll.add_child(hats_hbox)
 
 	var hat_list = [
@@ -5335,55 +5616,55 @@ func _build_shop_tab() -> Control:
 		card.mouse_filter = Control.MOUSE_FILTER_PASS
 		var card_style = StyleBoxFlat.new()
 		card_style.bg_color = active_theme.bg_bottom.darkened(0.35)
-		card_style.corner_radius_top_left = 16; card_style.corner_radius_top_right = 16
-		card_style.corner_radius_bottom_left = 16; card_style.corner_radius_bottom_right = 16
-		card_style.border_width_bottom = 4.0
+		card_style.corner_radius_top_left = 14; card_style.corner_radius_top_right = 14
+		card_style.corner_radius_bottom_left = 14; card_style.corner_radius_bottom_right = 14
+		card_style.border_width_bottom = 3.5
 		card_style.border_width_top = 1.5; card_style.border_width_left = 1.5; card_style.border_width_right = 1.5
 		card_style.border_color = active_theme.accent.darkened(0.15) if h_id != "none" else active_theme.bg_top.lightened(0.1)
-		card_style.content_margin_top = 12; card_style.content_margin_bottom = 12
-		card_style.content_margin_left = 12; card_style.content_margin_right = 12
+		card_style.content_margin_top = 8; card_style.content_margin_bottom = 8
+		card_style.content_margin_left = 8; card_style.content_margin_right = 8
 		card.add_theme_stylebox_override("panel", card_style)
-		card.custom_minimum_size = Vector2(215, 290)
+		card.custom_minimum_size = Vector2(168, 225)
 
 		var card_vbox = VBoxContainer.new()
 		card_vbox.mouse_filter = Control.MOUSE_FILTER_PASS
 		card_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-		card_vbox.add_theme_constant_override("separation", 8)
+		card_vbox.add_theme_constant_override("separation", 6)
 		card.add_child(card_vbox)
 
 		var preview_box = Control.new()
 		preview_box.mouse_filter = Control.MOUSE_FILTER_PASS
-		preview_box.custom_minimum_size = Vector2(110, 110)
+		preview_box.custom_minimum_size = Vector2(80, 80)
 		preview_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		preview_box.draw.connect(func():
-			var c = Vector2(preview_box.size.x / 2.0, preview_box.size.y / 2.0 + 12.0)
-			var r = 34.0
+			var c = Vector2(preview_box.size.x / 2.0, preview_box.size.y / 2.0 + 8.0)
+			var r = 26.0
 			preview_box.draw_circle(c, r, Color.WHITE)
-			preview_box.draw_arc(c, r, 0, TAU, 32, active_theme.accent, 2.8, true)
+			preview_box.draw_arc(c, r, 0, TAU, 32, active_theme.accent, 2.2, true)
 			if h_icon != null:
-				var cr_w = 54.0
-				var cr_h = 38.0
+				var cr_w = 42.0
+				var cr_h = 30.0
 				if h_id == "viking_helmet":
-					cr_w = 68.0
-					cr_h = 46.0
-				var cr_rect = Rect2(c.x - cr_w / 2.0, c.y - r - cr_h + 8.0, cr_w, cr_h)
+					cr_w = 52.0
+					cr_h = 36.0
+				var cr_rect = Rect2(c.x - cr_w / 2.0, c.y - r - cr_h + 6.0, cr_w, cr_h)
 				preview_box.draw_texture_rect(h_icon, cr_rect, false)
 			else:
-				preview_box.draw_line(Vector2(c.x - 14, c.y - 14), Vector2(c.x + 14, c.y + 14), Color8(220, 50, 50), 3.0)
+				preview_box.draw_line(Vector2(c.x - 10, c.y - 10), Vector2(c.x + 10, c.y + 10), Color8(220, 50, 50), 2.5)
 		)
 		card_vbox.add_child(preview_box)
 
-		var name_lbl = create_label_node(h_name_key, Color.WHITE, 28)
+		var name_lbl = create_label_node(h_name_key, Color.WHITE, 22)
 		name_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		card_vbox.add_child(name_lbl)
 
 		var action_btn = Button.new()
 		action_btn.add_theme_font_override("font", custom_font)
-		action_btn.add_theme_font_size_override("font_size", 26)
+		action_btn.add_theme_font_size_override("font_size", 20)
 		action_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
 		action_btn.add_theme_constant_override("shadow_offset_y", 2)
-		action_btn.custom_minimum_size = Vector2(185, 54)
+		action_btn.custom_minimum_size = Vector2(148, 44)
 		action_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 
 		if Global.is_hat_unlocked(h_id):
@@ -5391,11 +5672,11 @@ func _build_shop_tab() -> Control:
 				action_btn.text = LANG[Global.current_lang]["SHOP_EQUIPPED"]
 				ui_labels.append({"node": action_btn, "key": "SHOP_EQUIPPED", "type": "button"})
 				action_btn.add_theme_color_override("font_color", Color8(100, 255, 120))
-				apply_3d_style_to_button(action_btn, Color8(30, 80, 40, 220), Color8(15, 50, 25), 12, 3.0, 10, 6)
+				apply_3d_style_to_button(action_btn, Color8(30, 80, 40, 220), Color8(15, 50, 25), 10, 2.5, 8, 4)
 			else:
 				action_btn.text = LANG[Global.current_lang]["SHOP_EQUIP"] if h_id != "none" else LANG[Global.current_lang]["SHOP_UNEQUIP"]
 				action_btn.add_theme_color_override("font_color", Color.WHITE)
-				apply_3d_style_to_button(action_btn, active_theme.bg_top.lightened(0.15), active_theme.bg_bottom.darkened(0.25), 12, 3.0, 10, 6)
+				apply_3d_style_to_button(action_btn, active_theme.bg_top.lightened(0.15), active_theme.bg_bottom.darkened(0.25), 10, 2.5, 8, 4)
 				action_btn.pressed.connect(func():
 					Global.play_click()
 					Global.equipped_hat = h_id
@@ -5409,10 +5690,10 @@ func _build_shop_tab() -> Control:
 			if ResourceLoader.exists("res://jeton_icon.svg"):
 				action_btn.icon = load("res://jeton_icon.svg")
 				action_btn.expand_icon = true
-				action_btn.add_theme_constant_override("icon_max_width", 24)
-				action_btn.add_theme_constant_override("h_separation", 8)
+				action_btn.add_theme_constant_override("icon_max_width", 20)
+				action_btn.add_theme_constant_override("h_separation", 6)
 			action_btn.add_theme_color_override("font_color", Color.WHITE)
-			apply_3d_style_to_button(action_btn, active_theme.accent, active_theme.accent.darkened(0.35), 12, 3.5, 10, 6)
+			apply_3d_style_to_button(action_btn, active_theme.accent, active_theme.accent.darkened(0.35), 10, 3.0, 8, 4)
 			action_btn.pressed.connect(func():
 				Global.play_click()
 				if Global.ad_credits >= h_price:
@@ -5702,8 +5983,19 @@ func _on_buy_premium_pressed():
 				Global.save_progression()
 				_refresh_shop_tab()
 				_show_toast(LANG[Global.current_lang].get("PRO_ACTIVE", "PRO AKTİF!"))
-			elif r_code != BillingClient.BillingResponseCode.OK and r_code != -1:
+			elif r_code == BillingClient.BillingResponseCode.OK:
+				# Purchase flow started on Google Play overlay
+				pass
+			elif r_code != -1:
 				print("Billing error response code: ", r_code, " debug: ", response.get("debug_message", ""))
+				var err_msg = "Google Play Bağlantı Hatası (%d)" % r_code
+				if r_code == BillingClient.BillingResponseCode.ITEM_UNAVAILABLE:
+					err_msg = "Ürün Play Store'da henüz aktif değil veya test hesabı değil."
+				elif r_code == BillingClient.BillingResponseCode.BILLING_UNAVAILABLE:
+					err_msg = "Google Play Faturalandırma hizmeti kullanılamıyor."
+				elif r_code == BillingClient.BillingResponseCode.DEVELOPER_ERROR:
+					err_msg = "Play Console ürün yapılandırması bekleniyor."
+				_show_toast(err_msg)
 				billing.query_product_details(PackedStringArray(["premium_unlock"]), BillingClient.ProductType.INAPP)
 		else:
 			print("Mocking successful premium purchase on PC")
@@ -5713,6 +6005,24 @@ func _on_buy_premium_pressed():
 			_show_toast(LANG[Global.current_lang].get("PRO_ACTIVE", "PRO AKTİF!"))
 	)
 	dlg_hbox.add_child(confirm_btn)
+
+	if OS.is_debug_build():
+		var test_btn = Button.new()
+		test_btn.text = "🧪 TEST: PRO MODU AÇ / KAPAT"
+		test_btn.add_theme_font_override("font", custom_font)
+		test_btn.add_theme_font_size_override("font_size", 20)
+		test_btn.custom_minimum_size = Vector2(260, 44)
+		test_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		apply_3d_style_to_button(test_btn, Color8(80, 50, 140), Color8(45, 25, 80), 10, 2.5, 12, 6)
+		test_btn.pressed.connect(func():
+			Global.play_click()
+			Global.is_premium = not Global.is_premium
+			Global.save_progression()
+			bg_overlay.queue_free()
+			_refresh_shop_tab()
+			_show_toast("TEST: PRO = " + str(Global.is_premium))
+		)
+		dlg_vbox.add_child(test_btn)
 
 # ======================================================
 # SWIPE INPUT
@@ -6461,7 +6771,7 @@ func _show_prize_dialog(title_txt: String, amount_txt: String, sub_txt: String =
 	# Pop-in scale bounce animation
 	panel.scale = Vector2(0.8, 0.8)
 	panel.modulate.a = 0.0
-	var pop_tw = create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	var pop_tw = overlay.create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	pop_tw.tween_property(panel, "scale", Vector2.ONE, 0.45)
 	pop_tw.tween_property(panel, "modulate:a", 1.0, 0.35)
 	
@@ -6511,7 +6821,8 @@ func _show_prize_dialog(title_txt: String, amount_txt: String, sub_txt: String =
 	coin_box.add_child(coin_img)
 	
 	# Gentle living coin pulse
-	var c_tw = create_tween().set_loops().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	var c_tw = overlay.create_tween().set_loops().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	c_tw.bind_node(coin_img)
 	c_tw.tween_property(coin_img, "scale", Vector2(1.06, 1.06), 1.2)
 	c_tw.tween_property(coin_img, "scale", Vector2(0.96, 0.96), 1.2)
 	
@@ -6553,6 +6864,7 @@ func _show_prize_dialog(title_txt: String, amount_txt: String, sub_txt: String =
 	if Global.current_lang == "ENG": ok_txt = "AWESOME!"
 	elif Global.current_lang == "ESP": ok_txt = "¡GENIAL!"
 	elif Global.current_lang == "POR": ok_txt = "ÓTIMO!"
+	elif Global.current_lang == "ITA": ok_txt = "FANTASTICO!"
 	ok_btn.text = ok_txt
 	ok_btn.add_theme_font_override("font", custom_font)
 	ok_btn.add_theme_font_size_override("font_size", 30)
@@ -6562,7 +6874,17 @@ func _show_prize_dialog(title_txt: String, amount_txt: String, sub_txt: String =
 	ok_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	ok_btn.pressed.connect(func():
 		Global.play_click()
+		if is_instance_valid(c_tw):
+			c_tw.kill()
+		if is_instance_valid(pop_tw):
+			pop_tw.kill()
 		overlay.queue_free()
+	)
+	overlay.tree_exiting.connect(func():
+		if is_instance_valid(c_tw):
+			c_tw.kill()
+		if is_instance_valid(pop_tw):
+			pop_tw.kill()
 	)
 	vbox.add_child(ok_btn)
 
@@ -6587,6 +6909,7 @@ func _on_rewarded_video_earned(_ad_info = null, _reward_data = null):
 	Global.last_rewarded_ad_time = Time.get_unix_time_from_system()
 	Global.save_progression()
 	_refresh_shop_tab()
+	_update_start_button_display()
 	
 	var title_txt = "TEBRİKLER!"
 	var bal_prefix = "Güncel Bakiye: "
@@ -7088,11 +7411,11 @@ func _open_lucky_wheel():
 	spin_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	vbox.add_child(spin_btn)
 	
-	var is_spinning = false
+	var spin_state = {"is_spinning": false}
 	var close_btn = Button.new()
 	
 	var update_wheel_status = func():
-		if is_spinning:
+		if spin_state["is_spinning"]:
 			spin_btn.disabled = true
 			close_btn.disabled = true
 			return
@@ -7195,15 +7518,24 @@ func _open_lucky_wheel():
 	live_clock_timer.timeout.connect(func():
 		if not is_instance_valid(overlay): return
 		Global.check_daily_reset()
-		if not is_spinning:
+		if not spin_state["is_spinning"]:
 			update_wheel_status.call()
 	)
 	
 	var perform_spin = func(is_ad: bool):
-		if is_spinning: return
-		is_spinning = true
+		if spin_state["is_spinning"]: return
+		spin_state["is_spinning"] = true
 		spin_btn.disabled = true
 		close_btn.disabled = true
+		
+		var spinning_txt = "ÇARK DÖNÜYOR..."
+		if Global.current_lang == "ENG": spinning_txt = "SPINNING..."
+		elif Global.current_lang == "ESP": spinning_txt = "GIRANDO..."
+		elif Global.current_lang == "POR": spinning_txt = "RODANDO..."
+		elif Global.current_lang == "ITA": spinning_txt = "GIRANDO..."
+		spin_btn.text = spinning_txt
+		status_lbl.text = spinning_txt
+		status_lbl.add_theme_color_override("font_color", active_theme.accent)
 		
 		if not is_ad:
 			Global.lucky_wheel_free_spins_used = 1
@@ -7236,7 +7568,7 @@ func _open_lucky_wheel():
 		
 		tw.finished.connect(func():
 			if not is_instance_valid(overlay): return
-			is_spinning = false
+			spin_state["is_spinning"] = false
 			close_btn.disabled = false
 			var title_txt = "ŞANS ÇARKI ÖDÜLÜ"
 			var bal_prefix = "Güncel Bakiye: "
@@ -7257,7 +7589,7 @@ func _open_lucky_wheel():
 	
 	spin_btn.pressed.connect(func():
 		Global.play_click()
-		if is_spinning: return
+		if spin_state["is_spinning"]: return
 		
 		var free_avail = (Global.lucky_wheel_free_spins_used < 1)
 		var pending_ad = (Global.lucky_wheel_pending_ad_spins > 0)
@@ -7303,7 +7635,7 @@ func _open_lucky_wheel():
 	close_btn.add_theme_color_override("font_color", Color.WHITE)
 	close_btn.pressed.connect(func():
 		Global.play_click()
-		if is_spinning: return
+		if spin_state["is_spinning"]: return
 		overlay.queue_free()
 	)
 	vbox.add_child(close_btn)
@@ -7465,38 +7797,26 @@ func _open_leaderboard():
 	sync_btn.add_theme_color_override("font_color", Color8(20, 15, 0) if active_theme.accent.get_luminance() > 0.5 else Color.WHITE)
 	sync_btn.pressed.connect(func():
 		Global.play_click()
+		Global.recalculate_favorite_team_goals()
 		var sync_team = Global.favorite_team
-		var squad_data = Global.custom_player_names.get(sync_team, {}) if sync_team != "" else {}
-		var has_squad = false
-		if typeof(squad_data) == TYPE_DICTIONARY:
-			for k in squad_data:
-				if String(squad_data[k]).strip_edges() != "":
-					has_squad = true
-					break
-		elif squad_data is Array:
-			for s in squad_data:
-				if String(s).strip_edges() != "":
-					has_squad = true
-					break
-
-		if sync_team == "" or not has_squad:
-			var warn_txt = "Skorunu senkronize etmek için önce bir favori takım ve kadro belirlemelisin!"
-			if Global.current_lang == "ENG": warn_txt = "Please select a favorite team and set up your squad before synchronizing!"
-			elif Global.current_lang == "ESP": warn_txt = "¡Selecciona un equipo favorito y configura tu plantilla antes de sincronizar!"
-			elif Global.current_lang == "POR": warn_txt = "Selecione uma equipa favorita e defina o seu plantel antes de sincronizar!"
-			elif Global.current_lang == "ITA": warn_txt = "Seleziona una squadra preferita e imposta la tua rosa prima di sincronizzare!"
+		if sync_team == "":
+			var warn_txt = "Skorunu senkronize etmek için önce bir favori takım seçmelisin!"
+			if Global.current_lang == "ENG": warn_txt = "Please select a favorite team before synchronizing!"
+			elif Global.current_lang == "ESP": warn_txt = "¡Selecciona un equipo favorito antes de sincronizar!"
+			elif Global.current_lang == "POR": warn_txt = "Selecione uma equipa favorita antes de sincronizar!"
+			elif Global.current_lang == "ITA": warn_txt = "Seleziona una squadra preferita prima di sincronizzare!"
 			_show_toast(warn_txt)
 			return
 
+		var sync_player_name = Global.player_name.strip_edges()
+		if sync_player_name == "":
+			sync_player_name = Global.get_active_custom_player_name().strip_edges()
+		if sync_player_name == "" or sync_player_name == "Kaptan":
+			sync_player_name = sync_team + " Yıldızı"
+
 		var goals_count = int(Global.favorite_team_goals_scored)
 		Global.submit_score(goals_count)
-		_sync_score_to_web(Global.get_active_custom_player_name(), sync_team, goals_count)
-		var succ_txt = "Skorun başarıyla eşitlendi! (%d Gol)"
-		if Global.current_lang == "ENG": succ_txt = "Score successfully synchronized! (%d Goals)"
-		elif Global.current_lang == "ESP": succ_txt = "¡Puntuación sincronizada con éxito! (%d Goles)"
-		elif Global.current_lang == "POR": succ_txt = "Pontuação sincronizada com sucesso! (%d Golos)"
-		elif Global.current_lang == "ITA": succ_txt = "Punteggio sincronizzato con successo! (%d Gol)"
-		_show_toast(succ_txt % goals_count)
+		_sync_score_to_web(sync_player_name, sync_team, goals_count)
 	)
 	global_vbox.add_child(sync_btn)
 	
@@ -7541,9 +7861,26 @@ func _sync_score_to_web(p_name: String, team: String, goals: int):
 		http.queue_free()
 		if response_code == 200:
 			print("[LeaderboardSync] Web leaderboard synced successfully: ", p_name, " (", team, "): ", goals)
+			var succ_txt = "Skorun başarıyla eşitlendi! (%d Gol)"
+			if Global.current_lang == "ENG": succ_txt = "Score successfully synchronized! (%d Goals)"
+			elif Global.current_lang == "ESP": succ_txt = "¡Puntuación sincronizada con éxito! (%d Goles)"
+			elif Global.current_lang == "POR": succ_txt = "Pontuação sincronizada com sucesso! (%d Golos)"
+			elif Global.current_lang == "ITA": succ_txt = "Punteggio sincronizzato con successo! (%d Gol)"
+			_show_toast(succ_txt % goals)
+		else:
+			print("[LeaderboardSync] Sync failed with response_code: ", response_code)
+			var err_txt = "Skor eşitlenemedi. Lütfen internet bağlantınızı kontrol edin."
+			if Global.current_lang == "ENG": err_txt = "Could not synchronize score. Please check your internet connection."
+			elif Global.current_lang == "ESP": err_txt = "No se pudo sincronizar. Por favor verifica tu conexión a internet."
+			elif Global.current_lang == "POR": err_txt = "Não foi possível sincronizar. Verifique a sua ligação à internet."
+			elif Global.current_lang == "ITA": err_txt = "Impossibile sincronizzare. Controlla la tua connessione internet."
+			_show_toast(err_txt)
 	)
 	var url = "https://www.ebstudyo.com/api/sync_score.php"
-	var headers = ["Content-Type: application/json"]
+	var headers = [
+		"Content-Type: application/json",
+		"User-Agent: BolGolFutbol-Android/1.1.1"
+	]
 	var payload = JSON.stringify({
 		"player_name": p_name,
 		"team_name": team,

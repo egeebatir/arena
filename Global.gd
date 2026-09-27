@@ -1,5 +1,6 @@
 extends Node
 
+var custom_font = preload("res://Teko-Bold.ttf")
 var bg_music_player: AudioStreamPlayer
 var click_player: AudioStreamPlayer
 var goal_music_player: AudioStreamPlayer
@@ -57,14 +58,16 @@ func get_rewarded_ad_cooldown_left() -> float:
 func is_rewarded_ad_ready() -> bool:
 	return get_rewarded_ad_cooldown_left() <= 0.0
 
-const BALL_SKINS: Array = ["default", "gold", "neon", "chrome", "lava", "ice"]
+const BALL_SKINS: Array = ["default", "gold", "neon", "chrome", "lava", "ice", "obsidian"]
 var unlocked_ball_skins: Array = ["default"]
 var equipped_ball_skin: String = "default"
 var unlocked_hats: Array = []
 var equipped_hat: String = "none" # "none", "kings_crown", "queens_crown"
 var favorite_team: String = ""
+var player_name: String = ""
 var login_method: String = ""
 var matches_played_since_prompt: int = 0
+var came_from_completed_match: bool = false
 var is_premium: bool = false
 var premium_price_formatted: String = ""
 var home_selected: bool = true
@@ -75,12 +78,43 @@ var custom_player_names: Dictionary = {}
 var unlocked_achievements: Array = []
 var favorite_team_goals_scored: int = 0
 
-# --- DAILY QUESTS & LUCKY WHEEL ---
+# --- DAILY QUESTS, LUCKY WHEEL & MATCH ECONOMY ---
 var daily_date: String = ""
 var lucky_wheel_free_spins_used: int = 0
 var lucky_wheel_ad_spins_used: int = 0
 var lucky_wheel_pending_ad_spins: int = 0
 var daily_quests: Array = []
+var daily_free_matches_used: int = 0
+const DAILY_FREE_MATCH_LIMIT: int = 5
+const MATCH_TOKEN_COST: int = 50
+
+func has_match_right() -> bool:
+	if is_premium:
+		return true
+	check_daily_reset()
+	if daily_free_matches_used < DAILY_FREE_MATCH_LIMIT:
+		return true
+	return ad_credits >= MATCH_TOKEN_COST
+
+func get_remaining_free_matches() -> int:
+	if is_premium:
+		return 999
+	check_daily_reset()
+	return max(0, DAILY_FREE_MATCH_LIMIT - daily_free_matches_used)
+
+func consume_match_right() -> bool:
+	if is_premium:
+		return true
+	check_daily_reset()
+	if daily_free_matches_used < DAILY_FREE_MATCH_LIMIT:
+		daily_free_matches_used += 1
+		save_progression()
+		return true
+	elif ad_credits >= MATCH_TOKEN_COST:
+		ad_credits -= MATCH_TOKEN_COST
+		save_progression()
+		return true
+	return false
 
 func get_formatted_premium_price() -> String:
 	if premium_price_formatted != "":
@@ -879,6 +913,7 @@ func load_stats():
 			match_history = parsed
 			if match_history.size() > 100:
 				match_history = match_history.slice(match_history.size() - 100)
+			recalculate_favorite_team_goals()
 
 
 const SAVE_SALT = "bol_gol_futbol_anti_cheat_salt_2026"
@@ -898,6 +933,7 @@ func save_progression():
 			"unlocked_hats": unlocked_hats,
 			"equipped_hat": equipped_hat,
 			"favorite_team": favorite_team,
+			"player_name": player_name,
 			"login_method": login_method,
 			"matches_played_since_prompt": matches_played_since_prompt,
 			"is_premium": is_premium,
@@ -910,6 +946,7 @@ func save_progression():
 			"unlocked_achievements": unlocked_achievements,
 			"favorite_team_goals_scored": favorite_team_goals_scored,
 			"daily_date": daily_date,
+			"daily_free_matches_used": daily_free_matches_used,
 			"lucky_wheel_free_spins_used": lucky_wheel_free_spins_used,
 			"lucky_wheel_ad_spins_used": lucky_wheel_ad_spins_used,
 			"lucky_wheel_pending_ad_spins": lucky_wheel_pending_ad_spins,
@@ -965,6 +1002,7 @@ func load_progression():
 			if data_to_load.has("unlocked_hats"): unlocked_hats = data_to_load["unlocked_hats"]
 			if data_to_load.has("equipped_hat"): equipped_hat = data_to_load["equipped_hat"]
 			if data_to_load.has("favorite_team"): favorite_team = data_to_load["favorite_team"]
+			if data_to_load.has("player_name"): player_name = str(data_to_load["player_name"])
 			if data_to_load.has("login_method"): login_method = data_to_load["login_method"]
 			if data_to_load.has("matches_played_since_prompt"): matches_played_since_prompt = int(data_to_load["matches_played_since_prompt"])
 			if data_to_load.has("is_premium"): is_premium = bool(data_to_load["is_premium"])
@@ -977,6 +1015,7 @@ func load_progression():
 			if data_to_load.has("unlocked_achievements"): unlocked_achievements = data_to_load["unlocked_achievements"]
 			if data_to_load.has("favorite_team_goals_scored"): favorite_team_goals_scored = int(data_to_load["favorite_team_goals_scored"])
 			if data_to_load.has("daily_date"): daily_date = data_to_load["daily_date"]
+			if data_to_load.has("daily_free_matches_used"): daily_free_matches_used = int(data_to_load["daily_free_matches_used"])
 			if data_to_load.has("lucky_wheel_free_spins_used"): lucky_wheel_free_spins_used = int(data_to_load["lucky_wheel_free_spins_used"])
 			if data_to_load.has("lucky_wheel_ad_spins_used"): lucky_wheel_ad_spins_used = int(data_to_load["lucky_wheel_ad_spins_used"])
 			if data_to_load.has("lucky_wheel_pending_ad_spins"): lucky_wheel_pending_ad_spins = int(data_to_load["lucky_wheel_pending_ad_spins"])
@@ -994,6 +1033,7 @@ func check_daily_reset():
 	var today = Time.get_date_string_from_system()
 	if daily_date != today:
 		daily_date = today
+		daily_free_matches_used = 0
 		lucky_wheel_free_spins_used = 0
 		lucky_wheel_ad_spins_used = 0
 		lucky_wheel_pending_ad_spins = 0
@@ -1634,3 +1674,191 @@ static func draw_ball_skin(canvas: CanvasItem, center: Vector2, radius: float, s
 				var barb = ice_pos + d * (ice_len * 0.6)
 				canvas.draw_line(barb - perp * (2.2 * scale), barb + perp * (2.2 * scale), Color8(200, 245, 255, 200), 1.0 * scale, true)
 			canvas.draw_circle(ice_pos, 2.2 * scale, Color.WHITE)
+
+		"obsidian":
+			var obs_p = 0.5 + 0.5 * sin(time * 3.5)
+			# 1. Deep abyss violet aura (Exterior)
+			canvas.draw_arc(c, r + (5.5 + 2.5 * obs_p) * scale, 0, TAU, 48, Color8(110, 45, 175, 45), 5.5 * scale, true)
+			canvas.draw_arc(c, r + (2.8 + 1.2 * obs_p) * scale, 0, TAU, 48, Color8(150, 70, 220, 80), 3.5 * scale, true)
+			# 2. Pitch black volcanic glass rim with deep purple sheen
+			canvas.draw_arc(c, r - 1.2 * scale, 0, TAU, 64, Color8(22, 12, 34, 255), 4.8 * scale, true)
+			canvas.draw_arc(c, r - 2.8 * scale, 0, TAU, 64, Color8(165, 85, 245, int(190 + 55 * obs_p)), 1.8 * scale, true)
+			# 3. Prismatic crystalline facet fracture lines around edge
+			for i in range(8):
+				var fa = i * (TAU / 8.0) + time * 0.15
+				var p1 = c + Vector2(cos(fa), sin(fa)) * (r - 4.5 * scale)
+				var p2 = c + Vector2(cos(fa + 0.35), sin(fa + 0.35)) * (r - 1.0 * scale)
+				canvas.draw_line(p1, p2, Color8(220, 160, 255, 180), 1.2 * scale, true)
+			# 4. Prismatic diamond star glint on outer rim
+			var ob_pos = c + Vector2(-r * 0.72, -r * 0.72)
+			var ob_rot = time * 0.8
+			var ob_len = (8.0 + 2.0 * sin(time * 4.2)) * scale
+			for i in range(2):
+				var d = Vector2(cos(ob_rot + i * PI * 0.5), sin(ob_rot + i * PI * 0.5))
+				canvas.draw_line(ob_pos - d * ob_len, ob_pos + d * ob_len, Color8(240, 205, 255, 250), 1.5 * scale, true)
+			canvas.draw_circle(ob_pos, 2.5 * scale, Color8(255, 255, 255))
+			# 5. Orbiting dark violet obsidian crystal fragments
+			for i in range(4):
+				var oa = i * (TAU / 4.0) - time * (1.1 + i * 0.2)
+				var od = r * (1.05 + 0.08 * sin(time * 2.8 + i))
+				var op = c + Vector2(cos(oa), sin(oa)) * od
+				canvas.draw_circle(op, 2.2 * scale, Color8(190, 100, 255, 220))
+
+# ======================================================
+# GLOBAL SMOOTH TRANSITION & LOADING OVERLAY
+# ======================================================
+var _loading_canvas: CanvasLayer = null
+var _loading_overlay: Control = null
+var _loading_spinner: Control = null
+var _loading_label: Label = null
+var _loading_sublabel: Label = null
+var _is_transitioning: bool = false
+var _spin_tw: Tween = null
+var _spin_angle: float = 0.0:
+	set(val):
+		_spin_angle = val
+		if is_instance_valid(_loading_spinner) and _loading_spinner.is_visible_in_tree():
+			_loading_spinner.queue_redraw()
+
+func _ensure_loading_overlay():
+	if is_instance_valid(_loading_canvas):
+		return
+	_loading_canvas = CanvasLayer.new()
+	_loading_canvas.layer = 128
+	add_child(_loading_canvas)
+	
+	_loading_overlay = Control.new()
+	_loading_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_loading_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	_loading_overlay.visible = false
+	_loading_canvas.add_child(_loading_overlay)
+	
+	# Dimmed backdrop
+	var bg = ColorRect.new()
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.color = Color8(5, 9, 18, 225)
+	_loading_overlay.add_child(bg)
+	
+	var center = CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_loading_overlay.add_child(center)
+	
+	# Frosted glass card in the center
+	var card = PanelContainer.new()
+	var card_sb = StyleBoxFlat.new()
+	card_sb.bg_color = Color8(12, 20, 36, 240)
+	card_sb.corner_radius_top_left = 24
+	card_sb.corner_radius_top_right = 24
+	card_sb.corner_radius_bottom_left = 24
+	card_sb.corner_radius_bottom_right = 24
+	card_sb.border_width_left = 1.5
+	card_sb.border_width_right = 1.5
+	card_sb.border_width_top = 1.5
+	card_sb.border_width_bottom = 3.5
+	var theme_accent = THEMES.get(current_theme, THEMES["Mavi"]).accent
+	card_sb.border_color = theme_accent.lightened(0.15)
+	card_sb.shadow_color = Color8(0, 0, 0, 160)
+	card_sb.shadow_size = 24
+	card_sb.shadow_offset = Vector2(0, 8)
+	card_sb.content_margin_left = 38
+	card_sb.content_margin_right = 38
+	card_sb.content_margin_top = 30
+	card_sb.content_margin_bottom = 28
+	card.add_theme_stylebox_override("panel", card_sb)
+	center.add_child(card)
+	
+	var box = VBoxContainer.new()
+	box.alignment = BoxContainer.ALIGNMENT_CENTER
+	box.add_theme_constant_override("separation", 14)
+	card.add_child(box)
+	
+	# Dedicated centered spinner control
+	_loading_spinner = Control.new()
+	_loading_spinner.custom_minimum_size = Vector2(84, 84)
+	_loading_spinner.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_loading_spinner.draw.connect(func():
+		var c = Vector2(42, 42)
+		var acc = THEMES.get(current_theme, THEMES["Mavi"]).accent
+		
+		# 1. Subtle ambient aura
+		_loading_spinner.draw_circle(c, 38.0, Color(acc.r, acc.g, acc.b, 0.08))
+		
+		# 2. Outer track ring
+		_loading_spinner.draw_arc(c, 34.0, 0, TAU, 48, Color(1, 1, 1, 0.12), 3.0, true)
+		
+		# 3. Dynamic dual spinning glowing arcs
+		_loading_spinner.draw_arc(c, 34.0, _spin_angle, _spin_angle + PI * 0.85, 32, acc, 4.2, true)
+		_loading_spinner.draw_arc(c, 34.0, _spin_angle + PI, _spin_angle + PI * 1.45, 24, acc.lightened(0.35), 3.2, true)
+		
+		# 4. Inner counter-rotating ring
+		_loading_spinner.draw_arc(c, 24.0, -_spin_angle * 1.35, -_spin_angle * 1.35 + PI * 0.65, 20, Color8(255, 255, 255, 220), 2.4, true)
+		
+		# 5. Centered football core with authentic geometry
+		_loading_spinner.draw_circle(c, 14.0, Color8(248, 250, 252))
+		_loading_spinner.draw_circle(c, 6.0, Color8(15, 23, 42))
+		for p in range(5):
+			var a = p * (TAU / 5.0) - PI * 0.5
+			var p_inner = c + Vector2(cos(a), sin(a)) * 5.8
+			var p_outer = c + Vector2(cos(a), sin(a)) * 13.5
+			_loading_spinner.draw_line(p_inner, p_outer, Color8(15, 23, 42), 1.8, true)
+		_loading_spinner.draw_arc(c, 14.0, 0, TAU, 32, Color8(15, 23, 42, 180), 1.2, true)
+	)
+	box.add_child(_loading_spinner)
+	
+	_loading_label = Label.new()
+	_loading_label.text = "YÜKLENİYOR..."
+	_loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_loading_label.add_theme_font_override("font", custom_font)
+	_loading_label.add_theme_font_size_override("font_size", 30)
+	_loading_label.add_theme_color_override("font_color", Color.WHITE)
+	_loading_label.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
+	_loading_label.add_theme_constant_override("shadow_offset_y", 2)
+	box.add_child(_loading_label)
+	
+	_loading_sublabel = Label.new()
+	_loading_sublabel.text = "●  ●  ●"
+	_loading_sublabel.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_loading_sublabel.add_theme_font_override("font", custom_font)
+	_loading_sublabel.add_theme_font_size_override("font_size", 18)
+	var theme_acc = THEMES.get(current_theme, THEMES["Mavi"]).accent
+	_loading_sublabel.add_theme_color_override("font_color", theme_acc.lightened(0.2))
+	box.add_child(_loading_sublabel)
+
+func change_scene_with_loading(target_scene_path: String, custom_message: String = ""):
+	if _is_transitioning:
+		return
+	_is_transitioning = true
+	_ensure_loading_overlay()
+	
+	var txt = "YÜKLENİYOR..."
+	if current_lang == "ENG": txt = "LOADING..."
+	elif current_lang == "ESP": txt = "CARGANDO..."
+	elif current_lang == "POR": txt = "A CARREGAR..."
+	elif current_lang == "ITA": txt = "CARICAMENTO..."
+	
+	_loading_label.text = custom_message if custom_message != "" else txt
+	_loading_overlay.visible = true
+	_loading_overlay.modulate.a = 0.0
+	
+	var in_tw = _loading_overlay.create_tween()
+	in_tw.tween_property(_loading_overlay, "modulate:a", 1.0, 0.14)
+	
+	if is_instance_valid(_spin_tw): _spin_tw.kill()
+	_spin_tw = create_tween().set_loops()
+	_spin_tw.tween_property(self, "_spin_angle", TAU, 0.95).from(0.0)
+	
+	await in_tw.finished
+	await get_tree().process_frame
+	
+	get_tree().change_scene_to_file(target_scene_path)
+	
+	await get_tree().process_frame
+	await get_tree().process_frame
+	
+	var out_tw = _loading_overlay.create_tween()
+	out_tw.tween_property(_loading_overlay, "modulate:a", 0.0, 0.22)
+	await out_tw.finished
+	
+	if is_instance_valid(_spin_tw): _spin_tw.kill()
+	_loading_overlay.visible = false
+	_is_transitioning = false

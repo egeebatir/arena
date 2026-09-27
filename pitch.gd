@@ -646,7 +646,7 @@ func setup_scoreboard():
 		if is_instance_valid(ball1): ball1.velocity = Vector2.ZERO
 		if is_instance_valid(ball2): ball2.velocity = Vector2.ZERO
 		if state == "FULLTIME":
-			Global.increment_matches_played()
+			Global.came_from_completed_match = true
 		if is_instance_valid(stadium_player):
 			stadium_player.stop()
 		if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
@@ -654,11 +654,11 @@ func setup_scoreboard():
 		abandon_btn.disabled = true
 		_clean_match_banner()
 		if state == "FIRST_HALF" or state == "INTRO":
-			get_tree().change_scene_to_file("res://main_menu.tscn")
+			Global.change_scene_with_loading("res://main_menu.tscn")
 		else:
 			Global.show_interstitial_ad(func():
 				Engine.time_scale = 1.0
-				get_tree().change_scene_to_file("res://main_menu.tscn")
+				Global.change_scene_with_loading("res://main_menu.tscn")
 			)
 	)
 	top_header_hbox.add_child(abandon_btn)
@@ -1343,6 +1343,9 @@ func _physics_process(delta):
 				}
 			)
 			Global.save_stats()
+			Global.consume_match_right()
+			Global.increment_matches_played()
+			Global.came_from_completed_match = true
 			
 			# --- GOOGLE PLAY ACHIEVEMENTS TRIGGERS ---
 			var total_matches = Global.match_history.size()

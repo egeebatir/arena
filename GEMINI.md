@@ -70,4 +70,27 @@ This workspace is part of the 3-project Bol Gol Futbol ecosystem:
 7. **Fixture Scope & European Coverage:**
    - Fixture queues must maintain all Turkish Big 4 European clashes (UEFA Europa League & Champions League), UEFA Champions League marquee matches, 46 National Team games (Türkiye, Portekiz, Arjantin, İtalya, İngiltere, ABD, Fransa, İspanya, Almanya, Brezilya vb. - UEFA Nations League & FIFA World Cup Qualifiers), Marquee European Showcase games (e.g. Barcelona vs Galatasaray, Real Madrid vs Fenerbahçe), and weekly Süper Lig wildcards.
 
+# Multi-Platform Distribution, ASO & Web Authority Standards
+
+1. **Social Media Growth (YouTube Shorts, TikTok, Instagram Reels):**
+   - Apply `content-marketer` patterns: first 1.2s hook must create cognitive dissonance or high-tension anticipation with dynamic punch-in zoom.
+   - Maintain platform-specific narrative rhythm: YouTube Shorts (tactical suspense & score curiosity), TikTok (fast cuts, audio trends, high-energy goal replay), Instagram Reels (clean aesthetic showcase & stadium vibe).
+   - End cards must drive traffic directly to `ebstudyo.com` or Google Play closed beta with clear, low-friction CTA.
+
+2. **ASO & Store Discovery (Google Play Store):**
+   - Enforce `seo-keyword-strategist` and `seo-meta-optimizer` guidelines for 5 languages (TR, ENG, ESP, POR, ITA).
+   - Keep short description within 80 characters, packed with high-intent keywords (arcade football, soccer simulation, offline match).
+   - Long descriptions must structure features with scannable headers, bullet points, and Google Play search semantic density.
+   - Validate Data Safety, target SDK compliance, and permission minimization via `mobile-security-coder`.
+
+3. **Web Authority, UI/UX & Conversion (`ebstudyo.com`):**
+   - Apply `ui-ux-designer` and `ui-visual-validator`: maintain modern glassmorphism design tokens, accessible color contrasts (WCAG AA/AAA), and frictionless 1-click test enrollment.
+   - Apply `seo-structure-architect` & `seo-authority-builder`: keep JSON-LD structured data (`Organization`, `MobileApplication`, `FAQPage`) synchronized with live app capabilities (232 teams, 46 national teams, 7 world leagues).
+   - Ensure Core Web Vitals (CWV) resilience: zero audio playback before user interaction, on-demand engine loading, and responsive mobile-first layouts.
+
+4. **Pipeline Orchestration & Resilience (`futbol_automation`):**
+   - Apply `workflow-orchestration-patterns` and `async-python-patterns`: isolate render, post-production (ffmpeg), and upload jobs with graceful error recovery and automated retry with backoff.
+   - Track production metrics via `kpi-dashboard-design` patterns to observe schedule adherence (kickoff - 2 hours) and YouTube API quota efficiency.
+
+
 

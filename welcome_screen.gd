@@ -170,6 +170,9 @@ func _ready():
 	if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
 		Global.bg_music_player.play()
 	
+	active_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
+	_build_ui()
+	
 	# Google Play Games setup
 	if Global.play_games_sign_in_client:
 		sign_in_client = Global.play_games_sign_in_client
@@ -186,15 +189,12 @@ func _ready():
 				add_child(sign_in_client)
 				sign_in_client.user_authenticated.connect(_on_sign_in_result)
 	
-	if sign_in_client and sign_in_client.has_method("is_authenticated"):
-		sign_in_client.is_authenticated()
-	
-	active_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
-	_build_ui()
-	
 	# If player was previously connected with Google, reflect state immediately
 	if Global.login_method == "google":
-		_set_gp_btn_connected()
+		_set_gp_btn_connected(false)
+	
+	if sign_in_client and sign_in_client.has_method("is_authenticated"):
+		sign_in_client.is_authenticated()
 		
 	_start_intro_sequence()
 
@@ -564,7 +564,7 @@ func _build_ui():
 	add_child(ver_margin)
 	
 	var ver_lbl = Label.new()
-	ver_lbl.text = "v1.1.0"
+	ver_lbl.text = "v1.1.1"
 	ver_lbl.add_theme_font_override("font", custom_font)
 	ver_lbl.add_theme_font_size_override("font_size", 16)
 	ver_lbl.add_theme_color_override("font_color", Color8(130, 165, 195, 130))
@@ -813,10 +813,13 @@ func _update_gp_btn_text(new_text: String, new_icon_path: String = ""):
 		if is_instance_valid(gp_icon) and ResourceLoader.exists(new_icon_path):
 			gp_icon.texture = load(new_icon_path)
 
-func _set_gp_btn_connected():
+func _set_gp_btn_connected(animate: bool = false):
 	if not is_instance_valid(gp_btn): return
 	_update_gp_btn_text(LANG.get(Global.current_lang, LANG["ENG"]).get("PLAY_CONNECTED", "Google Play Bağlandı"), "res://checkmark_icon.svg")
 	gp_btn.disabled = true
+	var gp_lbl = gp_btn.get_node_or_null("GPHBox/GPLabel") as Label
+	if is_instance_valid(gp_lbl):
+		gp_lbl.add_theme_color_override("font_color", Color8(100, 255, 140))
 	var gp_conn_style = StyleBoxFlat.new()
 	gp_conn_style.bg_color = Color8(15, 60, 35, 230)
 	gp_conn_style.corner_radius_top_left = 28; gp_conn_style.corner_radius_top_right = 28
@@ -827,6 +830,11 @@ func _set_gp_btn_connected():
 	gp_btn.add_theme_stylebox_override("pressed", gp_conn_style)
 	gp_btn.add_theme_stylebox_override("disabled", gp_conn_style)
 	gp_btn.add_theme_color_override("font_disabled_color", Color8(100, 255, 140))
+	if animate:
+		gp_btn.pivot_offset = gp_btn.size / 2.0
+		var pop_tw = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		pop_tw.tween_property(gp_btn, "scale", Vector2(1.06, 1.06), 0.16)
+		pop_tw.tween_property(gp_btn, "scale", Vector2.ONE, 0.14)
 
 func _on_sign_in_result(is_authenticated: bool, is_manual_click: bool = false):
 	var was_manual = is_connecting_google or is_manual_click
@@ -834,8 +842,9 @@ func _on_sign_in_result(is_authenticated: bool, is_manual_click: bool = false):
 	if is_authenticated:
 		Global.login_method = "google"
 		Global.save_progression()
-		_set_gp_btn_connected()
+		_set_gp_btn_connected(true)
 		if was_manual:
+			await get_tree().create_timer(0.85).timeout
 			goto_main_menu()
 	else:
 		_on_sign_in_failed()
@@ -843,11 +852,14 @@ func _on_sign_in_result(is_authenticated: bool, is_manual_click: bool = false):
 func _on_sign_in_failed(_arg = null):
 	is_connecting_google = false
 	if is_instance_valid(gp_btn):
+		var gp_lbl = gp_btn.get_node_or_null("GPHBox/GPLabel") as Label
+		if is_instance_valid(gp_lbl):
+			gp_lbl.add_theme_color_override("font_color", Color8(220, 230, 245))
 		_update_gp_btn_text(LANG.get(Global.current_lang, LANG["ENG"])["LOGIN_PLAY"], "res://google_play_logo.svg")
 		gp_btn.disabled = false
 
 func goto_main_menu():
-	get_tree().change_scene_to_file("res://main_menu.tscn")
+	Global.change_scene_with_loading("res://main_menu.tscn")
 
 func _cycle_language():
 	Global.play_click()
@@ -868,7 +880,7 @@ func _update_language_texts():
 		play_now_btn.text = lang_data["PLAY_NOW"]
 	if is_instance_valid(gp_btn):
 		if Global.login_method == "google":
-			_update_gp_btn_text(lang_data.get("PLAY_CONNECTED", "Google Play Bağlandı"), "res://checkmark_icon.svg")
+			_set_gp_btn_connected(false)
 		else:
 			_update_gp_btn_text(lang_data["LOGIN_PLAY"], "res://google_play_logo.svg")
 	if is_instance_valid(privacy_btn):

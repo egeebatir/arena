@@ -220,11 +220,10 @@ def check_shop_and_assets():
         except Exception as e:
             record_failure(f"Failed to read hat image {fname}: {e}")
 
-    # 4.2 Check Team Crests
+    # 4.2 Check Team Crests & National Flags
     team_crests = [
         "ars1.png", "atm1.png", "bar1.png", "che1.png", "int1.png", "juv1.png",
-        "liv1.png", "mc1.png", "mil1.png", "mun1.png", "nap1.png", "rma1.png",
-        "tur1.png", "arg1.png", "por1.png", "eng1.png", "usa1.png", "ita1.png", "tor1.png"
+        "liv1.png", "mc1.png", "mil1.png", "mun1.png", "nap1.png", "rma1.png", "tor1.png"
     ]
     for cname in team_crests:
         cpath = os.path.join(futbol_dir, cname)
@@ -240,6 +239,26 @@ def check_shop_and_assets():
             record_pass(f"Team crest {cname} verified: {sz} bytes, {im.size}.")
         except Exception as e:
             record_failure(f"Failed to open crest {cname}: {e}")
+
+    # Check 6 national flags (and sample flags)
+    national_flags = [
+        "tur1.png", "arg1.png", "por1.png", "eng1.png", "usa1.png", "ita1.png",
+        "fra1.png", "esp1.png", "ger1.png", "bra1.png"
+    ]
+    for fname in national_flags:
+        fpath = os.path.join(futbol_dir, fname)
+        if not os.path.exists(fpath):
+            record_failure(f"National flag missing: {fname}")
+            continue
+        sz = os.path.getsize(fpath)
+        if sz < 3000:
+            record_failure(f"National flag {fname} is too small ({sz} bytes)!")
+            continue
+        try:
+            im = Image.open(fpath)
+            record_pass(f"National flag {fname} verified: {sz} bytes, {im.size}.")
+        except Exception as e:
+            record_failure(f"Failed to open flag {fname}: {e}")
 
     # 4.3 Check Hat List in main_menu.gd
     main_menu_path = os.path.join(futbol_dir, "main_menu.gd")
