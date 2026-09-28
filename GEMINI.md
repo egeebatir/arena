@@ -21,6 +21,14 @@ This workspace enforces modern, high-standard Android UI/UX guidelines:
    - Provide generous width (180-210 px) for buttons to prevent text truncation across TR, ENG, ESP, POR.
    - Enable `autowrap_mode` on multi-line text descriptions.
 
+### Anti‑Slop Integration (UI & Copy)
+
+- Apply **anti‑slop** filters to UI components and marketing copy to eliminate generic placeholders and AI‑generated filler.
+- Use `antislop-ui` skill when designing Godot UI scenes.
+- Use `antislop-copywriting` skill for in‑app text, social media posts, and website copy.
+- Enforce the rules defined in `anti_slop_rules.md` during CI via the `antislop-delivery` skill.
+
+
 # Multi-Agent Council & Ecosystem Governance
 
 This workspace is part of the 3-project Bol Gol Futbol ecosystem:
