@@ -21,14 +21,6 @@ This workspace enforces modern, high-standard Android UI/UX guidelines:
    - Provide generous width (180-210 px) for buttons to prevent text truncation across TR, ENG, ESP, POR.
    - Enable `autowrap_mode` on multi-line text descriptions.
 
-### Anti‑Slop Integration (UI & Copy)
-
-- Apply **anti‑slop** filters to UI components and marketing copy to eliminate generic placeholders and AI‑generated filler.
-- Use `antislop-ui` skill when designing Godot UI scenes.
-- Use `antislop-copywriting` skill for in‑app text, social media posts, and website copy.
-- Enforce the rules defined in `anti_slop_rules.md` during CI via the `antislop-delivery` skill.
-
-
 # Multi-Agent Council & Ecosystem Governance
 
 This workspace is part of the 3-project Bol Gol Futbol ecosystem:
@@ -44,25 +36,29 @@ This workspace is part of the 3-project Bol Gol Futbol ecosystem:
 
 # Video Automation & YouTube Publishing Standards
 
-1. **Resolution & Rendering:**
+1. **Resolution, Rendering & Quality:**
    - Always record in native 1080x1920 Full HD 60 FPS (Godot MovieWriter).
-   - Video bitrate 4500k, maxrate 6000k, YUV420p for crisp YouTube Shorts compression resilience.
+   - Match duration is set to **Normal** (`Global.match_duration = 1`, 36s realistic match simulation).
+   - Enhanced FFmpeg render quality: CRF 18 visually lossless, video bitrate 6000k, maxrate 8500k, audio bitrate 256k, YUV420p for crisp YouTube Shorts compression resilience.
 
 2. **Top Header & Scoreboard Safety:**
    - Scoreboard top margin must be at least 115px in automation mode.
    - Dynamic zoompan hook must be arena-centered with safe vertical anchor so top buttons (`<`, `||`) and scoreboard are never cut off.
 
-3. **CTA Block Placement:**
-   - Modern glassmorphism `ebstudyo.com` CTA badge must strictly be positioned between the scoreboard bottom (y~215) and arena circle top (y~570) at y = 270..362.
+3. **CTA Block Placement & Localization:**
+   - Modern glassmorphism `ebstudyo.com` CTA badge must strictly be positioned between the scoreboard bottom (y~215) and arena circle top (y~570) at y = 265..373.
+   - Dimensions: Compact width (`badge_w = 660px`) and increased vertical size (`badge_h = 108px`, logo 70px, large fonts 38px/23px) for maximum readability.
+   - **Language Localization:** On English channels (`EB Studio`), CTA badge text is strictly in English (`ebstudyo.com | EARLY ACCESS`, `Play Test Build • Link in Channel`). On Turkish channel (`EB Stüdyo`), it remains in Turkish (`ebstudyo.com | TEST SÜRÜMÜ`, `Erken Erişime Katıl • Link Kanalda`).
 
 4. **Dynamic Stoppage / Extra Time:**
    - Never hardcode added time (+1', +2', etc.). Keep extra time dynamic to reflect natural match simulation events and late drama.
    - Post-match screen must display for 2.2s before finishing.
 
-5. **Post-Match Title & Match-First Hashtag Hierarchy:**
+5. **Post-Match Title, National Team Localization & Hashtag Hierarchy:**
    - Simulate and record the match first to extract the true final score (`home_score - away_score`).
-   - Generate titles with actual scores (e.g. `[PUNCHY HOOK]! | [Team A] [Score] [Team B] | [Tournament/Hook] | BolGol`).
-   - **Match-First Hashtag Hierarchy:** Hashtags and descriptions must strictly follow the match-first order:
+   - Generate titles with actual scores in the video's target language.
+   - **National Team Name Translation:** When publishing on foreign channels (e.g. English), country/national team names MUST be translated into that language (e.g., `Germany` instead of `Almanya`, `Netherlands` instead of `Hollanda`, `Denmark` instead of `Danimarka`, `Spain` instead of `İspanya`). Club names remain intact.
+   - **Match-First Hashtag Hierarchy & Localization:** Hashtags and descriptions must strictly follow the match-first order with localized country/team tags in target language:
      1. Match combination query (`#{HomeTeam}{AwayTeam}`, `#{HomeTeam}vs{AwayTeam}`)
      2. Real team names & fan nicknames (`#{Home}`, `#{Away}`, `#{FanAlias}`)
      3. Goalscorers and star players (`#{ScorerName}`, `#{StarPlayer}`)
@@ -72,10 +68,15 @@ This workspace is part of the 3-project Bol Gol Futbol ecosystem:
      7. Minimal studio branding at the very end (`#BolGol`, `#EBStüdyo` / `#EBStudio`)
    - The 15 hashtags in the description body must strictly feature these match elements first; generic studio tags must never truncate match elements.
 
-6. **Publication Scheduling (Match-Day Pre-Kickoff Rule):**
-   - Every match video must be scheduled strictly on its **ACTUAL MATCH DAY, exactly 2 hours prior to kickoff** (`publishAt = match_kickoff - 2 hours UTC`) to capture the organic search surge and recommendation spike leading into the real match.
+6. **Publication Scheduling (3-Hour Pre-Kickoff Rule from Oct 1, 2026):**
+   - Past matches prior to Oct 1, 2026 are purged from upcoming queues.
+   - Every match video from **1 October 2026** onwards must be scheduled strictly on its **ACTUAL MATCH DAY, exactly 3 hours prior to kickoff** (`publishAt = match_kickoff - 3 hours UTC`) to capture the organic search surge leading into the real match.
 
-7. **Fixture Scope & European Coverage:**
+7. **YouTube Category Playlists & Game Title:**
+   - Videos must be published with the Game title set to `Bol Gol Futbol`.
+   - Every upload is automatically assigned to its matching official tournament category playlist (`National Teams`, `Champions League`, `Premier League`, `Süper Lig`, etc.), creating the playlist on demand if it does not yet exist.
+
+8. **Fixture Scope & European Coverage:**
    - Fixture queues must maintain all Turkish Big 4 European clashes (UEFA Europa League & Champions League), UEFA Champions League marquee matches, 46 National Team games (Türkiye, Portekiz, Arjantin, İtalya, İngiltere, ABD, Fransa, İspanya, Almanya, Brezilya vb. - UEFA Nations League & FIFA World Cup Qualifiers), Marquee European Showcase games (e.g. Barcelona vs Galatasaray, Real Madrid vs Fenerbahçe), and weekly Süper Lig wildcards.
 
 # Multi-Platform Distribution, ASO & Web Authority Standards
