@@ -46,7 +46,7 @@ var is_automation_mode = false
 # --- PROGRESSION & ADS ---
 var ad_credits: int = 0
 var last_rewarded_ad_time: float = 0.0
-const REWARDED_AD_COOLDOWN_SEC: float = 300.0 # 5 minutes (300 seconds) ideal retention cooldown
+const REWARDED_AD_COOLDOWN_SEC: float = 600.0 # 10 minutes (600 seconds) ideal retention cooldown
 
 func get_rewarded_ad_cooldown_left() -> float:
 	var now = Time.get_unix_time_from_system()

@@ -72,8 +72,8 @@ func _ready():
 		away_dict["p" + str(i + 1)] = away_stars[i]
 	Global.custom_player_names[away_team] = away_dict
 
-	# Rule 3: Fast match duration (0 = 24s standard duration)
-	Global.match_duration = 0
+	# Rule 3: Normal match duration (1 = 36s normal duration)
+	Global.match_duration = 1
 	
 	# Rule 4: Visual Variety - Random Theme & Random Ball Skins
 	Global.equipped_hat = "none"

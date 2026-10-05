@@ -235,6 +235,51 @@
   - `bol_gol_v32_1.1.2.aab` üretildi (100.6 MB)
   - Google Play Console `internal` ve `alpha` kanallarına 5 dilde (TR, ENG, ESP, POR, ITA) release notes ile yüklendi ve yayınlandı (Commit ID: `16644697819937373798`).
 
+### 🎬 YouTube Otomasyonu: Dinamik Başlık Arketip Motoru, Kanal & Çalma Listesi Senkronizasyonu (2026-10-01):
+- [x] **Dinamik Maç Olayı ve Skora Dayalı Başlık Arketip Motoru (`metadata_generator.py`):**
+  - Tekdüze "SAHASINDA NEFES KESEN MAÇ!" veya "THRILLER AT..." başlık kalıpları tamamen ortadan kaldırıldı; her simüle edilen maçın gerçek skoruna ve olaylarına dayalı 5 ana arketip devreye alındı.
+  - **Golcü / Yıldız Büyüsü:** Maçta gol atan yıldız oyuncu adına odaklı yüksek CTR başlıklar (`MESSI MAGIC IN MIAMI!`, `OSIMHEN ŞOV YAPTI!`, `HAALAND RUNS RIOT!`, `KANE SHOWTIME!`).
+  - **Avrupa Temsilcimiz İfadeleri (*Temsilcimiz*):** Türk takımları (GS, FB, BJK, TS, Başakşehir) Avrupa kupalarında yabancı takımlarla karşılaştığında klasik spor medyası kalıbı entegre edildi (`TEMSİLCİMİZ CİMBOM'DAN DEV ZAFER!`, `TEMSİLCİMİZ FENERBAHÇE DEVİ DEVİRDİ!`, `TEMSİLCİMİZ KARA KARTAL AVRUPA'DA SAHNEDE!`).
+  - **Geri Dönüş (Comeback) & Çılgın Gol Düelloları:** Geri dönüşlerde `EFSANE GERİ DÖNÜŞ! {TAKIM} PES ETMEDİ!` / `INCREDIBLE COMEBACK!`; 5+ gollerde `{GOALS} GOLLÜ ÇILGIN DÜELLO!` / `{GOALS}-GOAL THRILLER!`; 3+ farkta `{TAKIM}'DAN GÖVDE GÖSTERİSİ!` / `{TAKIM} ANNIHILATION!`; 0-0 ve 1-0 maçlarda `KALE GOLE KAPANDI! SAVUNMA DUVARI DELİNMEDİ!` / `DEFENSIVE MASTERCLASS! GOALLESS STALEMATE!`.
+  - **Takım Lakapları & Rekabet Düellosu:** GS: *Cimbom* / *Aslan*, FB: *Sarı Kanarya* / *Fener*, BJK: *Kara Kartal*, TS: *Fırtına*, Başakşehir: *Boz Baykuşlar*, Samsunspor: *Kırmızı Şimşekler*, Konyaspor: *Anadolu Kartalı*, Arsenal: *The Gunners*, Liverpool: *The Reds*, Real Madrid: *Los Blancos*, Barcelona: *Blaugrana*, Man City: *Cityzens*, Man United: *Red Devils*, Chelsea: *The Blues*, Bayern: *Die Roten*, Dortmund: *Die Schwarzgelben*, PSG: *Les Parisiens*, Juventus: *Bianconeri*, Inter: *Nerazzurri*, vb.
+- [x] **Godot Simülasyon Olay Kaydı (`pitch.gd` & `match_recorder.py`):**
+  - `pitch.gd` içine `goal_events` dizisi eklenerek gol atan oyuncunun adı, takımı ve maç dakikası hafızaya alındı.
+  - `automation_match_runner.gd` ve `match_recorder.py` maç bitiminde golcüleri (`scorers_home`, `scorers_away`), geri dönüş bayrağını (`is_comeback`) `automation_result.json` dosyasına yazıp Python boru hattına aktarır hale getirildi.
+- [x] **Web Sitesi ve Oyun İndirme Dönüşüm Hunisi (Conversion Funnel):**
+  - Tüm video açıklamalarının ilk 3 satırı doğrudan `https://ebstudyo.com` ve Google Play Android erken erişimine yönlendiren yüksek dönüşümlü harekete geçirici mesajlarla (CTA) donatıldı.
+  - Açıklama gövdesine topluluk etkileşimini ve yorum algoritmasını tetikleyen maçın adamı / skor adaleti soruları eklendi.
+- [x] **15 Etiketli Öncelikli Hashtag Hiyerarşisi:**
+  - Açıklamalara en fazla 15 etiket kuralı getirildi: 1. Maç kombinasyonu (`#gsfb`), 2. Gerçek takım isimleri, 3. Taraftar lakapları (`#cimbom`, `#sarikanarya`), 4. Golcüler, 5. Turnuva, 6. Arama niyeti (`#maçözeti`, `#goller`), 7. Keşif (`#shorts`, `#futbol`), 8. Stüdyo (`#bolgol`, `#ebstudyo`).
+- [x] **Kanal Yapısı ve Çalma Listeleri Senkronizasyonu:**
+  - Global İngilizce kanalında (`EB Studio`) eksik olan `La Liga` ve `MLS` resmi kategorileri YouTube Data API ile oluşturuldu.
+  - Yüklenmiş olan 11 adet maç videosunun başlıkları, açıklamaları ve etiketleri yeni dinamik arketip motoruna göre güncellendi (`9-GOAL MADNESS! SERBIA RUNS RIOT!`, `7-GOAL EPIC THRILLER!`, `THE DRAGONS STUN NORWAY!`, `DEFENSIVE MASTERCLASS!`, `THE ORANJE CONQUER MUNICH!`, `MESSI MAGIC IN MIAMI!`, `6 GOLLÜ ÇILGIN DÜELLO!`, `KIRMIZI ŞİMŞEKLER'DEN GÖVDE GÖSTERİSİ!`).
+  - Tüm videolar ilgili turnuva çalma listelerine (`National Teams`, `La Liga`, `MLS`, `Süper Lig`, `Bundesliga`) otomatik olarak atandı.
+- [x] **Doğrulamalar:** `tests/test_dynamic_metadata.py`, `tests/test_pipeline.py` ve `tests/test_backend_logic.py` %100 başarıyla geçti.
+
+### 🎬 YouTube Otomasyonu: Kusursuz Başlık, Evergreen Açıklama & 500-Karakter Etiket Revizyonu (2026-10-05):
+- [x] **Resmi Oyun Adı ("Bol Gol Futbol") Entegrasyonu:**
+  - YouTube yayınlayıcısı (`youtube_publisher.py`) ve metadata motorunda resmi oyun adı `Bol Gol Futbol` olarak tescillendi.
+  - Açıklamalarda bağımsız oyun bilgileri (`--- RESMİ OYUN BİLGİLERİ ---`) bölümü kurularak oyun adı, motoru (Godot Engine) ve platformlar (Android / Web) net biçimde açıklandı.
+- [x] **Kusursuz, Kesilme Riski Olmayan Başlıklar (<= 92 Karakter):**
+  - Mobil cihazlarda YouTube arayüzünün 95-100 karakter sonrasını kesmesi ve `| BolGol` imzasının kaybolması riski bertaraf edildi.
+  - Başlık formülü `[DİNAMİK KANCA]! | [Takım A] [Skor] [Takım B] | [Turnuva] | BolGol` katı bütçeleme ile <= 92 karaktere sabitlendi.
+  - Uzun turnuva isimleri (`UEFA Champions League - League Phase - MD2` -> `Champions League` / `UCL`) ve kulüp isimlerindeki iç kodlar (`ROMA SC` -> `Roma`, `BARSELONA SC` -> `Barcelona`) temizlendi.
+- [x] **Evergreen, Arama Odaklı ve Antislop Uyumlu Açıklamalar:**
+  - Video viral zirvesini geçtikten sonra bile aramalardan sürekli izlenme çekecek 2000+ karakterlik zengin indie stüdyo metinleri hazırlandı.
+  - Dönüşüm hunisi korunarak en başta `https://ebstudyo.com` ve Google Play Android erken erişim linkleri yerleştirildi.
+  - Antislop R-02 kuralına tam uyum: Sıfır em dash (`—`), sıfır sentetik yapay zeka jargonu, samimi 2 kişilik bağımsız geliştirici anlatımı.
+  - Gerçek 2D elastik fizik motoru çalışma prensibi, maçta sahaya çıkan yıldız kadrolar, topluluk yorum tetikleyicisi ve yüksek arama hacimli anahtar kelime indeksi eklendi.
+- [x] **YouTube 500 Karakter Etiket (Tags) Mimarisi (450 - 494 Karakter):**
+  - YouTube Data API v3'ün çok kelimeli etiketlere tırnak işareti (`"..."`) ekleyerek 500 karakter sınırından harcadığı keşfi üzerine çift sayaçlı paketleme geliştirildi (`yt_tag_len`).
+  - Hem ham virgüllü karakter toplamı strictly >= 450 karakter tutuldu, hem de YouTube tırnaklı API kotası <= 494 karakterde kilitlenerek HTTP 400 `invalidTags` hatası sıfırlandı.
+  - Maç aramaları, kulüp takma adları, turnuva sorguları, fizik motoru terimleri, resmi `Bol Gol Futbol` etiketleri ve keşif/Shorts terimleri harmanlandı.
+- [x] **27 Mevcut Kanal Videosunun Güncellenmesi:**
+  - `fix_youtube_videos.py` ile `EB Stüdyo` (TR) ve `EB Studio` (Global EN) kanallarındaki toplam 27 video yeni standartlara göre 0 hata ile güncellendi.
+- [x] **Fikstür Takibi & Kuyruk Doğrulaması:**
+  - `status_queue.py` doğrulaması: 42 maç oynandı, 123 maç sırada bekliyor. Sonraki maç `[0043]` Alanyaspor vs Galatasaray. Fikstür sırası kronolojik ve eksiksiz doğrulandı.
+- [x] **Doğrulamalar:** `tests/test_dynamic_metadata.py` 5 farklı dil/senaryo altında %100 başarıyla geçti.
+
+
 
 
 

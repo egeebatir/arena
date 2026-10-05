@@ -63,6 +63,7 @@ var intro_timer = 0
 
 var team1_trailed: bool = false
 var team2_trailed: bool = false
+var goal_events: Array = []
 
 var active_cards = []
 var red_cards_1 = 0
@@ -1125,6 +1126,7 @@ func _reset_match_for_replay():
 	target_yellow_cards = randi_range(1, 3)
 	team1_trailed = false
 	team2_trailed = false
+	goal_events.clear()
 	display_added_time = false
 	is_paused = false
 	event_timer = 0.0
@@ -1550,13 +1552,25 @@ func trigger_goal(b, team_id):
 	var scorer_display_col = scorer_col.lightened(0.35) if s_lum < 0.25 else (scorer_col.darkened(0.15) if s_lum > 0.85 else scorer_col)
 	var s_outline = Color.BLACK if s_lum > 0.45 else Color.WHITE
 
+	var final_scorer_name = ""
 	if custom_names.size() > 0:
 		var chosen_name = custom_names[randi() % custom_names.size()]
+		final_scorer_name = chosen_name
 		goal_banner_lbl.text = chosen_name + " (" + time_str + "')"
 	else:
 		var available_nums = [7, 8, 9, 10, 11, 14, 17, 19, 21, 23]
 		var scorer_num = available_nums[randi() % available_nums.size()]
-		goal_banner_lbl.text = "#" + str(scorer_num) + " (" + time_str + "')"
+		final_scorer_name = "#" + str(scorer_num)
+		goal_banner_lbl.text = final_scorer_name + " (" + time_str + "')"
+	goal_events.append({
+		"team_id": team_id,
+		"team_name": scoring_team_name,
+		"scorer": final_scorer_name,
+		"minute": time_str,
+		"sim_minute": sim_minute,
+		"score1": score1,
+		"score2": score2
+	})
 	goal_banner_lbl.add_theme_color_override("font_color", scorer_display_col)
 	goal_banner_lbl.add_theme_color_override("font_outline_color", s_outline)
 	goal_banner_lbl.add_theme_constant_override("outline_size", 3)

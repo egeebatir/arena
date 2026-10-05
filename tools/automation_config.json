@@ -1,17 +1,17 @@
 {
-  "home_team": "KONYA FK",
-  "away_team": "BAŞAKŞEHIR FK",
+  "home_team": "BEŞIKTAŞ FK",
+  "away_team": "BILBAO CF",
   "home_stars": [
-    "Umut Nayir",
-    "Pedrinho",
-    "Danijel Aleksic"
+    "Ciro Immobile",
+    "Rafa Silva",
+    "Gedson Fernandes"
   ],
   "away_stars": [
-    "Krzysztof Piatek",
-    "Deniz Türüç",
-    "Miguel Crespo"
+    "Nico Williams",
+    "Inaki Williams",
+    "Oihan Sancet"
   ],
   "mode": "regular",
-  "max_seconds": 45.0,
-  "lang": "TR"
+  "max_seconds": 65.0,
+  "lang": "ENG"
 }

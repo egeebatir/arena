@@ -87,7 +87,13 @@ var LANG = {
 		"HOUSE_AD_PRO_TITLE": "👑 BOL GOL PRO ÜYELİK",
 		"HOUSE_AD_PRO_DESC": "Sıfır reklam, tüm kozmetikler açık & sınırsız oyun! Keşfet ➔",
 		"HOUSE_AD_QUEST_TITLE": "📋 GÜNLÜK GÖREVLER",
-		"HOUSE_AD_QUEST_DESC": "Günün görevlerini tamamla, bonus altınları topla! Görevler ➔"
+		"HOUSE_AD_QUEST_DESC": "Günün görevlerini tamamla, bonus altınları topla! Görevler ➔",
+		"HOUSE_AD_TIP1_TITLE": "💡 MAÇ TAKTİĞİ: ÇEMBER AÇISI",
+		"HOUSE_AD_TIP1_DESC": "Topu çember kenarlarına çarptırarak falso ver ve kaleciyi avla!",
+		"HOUSE_AD_TIP2_TITLE": "🧤 KADRO DÜZENLEME & KAPTAN",
+		"HOUSE_AD_TIP2_DESC": "Takımının ilk 11'ini ve kaptanını belirle, sahaya kendi kadronla çık!",
+		"HOUSE_AD_WEB_TITLE": "🌐 CANLI WEB SIRALAMASI: EBSTUDYO.COM",
+		"HOUSE_AD_WEB_DESC": "Dünya rekorlarını ve küresel sıralamaları webden canlı izle! ➔"
 	},
 	"ENG": {
 		"TEAM_SELECTION": "TEAM SELECTION", "SETTINGS": "SETTINGS",
@@ -170,7 +176,13 @@ var LANG = {
 		"HOUSE_AD_PRO_TITLE": "👑 BOL GOL PRO MEMBER",
 		"HOUSE_AD_PRO_DESC": "Zero ads, all cosmetics unlocked & unlimited play! Unlock ➔",
 		"HOUSE_AD_QUEST_TITLE": "📋 DAILY QUESTS",
-		"HOUSE_AD_QUEST_DESC": "Complete daily quests and earn bonus coins! Quests ➔"
+		"HOUSE_AD_QUEST_DESC": "Complete daily quests and earn bonus coins! Quests ➔",
+		"HOUSE_AD_TIP1_TITLE": "💡 MATCH TACTIC: ARENA REBOUND",
+		"HOUSE_AD_TIP1_DESC": "Bank shots off the arena curve to curve the ball past the keeper!",
+		"HOUSE_AD_TIP2_TITLE": "🧤 SQUAD BUILDER & CAPTAIN",
+		"HOUSE_AD_TIP2_DESC": "Customize your team's starting lineup & captain to play your way!",
+		"HOUSE_AD_WEB_TITLE": "🌐 LIVE LEADERBOARD: EBSTUDYO.COM",
+		"HOUSE_AD_WEB_DESC": "Check global live rankings and tournament records online! ➔"
 	},
 	"ESP": {
 		"TEAM_SELECTION": "SELECCIÓN DE EQUIPO", "SETTINGS": "AJUSTES",
@@ -253,7 +265,13 @@ var LANG = {
 		"HOUSE_AD_PRO_TITLE": "👑 MIEMBRO PRO BOL GOL",
 		"HOUSE_AD_PRO_DESC": "¡Sin anuncios, cosméticos desbloqueados y juego libre! Descubrir ➔",
 		"HOUSE_AD_QUEST_TITLE": "📋 MISIONES DIARIAS",
-		"HOUSE_AD_QUEST_DESC": "¡Completa las misiones de hoy y gana monedas extra! Misiones ➔"
+		"HOUSE_AD_QUEST_DESC": "¡Completa las misiones de hoy y gana monedas extra! Misiones ➔",
+		"HOUSE_AD_TIP1_TITLE": "💡 TÁCTICA: REBOTE EN LA CURVA",
+		"HOUSE_AD_TIP1_DESC": "¡Usa la curvatura del estadio para dar efecto al balón y superar al portero!",
+		"HOUSE_AD_TIP2_TITLE": "🧤 EDICIÓN DE PLANTILLA Y CAPITÁN",
+		"HOUSE_AD_TIP2_DESC": "¡Define tu alineación titular y capitán para saltar al campo a tu estilo!",
+		"HOUSE_AD_WEB_TITLE": "🌐 CLASIFICACIÓN EN VIVO: EBSTUDYO.COM",
+		"HOUSE_AD_WEB_DESC": "¡Sigue los récords mundiales y tablas de clasificación en la web! ➔"
 	},
 	"POR": {
 		"TEAM_SELECTION": "SELEÇÃO DE EQUIPA", "SETTINGS": "DEFINIÇÕES",
@@ -336,7 +354,13 @@ var LANG = {
 		"HOUSE_AD_PRO_TITLE": "👑 MEMBRO PRO BOL GOL",
 		"HOUSE_AD_PRO_DESC": "Sem anúncios, cosméticos desbloqueados e jogo ilimitado! Ativar ➔",
 		"HOUSE_AD_QUEST_TITLE": "📋 MISSÕES DIÁRIAS",
-		"HOUSE_AD_QUEST_DESC": "Complete as missões de hoje e ganhe moedas extras! Missões ➔"
+		"HOUSE_AD_QUEST_DESC": "Complete as missões de hoje e ganhe moedas extras! Missões ➔",
+		"HOUSE_AD_TIP1_TITLE": "💡 TÁTICA: RESSALTO NA CURVA",
+		"HOUSE_AD_TIP1_DESC": "Use a curva da arena para dar efeito à bola e surpreender o guarda-redes!",
+		"HOUSE_AD_TIP2_TITLE": "🧤 EDIÇÃO DE PLANTEL E CAPITÃO",
+		"HOUSE_AD_TIP2_DESC": "Defina o onze titular e o capitão da equipa para jogar à sua maneira!",
+		"HOUSE_AD_WEB_TITLE": "🌐 CLASSIFICAÇÃO ONLINE: EBSTUDYO.COM",
+		"HOUSE_AD_WEB_DESC": "Acompanhe recordes mundiais e tabelas em tempo real na web! ➔"
 	},
 	"ITA": {
 		"TEAM_SELECTION": "SELEZIONE SQUADRA", "SETTINGS": "IMPOSTAZIONI",
@@ -419,7 +443,13 @@ var LANG = {
 		"HOUSE_AD_PRO_TITLE": "👑 MEMBRO PRO BOL GOL",
 		"HOUSE_AD_PRO_DESC": "Zero pubblicità, cosmetici sbloccati e gioco illimitato! Scopri ➔",
 		"HOUSE_AD_QUEST_TITLE": "📋 MISSIONI GIORNALIERE",
-		"HOUSE_AD_QUEST_DESC": "Completa le missioni di oggi e guadagna monete! Missioni ➔"
+		"HOUSE_AD_QUEST_DESC": "Completa le missioni di oggi e guadagna monete! Missioni ➔",
+		"HOUSE_AD_TIP1_TITLE": "💡 TATTICA: RIMBALZO SULLA CURVA",
+		"HOUSE_AD_TIP1_DESC": "Sfrutta la curva dello stadio per dare effetto alla palla e battere il portiere!",
+		"HOUSE_AD_TIP2_TITLE": "🧤 GESTIONE SQUADRA E CAPITANO",
+		"HOUSE_AD_TIP2_DESC": "Scegli l'undici titolare e il capitano della squadra per scendere in campo a modo tuo!",
+		"HOUSE_AD_WEB_TITLE": "🌐 CLASSIFICA WEB LIVE: EBSTUDYO.COM",
+		"HOUSE_AD_WEB_DESC": "Guarda i record mondiali e le classifiche globali in diretta sul web! ➔"
 	}
 }
 
@@ -479,6 +509,8 @@ var is_rewarded_loading: bool = false
 var is_refreshing_shop: bool = false
 var shop_cosmetic_category: int = 0
 var swipe_threshold: float = 60.0
+var stats_scroll: ScrollContainer = null
+var shop_scroll_node: ScrollContainer = null
 var shop_balls_scroll: ScrollContainer = null
 var shop_hats_scroll: ScrollContainer = null
 var badge_textures: Dictionary = {}  # Preloaded at _ready() for badge overlay on preview balls
@@ -3858,13 +3890,6 @@ func _show_insufficient_tokens_dialog():
 	)
 	btn_vbox.add_child(close_btn)
 
-	if is_instance_valid(Global.bg_music_player):
-		Global.bg_music_player.stop()
-	Global.remove_all_banners()
-	menu_banner_ad_id = ""
-	_set_house_ad_visible(false)
-	Global.change_scene_with_loading("res://pitch.tscn")
-
 func _on_random_team_pressed(is_home: bool):
 	Global.play_click()
 	var teams = Global.TEAMS.keys()
@@ -4258,6 +4283,7 @@ func _build_stats_tab() -> Control:
 
 	# --- Scroll Container for Cards ---
 	var scroll = ScrollContainer.new()
+	stats_scroll = scroll
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -4290,6 +4316,7 @@ func _build_stats_tab() -> Control:
 	vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
 	vbox.add_theme_constant_override("separation", 8)
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vbox.mouse_filter = Control.MOUSE_FILTER_PASS
 	scroll.add_child(vbox)
 
 	var history = Global.match_history
@@ -4299,6 +4326,7 @@ func _build_stats_tab() -> Control:
 	# Helper to create theme-harmonized styled card panels
 	var create_card_panel = func() -> PanelContainer:
 		var card = PanelContainer.new()
+		card.mouse_filter = Control.MOUSE_FILTER_PASS
 		var cs = StyleBoxFlat.new()
 		var card_bg = active_theme.bg_bottom.darkened(0.65) if is_buz else active_theme.bg_bottom.darkened(0.18)
 		cs.bg_color = Color(card_bg.r, card_bg.g, card_bg.b, 0.95)
@@ -4318,6 +4346,7 @@ func _build_stats_tab() -> Control:
 	# Helper to create large, readable stat tile
 	var create_stat_tile = func(label_key: String, val_str: String, sub_str: String = "", sub_color: Color = Color.WHITE, icon_tex: Texture2D = null) -> PanelContainer:
 		var p = PanelContainer.new()
+		p.mouse_filter = Control.MOUSE_FILTER_PASS
 		var ps = StyleBoxFlat.new()
 		var cell_bg = active_theme.bg_bottom.darkened(0.75) if is_buz else active_theme.bg_bottom.darkened(0.38)
 		ps.bg_color = Color(cell_bg.r, cell_bg.g, cell_bg.b, 0.94)
@@ -4332,6 +4361,7 @@ func _build_stats_tab() -> Control:
 		p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 		var inner_vb = VBoxContainer.new()
+		inner_vb.mouse_filter = Control.MOUSE_FILTER_PASS
 		inner_vb.alignment = BoxContainer.ALIGNMENT_CENTER
 		inner_vb.add_theme_constant_override("separation", 2)
 		p.add_child(inner_vb)
@@ -4384,6 +4414,7 @@ func _build_stats_tab() -> Control:
 	# Helper to create clean vertical win/loss cards (Zero-Overflow Layout)
 	var create_win_loss_box = func(title_key: String, score_str: String, opp_str: String, is_win: bool) -> PanelContainer:
 		var p = PanelContainer.new()
+		p.mouse_filter = Control.MOUSE_FILTER_PASS
 		var ps = StyleBoxFlat.new()
 		var cell_bg = active_theme.bg_bottom.darkened(0.75) if is_buz else active_theme.bg_bottom.darkened(0.38)
 		ps.bg_color = Color(cell_bg.r, cell_bg.g, cell_bg.b, 0.94)
@@ -4398,6 +4429,7 @@ func _build_stats_tab() -> Control:
 		p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 		var inner_vbox = VBoxContainer.new()
+		inner_vbox.mouse_filter = Control.MOUSE_FILTER_PASS
 		inner_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 		inner_vbox.add_theme_constant_override("separation", 2)
 		p.add_child(inner_vbox)
@@ -4884,6 +4916,7 @@ func _build_stats_tab() -> Control:
 
 		var add_kpi = func(k_key: String, k_val: String, sub_str: String = ""):
 			var kp = PanelContainer.new()
+			kp.mouse_filter = Control.MOUSE_FILTER_PASS
 			var kps = StyleBoxFlat.new()
 			var cell_bg = active_theme.bg_bottom.darkened(0.75) if is_buz else active_theme.bg_bottom.darkened(0.4)
 			kps.bg_color = Color(cell_bg.r, cell_bg.g, cell_bg.b, 0.94)
@@ -4898,6 +4931,7 @@ func _build_stats_tab() -> Control:
 			kp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 			var kvbox = VBoxContainer.new()
+			kvbox.mouse_filter = Control.MOUSE_FILTER_PASS
 			kvbox.alignment = BoxContainer.ALIGNMENT_CENTER
 			kvbox.add_theme_constant_override("separation", 2)
 			kp.add_child(kvbox)
@@ -5000,6 +5034,7 @@ func _build_stats_tab() -> Control:
 			var m_a_score = int(m.get("away_score", m.get("score_a", 0)))
 
 			var m_panel = PanelContainer.new()
+			m_panel.mouse_filter = Control.MOUSE_FILTER_PASS
 			var m_style = StyleBoxFlat.new()
 			var match_bg = active_theme.bg_bottom.darkened(0.75) if is_buz else active_theme.bg_bottom.darkened(0.38)
 			m_style.bg_color = Color(match_bg.r, match_bg.g, match_bg.b, 0.94)
@@ -5014,6 +5049,7 @@ func _build_stats_tab() -> Control:
 			m_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 			var m_hbox = HBoxContainer.new()
+			m_hbox.mouse_filter = Control.MOUSE_FILTER_PASS
 			m_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
 			m_hbox.add_theme_constant_override("separation", 10)
 			m_panel.add_child(m_hbox)
@@ -5273,6 +5309,7 @@ func _build_shop_tab() -> Control:
 
 	# --- SCROLL CONTAINER FOR SHOP CONTENT (Scrolls smoothly underneath pinned header) ---
 	var shop_scroll = ScrollContainer.new()
+	shop_scroll_node = shop_scroll
 	shop_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	shop_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	shop_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -5305,32 +5342,8 @@ func _build_shop_tab() -> Control:
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
 	vbox.add_theme_constant_override("separation", 10 if is_tablet else 14)
+	vbox.mouse_filter = Control.MOUSE_FILTER_PASS
 	shop_scroll.add_child(vbox)
-
-	# Helper to create carousel navigation arrow buttons
-	var create_carousel_arrow = func(arrow_txt: String, scroll_target: ScrollContainer, step: int) -> Button:
-		var ab = Button.new()
-		ab.text = arrow_txt
-		ab.custom_minimum_size = Vector2(36, 32)
-		ab.add_theme_font_override("font", custom_font)
-		ab.add_theme_font_size_override("font_size", 18)
-		ab.add_theme_color_override("font_color", Color.WHITE)
-		var abs = StyleBoxFlat.new()
-		abs.bg_color = active_theme.bg_bottom.darkened(0.2)
-		abs.corner_radius_top_left = 8; abs.corner_radius_top_right = 8
-		abs.corner_radius_bottom_left = 8; abs.corner_radius_bottom_right = 8
-		abs.border_width_left = 1; abs.border_width_right = 1
-		abs.border_width_top = 1; abs.border_width_bottom = 2
-		abs.border_color = active_theme.accent.lightened(0.1)
-		ab.add_theme_stylebox_override("normal", abs)
-		ab.add_theme_stylebox_override("hover", abs)
-		ab.add_theme_stylebox_override("pressed", abs)
-		ab.pressed.connect(func():
-			Global.play_click()
-			var tw = scroll_target.create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-			tw.tween_property(scroll_target, "scroll_horizontal", max(0, scroll_target.scroll_horizontal + step), 0.22)
-		)
-		return ab
 
 	# --- 2. QUICK REWARDS & FEATURES ROW (3 Buttons) ---
 	var rewards_hbox = HBoxContainer.new()
@@ -5550,10 +5563,6 @@ func _build_shop_tab() -> Control:
 	ui_labels.append({"node": balls_title, "key": "SHOP_BALL_SKINS", "type": "label"})
 	balls_header_hb.add_child(balls_title)
 
-	var balls_arrows_hb = HBoxContainer.new()
-	balls_arrows_hb.add_theme_constant_override("separation", 8)
-	balls_header_hb.add_child(balls_arrows_hb)
-
 	var balls_scroll = ScrollContainer.new()
 	balls_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	balls_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS
@@ -5572,9 +5581,6 @@ func _build_shop_tab() -> Control:
 	h_gb_b.corner_radius_bottom_left = 3; h_gb_b.corner_radius_bottom_right = 3
 	h_sc_b.add_theme_stylebox_override("scroll", h_sb_b)
 	h_sc_b.add_theme_stylebox_override("grabber", h_gb_b)
-	
-	balls_arrows_hb.add_child(create_carousel_arrow.call("◀", balls_scroll, -200))
-	balls_arrows_hb.add_child(create_carousel_arrow.call("▶", balls_scroll, 200))
 
 	balls_scroll.gui_input.connect(func(event: InputEvent):
 		if event is InputEventScreenDrag or event is InputEventMouseMotion:
@@ -5734,10 +5740,6 @@ func _build_shop_tab() -> Control:
 	ui_labels.append({"node": hats_title, "key": "SHOP_HATS", "type": "label"})
 	hats_header_hb.add_child(hats_title)
 
-	var hats_arrows_hb = HBoxContainer.new()
-	hats_arrows_hb.add_theme_constant_override("separation", 8)
-	hats_header_hb.add_child(hats_arrows_hb)
-
 	var hats_scroll = ScrollContainer.new()
 	hats_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	hats_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS
@@ -5756,9 +5758,6 @@ func _build_shop_tab() -> Control:
 	h_gb_h.corner_radius_bottom_left = 3; h_gb_h.corner_radius_bottom_right = 3
 	h_sc_h.add_theme_stylebox_override("scroll", h_sb_h)
 	h_sc_h.add_theme_stylebox_override("grabber", h_gb_h)
-	
-	hats_arrows_hb.add_child(create_carousel_arrow.call("◀", hats_scroll, -200))
-	hats_arrows_hb.add_child(create_carousel_arrow.call("▶", hats_scroll, 200))
 
 	hats_scroll.gui_input.connect(func(event: InputEvent):
 		if event is InputEventScreenDrag or event is InputEventMouseMotion:
@@ -6251,9 +6250,8 @@ func _input(event: InputEvent):
 				if abs_dx > abs_dy * 1.35 and not _is_pos_in_shop_carousels(swipe_start):
 					gesture_direction = "horizontal"
 				else:
-					# Vertical scrolling motion detected - immediately lock out tab switching for this gesture
+					# Vertical scrolling motion detected - lock out tab switching for this gesture
 					gesture_direction = "vertical"
-					swipe_active = false
 					
 		if gesture_direction == "horizontal" and swipe_active:
 			if abs_dx > swipe_threshold:
@@ -6263,6 +6261,13 @@ func _input(event: InputEvent):
 					_switch_tab(current_tab + 1)
 				elif delta_x > 0 and current_tab > 0:
 					_switch_tab(current_tab - 1)
+		elif gesture_direction == "vertical" and swipe_active:
+			var rel_y = event.relative.y
+			if current_tab == 0 and is_instance_valid(stats_scroll):
+				stats_scroll.scroll_vertical -= int(rel_y)
+			elif current_tab == 2 and is_instance_valid(shop_scroll_node):
+				if not _is_pos_in_shop_carousels(swipe_start):
+					shop_scroll_node.scroll_vertical -= int(rel_y)
 
 # ======================================================
 # ADMOB & SHOP LOGIC
@@ -6635,21 +6640,21 @@ func _ensure_vip_top_bar():
 	move_child(vip_margin, min(2, max(0, get_child_count() - 1)))
 	
 	var vip_btn = Button.new()
-	vip_btn.custom_minimum_size = Vector2(min(get_viewport_rect().size.x - 40, 660), 76)
+	vip_btn.custom_minimum_size = Vector2(min(get_viewport_rect().size.x - 40, 660), 54)
 	vip_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var vp_style = StyleBoxFlat.new()
 	vp_style.bg_color = active_theme.bg_bottom.darkened(0.25)
 	vp_style.bg_color.a = 0.96
-	vp_style.corner_radius_top_left = 16; vp_style.corner_radius_top_right = 16
-	vp_style.corner_radius_bottom_left = 16; vp_style.corner_radius_bottom_right = 16
-	vp_style.border_width_left = 2; vp_style.border_width_right = 2
-	vp_style.border_width_top = 2; vp_style.border_width_bottom = 4
+	vp_style.corner_radius_top_left = 14; vp_style.corner_radius_top_right = 14
+	vp_style.corner_radius_bottom_left = 14; vp_style.corner_radius_bottom_right = 14
+	vp_style.border_width_left = 1.5; vp_style.border_width_right = 1.5
+	vp_style.border_width_top = 1.5; vp_style.border_width_bottom = 3.0
 	vp_style.border_color = Color8(255, 215, 0)
-	vp_style.shadow_color = Color8(0, 0, 0, 160)
-	vp_style.shadow_size = 14
-	vp_style.shadow_offset = Vector2(0, 3)
-	vp_style.content_margin_left = 16; vp_style.content_margin_right = 16
-	vp_style.content_margin_top = 8; vp_style.content_margin_bottom = 8
+	vp_style.shadow_color = Color8(0, 0, 0, 140)
+	vp_style.shadow_size = 10
+	vp_style.shadow_offset = Vector2(0, 2)
+	vp_style.content_margin_left = 12; vp_style.content_margin_right = 12
+	vp_style.content_margin_top = 4; vp_style.content_margin_bottom = 4
 	vip_btn.add_theme_stylebox_override("normal", vp_style)
 	
 	var vp_hover = vp_style.duplicate()
@@ -6658,7 +6663,7 @@ func _ensure_vip_top_bar():
 	
 	var vp_press = vp_style.duplicate()
 	vp_press.border_width_bottom = 2
-	vp_press.content_margin_top = 10
+	vp_press.content_margin_top = 6
 	vip_btn.add_theme_stylebox_override("pressed", vp_press)
 	vip_btn.add_theme_stylebox_override("focus", vp_style)
 	vip_margin.add_child(vip_btn)
@@ -6667,13 +6672,13 @@ func _ensure_vip_top_bar():
 	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hb.set_anchors_preset(Control.PRESET_FULL_RECT)
 	hb.alignment = BoxContainer.ALIGNMENT_CENTER
-	hb.add_theme_constant_override("separation", 14)
+	hb.add_theme_constant_override("separation", 10)
 	vip_btn.add_child(hb)
 	
 	if ResourceLoader.exists("res://kings_crown.png"):
 		var crown_rect = TextureRect.new()
 		crown_rect.texture = load("res://kings_crown.png")
-		crown_rect.custom_minimum_size = Vector2(36, 26)
+		crown_rect.custom_minimum_size = Vector2(26, 20)
 		crown_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		crown_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		crown_rect.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -6696,10 +6701,10 @@ func _ensure_vip_top_bar():
 	elif Global.current_lang == "ITA": vip_title_template = "⭐ PRO VIP: %s (%s) ⭐"
 	title_lbl.text = vip_title_template % [cap_name, fav_team]
 	title_lbl.add_theme_font_override("font", custom_font)
-	title_lbl.add_theme_font_size_override("font_size", 28)
+	title_lbl.add_theme_font_size_override("font_size", 21)
 	title_lbl.add_theme_color_override("font_color", Color8(255, 220, 60))
 	title_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
-	title_lbl.add_theme_constant_override("shadow_offset_y", 2)
+	title_lbl.add_theme_constant_override("shadow_offset_y", 1)
 	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(title_lbl)
 	
@@ -6711,7 +6716,7 @@ func _ensure_vip_top_bar():
 	elif Global.current_lang == "ITA": perks_txt = "Zero Pubblicità • Cosmetici Sbloccati • 2x Monete"
 	desc_lbl.text = perks_txt
 	desc_lbl.add_theme_font_override("font", custom_font)
-	desc_lbl.add_theme_font_size_override("font_size", 18)
+	desc_lbl.add_theme_font_size_override("font_size", 15)
 	desc_lbl.add_theme_color_override("font_color", Color8(240, 245, 255, 220))
 	desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(desc_lbl)
@@ -6719,7 +6724,7 @@ func _ensure_vip_top_bar():
 	if ResourceLoader.exists("res://kings_crown.png"):
 		var crown_rect2 = TextureRect.new()
 		crown_rect2.texture = load("res://kings_crown.png")
-		crown_rect2.custom_minimum_size = Vector2(36, 26)
+		crown_rect2.custom_minimum_size = Vector2(26, 20)
 		crown_rect2.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		crown_rect2.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		crown_rect2.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -6759,7 +6764,7 @@ func _ensure_house_ad_bar():
 	var ad_btn = Button.new()
 	ad_btn.flat = true
 	ad_btn.focus_mode = Control.FOCUS_NONE
-	ad_btn.custom_minimum_size = Vector2(0, 68)
+	ad_btn.custom_minimum_size = Vector2(0, 56)
 	ad_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ad_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	ad_btn.pressed.connect(_on_house_ad_clicked)
@@ -6767,7 +6772,7 @@ func _ensure_house_ad_bar():
 	
 	var ad_panel = PanelContainer.new()
 	ad_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	ad_panel.custom_minimum_size = Vector2(0, 68)
+	ad_panel.custom_minimum_size = Vector2(0, 56)
 	ad_panel.set_anchors_preset(Control.PRESET_FULL_RECT)
 	ad_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ad_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -6777,29 +6782,29 @@ func _ensure_house_ad_bar():
 	var ad_style = StyleBoxFlat.new()
 	ad_style.bg_color = active_theme.bg_bottom.darkened(0.28)
 	ad_style.bg_color.a = 0.94
-	ad_style.corner_radius_top_left = 16; ad_style.corner_radius_top_right = 16
-	ad_style.corner_radius_bottom_left = 16; ad_style.corner_radius_bottom_right = 16
+	ad_style.corner_radius_top_left = 14; ad_style.corner_radius_top_right = 14
+	ad_style.corner_radius_bottom_left = 14; ad_style.corner_radius_bottom_right = 14
 	ad_style.border_width_left = 1.5; ad_style.border_width_right = 1.5
-	ad_style.border_width_top = 1.5; ad_style.border_width_bottom = 3.5
+	ad_style.border_width_top = 1.5; ad_style.border_width_bottom = 3.0
 	ad_style.border_color = active_theme.accent.lightened(0.15)
 	ad_style.shadow_color = Color8(0, 0, 0, 130)
-	ad_style.shadow_size = 10
+	ad_style.shadow_size = 8
 	ad_style.shadow_offset = Vector2(0, 2)
-	ad_style.content_margin_left = 16; ad_style.content_margin_right = 16
-	ad_style.content_margin_top = 6; ad_style.content_margin_bottom = 6
+	ad_style.content_margin_left = 14; ad_style.content_margin_right = 14
+	ad_style.content_margin_top = 4; ad_style.content_margin_bottom = 4
 	ad_panel.add_theme_stylebox_override("panel", ad_style)
 	
 	var hb = HBoxContainer.new()
 	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hb.alignment = BoxContainer.ALIGNMENT_CENTER
-	hb.add_theme_constant_override("separation", 12)
+	hb.add_theme_constant_override("separation", 10)
 	hb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ad_panel.add_child(hb)
 	
 	house_ad_icon_lbl = Label.new()
 	house_ad_icon_lbl.text = "🎡"
 	house_ad_icon_lbl.add_theme_font_override("font", custom_font)
-	house_ad_icon_lbl.add_theme_font_size_override("font_size", 30)
+	house_ad_icon_lbl.add_theme_font_size_override("font_size", 26)
 	house_ad_icon_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	hb.add_child(house_ad_icon_lbl)
 	
@@ -6812,7 +6817,7 @@ func _ensure_house_ad_bar():
 	
 	house_ad_title_lbl = Label.new()
 	house_ad_title_lbl.add_theme_font_override("font", custom_font)
-	house_ad_title_lbl.add_theme_font_size_override("font_size", 24)
+	house_ad_title_lbl.add_theme_font_size_override("font_size", 21)
 	house_ad_title_lbl.add_theme_color_override("font_color", Color8(255, 235, 120))
 	house_ad_title_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	house_ad_title_lbl.add_theme_constant_override("shadow_offset_y", 1)
@@ -6821,7 +6826,7 @@ func _ensure_house_ad_bar():
 	
 	house_ad_desc_lbl = Label.new()
 	house_ad_desc_lbl.add_theme_font_override("font", custom_font)
-	house_ad_desc_lbl.add_theme_font_size_override("font_size", 17)
+	house_ad_desc_lbl.add_theme_font_size_override("font_size", 15)
 	house_ad_desc_lbl.add_theme_color_override("font_color", Color8(230, 240, 255, 220))
 	house_ad_desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	house_ad_desc_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -6830,7 +6835,7 @@ func _ensure_house_ad_bar():
 	var chevron_lbl = Label.new()
 	chevron_lbl.text = "➔"
 	chevron_lbl.add_theme_font_override("font", custom_font)
-	chevron_lbl.add_theme_font_size_override("font_size", 22)
+	chevron_lbl.add_theme_font_size_override("font_size", 20)
 	chevron_lbl.add_theme_color_override("font_color", active_theme.accent.lightened(0.2))
 	chevron_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	hb.add_child(chevron_lbl)
@@ -6866,11 +6871,23 @@ func _update_house_ad_content():
 			house_ad_icon_lbl.text = "📋"
 			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_QUEST_TITLE", "📋 GÜNLÜK GÖREVLER")
 			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_QUEST_DESC", "Günün görevlerini tamamla, bonus altınları topla! Görevler ➔")
+		4:
+			house_ad_icon_lbl.text = "🎯"
+			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_TIP1_TITLE", "🎯 ARENA TAKTİĞİ")
+			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_TIP1_DESC", "Duvar paslarını ve falso açılarını kullanarak kaleciyi gafil avla! Oyna ➔")
+		5:
+			house_ad_icon_lbl.text = "📋"
+			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_TIP2_TITLE", "📋 KADRO & TAKTİK")
+			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_TIP2_DESC", "Takımının kadrosunu düzenle, kaptanını seç ve sahaya hükmet! Kadro ➔")
+		6:
+			house_ad_icon_lbl.text = "🌐"
+			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_WEB_TITLE", "🌐 EBSTUDYO.COM")
+			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_WEB_DESC", "Canlı fikstürler, skorlar ve küresel liderlik tablosu web sitemizde! Git ➔")
 
 func _on_house_ad_timer_timeout():
 	if not is_instance_valid(house_ad_bar) or not house_ad_bar.visible:
 		return
-	house_ad_idx = (house_ad_idx + 1) % 4
+	house_ad_idx = (house_ad_idx + 1) % 7
 	_update_house_ad_content()
 
 func _on_house_ad_clicked():
@@ -6884,6 +6901,12 @@ func _on_house_ad_clicked():
 			_switch_tab(2)
 		3:
 			_open_daily_quests()
+		4:
+			_switch_tab(1)
+		5:
+			_open_player_list()
+		6:
+			OS.shell_open("https://ebstudyo.com")
 
 func _set_house_ad_visible(is_vis: bool):
 	if Global.is_premium or menu_banner_ad_id != "":
@@ -7253,7 +7276,7 @@ func _on_banner_failed_to_load(ad_info, error_data):
 	_set_house_ad_visible(true)
 	
 	menu_banner_retry_count += 1
-	var delay = min(25.0 + float(menu_banner_retry_count * 15), 60.0)
+	var delay = min(15.0 + float(menu_banner_retry_count * 10), 45.0)
 	print("[AdMob] Scheduling menu banner retry #", menu_banner_retry_count, " in ", delay, " seconds...")
 	await get_tree().create_timer(delay).timeout
 	if is_inside_tree() and not Global.is_premium and menu_banner_ad_id == "":

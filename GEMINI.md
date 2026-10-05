@@ -54,11 +54,36 @@ This workspace is part of the 3-project Bol Gol Futbol ecosystem:
    - Never hardcode added time (+1', +2', etc.). Keep extra time dynamic to reflect natural match simulation events and late drama.
    - Post-match screen must display for 2.2s before finishing.
 
-5. **Post-Match Title, National Team Localization & Hashtag Hierarchy:**
-   - Simulate and record the match first to extract the true final score (`home_score - away_score`).
-   - Generate titles with actual scores in the video's target language.
-   - **National Team Name Translation:** When publishing on foreign channels (e.g. English), country/national team names MUST be translated into that language (e.g., `Germany` instead of `Almanya`, `Netherlands` instead of `Hollanda`, `Denmark` instead of `Danimarka`, `Spain` instead of `İspanya`). Club names remain intact.
-   - **Match-First Hashtag Hierarchy & Localization:** Hashtags and descriptions must strictly follow the match-first order with localized country/team tags in target language:
+5. **Post-Match Title Archetypes, Nicknames & Conversion Funnel:**
+   - Simulate and record the match first to extract true final score (`home_score - away_score`), scorers list, comeback status, and match events.
+   - **Dynamic 5-Category Title Archetypes:** Titles must strictly avoid repetitive formulaic prefixes and reflect specific match events:
+     1. **Goalscorer / Star Magic:** (e.g., `MESSI MAGIC IN MIAMI!`, `OSIMHEN ŞOV YAPTI!`, `HAALAND RUNS RIOT!`, `KANE SHOWTIME!`). Always prioritize world stars or decisive goalscorers.
+     2. **European Representative (*Temsilcimiz* in TR):** When a Turkish team (Galatasaray, Fenerbahçe, Beşiktaş, Trabzonspor, Başakşehir, etc.) plays a foreign team in UEFA Champions League, Europa League, or Conference League:
+        - Win: `TEMSİLCİMİZ CİMBOM'DAN DEV ZAFER!`, `TEMSİLCİMİZ FENERBAHÇE DEVİ DEVİRDİ!`
+        - Stage/Clash: `TEMSİLCİMİZ KARA KARTAL AVRUPA'DA SAHNEDE!`
+     3. **Match Narrative & Drama:**
+        - Comeback: `EFSANE GERİ DÖNÜŞ! {WINNER_NICK} PES ETMEDİ!` / `INCREDIBLE COMEBACK! {WINNER} REFUSES TO LOSE!`
+        - High-Scoring (5+ goals): `{GOALS} GOLLÜ ÇILGIN DÜELLO!` / `{GOALS}-GOAL THRILLER!`
+        - Blowout (3+ goal margin): `{WINNER}'DAN GÖVDE GÖSTERİSİ!` / `{WINNER} ANNIHILATION!`
+        - Defensive / Goalless (0-0 or 1-0): `KALE GOLE KAPANDI!` / `DEFENSIVE MASTERCLASS! GOALLESS STALEMATE!`
+     4. **Team Nicknames & Heritage Clash:** Naturally incorporate established nicknames:
+        - GS: *Cimbom* / *Aslan*, FB: *Sarı Kanarya* / *Fener*, BJK: *Kara Kartal*, TS: *Fırtına*, Başakşehir: *Boz Baykuşlar*, Samsunspor: *Kırmızı Şimşekler*, Konyaspor: *Anadolu Kartalı*.
+        - Arsenal: *The Gunners*, Liverpool: *The Reds*, Real Madrid: *Los Blancos*, Barcelona: *Blaugrana*, Man City: *Cityzens*, Man United: *Red Devils*, Chelsea: *The Blues*, Bayern: *Die Roten* / *Bavarian Giants*, Dortmund: *Die Schwarzgelben*, PSG: *Les Parisiens*, Juventus: *Bianconeri*, Inter: *Nerazzurri*, Milan: *Rossoneri*, Atletico: *Colchoneros*.
+        - National: *Bizim Çocuklar* (TR), *Die Mannschaft* (GER), *The Oranje* (NED), *Les Bleus* (FRA), *La Roja* (ESP), *Seleção* (POR/BRA), *The Three Lions* (ENG), *Albiceleste* (ARG), *Danish Dynamite* (DEN), *The Eagles* (SRB), *The Dragons* (WAL).
+     5. **Stadium / Derby Intensity:** High-tension atmospheric hooks (`RAMS PARK'TA BÜYÜK DEPREM!`, `KADIKÖY'DE NEFESLER TUTULDU!`, `SHOCKWAVE AT THE BERNABÉU!`).
+   - Title Suffix Format: `[DYNAMIC HOOK]! | [Team A] [Score or vs] [Team B] | [Tournament] | BolGol`
+   - **Title Length Budgeting (Strictly <= 92 Chars):** Titles must never be truncated on mobile devices or lose the `| BolGol` brand suffix. Clean tournament names (`Champions League` / `UCL` instead of `UEFA Champions League - League Phase - MD2`) and clean internal team strings (`Roma` instead of `ROMA SC`).
+   - **Evergreen Search Descriptions & Antislop Compliance:** Descriptions must drive search traffic long after the initial viral window. In addition to the conversion funnel (`https://ebstudyo.com`), include official game metadata (`Bol Gol Futbol`, Godot Engine, Android / Web), 2D elastic physics simulation explanations, featured player lineups, and community discussion prompts. Strictly adhere to antislop R-02 (zero em dashes `—`, zero synthetic buzzwords).
+   - **Conversion Funnel in Descriptions (Lead with `ebstudyo.com`):** The primary goal is pulling viewers to the website and Google Play downloads. Every video description MUST strictly lead with:
+     - TR: `⚽ OYUNU HEMEN ÜCRETSİZ OYNAYIN: https://ebstudyo.com\n📲 Google Play Android Erken Erişim Sürümü Yayında!\n🔥 Bağımsız Türk futbol simülasyonumuzu web sitemizden veya Android cihazınızdan hemen ücretsiz deneyin.`
+     - EN: `⚽ PLAY THE FREE GAME NOW: https://ebstudyo.com\n📲 Google Play Android Beta Access Live!\n🔥 Experience authentic physics-driven football simulation built from scratch on web and Android.`
+     - ESP: `⚽ JUEGA GRATIS EN NUESTRA WEB: https://ebstudyo.com\n📲 ¡Acceso Beta para Android en Google Play ya disponible!\n🔥 Prueba nuestro simulador de fútbol independiente gratis desde el navegador o en tu móvil Android.`
+   - **YouTube 500-Character Tag Packing (450 - 494 Chars):** YouTube Data API v3 enforces a 500-character limit across all tags and automatically wraps multi-word tags in quotes (`"..."`), adding +2 chars per spaced tag. The publisher and metadata generator must enforce a dual-counter packing algorithm (`yt_tag_len`):
+     - Raw comma-joined length must be strictly >= 450 characters.
+     - YouTube API total length (including quote penalty) must be strictly <= 494 characters.
+     - Tag pool must blend match matchups, fan nicknames, star players, tournament queries, physics simulation terms, platform discovery tags, and official game tags (`Bol Gol Futbol`).
+   - **National Team Name Translation:** When publishing on foreign channels (e.g. English), country/national team names MUST be translated into that language (e.g., `Germany` instead of `Almanya`, `Netherlands` instead of `Hollanda`, `Denmark` instead of `Danimarka`, `Spain` instead of `İspanya`).
+   - **Match-First Hashtag Hierarchy & Localization:** 15 hashtags max in description body, strictly ordered:
      1. Match combination query (`#{HomeTeam}{AwayTeam}`, `#{HomeTeam}vs{AwayTeam}`)
      2. Real team names & fan nicknames (`#{Home}`, `#{Away}`, `#{FanAlias}`)
      3. Goalscorers and star players (`#{ScorerName}`, `#{StarPlayer}`)
@@ -66,7 +91,6 @@ This workspace is part of the 3-project Bol Gol Futbol ecosystem:
      5. High-volume search intent queries (`#MaçÖzeti`, `#Goller` / `#MatchHighlights`, `#Goals`)
      6. Platform discovery tags (`#Shorts`, `#Futbol`, `#Football`)
      7. Minimal studio branding at the very end (`#BolGol`, `#EBStüdyo` / `#EBStudio`)
-   - The 15 hashtags in the description body must strictly feature these match elements first; generic studio tags must never truncate match elements.
 
 6. **Publication Scheduling (3-Hour Pre-Kickoff Rule from Oct 1, 2026):**
    - Past matches prior to Oct 1, 2026 are purged from upcoming queues.
@@ -100,6 +124,21 @@ This workspace is part of the 3-project Bol Gol Futbol ecosystem:
 4. **Pipeline Orchestration & Resilience (`futbol_automation`):**
    - Apply `workflow-orchestration-patterns` and `async-python-patterns`: isolate render, post-production (ffmpeg), and upload jobs with graceful error recovery and automated retry with backoff.
    - Track production metrics via `kpi-dashboard-design` patterns to observe schedule adherence (kickoff - 2 hours) and YouTube API quota efficiency.
+
+<!-- antislop:start -->
+## antislop & Non-Sloppy Web Architecture (Frontend & Backend)
+
+For UI, copy, accessibility/contrast, mobile layouts, backend APIs, and code comments, follow `antislop.md` and the modular antislop skills:
+- **UI / Visual:** `.agents/skills/antislop-ui/SKILL.md` (Restrained palettes, genuine hierarchy, anti-generic AI card layouts, no mindless glow/glassmorphism/gradients).
+- **Copy & Text:** `.agents/skills/antislop-copywriting/SKILL.md` (Honest product-specific copy, zero buzzwords/empty claims, zero conversational AI filler).
+- **Human & Accessibility:** `.agents/skills/antislop-human/SKILL.md` (WCAG AA 4.5:1 text / 3:1 non-text contrast, keyboard navigable, visible focus outlines, no mouse-only traps).
+- **Mobile / Responsive Layout:** `.agents/skills/antislop-layoutmobile/SKILL.md` (Fluid typography, tap target safety 48x48+, no horizontal scroll leaks, authentic content breakpoints).
+- **Code & Backend Cleanliness:** `.agents/skills/antislop-code/SKILL.md` (Zero AI banner comments/workflow narration/restating the obvious, clean idiomatic backend endpoints, robust input validation, meaningful error handling).
+
+### Core Non-Slop Web Tenets (Frontend & Backend):
+1. **Frontend Craft:** Every visual element must pass the **purpose test** (what functional or hierarchy goal does it serve?). Avoid generic AI tropes: purple-blue gradients, bento grids with uniform content, fake trust badges, and floating cards.
+2. **Backend Integrity:** Avoid generic boilerplate code, dummy try-catch blocks that swallow errors, and vacuous comments (`// Handle post request`). Implement explicit status codes, strict sanitization/validation, clear schema responses, and concise architectural docstrings.
+<!-- antislop:end -->
 
 
 
