@@ -394,7 +394,7 @@ func _ready():
 	# Dynamic vertical centering in available playable space:
 	# Top safe boundary: bottom of header scoreboard pill + goal banner (~195px)
 	# Bottom safe boundary: top of bottom AdMob banner safe zone (screen_size.y - 130px)
-	var top_limit = 195.0
+	var top_limit = 207.0
 	var bottom_limit = screen_size.y - 130.0
 	CENTER = Vector2(screen_size.x / 2.0, (top_limit + bottom_limit) / 2.0 - 58.0)
 	
@@ -603,7 +603,7 @@ func setup_scoreboard():
 	
 	var top_header_margin = MarginContainer.new()
 	top_header_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	var top_m = 115 if Global.is_automation_mode else 58
+	var top_m = 115 if Global.is_automation_mode else 70
 	top_header_margin.add_theme_constant_override("margin_top", top_m)
 	top_header_margin.add_theme_constant_override("margin_left", 16)
 	top_header_margin.add_theme_constant_override("margin_right", 16)

@@ -46,7 +46,7 @@ var is_automation_mode = false
 # --- PROGRESSION & ADS ---
 var ad_credits: int = 0
 var last_rewarded_ad_time: float = 0.0
-const REWARDED_AD_COOLDOWN_SEC: float = 600.0 # 10 minutes (600 seconds) ideal retention cooldown
+const REWARDED_AD_COOLDOWN_SEC: float = 300.0 # 5 minutes (300 seconds) ideal retention cooldown
 
 func get_rewarded_ad_cooldown_left() -> float:
 	var now = Time.get_unix_time_from_system()
@@ -821,6 +821,10 @@ func _ready():
 	bg_music_player.stream = preload("res://main_menu.mp3")
 	if bg_music_player.stream is AudioStreamMP3:
 		bg_music_player.stream.loop = true
+	bg_music_player.finished.connect(func():
+		if is_instance_valid(bg_music_player) and not is_on_match_pitch():
+			bg_music_player.play()
+	)
 	add_child(bg_music_player)
 	_update_bg_music_volume()
 	
@@ -842,8 +846,7 @@ func _ready():
 	
 	# Initial delay before starting menu music
 	get_tree().create_timer(0.5).timeout.connect(func():
-		if is_instance_valid(bg_music_player) and not bg_music_player.playing:
-			bg_music_player.play()
+		play_menu_music()
 	)
 	
 	load_progression()
@@ -851,6 +854,18 @@ func _ready():
 	init_google_play_services()
 	init_admob()
 
+
+func is_on_match_pitch() -> bool:
+	var cur = get_tree().current_scene if get_tree() else null
+	if cur == null:
+		return false
+	return cur.name == "Pitch" or (cur.scene_file_path != "" and cur.scene_file_path.ends_with("pitch.tscn"))
+
+func play_menu_music():
+	if is_instance_valid(bg_music_player):
+		_update_bg_music_volume()
+		if not bg_music_player.playing and not is_on_match_pitch():
+			bg_music_player.play()
 
 func play_click():
 	if is_instance_valid(click_player):
@@ -865,6 +880,8 @@ func _update_bg_music_volume():
 			bg_music_player.volume_db = -80.0
 		else:
 			bg_music_player.volume_db = linear_to_db(target_vol)
+			if not bg_music_player.playing and not is_on_match_pitch():
+				bg_music_player.play()
 
 func _update_goal_music_volume():
 	if is_instance_valid(goal_music_player):

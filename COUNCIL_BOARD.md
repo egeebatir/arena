@@ -279,6 +279,35 @@
   - `status_queue.py` doğrulaması: 42 maç oynandı, 123 maç sırada bekliyor. Sonraki maç `[0043]` Alanyaspor vs Galatasaray. Fikstür sırası kronolojik ve eksiksiz doğrulandı.
 - [x] **Doğrulamalar:** `tests/test_dynamic_metadata.py` 5 farklı dil/senaryo altında %100 başarıyla geçti.
 
+### 2026-10-10: Token Cooldown, Lobi Müziği Sürekliliği, Üst Banner Rozetleri & Yeni Oyuncu Rehberi Araştırması (Bol Gol Futbol)
+- [x] **Ödüllü Video Reklam Bekleme Süresi (Cooldown):**
+  - `Global.gd` içerisindeki `REWARDED_AD_COOLDOWN_SEC` 600.0s (10 dk) değerinden tekrar 300.0s (5 dk) değerine çekildi.
+- [x] **Lobi Müziği Kesilme Sorunu Giderildi:**
+  - `main_menu.mp3.import` dosyasında `loop=true` yapıldı.
+  - `Global.gd` üzerinde `bg_music_player.finished` sinyali lobi ekranında otomatik tekrar çalacak şekilde bağlandı ve `play_menu_music()` yardımcı fonksiyonu tanımlandı.
+  - Tema değişiminde (`update_theme_visuals`, ayarlar butonları ve önizleme sürgüleri) sesin kesilmesi engellendi ve müziğin kesintisiz çalması sağlandı.
+- [x] **Üst Banner Arkası Rozet Tasarımı (Normal & Pro Pass):**
+  - Ana menüdeki tüm sekmelerin (İstatistikler, Maç/Takımlar, Mağaza) üst reklam alanının hemen arkasında yer alan 2 alternatif rozet geliştirildi:
+    1. **Normal Oyuncular:** Dinamik tema tabanlı buzlu cam panel, 3D derinlik, 5 dilli ipuçları ve web yönlendirmesi. Reklam yüklense dahi arkasında zemin olarak stabil kalır.
+    2. **Pro Pass Oyuncuları:** 24k altın yaldızlı VIP kart (`vip_top_bar`), kaptan & kulüp adı ve VIP avantajları.
+  - Eski deneysel `ghost_banner.gd` ve `.uid` kalıntıları projeden ve script önbelleğinden tamamen temizlendi.
+- [x] **Yeni Başlayanlar İçin Rehber (Walkthrough Tutorial) Araştırması:**
+  - Kod eklenmeden önce araştırma alt ajanı ile oyun akışı, mekanikler ve kaydetme yapısı incelendi. 3 adımlı hafif onboarding kartı ve 5 dilli lokalizasyon hazırlandı.
+- [x] **Üst Banner Rozetleri Görünürlük Sorunu Kökten Çözüldü:**
+  - Düğüm ağacı sıralama hatası tespit edildi: Rozetler `bg` (tam ekran arkaplan) eklenmeden önce Child 0 olarak oluşturulduğu için `bg` ve `tab_container` tarafından tamamen örtülüyordu.
+  - `move_child(..., min(2, ...))` kaldırıldı, `_position_top_bar()` yardımcı fonksiyonu ile rozetler her zaman arkaplan ve sekmelerin üstünde (Child 2) konumlandırıldı.
+  - `House_Ad_Btn` mimarisi doğrudan `StyleBoxFlat` ve 660px ortalı hizalama ile `VIP_Btn` ile birebir uyumlu hale getirildi. Reklam yüklendiğinde yerel AdMob banner'ı üstüne binecek şekilde rozetler sürekli zeminde aktif kalır.
+- [x] **Saha Ekranı Üst Butonlarının Mesafesi (`pitch.gd`):**
+  - Çıkış (`<`) ve duraklatma (`||`) butonları ile skor tabelasının üst kenar mesafesi `margin_top = 70` (58'den artırıldı) ve `top_limit = 207.0` (195'ten artırıldı) yapılarak ekranın üst kenarından hafifçe (12px) uzaklaştırıldı.
+- [x] **Lig Seçimi Dropdown İkonu (`dropdownarrow.svg` & `main_menu.gd`):**
+  - `dropdownarrow.svg` 64x64'ten 22x22 klasik beyaz chevron formatına optimize edildi.
+  - `league_dropdown_home` ve `league_dropdown_away` üzerindeki şeffaf 1x1 geçici ikon kaldırılıp `arrow_margin: 16` ile klasik SVG ikonu hizalandı.
+- [x] **Yeni Başlayanlar İçin Ok Çizimli & Odaklı Walkthrough Çalışması:**
+  - Sağ üst burger menüsü (`burger_btn`), sağ ve sol ekranlar (İstatistikler & Mağaza geçişleri), lig ve takım bolluğu (7 lig, 46 milli takım, 232 kulüp) ve maçı başlatma çağrısını kapsayan 4 adımlı dinamik ok ve kısa metin mimarisi çalışıldı (kod uygulanmadı).
+- [x] **Doğrulamalar:** `python tests/test_backend_logic.py` %100 BAŞARILI, Godot 4.6.1 headless canlı ağaç doğrulaması sıfır hata ile geçti. Versiyon artırılmadı ve git push yapılmadı.
+
+
+
 
 
 
