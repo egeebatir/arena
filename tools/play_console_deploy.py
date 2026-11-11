@@ -99,23 +99,23 @@ def upload_aab(aab_path, tracks=["internal", "alpha"], release_name=None, releas
             release_notes = [
                 {
                     "language": "tr-TR",
-                    "text": "• Elit Kulüp & Üst Rozet Yenilendi: Modern rozet tasarımı, Elit Kulüp ayrıcalıkları ve tema uyumlu vitrin kartı eklendi.\n• Yenilenen Mağaza & Günlük Görevler: Tıklanabilir günlük görevler kartı (gg/aa/yy tarih formatı), ikonlu Şans Çarkı ve geliştirilmiş Video İzle butonu.\n• Modern Jeton & Beyaz Tipografi: Minimalist geometrik jeton ikonu ve tüm ekranlarda net beyaz yazı standardı.\n• Gelişmiş Rehber Deneyimi: 3. adımda tam ekran dokunuşla tamamlama ve rehber sırasında ekran kaydırma kilidi."
+                    "text": "• Elit Kulüp & Üst Rozet: Modern rozet tasarımı, Elit Kulüp ayrıcalıkları ve tema uyumlu mağaza vitrini.\n• Mağaza & Günlük Görevler: Tıklanabilir günlük görevler kartı (gg/aa/yy tarih), ikonlu Şans Çarkı ve yenilenen Video İzle butonu.\n• Modern Jeton & Beyaz Yazılar: Minimalist geometrik jeton ikonu ve tüm ekranlarda net beyaz tipografi.\n• Rehber İyileştirmesi: Son adımda tam ekran dokunuşla tamamlama ve kaydırma kilidi."
                 },
                 {
                     "language": "en-US",
-                    "text": "• Elite Club & Top Badge Rework: Redesigned top status badge, Elite Club perks showcase, and theme-harmonized store card.\n• Refined Shop & Daily Quests: Interactive Daily Quests card (DD/MM/YY date format), compact Lucky Wheel icon button, and enhanced Watch Video CTA.\n• Modern Token & Crisp Typography: Minimalist geometric token artwork and pure white text across all screens.\n• Enhanced Guide Flow: Full-screen tap-to-finish on the final step and swipe lock while the guide is active."
+                    "text": "• Elite Club & Top Badge: Redesigned top badge, Elite Club perks showcase, and theme-harmonized shop card.\n• Shop & Daily Quests: Clickable Daily Quests card (DD/MM/YY date), compact Lucky Wheel icon button, and refined Watch Video CTA.\n• Modern Token & Crisp Text: Minimalist geometric token icon and pure white typography across all screens.\n• Guide Polish: Full-screen tap-to-finish on the final step and swipe lock."
                 },
                 {
                     "language": "es-ES",
-                    "text": "• Club Élite e Insignia Superior: Nuevo diseño de insignia superior, ventajas del Club Élite y tarjeta temática en la tienda.\n• Tienda y Misiones Diarias: Tarjeta interactiva de Misiones Diarias (formato DD/MM/AA), botón compacto de Ruleta y botón Ver Video mejorado.\n• Ficha Moderna y Tipografía Blanca: Nuevo icono geométrico de ficha y textos en blanco puro en todas las pantallas.\n• Guía Mejorada: Toque en pantalla completa para finalizar y bloqueo de deslizamiento durante la guía."
+                    "text": "• Club Élite e Insignia Superior: Nuevo diseño de insignia, ventajas del Club Élite y tarjeta temática en la tienda.\n• Tienda y Misiones Diarias: Tarjeta interactiva de Misiones Diarias (DD/MM/AA), botón icono de Ruleta y Ver Video mejorado.\n• Ficha Moderna y Texto Blanco: Nuevo icono geométrico de ficha y tipografía blanca en todo el juego.\n• Guía Mejorada: Toque en pantalla completa al finalizar y bloqueo de deslizamiento."
                 },
                 {
                     "language": "pt-BR",
-                    "text": "• Clube Elite e Emblema Superior: Novo design de emblema no topo, vantagens do Clube Elite e cartão temático na loja.\n• Loja e Missões Diárias: Cartão interativo de Missões Diárias (formato DD/MM/AA), botão compacto da Roleta e botão Assistir Vídeo aprimorado.\n• Moeda Moderna e Tipografia Branca: Novo ícone geométrico de moeda e textos em branco puro em todas as telas.\n• Guia Aprimorado: Toque em tela cheia para concluir no passo final e bloqueio de deslize durante o guia."
+                    "text": "• Clube Elite e Emblema Superior: Novo emblema no topo, vantagens do Clube Elite e cartão temático na loja.\n• Loja e Missões Diárias: Cartão interativo de Missões Diárias (DD/MM/AA), botão ícone da Roleta e Assistir Vídeo aprimorado.\n• Moeda Moderna e Texto Branco: Novo ícone geométrico de moeda e textos em branco puro.\n• Guia Aprimorado: Toque em tela cheia no passo final e bloqueio de deslize."
                 },
                 {
                     "language": "it-IT",
-                    "text": "• Club Élite e Badge Superiore: Nuovo design del badge superiore, vantaggi Club Élite e scheda negozio armonizzata col tema.\n• Negozio e Missioni Giornaliere: Scheda interattiva Missioni Giornaliere (formato GG/MM/AA), pulsante icona Ruota e Guarda Video migliorato.\n• Gettone Moderno e Tipografia Bianca: Nuova icona geometrica del gettone e testi in bianco puro su tutte le schermate.\n• Guida Migliorata: Tocco a tutto schermo per completare l'ultimo passaggio e blocco dello scorrimento durante la guida."
+                    "text": "• Club Élite e Badge Superiore: Nuovo badge superiore, vantaggi Club Élite e scheda negozio armonizzata.\n• Negozio e Missioni Giornaliere: Scheda Missioni Giornaliere cliccabile (GG/MM/AA), pulsante icona Ruota e Guarda Video migliorato.\n• Gettone Moderno e Testo Bianco: Nuova icona geometrica del gettone e testi in bianco puro.\n• Guida Migliorata: Tocco a tutto schermo nel passo finale e blocco scorrimento."
                 }
             ]
 
