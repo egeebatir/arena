@@ -3,6 +3,7 @@ extends Control
 var custom_font = preload("res://Teko-Bold.ttf")
 var logo_texture: Texture2D = null
 var studio_texture: Texture2D = null
+var pitch_lines_texture: Texture2D = null
 var active_theme: Dictionary
 
 var play_games_plugin = null
@@ -20,6 +21,7 @@ var gp_btn: Button
 var title_lbl: Label
 var subtitle_lbl: Label
 var logo_rect: TextureRect
+var logo_frame: PanelContainer
 var logo_container: CenterContainer
 var shine_overlay: Control
 var shine_progress: float = -1.0
@@ -161,11 +163,15 @@ func _ready():
 		if res is Texture2D:
 			logo_texture = res
 
-	# 2. Load Studio Logo
+	# 2. Load Studio Logo & Button Pitch Texture
 	if ResourceLoader.exists("res://eb studio 2.png"):
 		var res = load("res://eb studio 2.png")
 		if res is Texture2D:
 			studio_texture = res
+	if ResourceLoader.exists("res://match_btn_pitch_lines.png"):
+		var p_res = load("res://match_btn_pitch_lines.png")
+		if p_res is Texture2D:
+			pitch_lines_texture = p_res
 	
 	if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
 		Global.bg_music_player.play()
@@ -209,73 +215,133 @@ func _gui_input(event: InputEvent) -> void:
 		elif event.keycode == KEY_SPACE or event.keycode == KEY_ENTER:
 			_on_play_now_pressed()
 
+func _draw_regular_polygon_outline(canvas: CanvasItem, center: Vector2, radius: float, sides: int, rot_offset: float, col: Color, width: float = 1.5) -> void:
+	var pts = PackedVector2Array()
+	for i in range(sides + 1):
+		var ang = rot_offset + (TAU * float(i) / float(sides))
+		pts.append(center + Vector2(cos(ang), sin(ang)) * radius)
+	canvas.draw_polyline(pts, col, width)
+
 func _build_ui():
 	var s = get_viewport_rect().size
-	var accent_color: Color = active_theme.get("accent", Color8(0, 210, 160))
+	var bg_top: Color = active_theme.get("bg_top", Color8(150, 170, 200))
+	var bg_bottom: Color = active_theme.get("bg_bottom", Color8(0, 18, 40))
+	var accent_color: Color = active_theme.get("accent", Color8(255, 100, 0))
 	
-	# 1. Vibrant, Fresh & Energetic Stadium Grass & Floodlight Background
+	# 1. Unified Theme Gradient Background (Matches main_menu.gd seamlessly)
+	var bg_tex_rect = TextureRect.new()
+	var bg_grad = Gradient.new()
+	bg_grad.set_color(0, bg_top)
+	bg_grad.set_color(1, bg_bottom)
+	var grad_tex = GradientTexture2D.new()
+	grad_tex.gradient = bg_grad
+	grad_tex.fill_from = Vector2(0, 0)
+	grad_tex.fill_to = Vector2(0, 1)
+	grad_tex.width = 64
+	grad_tex.height = 64
+	bg_tex_rect.texture = grad_tex
+	bg_tex_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg_tex_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(bg_tex_rect)
+	
+	# 2. Tactical Stadium & Football Vector Watermark Layer (Low-Opacity ~0.035 - 0.06)
 	var bg = Control.new()
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
 	bg.draw.connect(func():
 		var sz = get_viewport_rect().size
+		var c = sz * 0.5
 		
-		# Vibrant Stadium Emerald Turf Gradient Base
-		for y in range(0, int(sz.y), 4):
-			var ratio = float(y) / max(1.0, sz.y)
-			# Top stadium light grass to bottom deep turf
-			var col = Color8(
-				int(lerp(16.0, 8.0, ratio)),
-				int(lerp(82.0, 44.0, ratio)),
-				int(lerp(52.0, 28.0, ratio))
-			)
-			bg.draw_rect(Rect2(0, y, sz.x, 4), col)
+		# Subtle dark depth vignette so the center card and typography maintain high WCAG contrast
+		bg.draw_rect(Rect2(0, 0, sz.x, sz.y), Color(bg_bottom.r * 0.35, bg_bottom.g * 0.35, bg_bottom.b * 0.35, 0.32))
 		
-		# Alternating Lush Turf Stripes
-		for y in range(0, int(sz.y), 56):
-			bg.draw_rect(Rect2(0, y, sz.x, 28), Color8(28, 110, 70, 75))
+		# Subtle Diagonal Stadium Architecture Stripes
+		var stripe_col = Color(1.0, 1.0, 1.0, 0.022)
+		for i in range(-4, 12):
+			var y_off = float(i) * 110.0
+			var stripe_pts = PackedVector2Array([
+				Vector2(0, y_off),
+				Vector2(sz.x, y_off - 90.0),
+				Vector2(sz.x, y_off - 45.0),
+				Vector2(0, y_off + 45.0)
+			])
+			bg.draw_colored_polygon(stripe_pts, stripe_col)
 		
-		# Warm & Cool Stadium Floodlight Spotlight Cones
-		var top_l = Vector2(sz.x * 0.15, -20.0)
-		var top_r = Vector2(sz.x * 0.85, -20.0)
-		bg.draw_circle(top_l, sz.x * 0.75, Color8(190, 245, 255, 30))
-		bg.draw_circle(top_r, sz.x * 0.75, Color8(255, 235, 160, 25))
-		bg.draw_circle(Vector2(sz.x * 0.5, sz.y * 0.5), sz.x * 0.55, Color(accent_color.r, accent_color.g, accent_color.b, 0.10))
+		# Low-opacity Tactical Pitch Watermark Lines
+		var line_col = Color(1.0, 1.0, 1.0, 0.055)
+		var faint_col = Color(1.0, 1.0, 1.0, 0.038)
+		var margin_x = sz.x * 0.06
+		var margin_y = sz.y * 0.04
+		var pitch_rect = Rect2(margin_x, margin_y, sz.x - margin_x * 2.0, sz.y - margin_y * 2.0)
 		
-		# Vibrant Glowing Pitch Markings (Center Circle, Halfway Line, Kick-off Spot)
-		var c = sz / 2.0
-		var pitch_line_col = Color8(240, 255, 245, 85)
-		var pitch_glow_col = Color(accent_color.r, accent_color.g, accent_color.b, 0.22)
+		# Outer Pitch Touchlines & Goal Lines
+		bg.draw_rect(pitch_rect, line_col, false, 2.0)
 		
-		# Halfway Line with Glow
-		bg.draw_line(Vector2(0, c.y), Vector2(sz.x, c.y), pitch_glow_col, 5.0)
-		bg.draw_line(Vector2(0, c.y), Vector2(sz.x, c.y), pitch_line_col, 2.5)
+		# Halfway Line & Center Circle
+		bg.draw_line(Vector2(pitch_rect.position.x, c.y), Vector2(pitch_rect.end.x, c.y), line_col, 2.0)
+		var circle_r = min(sz.x, sz.y) * 0.24
+		bg.draw_arc(c, circle_r, 0, TAU, 64, line_col, 2.0)
+		bg.draw_arc(c, circle_r * 1.18, 0, TAU, 64, faint_col, 1.2)
+		bg.draw_circle(c, 4.5, line_col)
 		
-		# Center Circle with Glow
-		bg.draw_arc(c, sz.x * 0.32, 0, TAU, 64, pitch_glow_col, 5.0)
-		bg.draw_arc(c, sz.x * 0.32, 0, TAU, 64, pitch_line_col, 2.5)
+		# Top & Bottom Penalty Boxes, 6-Yard Boxes & Penalty Arcs
+		var pen_w = pitch_rect.size.x * 0.56
+		var pen_h = pitch_rect.size.y * 0.14
+		var goal_w = pitch_rect.size.x * 0.26
+		var goal_h = pitch_rect.size.y * 0.055
 		
-		# Center Spot & Penalty Arc Accents
-		bg.draw_circle(c, 7.0, pitch_line_col)
-		bg.draw_circle(c, 3.5, Color.WHITE)
-		bg.draw_arc(Vector2(c.x, c.y - sz.y * 0.38), sz.x * 0.22, 0, PI, 32, pitch_line_col, 2.0)
-		bg.draw_arc(Vector2(c.x, c.y + sz.y * 0.38), sz.x * 0.22, PI, TAU, 32, pitch_line_col, 2.0)
+		# Top Penalty Area
+		bg.draw_rect(Rect2(c.x - pen_w * 0.5, pitch_rect.position.y, pen_w, pen_h), line_col, false, 1.8)
+		bg.draw_rect(Rect2(c.x - goal_w * 0.5, pitch_rect.position.y, goal_w, goal_h), faint_col, false, 1.5)
+		bg.draw_arc(Vector2(c.x, pitch_rect.position.y + pen_h), circle_r * 0.52, 0.15 * PI, 0.85 * PI, 32, line_col, 1.8)
+		
+		# Bottom Penalty Area
+		bg.draw_rect(Rect2(c.x - pen_w * 0.5, pitch_rect.end.y - pen_h, pen_w, pen_h), line_col, false, 1.8)
+		bg.draw_rect(Rect2(c.x - goal_w * 0.5, pitch_rect.end.y - goal_h, goal_w, goal_h), faint_col, false, 1.5)
+		bg.draw_arc(Vector2(c.x, pitch_rect.end.y - pen_h), circle_r * 0.52, 1.15 * PI, 1.85 * PI, 32, line_col, 1.8)
+		
+		# 4 Corner Kick Arcs
+		var cr = 22.0
+		bg.draw_arc(pitch_rect.position, cr, 0.0, PI * 0.5, 16, line_col, 1.8)
+		bg.draw_arc(Vector2(pitch_rect.end.x, pitch_rect.position.y), cr, PI * 0.5, PI, 16, line_col, 1.8)
+		bg.draw_arc(pitch_rect.end, cr, PI, PI * 1.5, 16, line_col, 1.8)
+		bg.draw_arc(Vector2(pitch_rect.position.x, pitch_rect.end.y), cr, PI * 1.5, TAU, 16, line_col, 1.8)
+		
+		# Geometric Football Hexagon Cluster Watermarks (Top-Left & Bottom-Right Flanks)
+		var hex_r = 26.0
+		var hex_centers = [
+			Vector2(sz.x * 0.16, sz.y * 0.16),
+			Vector2(sz.x * 0.84, sz.y * 0.83)
+		]
+		for hc in hex_centers:
+			_draw_regular_polygon_outline(bg, hc, hex_r, 6, -PI / 6.0, faint_col, 1.5)
+			for ring_i in range(6):
+				var ang = (TAU * float(ring_i) / 6.0)
+				var neighbor = hc + Vector2(cos(ang), sin(ang)) * (hex_r * 1.732)
+				_draw_regular_polygon_outline(bg, neighbor, hex_r, 6, -PI / 6.0, Color(1.0, 1.0, 1.0, 0.025), 1.2)
+		
+		# Tactical Playbook X & O Markers
+		var x_pos = Vector2(sz.x * 0.82, sz.y * 0.19)
+		var x_sz = 8.0
+		bg.draw_line(x_pos - Vector2(x_sz, x_sz), x_pos + Vector2(x_sz, x_sz), faint_col, 2.0)
+		bg.draw_line(x_pos + Vector2(-x_sz, x_sz), x_pos + Vector2(x_sz, -x_sz), faint_col, 2.0)
+		bg.draw_arc(Vector2(sz.x * 0.18, sz.y * 0.81), 9.0, 0, TAU, 24, faint_col, 2.0)
 	)
 	
-	# 2. Ambient Floating Golden Sparks & Neon Theme Accent Particles
+	# Subtle Low-Opacity Stadium Atmosphere Dust (No harsh neon/orange blobs)
 	particle_canvas = Control.new()
 	particle_canvas.set_anchors_preset(Control.PRESET_FULL_RECT)
 	particle_canvas.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(particle_canvas)
 	
 	particles.clear()
-	for _i in range(38):
-		var p_col = Color8(255, 225, 90, randi_range(90, 220)) if randf() > 0.45 else Color(accent_color.r, accent_color.g, accent_color.b, randf_range(0.35, 0.85))
+	for _i in range(18):
 		particles.append({
 			"pos": Vector2(randf() * s.x, randf() * s.y),
-			"vel": Vector2(randf_range(-0.3, 0.3), randf_range(-0.7, -0.2)),
-			"radius": randf_range(1.6, 3.6),
-			"color": p_col
+			"vel": Vector2(randf_range(-0.18, 0.18), randf_range(-0.38, -0.12)),
+			"radius": randf_range(1.2, 2.4),
+			"color": Color(1.0, 1.0, 1.0, randf_range(0.035, 0.075))
 		})
 	
 	particle_canvas.draw.connect(func():
@@ -283,35 +349,42 @@ func _build_ui():
 			particle_canvas.draw_circle(p.pos, p.radius, p.color)
 	)
 	
-	# 3. Language Switcher Button (Top-Right, Accessible 52x48 dp touch target)
+	# 3. Language Switcher Button (Top-Right, Standardized to match main_menu.gd)
 	lang_btn = Button.new()
 	lang_btn.text = " " + LANG_DISPLAY.get(Global.current_lang, "TR")
 	if ResourceLoader.exists("res://languageicon.svg"):
 		lang_btn.icon = load("res://languageicon.svg")
 		lang_btn.expand_icon = true
 		lang_btn.add_theme_constant_override("icon_max_width", 22)
-		lang_btn.add_theme_constant_override("h_separation", 6)
+		lang_btn.add_theme_constant_override("h_separation", 8)
 	lang_btn.add_theme_font_override("font", custom_font)
-	lang_btn.add_theme_font_size_override("font_size", 22)
-	lang_btn.add_theme_color_override("font_color", Color8(240, 250, 255))
-	lang_btn.custom_minimum_size = Vector2(64, 48)
+	lang_btn.add_theme_font_size_override("font_size", 24)
+	lang_btn.add_theme_color_override("font_color", Color.WHITE)
+	lang_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 150))
+	lang_btn.add_theme_constant_override("shadow_offset_y", 1)
+	lang_btn.custom_minimum_size = Vector2(92, 48)
 	
 	var lang_style = StyleBoxFlat.new()
-	lang_style.bg_color = Color8(10, 32, 28, 200)
-	lang_style.corner_radius_top_left = 24; lang_style.corner_radius_top_right = 24
-	lang_style.corner_radius_bottom_left = 24; lang_style.corner_radius_bottom_right = 24
-	lang_style.border_width_left = 1; lang_style.border_width_right = 1
-	lang_style.border_width_top = 1; lang_style.border_width_bottom = 3
-	lang_style.border_color = Color(accent_color.r, accent_color.g, accent_color.b, 0.6)
-	lang_style.content_margin_left = 12; lang_style.content_margin_right = 14
+	lang_style.bg_color = bg_bottom.darkened(0.22)
+	lang_style.bg_color.a = 0.94
+	lang_style.corner_radius_top_left = 14; lang_style.corner_radius_top_right = 14
+	lang_style.corner_radius_bottom_left = 14; lang_style.corner_radius_bottom_right = 14
+	lang_style.border_width_left = 2; lang_style.border_width_right = 2
+	lang_style.border_width_top = 2; lang_style.border_width_bottom = 4
+	lang_style.border_color = accent_color
+	lang_style.shadow_color = Color8(0, 0, 0, 110)
+	lang_style.shadow_size = 6
+	lang_style.shadow_offset = Vector2(0, 2)
+	lang_style.content_margin_left = 14; lang_style.content_margin_right = 16
+	lang_style.content_margin_top = 6; lang_style.content_margin_bottom = 6
 	
 	var lang_hover = lang_style.duplicate()
-	lang_hover.bg_color = Color8(18, 48, 40, 230)
-	lang_hover.border_color = accent_color
+	lang_hover.bg_color = bg_bottom.darkened(0.10)
+	lang_hover.border_color = accent_color.lightened(0.20)
 	
 	var lang_pressed = lang_style.duplicate()
-	lang_pressed.border_width_bottom = 0
-	lang_pressed.content_margin_top = 3
+	lang_pressed.border_width_bottom = 2
+	lang_pressed.content_margin_top = 8
 	
 	lang_btn.add_theme_stylebox_override("normal", lang_style)
 	lang_btn.add_theme_stylebox_override("hover", lang_hover)
@@ -322,8 +395,8 @@ func _build_ui():
 	# Place language button in top-right corner safely inside margins
 	var top_bar = MarginContainer.new()
 	top_bar.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	top_bar.add_theme_constant_override("margin_top", 18)
-	top_bar.add_theme_constant_override("margin_right", 18)
+	top_bar.add_theme_constant_override("margin_top", 22)
+	top_bar.add_theme_constant_override("margin_right", 20)
 	top_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(top_bar)
 	
@@ -333,58 +406,79 @@ func _build_ui():
 	top_bar.add_child(top_hbox)
 	top_hbox.add_child(lang_btn)
 	
-	# 4. Main Center Layout
+	# 4. Main Center Layout (Standardized Tactical Card matching main_menu.gd)
 	var center = CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_PASS
 	add_child(center)
 	
 	center_panel = PanelContainer.new()
 	var p_style = StyleBoxFlat.new()
-	p_style.bg_color = Color8(10, 34, 30, 238) # Frosted deep stadium emerald glass
-	p_style.corner_radius_top_left = 28; p_style.corner_radius_top_right = 28
-	p_style.corner_radius_bottom_left = 28; p_style.corner_radius_bottom_right = 28
-	p_style.border_width_left = 1.8; p_style.border_width_right = 1.8
-	p_style.border_width_top = 2.0; p_style.border_width_bottom = 5.0
-	p_style.border_color = Color(accent_color.r, accent_color.g, accent_color.b, 0.85)
-	p_style.shadow_color = Color8(0, 0, 0, 180)
-	p_style.shadow_size = 35
-	p_style.content_margin_left = 36; p_style.content_margin_right = 36
+	p_style.bg_color = bg_bottom.darkened(0.32)
+	p_style.bg_color.a = 0.96
+	p_style.corner_radius_top_left = 22; p_style.corner_radius_top_right = 22
+	p_style.corner_radius_bottom_left = 22; p_style.corner_radius_bottom_right = 22
+	p_style.border_width_left = 2; p_style.border_width_right = 2
+	p_style.border_width_top = 2; p_style.border_width_bottom = 5
+	var card_border_col = bg_top.lerp(accent_color, 0.35)
+	card_border_col.a = 0.78
+	p_style.border_color = card_border_col
+	p_style.shadow_color = Color(0, 0, 0, 0.48)
+	p_style.shadow_size = 24
+	p_style.shadow_offset = Vector2(0, 8)
+	p_style.content_margin_left = 32; p_style.content_margin_right = 32
 	p_style.content_margin_top = 28; p_style.content_margin_bottom = 26
 	center_panel.add_theme_stylebox_override("panel", p_style)
-	center_panel.custom_minimum_size = Vector2(min(s.x * 0.92, 480), 0)
+	center_panel.custom_minimum_size = Vector2(min(s.x * 0.90, 460), 0)
 	center.add_child(center_panel)
 	
 	var vbox = VBoxContainer.new()
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	vbox.add_theme_constant_override("separation", 14)
+	vbox.add_theme_constant_override("separation", 12)
 	center_panel.add_child(vbox)
 	
-	# --- HERO LOGO CONTAINER ---
+	# --- HERO LOGO CONTAINER (Rounded-Square Frame matching game_logo.png, no circular backplate!) ---
 	logo_container = CenterContainer.new()
-	var logo_dim = min(180.0, s.x * 0.42)
-	logo_container.custom_minimum_size = Vector2(0, logo_dim + 12)
+	var logo_dim = min(168.0, s.x * 0.38)
+	logo_container.custom_minimum_size = Vector2(0, logo_dim + 8)
 	vbox.add_child(logo_container)
 	
-	# Glow backdrop behind the logo
-	var logo_backplate = Control.new()
-	logo_backplate.custom_minimum_size = Vector2(logo_dim, logo_dim)
-	logo_backplate.draw.connect(func():
-		var center_pt = Vector2(logo_dim / 2.0, logo_dim / 2.0)
-		logo_backplate.draw_circle(center_pt, logo_dim * 0.55, Color(accent_color.r, accent_color.g, accent_color.b, 0.16))
-		logo_backplate.draw_circle(center_pt, logo_dim * 0.42, Color8(255, 230, 130, 20))
-	)
-	logo_container.add_child(logo_backplate)
+	logo_frame = PanelContainer.new()
+	logo_frame.custom_minimum_size = Vector2(logo_dim, logo_dim)
+	logo_frame.pivot_offset = Vector2(logo_dim * 0.5, logo_dim * 0.5)
+	logo_frame.clip_children = CanvasItem.CLIP_CHILDREN_AND_DRAW
+	var lf_style = StyleBoxFlat.new()
+	lf_style.bg_color = bg_bottom.darkened(0.45)
+	lf_style.corner_radius_top_left = 28; lf_style.corner_radius_top_right = 28
+	lf_style.corner_radius_bottom_left = 28; lf_style.corner_radius_bottom_right = 28
+	lf_style.border_width_left = 2; lf_style.border_width_right = 2
+	lf_style.border_width_top = 2; lf_style.border_width_bottom = 4
+	var lf_border = bg_top.lightened(0.18)
+	lf_border.a = 0.55
+	lf_style.border_color = lf_border
+	lf_style.shadow_color = Color(0, 0, 0, 0.45)
+	lf_style.shadow_size = 16
+	lf_style.shadow_offset = Vector2(0, 5)
+	logo_frame.add_theme_stylebox_override("panel", lf_style)
+	logo_container.add_child(logo_frame)
+	
+	var logo_inner = Control.new()
+	logo_inner.custom_minimum_size = Vector2(logo_dim, logo_dim)
+	logo_inner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	logo_frame.add_child(logo_inner)
 	
 	logo_rect = TextureRect.new()
 	logo_rect.texture = logo_texture
+	logo_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
 	logo_rect.custom_minimum_size = Vector2(logo_dim, logo_dim)
 	logo_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	logo_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	logo_rect.pivot_offset = Vector2(logo_dim / 2.0, logo_dim / 2.0)
-	logo_container.add_child(logo_rect)
+	logo_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	logo_rect.pivot_offset = Vector2(logo_dim * 0.5, logo_dim * 0.5)
+	logo_inner.add_child(logo_rect)
 	
-	# Dynamic Light Sheen / Shine Overlay (AAA Glossy Sweep)
+	# Dynamic Light Sheen / Shine Overlay (Clipped cleanly inside rounded-square logo_frame)
 	shine_overlay = Control.new()
+	shine_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	shine_overlay.custom_minimum_size = Vector2(logo_dim, logo_dim)
 	shine_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	shine_overlay.draw.connect(func():
@@ -393,7 +487,7 @@ func _build_ui():
 			var h = logo_dim
 			var x_mid = shine_progress * (w + h * 0.8) - h * 0.4
 			var slant = h * 0.35
-			var bar_w = 26.0
+			var bar_w = 24.0
 			
 			var pts = PackedVector2Array([
 				Vector2(x_mid, 0),
@@ -401,7 +495,7 @@ func _build_ui():
 				Vector2(x_mid - slant + bar_w, h),
 				Vector2(x_mid - slant, h)
 			])
-			shine_overlay.draw_colored_polygon(pts, Color(1.0, 1.0, 1.0, 0.35))
+			shine_overlay.draw_colored_polygon(pts, Color(1.0, 1.0, 1.0, 0.28))
 			
 			var pts2 = PackedVector2Array([
 				Vector2(x_mid + bar_w + 8, 0),
@@ -409,69 +503,133 @@ func _build_ui():
 				Vector2(x_mid - slant + bar_w + 14, h),
 				Vector2(x_mid - slant + bar_w + 8, h)
 			])
-			shine_overlay.draw_colored_polygon(pts2, Color(1.0, 1.0, 1.0, 0.20))
+			shine_overlay.draw_colored_polygon(pts2, Color(1.0, 1.0, 1.0, 0.14))
 	)
-	logo_container.add_child(shine_overlay)
+	logo_inner.add_child(shine_overlay)
 	
 	# --- GAME TITLE ---
 	title_lbl = Label.new()
 	title_lbl.text = LANG.get(Global.current_lang, LANG["ENG"])["TITLE"]
 	title_lbl.add_theme_font_override("font", custom_font)
-	title_lbl.add_theme_font_size_override("font_size", 48)
+	title_lbl.add_theme_font_size_override("font_size", 50)
 	title_lbl.add_theme_color_override("font_color", Color.WHITE)
-	title_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 220))
-	title_lbl.add_theme_constant_override("shadow_offset_y", 4)
+	title_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 210))
+	title_lbl.add_theme_constant_override("shadow_offset_y", 3)
 	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(title_lbl)
 	
-	# --- SUBTITLE: EB STÜDYO ---
+	# --- SUBTITLE BADGE: EB STÜDYO • ebstudyo.com ---
+	var sub_badge = PanelContainer.new()
+	sub_badge.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	var sb_badge_style = StyleBoxFlat.new()
+	sb_badge_style.bg_color = bg_bottom.darkened(0.48)
+	sb_badge_style.bg_color.a = 0.90
+	sb_badge_style.corner_radius_top_left = 10; sb_badge_style.corner_radius_top_right = 10
+	sb_badge_style.corner_radius_bottom_left = 10; sb_badge_style.corner_radius_bottom_right = 10
+	sb_badge_style.border_width_left = 1; sb_badge_style.border_width_right = 1
+	sb_badge_style.border_width_top = 1; sb_badge_style.border_width_bottom = 2
+	sb_badge_style.border_color = Color(1.0, 1.0, 1.0, 0.14)
+	sb_badge_style.content_margin_left = 14; sb_badge_style.content_margin_right = 14
+	sb_badge_style.content_margin_top = 2; sb_badge_style.content_margin_bottom = 2
+	sub_badge.add_theme_stylebox_override("panel", sb_badge_style)
+	vbox.add_child(sub_badge)
+	
 	subtitle_lbl = Label.new()
 	subtitle_lbl.text = LANG.get(Global.current_lang, LANG["ENG"])["SUBTITLE"]
 	subtitle_lbl.add_theme_font_override("font", custom_font)
-	subtitle_lbl.add_theme_font_size_override("font_size", 20)
-	subtitle_lbl.add_theme_color_override("font_color", accent_color)
+	subtitle_lbl.add_theme_font_size_override("font_size", 19)
+	subtitle_lbl.add_theme_color_override("font_color", Color.WHITE)
 	subtitle_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(subtitle_lbl)
+	sub_badge.add_child(subtitle_lbl)
 	
-	var spacer = Control.new()
-	spacer.custom_minimum_size = Vector2(0, 6)
-	vbox.add_child(spacer)
+	# Subtle Tactical Divider Bar
+	var divider_ctrl = Control.new()
+	divider_ctrl.custom_minimum_size = Vector2(0, 8)
+	divider_ctrl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	divider_ctrl.draw.connect(func():
+		var dw = divider_ctrl.size.x
+		var dy = divider_ctrl.size.y * 0.5
+		divider_ctrl.draw_line(Vector2(dw * 0.12, dy), Vector2(dw * 0.88, dy), Color(1, 1, 1, 0.08), 1.0)
+		divider_ctrl.draw_line(Vector2(dw * 0.42, dy), Vector2(dw * 0.58, dy), Color(accent_color.r, accent_color.g, accent_color.b, 0.65), 2.5)
+	)
+	vbox.add_child(divider_ctrl)
 	
-	# --- 1. PRIMARY BUTTON: HEMEN OYNA (3D Tactile Action Hero Button) ---
+	# --- 1. PRIMARY BUTTON: HEMEN OYNA (Standardized Tactile 3D Sport CTA, corner_radius = 16) ---
+	var btn_width = min(s.x * 0.82, 380.0)
 	play_now_btn = Button.new()
 	play_now_btn.text = LANG.get(Global.current_lang, LANG["ENG"])["PLAY_NOW"]
 	play_now_btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	play_now_btn.add_theme_font_override("font", custom_font)
-	play_now_btn.add_theme_font_size_override("font_size", 36)
+	play_now_btn.add_theme_font_size_override("font_size", 38)
 	play_now_btn.add_theme_color_override("font_color", Color.WHITE)
-	play_now_btn.custom_minimum_size = Vector2(min(s.x * 0.85, 380), 76)
+	play_now_btn.add_theme_color_override("font_hover_color", Color.WHITE)
+	play_now_btn.add_theme_color_override("font_pressed_color", Color.WHITE)
+	play_now_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 190))
+	play_now_btn.add_theme_constant_override("shadow_offset_y", 2)
+	play_now_btn.custom_minimum_size = Vector2(btn_width, 72)
+	play_now_btn.clip_contents = true
 	
 	var p_btn_style = StyleBoxFlat.new()
-	p_btn_style.bg_color = Color8(0, 175, 125) # Modern Vibrant Emerald
-	p_btn_style.corner_radius_top_left = 38; p_btn_style.corner_radius_top_right = 38
-	p_btn_style.corner_radius_bottom_left = 38; p_btn_style.corner_radius_bottom_right = 38
-	p_btn_style.border_width_bottom = 6; p_btn_style.border_color = Color8(0, 95, 65)
-	p_btn_style.shadow_color = Color(accent_color.r, accent_color.g, accent_color.b, 0.40)
-	p_btn_style.shadow_size = 14
+	p_btn_style.bg_color = Color8(16, 152, 96)
+	p_btn_style.corner_radius_top_left = 16; p_btn_style.corner_radius_top_right = 16
+	p_btn_style.corner_radius_bottom_left = 16; p_btn_style.corner_radius_bottom_right = 16
+	p_btn_style.border_width_left = 2; p_btn_style.border_width_right = 2
+	p_btn_style.border_width_top = 2; p_btn_style.border_width_bottom = 5
+	p_btn_style.border_color = Color8(8, 88, 54)
+	p_btn_style.shadow_color = Color(0, 0, 0, 0.40)
+	p_btn_style.shadow_size = 10
 	p_btn_style.shadow_offset = Vector2(0, 4)
 	
 	var p_btn_hover = p_btn_style.duplicate()
-	p_btn_hover.bg_color = Color8(10, 195, 140)
+	p_btn_hover.bg_color = Color8(22, 170, 108)
+	p_btn_hover.border_color = Color8(10, 104, 64)
 	
 	var p_btn_pressed = p_btn_style.duplicate()
-	p_btn_pressed.border_width_bottom = 0
-	p_btn_pressed.content_margin_top = 6
+	p_btn_pressed.bg_color = Color8(12, 132, 82)
+	p_btn_pressed.border_width_bottom = 2
+	p_btn_pressed.content_margin_top = 4
 	
 	play_now_btn.add_theme_stylebox_override("normal", p_btn_style)
 	play_now_btn.add_theme_stylebox_override("hover", p_btn_hover)
 	play_now_btn.add_theme_stylebox_override("pressed", p_btn_pressed)
 	play_now_btn.add_theme_stylebox_override("focus", p_btn_style)
+	
+	# Subtle Pitch Line Texture Overlay inside Primary CTA (matches StartMatchButton in main_menu.gd)
+	if pitch_lines_texture:
+		var field_tex = TextureRect.new()
+		field_tex.texture = pitch_lines_texture
+		field_tex.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		field_tex.stretch_mode = TextureRect.STRETCH_SCALE
+		field_tex.set_anchors_preset(Control.PRESET_FULL_RECT)
+		field_tex.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		field_tex.modulate = Color(1, 1, 1, 0.22)
+		play_now_btn.add_child(field_tex)
+	
+	# Crisp Vector Forward Play Chevron on Right Side of Primary CTA
+	var play_chevron = Control.new()
+	play_chevron.set_anchors_preset(Control.PRESET_FULL_RECT)
+	play_chevron.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	play_chevron.draw.connect(func():
+		var bsz = play_chevron.size
+		# Subtle top inner highlight line
+		play_chevron.draw_line(Vector2(16, 2), Vector2(bsz.x - 16, 2), Color(1, 1, 1, 0.22), 1.5)
+		var cx = bsz.x - 28.0
+		var cy = (bsz.y - 3.0) * 0.5
+		var chevron_pts = PackedVector2Array([
+			Vector2(cx - 5.0, cy - 8.0),
+			Vector2(cx + 4.0, cy),
+			Vector2(cx - 5.0, cy + 8.0)
+		])
+		play_chevron.draw_polyline(chevron_pts, Color(1, 1, 1, 0.92), 2.8)
+	)
+	play_now_btn.add_child(play_chevron)
+	
 	play_now_btn.pressed.connect(_on_play_now_pressed)
 	vbox.add_child(play_now_btn)
 	
-	# --- 2. SECONDARY BUTTON: GOOGLE PLAY GAMES (3D Tactile Glass) ---
+	# --- 2. SECONDARY BUTTON: GOOGLE PLAY GAMES (Standardized Tactile Button, corner_radius = 14) ---
 	gp_btn = Button.new()
-	gp_btn.custom_minimum_size = Vector2(min(s.x * 0.85, 380), 56)
+	gp_btn.custom_minimum_size = Vector2(btn_width, 54)
 	
 	var gp_hbox = HBoxContainer.new()
 	gp_hbox.name = "GPHBox"
@@ -485,7 +643,7 @@ func _build_ui():
 	gp_icon.name = "GPIcon"
 	if ResourceLoader.exists("res://google_play_logo.svg"):
 		gp_icon.texture = load("res://google_play_logo.svg")
-	gp_icon.custom_minimum_size = Vector2(26, 26)
+	gp_icon.custom_minimum_size = Vector2(24, 24)
 	gp_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	gp_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	gp_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -496,23 +654,32 @@ func _build_ui():
 	gp_lbl.text = LANG.get(Global.current_lang, LANG["ENG"])["LOGIN_PLAY"]
 	gp_lbl.add_theme_font_override("font", custom_font)
 	gp_lbl.add_theme_font_size_override("font_size", 24)
-	gp_lbl.add_theme_color_override("font_color", Color8(220, 230, 245))
+	gp_lbl.add_theme_color_override("font_color", Color.WHITE)
+	gp_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 150))
+	gp_lbl.add_theme_constant_override("shadow_offset_y", 1)
 	gp_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	gp_hbox.add_child(gp_lbl)
 	
 	var gp_style = StyleBoxFlat.new()
-	gp_style.bg_color = Color8(255, 255, 255, 20)
-	gp_style.corner_radius_top_left = 28; gp_style.corner_radius_top_right = 28
-	gp_style.corner_radius_bottom_left = 28; gp_style.corner_radius_bottom_right = 28
-	gp_style.border_width_left = 1; gp_style.border_width_right = 1
-	gp_style.border_width_top = 1; gp_style.border_width_bottom = 3
-	gp_style.border_color = Color8(255, 255, 255, 45)
+	gp_style.bg_color = bg_bottom.darkened(0.16)
+	gp_style.bg_color.a = 0.94
+	gp_style.corner_radius_top_left = 14; gp_style.corner_radius_top_right = 14
+	gp_style.corner_radius_bottom_left = 14; gp_style.corner_radius_bottom_right = 14
+	gp_style.border_width_left = 2; gp_style.border_width_right = 2
+	gp_style.border_width_top = 2; gp_style.border_width_bottom = 4
+	var gp_border = bg_top.lightened(0.15)
+	gp_border.a = 0.38
+	gp_style.border_color = gp_border
+	gp_style.shadow_color = Color(0, 0, 0, 0.32)
+	gp_style.shadow_size = 8
+	gp_style.shadow_offset = Vector2(0, 2)
 	
 	var gp_hover = gp_style.duplicate()
-	gp_hover.bg_color = Color8(255, 255, 255, 35)
+	gp_hover.bg_color = bg_bottom.lightened(0.04)
+	gp_hover.border_color = Color(gp_border.r, gp_border.g, gp_border.b, 0.58)
 	
 	var gp_pressed = gp_style.duplicate()
-	gp_pressed.border_width_bottom = 0
+	gp_pressed.border_width_bottom = 2
 	gp_pressed.content_margin_top = 3
 	
 	gp_btn.add_theme_stylebox_override("normal", gp_style)
@@ -522,30 +689,32 @@ func _build_ui():
 	gp_btn.pressed.connect(_on_google_play_pressed)
 	vbox.add_child(gp_btn)
 	
-	# --- 3. PRIVACY POLICY FOOTER BUTTON (Standardized 48 dp Touch Target & 3D Tactile Feel) ---
+	# --- 3. PRIVACY POLICY FOOTER BUTTON (Standardized 48 dp Touch Target, corner_radius = 14) ---
 	privacy_btn = Button.new()
 	privacy_btn.text = LANG.get(Global.current_lang, LANG["ENG"])["PRIVACY"]
 	privacy_btn.add_theme_font_override("font", custom_font)
 	privacy_btn.add_theme_font_size_override("font_size", 20)
-	privacy_btn.add_theme_color_override("font_color", Color8(170, 205, 230))
-	privacy_btn.custom_minimum_size = Vector2(min(s.x * 0.75, 280), 48) # Standard >= 48 dp
+	privacy_btn.add_theme_color_override("font_color", Color.WHITE)
+	privacy_btn.add_theme_color_override("font_hover_color", Color.WHITE)
+	privacy_btn.custom_minimum_size = Vector2(min(s.x * 0.75, 280), 48)
 	privacy_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	
 	var priv_style = StyleBoxFlat.new()
-	priv_style.bg_color = Color8(255, 255, 255, 12)
-	priv_style.corner_radius_top_left = 24; priv_style.corner_radius_top_right = 24
-	priv_style.corner_radius_bottom_left = 24; priv_style.corner_radius_bottom_right = 24
+	priv_style.bg_color = bg_bottom.darkened(0.26)
+	priv_style.bg_color.a = 0.82
+	priv_style.corner_radius_top_left = 14; priv_style.corner_radius_top_right = 14
+	priv_style.corner_radius_bottom_left = 14; priv_style.corner_radius_bottom_right = 14
 	priv_style.border_width_left = 1; priv_style.border_width_right = 1
-	priv_style.border_width_top = 1; priv_style.border_width_bottom = 2
-	priv_style.border_color = Color8(255, 255, 255, 35)
+	priv_style.border_width_top = 1; priv_style.border_width_bottom = 3
+	priv_style.border_color = Color(1, 1, 1, 0.18)
 	priv_style.content_margin_left = 18; priv_style.content_margin_right = 18
 	
 	var priv_hover = priv_style.duplicate()
-	priv_hover.bg_color = Color8(255, 255, 255, 25)
-	priv_hover.border_color = Color(accent_color.r, accent_color.g, accent_color.b, 0.7)
+	priv_hover.bg_color = bg_bottom.darkened(0.14)
+	priv_hover.border_color = Color(1, 1, 1, 0.35)
 	
 	var priv_pressed = priv_style.duplicate()
-	priv_pressed.border_width_bottom = 0
+	priv_pressed.border_width_bottom = 1
 	priv_pressed.content_margin_top = 2
 	
 	privacy_btn.add_theme_stylebox_override("normal", priv_style)
@@ -564,16 +733,19 @@ func _build_ui():
 	add_child(ver_margin)
 	
 	var ver_lbl = Label.new()
-	ver_lbl.text = "v1.1.2"
+	ver_lbl.text = "v" + Global.CURRENT_GAME_VERSION
 	ver_lbl.add_theme_font_override("font", custom_font)
 	ver_lbl.add_theme_font_size_override("font_size", 16)
-	ver_lbl.add_theme_color_override("font_color", Color8(130, 165, 195, 130))
+	ver_lbl.add_theme_color_override("font_color", Color.WHITE)
 	ver_margin.add_child(ver_lbl)
 
 	# 6. Create Splash Intro Overlay (AAA Studio Presentation)
 	_build_splash_overlay()
 
 func _build_splash_overlay():
+	var bg_bottom: Color = active_theme.get("bg_bottom", Color8(0, 18, 40))
+	var accent_color: Color = active_theme.get("accent", Color8(255, 100, 0))
+	
 	splash_overlay = Control.new()
 	splash_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	splash_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -585,10 +757,11 @@ func _build_splash_overlay():
 			_skip_splash()
 	)
 	
-	# Dark cinematic backdrop (passes events to splash_overlay)
+	# Dark cinematic backdrop harmonized with active theme
 	var splash_bg = ColorRect.new()
 	splash_bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	splash_bg.color = Color8(6, 12, 20, 255)
+	splash_bg.color = bg_bottom.darkened(0.55)
+	splash_bg.color.a = 1.0
 	splash_bg.mouse_filter = Control.MOUSE_FILTER_PASS
 	splash_overlay.add_child(splash_bg)
 	
@@ -630,7 +803,7 @@ func _build_splash_overlay():
 	studio_sub.text = LANG.get(Global.current_lang, LANG["ENG"])["PRESENTS"]
 	studio_sub.add_theme_font_override("font", custom_font)
 	studio_sub.add_theme_font_size_override("font_size", 22)
-	studio_sub.add_theme_color_override("font_color", active_theme.get("accent", Color8(0, 210, 160)))
+	studio_sub.add_theme_color_override("font_color", Color.WHITE)
 	studio_sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	studio_sub.mouse_filter = Control.MOUSE_FILTER_PASS
 	splash_vbox.add_child(studio_sub)
@@ -640,7 +813,7 @@ func _build_splash_overlay():
 	skip_hint.text = LANG.get(Global.current_lang, LANG["ENG"]).get("SKIP_HINT", "Geçmek için dokunun")
 	skip_hint.add_theme_font_override("font", custom_font)
 	skip_hint.add_theme_font_size_override("font_size", 18)
-	skip_hint.add_theme_color_override("font_color", Color8(140, 160, 180, 170))
+	skip_hint.add_theme_color_override("font_color", Color.WHITE)
 	skip_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	skip_hint.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 	skip_hint.offset_top = -48
@@ -714,13 +887,15 @@ func _trigger_logo_shine():
 	)
 
 func _start_logo_idle_effects():
-	if not is_instance_valid(logo_rect):
+	var target_node: Control = logo_frame if is_instance_valid(logo_frame) else logo_rect
+	if not is_instance_valid(target_node):
 		return
 	
-	# Gentle living breath animation
+	target_node.pivot_offset = target_node.size * 0.5
+	# Gentle living breath animation on the rounded-square logo frame
 	var logo_tween = create_tween().set_loops().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	logo_tween.tween_property(logo_rect, "scale", Vector2(1.04, 1.04), 1.6)
-	logo_tween.tween_property(logo_rect, "scale", Vector2(0.98, 0.98), 1.6)
+	logo_tween.tween_property(target_node, "scale", Vector2(1.025, 1.025), 1.8)
+	logo_tween.tween_property(target_node, "scale", Vector2(0.99, 0.99), 1.8)
 	
 	# Periodic glossy shine sweep every 4.5 seconds
 	var periodic_shine = create_tween().set_loops()
@@ -732,8 +907,8 @@ func _start_button_pulse():
 		return
 	play_now_btn.pivot_offset = play_now_btn.size / 2.0
 	var btn_tween = create_tween().set_loops().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	btn_tween.tween_property(play_now_btn, "scale", Vector2(1.02, 1.02), 1.3)
-	btn_tween.tween_property(play_now_btn, "scale", Vector2(1.0, 1.0), 1.3)
+	btn_tween.tween_property(play_now_btn, "scale", Vector2(1.015, 1.015), 1.4)
+	btn_tween.tween_property(play_now_btn, "scale", Vector2(1.0, 1.0), 1.4)
 
 func _process(delta: float) -> void:
 	var s = get_viewport_rect().size
@@ -819,17 +994,19 @@ func _set_gp_btn_connected(animate: bool = false):
 	gp_btn.disabled = true
 	var gp_lbl = gp_btn.get_node_or_null("GPHBox/GPLabel") as Label
 	if is_instance_valid(gp_lbl):
-		gp_lbl.add_theme_color_override("font_color", Color8(100, 255, 140))
+		gp_lbl.add_theme_color_override("font_color", Color8(110, 255, 150))
 	var gp_conn_style = StyleBoxFlat.new()
-	gp_conn_style.bg_color = Color8(15, 60, 35, 230)
-	gp_conn_style.corner_radius_top_left = 28; gp_conn_style.corner_radius_top_right = 28
-	gp_conn_style.corner_radius_bottom_left = 28; gp_conn_style.corner_radius_bottom_right = 28
-	gp_conn_style.border_width_bottom = 3; gp_conn_style.border_color = Color8(15, 157, 88)
+	gp_conn_style.bg_color = Color8(14, 65, 42, 238)
+	gp_conn_style.corner_radius_top_left = 14; gp_conn_style.corner_radius_top_right = 14
+	gp_conn_style.corner_radius_bottom_left = 14; gp_conn_style.corner_radius_bottom_right = 14
+	gp_conn_style.border_width_left = 2; gp_conn_style.border_width_right = 2
+	gp_conn_style.border_width_top = 2; gp_conn_style.border_width_bottom = 4
+	gp_conn_style.border_color = Color8(24, 165, 98)
 	gp_btn.add_theme_stylebox_override("normal", gp_conn_style)
 	gp_btn.add_theme_stylebox_override("hover", gp_conn_style)
 	gp_btn.add_theme_stylebox_override("pressed", gp_conn_style)
 	gp_btn.add_theme_stylebox_override("disabled", gp_conn_style)
-	gp_btn.add_theme_color_override("font_disabled_color", Color8(100, 255, 140))
+	gp_btn.add_theme_color_override("font_disabled_color", Color8(110, 255, 150))
 	if animate:
 		gp_btn.pivot_offset = gp_btn.size / 2.0
 		var pop_tw = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -854,7 +1031,7 @@ func _on_sign_in_failed(_arg = null):
 	if is_instance_valid(gp_btn):
 		var gp_lbl = gp_btn.get_node_or_null("GPHBox/GPLabel") as Label
 		if is_instance_valid(gp_lbl):
-			gp_lbl.add_theme_color_override("font_color", Color8(220, 230, 245))
+			gp_lbl.add_theme_color_override("font_color", Color.WHITE)
 		_update_gp_btn_text(LANG.get(Global.current_lang, LANG["ENG"])["LOGIN_PLAY"], "res://google_play_logo.svg")
 		gp_btn.disabled = false
 
@@ -887,6 +1064,28 @@ func _update_language_texts():
 		privacy_btn.text = lang_data["PRIVACY"]
 	if is_instance_valid(lang_btn):
 		lang_btn.text = " " + LANG_DISPLAY.get(Global.current_lang, "TR")
+
+func refresh_ui_texts():
+	_update_language_texts()
+
+func _on_play_pressed():
+	_on_play_now_pressed()
+
+func _on_gpgs_pressed():
+	_on_google_play_pressed()
+
+func _on_privacy_pressed():
+	_show_privacy_policy()
+
+func _on_lang_pressed():
+	_cycle_language()
+
+func _update_gpgs_btn_state():
+	if Global.login_method == "google":
+		_set_gp_btn_connected(false)
+	else:
+		var lang_data = LANG.get(Global.current_lang, LANG["ENG"])
+		_update_gp_btn_text(lang_data["LOGIN_PLAY"], "res://google_play_logo.svg")
 
 func _show_privacy_policy():
 	Global.play_click()

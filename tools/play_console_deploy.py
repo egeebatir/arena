@@ -99,27 +99,27 @@ def upload_aab(aab_path, tracks=["internal", "alpha"], release_name=None, releas
             release_notes = [
                 {
                     "language": "tr-TR",
-                    "text": "• Maç Jeton Ekonomisi: Günlük 5 ücretsiz maç sonrası 50 jeton ücreti ve bakiye senkronizasyonu düzeltildi.\n• Resmi Jeton Tasarımı: Maç ücreti rozetinde oyunun resmi jeton grafiği entegre edildi.\n• Sabit Mağaza Başlığı: Başlık ve jeton göstergesi sabitlendi, içerik akıcı kaydırılabilir hale getirildi.\n• Gelişmiş Tablet Deneyimi: İstatistikler ve Mağaza ekranlarına dokunsal kaydırma çubukları, yön kilidi ve hızlı gezinme butonları eklendi."
+                    "text": "• Elit Kulüp & Üst Rozet Yenilendi: Modern rozet tasarımı, Elit Kulüp ayrıcalıkları ve tema uyumlu vitrin kartı eklendi.\n• Yenilenen Mağaza & Günlük Görevler: Tıklanabilir günlük görevler kartı (gg/aa/yy tarih formatı), ikonlu Şans Çarkı ve geliştirilmiş Video İzle butonu.\n• Modern Jeton & Beyaz Tipografi: Minimalist geometrik jeton ikonu ve tüm ekranlarda net beyaz yazı standardı.\n• Gelişmiş Rehber Deneyimi: 3. adımda tam ekran dokunuşla tamamlama ve rehber sırasında ekran kaydırma kilidi."
                 },
                 {
                     "language": "en-US",
-                    "text": "• Match Token Economy: Fixed 50 token fee per match after 5 daily free matches with instant balance sync.\n• Authentic Token Design: Replaced generic icon with the official in-game token artwork.\n• Pinned Shop Header: Pinned shop title and coin balance at the top with smooth scrolling underneath.\n• Enhanced Tablet & Scroll UX: Equipped Stats and Shop with tactile scrollbars, directional gesture locks, and carousel arrow controls."
+                    "text": "• Elite Club & Top Badge Rework: Redesigned top status badge, Elite Club perks showcase, and theme-harmonized store card.\n• Refined Shop & Daily Quests: Interactive Daily Quests card (DD/MM/YY date format), compact Lucky Wheel icon button, and enhanced Watch Video CTA.\n• Modern Token & Crisp Typography: Minimalist geometric token artwork and pure white text across all screens.\n• Enhanced Guide Flow: Full-screen tap-to-finish on the final step and swipe lock while the guide is active."
                 },
                 {
                     "language": "es-ES",
-                    "text": "• Economía de Partidos: Corrección del cobro de 50 fichas tras agotar los 5 partidos gratis diarios.\n• Diseño Oficial de Ficha: Icono oficial integrado en el botón de inicio de partido.\n• Encabezado de Tienda Fijo: Título y saldo de fichas fijos en la parte superior con desplazamiento fluido.\n• Mejoras de Tablet: Barras táctiles visibles en Estadísticas y Tienda con bloqueo direccional de gestos."
+                    "text": "• Club Élite e Insignia Superior: Nuevo diseño de insignia superior, ventajas del Club Élite y tarjeta temática en la tienda.\n• Tienda y Misiones Diarias: Tarjeta interactiva de Misiones Diarias (formato DD/MM/AA), botón compacto de Ruleta y botón Ver Video mejorado.\n• Ficha Moderna y Tipografía Blanca: Nuevo icono geométrico de ficha y textos en blanco puro en todas las pantallas.\n• Guía Mejorada: Toque en pantalla completa para finalizar y bloqueo de deslizamiento durante la guía."
                 },
                 {
                     "language": "pt-BR",
-                    "text": "• Economia de Partidas: Correção na cobrança de 50 fichas após usar as 5 partidas grátis diárias.\n• Design Oficial de Ficha: Ícone oficial do jogo integrado no aviso de custo da partida.\n• Cabeçalho Fixo na Loja: Título e saldo fixados no topo com rolagem suave de conteúdo.\n• Melhorias para Tablet: Barras de rolagem visíveis nas Estatísticas e Loja com bloqueio direcional de gestos."
+                    "text": "• Clube Elite e Emblema Superior: Novo design de emblema no topo, vantagens do Clube Elite e cartão temático na loja.\n• Loja e Missões Diárias: Cartão interativo de Missões Diárias (formato DD/MM/AA), botão compacto da Roleta e botão Assistir Vídeo aprimorado.\n• Moeda Moderna e Tipografia Branca: Novo ícone geométrico de moeda e textos em branco puro em todas as telas.\n• Guia Aprimorado: Toque em tela cheia para concluir no passo final e bloqueio de deslize durante o guia."
                 },
                 {
                     "language": "it-IT",
-                    "text": "• Economia Partite: Corretto il costo di 50 gettoni dopo le 5 partite gratuite giornaliere.\n• Grafica Ufficiale Gettoni: Icona ufficiale del gioco integrata nel badge di ingresso partita.\n• Intestazione Negozio Fissa: Titolo e saldo fissati in alto con scorrimento fluido dei contenuti.\n• Esperienza Tablet: Barre di scorrimento visibili per Statistiche e Negozio con blocco direzionale dei gesti."
+                    "text": "• Club Élite e Badge Superiore: Nuovo design del badge superiore, vantaggi Club Élite e scheda negozio armonizzata col tema.\n• Negozio e Missioni Giornaliere: Scheda interattiva Missioni Giornaliere (formato GG/MM/AA), pulsante icona Ruota e Guarda Video migliorato.\n• Gettone Moderno e Tipografia Bianca: Nuova icona geometrica del gettone e testi in bianco puro su tutte le schermate.\n• Guida Migliorata: Tocco a tutto schermo per completare l'ultimo passaggio e blocco dello scorrimento durante la guida."
                 }
             ]
 
-        rel_name = release_name or f"{version_code} (1.1.2)"
+        rel_name = release_name or f"{version_code} (1.1.3)"
 
         # 3. Assign bundle to each requested track
         for track in tracks:

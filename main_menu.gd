@@ -7,6 +7,17 @@ var billing
 
 var LANG = {
 	"TR": {
+		"TUTORIAL_TITLE_1": "HOŞ GELDİN!",
+		"TUTORIAL_DESC_1": "Bol Gol Futbol'a hoş geldin!\nBuradan ligleri ve maç yapmak istediğin iki takımı seçebilir, favori kulübünü belirleyebilirsin.",
+		"TUTORIAL_TITLE_2": "DİL & HIZLI MENÜ",
+		"TUTORIAL_DESC_2": "Sol üstten oyun dilini anında değiştirebilirsin.\nSağ üstteki menüden ise Kadro Kurucu ile özel kadronu oluşturabilir, oyuncu isimlerini düzenleyebilir ve ayarlara ulaşabilirsin!",
+		"TUTORIAL_TITLE_3": "İSTATİSTİKLER, MAĞAZA & JETONLAR",
+		"TUTORIAL_DESC_3": "Alt çubuktan geçmiş maç istatistiklerini görebilir ve Mağaza'ya geçebilirsin.\n\n🪙 Jetonlar: Maç kazanarak, video izleyerek, çark çevirerek veya görevlerle jeton kazanabilir; bunlarla özel top görünümleri, taçlar ve maç hakları alabilirsin!\n\nSahaya çık ve keyfini çıkar! ⚽🔥",
+		"TUTORIAL_BTN_NEXT": "İLERİ ➔",
+		"TUTORIAL_BTN_FINISH": "KEYFİNİ ÇIKAR! ⚽",
+		"TUTORIAL_BTN_SKIP": "ATLA",
+		"TUTORIAL_MENU_ITEM": "Rehber",
+		"TUTORIAL_STEP_FMT": "AŞAMA %d / 3",
 		"TEAM_SELECTION": "TAKIM SEÇİMİ", "SETTINGS": "AYARLAR",
 		"HOME": "EV SAHİBİ", "AWAY": "DEPLASMAN", "SEARCH": "Takım Ara...",
 		"START_MATCH": "MAÇI BAŞLAT", "LANG_BTN": "TR", "CLOSE": "KAPAT", "SAVE": "KAYDET",
@@ -19,8 +30,9 @@ var LANG = {
 		"STATS_HOME_W": "Galibiyet (Ev)", "STATS_AWAY_W": "Dep. Galibiyet",
 		"STATS_DRAW": "Beraberlik", "STATS_MOST_GOALS": "En Çok Gol", "STATS_BIGGEST_WIN": "En Büyük Fark",
 		"SHOP_COSMETICS": "KOZMETİKLER", "SHOP_BALL_SKINS": "Top Görünümleri",
+		"PRO_PASS_TITLE": "ELİT KULÜP",
 		"SHOP_BUY": "49.99 TL — SATIN AL", "SHOP_CANCEL": "VAZGEÇ",
-		"SHOP_PRO_DESC": "Tüm özel temalar, özel toplar, taçlar ve reklamsız deneyim",
+		"SHOP_PRO_DESC": "Reklamsız deneyim, tüm özel temalar, toplar, taçlar ve sınırsız maç hakkı",
 		"REPLAY_ASK": "Aynı maçı tekrar oynatmak istediğinize emin misiniz?",
 		"RANDOM": "RASTGELE",
 		"AD_COOLDOWN_WAIT": "Lütfen bekle: %02d:%02d",
@@ -46,7 +58,7 @@ var LANG = {
 		"PLAYER_LIST_TITLE": "KADRO", "PLAYER_LIST_BTN": "Oyuncu Kadrosu",
 		"NO_FAV_TEAM_WARN": "Favori Takım Seçilmedi",
 		"MAX_CHAR_WARN": "Maksimum 20 karakter yazabilirsiniz!", "ADD_PLAYER": "+ OYUNCU EKLE",
-		"PRO_ACTIVE": "PRO AKTİF", "PRO_OFF": "PRO KAPAT", "PRO_OFF_TOAST": "PRO KAPATILDI", "RESTORE_PURCHASES": "Satın Alımları Geri Yükle",
+		"PRO_ACTIVE": "ELİT AKTİF", "PRO_OFF": "ELİT KAPAT", "PRO_OFF_TOAST": "ELİT KULÜP KAPATILDI", "RESTORE_PURCHASES": "Satın Alımları Geri Yükle",
 		"PRIVACY_POLICY": "Gizlilik Politikası", "PRIVACY_TITLE": "GİZLİLİK POLİTİKASI",
 		"RESTORE_CHECK": "Satın alımlar kontrol ediliyor...", "RESTORE_SUCCESS": "Satın alımlar geri yüklendi!",
 		"EXIT_CONFIRM": "Çıkmak istediğinize emin misiniz?", "EXIT_TITLE": "ÇIKIŞ", "SEC_ACCOUNT": "HESAP & GİZLİLİK",
@@ -65,7 +77,7 @@ var LANG = {
 		"QUEST_PROGRESS": "İlerleme", "QUEST_REWARD": "Ödül", "REMAINING_AD_SPINS": "Kalan Reklamlı Çevirme",
 		"LEADERBOARD_OPEN": "DÜNYA SIRALAMASINI GÖR", "LEADERBOARD_SYNC": "SKORU EŞİTLE",
 		"LEADERBOARD_HINT": "Google Play Games ile dünya sıralamasına katıl ve diğer oyuncularla yarış!",
-		"GOALS_SUFFIX": "Gol", "PRO_UPGRADE_TITLE": "PRO'ya Yükselt", "LEADERBOARD_LOCAL_TITLE": "Skor Kartın",
+		"GOALS_SUFFIX": "Gol", "PRO_UPGRADE_TITLE": "ELİT KULÜP'E KATIL", "LEADERBOARD_LOCAL_TITLE": "Skor Kartın",
 		"LEADERBOARD_GLOBAL_TITLE": "Google Play Games Dünya Sıralaması",
 		"LEAGUE_TURKEY": "Türkiye Ligi", "LEAGUE_NATIONAL": "Milli Takımlar", "LEAGUE_ENGLAND": "İngiltere Ligi", "LEAGUE_SPAIN": "İspanya Ligi",
 		"LEAGUE_GERMANY": "Almanya Ligi", "LEAGUE_ITALY": "İtalya Ligi", "LEAGUE_FRANCE": "Fransa Ligi",
@@ -79,23 +91,34 @@ var LANG = {
 		"EARNED_REWARD": "+%s %s Kazandın!",
 		"SQUAD_SUFFIX": "KADROSU", "TAP_TO_SWITCH_TEAM": "Takım değiştirmek için dokun",
 		"SELECT_TEAM": "TAKIM SEÇ", "SEARCH_TEAM": "Takım ara...",
-		"VIP_TITLE": "⭐ VIP AYRICALIKLARI AKTİF ⭐", "VIP_DESC": "Reklamsız • Tüm Kozmetikler Açık • Sınırsız Oyun",
-		"HOUSE_AD_WHEEL_TITLE": "🎡 ŞANS ÇARKI",
-		"HOUSE_AD_WHEEL_DESC": "Günün ücretsiz çevirmesini al, altınları kap! Hemen Çevir ➔",
-		"HOUSE_AD_FAV_TITLE": "⚽ FAVORİ TAKIM & KARİYER",
-		"HOUSE_AD_FAV_DESC": "Takımını seç, kupa ve gol istatistiklerini takip et! İncele ➔",
-		"HOUSE_AD_PRO_TITLE": "👑 BOL GOL PRO ÜYELİK",
-		"HOUSE_AD_PRO_DESC": "Sıfır reklam, tüm kozmetikler açık & sınırsız oyun! Keşfet ➔",
-		"HOUSE_AD_QUEST_TITLE": "📋 GÜNLÜK GÖREVLER",
-		"HOUSE_AD_QUEST_DESC": "Günün görevlerini tamamla, bonus altınları topla! Görevler ➔",
-		"HOUSE_AD_TIP1_TITLE": "💡 MAÇ TAKTİĞİ: ÇEMBER AÇISI",
+		"VIP_TITLE": "ELİT KULÜP ÜYESİ", "VIP_DESC": "Reklamsız Deneyim • Tüm Özel Kozmetikler & Sınırsız Maç Aktif",
+		"HOUSE_AD_WHEEL_TITLE": "ŞANS ÇARKI",
+		"HOUSE_AD_WHEEL_DESC": "Günün ücretsiz çevirmesini kullan, jetonları kap!",
+		"HOUSE_AD_FAV_TITLE": "FAVORİ TAKIM & KARİYER",
+		"HOUSE_AD_FAV_DESC": "Takımını seç, kupa ve gol istatistiklerini takip et!",
+		"HOUSE_AD_PRO_TITLE": "ELİT KULÜP AYRICALIKLARI",
+		"HOUSE_AD_PRO_DESC": "Reklamsız deneyim, tüm özel toplar, taçlar ve sınırsız maç hakkı!",
+		"HOUSE_AD_QUEST_TITLE": "GÜNLÜK GÖREVLER",
+		"HOUSE_AD_QUEST_DESC": "Günün görevlerini tamamla, ekstra jeton ödüllerini topla!",
+		"HOUSE_AD_TIP1_TITLE": "MAÇ TAKTİĞİ: ÇEMBER AÇISI",
 		"HOUSE_AD_TIP1_DESC": "Topu çember kenarlarına çarptırarak falso ver ve kaleciyi avla!",
-		"HOUSE_AD_TIP2_TITLE": "🧤 KADRO DÜZENLEME & KAPTAN",
+		"HOUSE_AD_TIP2_TITLE": "KADRO KURUCU & KAPTAN",
 		"HOUSE_AD_TIP2_DESC": "Takımının ilk 11'ini ve kaptanını belirle, sahaya kendi kadronla çık!",
-		"HOUSE_AD_WEB_TITLE": "🌐 CANLI WEB SIRALAMASI: EBSTUDYO.COM",
-		"HOUSE_AD_WEB_DESC": "Dünya rekorlarını ve küresel sıralamaları webden canlı izle! ➔"
+		"HOUSE_AD_WEB_TITLE": "CANLI SIRALAMA: EBSTUDYO.COM",
+		"HOUSE_AD_WEB_DESC": "Küresel liderlik tablosunu ve turnuva rekorlarını webden takip et!"
 	},
 	"ENG": {
+		"TUTORIAL_TITLE_1": "WELCOME!",
+		"TUTORIAL_DESC_1": "Welcome to Bol Gol Futbol!\nSelect leagues and pick the two teams for your matchup. Set your favorite club right here!",
+		"TUTORIAL_TITLE_2": "LANGUAGE & QUICK MENU",
+		"TUTORIAL_DESC_2": "Switch the game language instantly at top-left.\nTap the top-right menu for Squad Builder to create custom lineups, edit player names, and access settings!",
+		"TUTORIAL_TITLE_3": "STATS, SHOP & COINS",
+		"TUTORIAL_DESC_3": "Use the bottom navigation bar to review match stats and browse the Shop.\n\n🪙 Coins: Earn coins by winning matches, watching videos, spinning the wheel, or completing quests. Spend coins on ball skins, crowns, and match entries!\n\nHit the pitch and have fun! ⚽🔥",
+		"TUTORIAL_BTN_NEXT": "NEXT ➔",
+		"TUTORIAL_BTN_FINISH": "LET'S PLAY! ⚽",
+		"TUTORIAL_BTN_SKIP": "SKIP",
+		"TUTORIAL_MENU_ITEM": "Guide",
+		"TUTORIAL_STEP_FMT": "STEP %d / 3",
 		"TEAM_SELECTION": "TEAM SELECTION", "SETTINGS": "SETTINGS",
 		"HOME": "HOME", "AWAY": "AWAY", "SEARCH": "Search Team...",
 		"START_MATCH": "START MATCH", "LANG_BTN": "ENG", "CLOSE": "CLOSE", "SAVE": "SAVE",
@@ -108,8 +131,9 @@ var LANG = {
 		"STATS_HOME_W": "Home Wins", "STATS_AWAY_W": "Away Wins",
 		"STATS_DRAW": "Draws", "STATS_MOST_GOALS": "Most Goals", "STATS_BIGGEST_WIN": "Biggest Win",
 		"SHOP_COSMETICS": "COSMETICS", "SHOP_BALL_SKINS": "Ball Skins",
+		"PRO_PASS_TITLE": "ELITE CLUB",
 		"SHOP_BUY": "$0.99 — BUY NOW", "SHOP_CANCEL": "CANCEL",
-		"SHOP_PRO_DESC": "Unlock all themes, custom balls, crowns and ad-free experience",
+		"SHOP_PRO_DESC": "Ad-free experience, all custom themes, balls, crowns and unlimited matches",
 		"REPLAY_ASK": "Are you sure you want to replay the exact same match?",
 		"RANDOM": "RANDOM",
 		"AD_COOLDOWN_WAIT": "Please wait: %02d:%02d",
@@ -135,7 +159,7 @@ var LANG = {
 		"PLAYER_LIST_TITLE": "PLAYER LIST", "PLAYER_LIST_BTN": "Player Squad",
 		"NO_FAV_TEAM_WARN": "No Favorite Team Selected",
 		"MAX_CHAR_WARN": "Maximum 20 characters!", "ADD_PLAYER": "+ ADD PLAYER",
-		"PRO_ACTIVE": "PRO ACTIVE", "PRO_OFF": "TURN OFF PRO", "PRO_OFF_TOAST": "PRO DEACTIVATED", "RESTORE_PURCHASES": "Restore Purchases",
+		"PRO_ACTIVE": "ELITE ACTIVE", "PRO_OFF": "TURN OFF ELITE", "PRO_OFF_TOAST": "ELITE CLUB DEACTIVATED", "RESTORE_PURCHASES": "Restore Purchases",
 		"PRIVACY_POLICY": "Privacy Policy", "PRIVACY_TITLE": "PRIVACY POLICY",
 		"RESTORE_CHECK": "Checking purchases...", "RESTORE_SUCCESS": "Purchases restored!",
 		"EXIT_CONFIRM": "Are you sure you want to exit?", "EXIT_TITLE": "EXIT", "SEC_ACCOUNT": "ACCOUNT & PRIVACY",
@@ -154,7 +178,7 @@ var LANG = {
 		"QUEST_PROGRESS": "Progress", "QUEST_REWARD": "Reward", "REMAINING_AD_SPINS": "Remaining Ad Spins",
 		"LEADERBOARD_OPEN": "VIEW GLOBAL LEADERBOARD", "LEADERBOARD_SYNC": "SYNC SCORE",
 		"LEADERBOARD_HINT": "Join Google Play Games global leaderboard and compete worldwide!",
-		"GOALS_SUFFIX": "Goals", "PRO_UPGRADE_TITLE": "Upgrade to PRO", "LEADERBOARD_LOCAL_TITLE": "Your Scorecard",
+		"GOALS_SUFFIX": "Goals", "PRO_UPGRADE_TITLE": "JOIN ELITE CLUB", "LEADERBOARD_LOCAL_TITLE": "Your Scorecard",
 		"LEADERBOARD_GLOBAL_TITLE": "Google Play Games Global Leaderboard",
 		"LEAGUE_TURKEY": "Turkish League", "LEAGUE_NATIONAL": "National Teams", "LEAGUE_ENGLAND": "English League", "LEAGUE_SPAIN": "Spanish League",
 		"LEAGUE_GERMANY": "German League", "LEAGUE_ITALY": "Italian League", "LEAGUE_FRANCE": "French League",
@@ -168,23 +192,34 @@ var LANG = {
 		"EARNED_REWARD": "Earned +%s %s!",
 		"SQUAD_SUFFIX": "SQUAD", "TAP_TO_SWITCH_TEAM": "Tap to switch team",
 		"SELECT_TEAM": "SELECT TEAM", "SEARCH_TEAM": "Search team...",
-		"VIP_TITLE": "⭐ VIP MEMBER ACTIVE ⭐", "VIP_DESC": "Ad-Free • All Cosmetics Unlocked • Unlimited Play",
-		"HOUSE_AD_WHEEL_TITLE": "🎡 LUCKY WHEEL",
-		"HOUSE_AD_WHEEL_DESC": "Claim your daily free spin and collect coins! Spin Now ➔",
-		"HOUSE_AD_FAV_TITLE": "⚽ FAVORITE TEAM & STATS",
-		"HOUSE_AD_FAV_DESC": "Pick your favorite team, track deep stats & records! View ➔",
-		"HOUSE_AD_PRO_TITLE": "👑 BOL GOL PRO MEMBER",
-		"HOUSE_AD_PRO_DESC": "Zero ads, all cosmetics unlocked & unlimited play! Unlock ➔",
-		"HOUSE_AD_QUEST_TITLE": "📋 DAILY QUESTS",
-		"HOUSE_AD_QUEST_DESC": "Complete daily quests and earn bonus coins! Quests ➔",
-		"HOUSE_AD_TIP1_TITLE": "💡 MATCH TACTIC: ARENA REBOUND",
+		"VIP_TITLE": "ELITE CLUB MEMBER", "VIP_DESC": "Ad-Free Experience • All Custom Cosmetics & Unlimited Matches",
+		"HOUSE_AD_WHEEL_TITLE": "LUCKY WHEEL",
+		"HOUSE_AD_WHEEL_DESC": "Claim your daily free spin and collect coins!",
+		"HOUSE_AD_FAV_TITLE": "FAVORITE TEAM & STATS",
+		"HOUSE_AD_FAV_DESC": "Pick your favorite team, track deep stats & records!",
+		"HOUSE_AD_PRO_TITLE": "ELITE CLUB PRIVILEGES",
+		"HOUSE_AD_PRO_DESC": "Ad-free play, all custom balls, crowns & unlimited matches!",
+		"HOUSE_AD_QUEST_TITLE": "DAILY QUESTS",
+		"HOUSE_AD_QUEST_DESC": "Complete daily quests and earn bonus coins!",
+		"HOUSE_AD_TIP1_TITLE": "MATCH TACTIC: ARENA REBOUND",
 		"HOUSE_AD_TIP1_DESC": "Bank shots off the arena curve to curve the ball past the keeper!",
-		"HOUSE_AD_TIP2_TITLE": "🧤 SQUAD BUILDER & CAPTAIN",
+		"HOUSE_AD_TIP2_TITLE": "SQUAD BUILDER & CAPTAIN",
 		"HOUSE_AD_TIP2_DESC": "Customize your team's starting lineup & captain to play your way!",
-		"HOUSE_AD_WEB_TITLE": "🌐 LIVE LEADERBOARD: EBSTUDYO.COM",
-		"HOUSE_AD_WEB_DESC": "Check global live rankings and tournament records online! ➔"
+		"HOUSE_AD_WEB_TITLE": "LIVE LEADERBOARD: EBSTUDYO.COM",
+		"HOUSE_AD_WEB_DESC": "Check global live rankings and tournament records online!"
 	},
 	"ESP": {
+		"TUTORIAL_TITLE_1": "¡BIENVENIDO!",
+		"TUTORIAL_DESC_1": "¡Bienvenido a Bol Gol Futbol!\nElige las ligas y selecciona los dos equipos para tu partido. ¡Define tu club favorito aquí mismo!",
+		"TUTORIAL_TITLE_2": "IDIOMA Y MENÚ RÁPIDO",
+		"TUTORIAL_DESC_2": "Cambia el idioma al instante arriba a la izquierda.\n¡Abre el menú superior derecho para el Creador de Plantillas, editar nombres y configurar ajustes!",
+		"TUTORIAL_TITLE_3": "ESTADÍSTICAS, TIENDA Y MONEDAS",
+		"TUTORIAL_DESC_3": "Usa la barra inferior para ver tus estadísticas y visitar la Tienda.\n\n🪙 Monedas: Gana monedas ganando partidos, viendo videos, girando la ruleta o con misiones. ¡Úsalas para balones, coronas y entradas!\n\n¡Entra a la cancha y disfruta! ⚽🔥",
+		"TUTORIAL_BTN_NEXT": "SIGUIENTE ➔",
+		"TUTORIAL_BTN_FINISH": "¡A JUGAR! ⚽",
+		"TUTORIAL_BTN_SKIP": "SALTAR",
+		"TUTORIAL_MENU_ITEM": "Guía",
+		"TUTORIAL_STEP_FMT": "PASO %d / 3",
 		"TEAM_SELECTION": "SELECCIÓN DE EQUIPO", "SETTINGS": "AJUSTES",
 		"HOME": "LOCAL", "AWAY": "VISITANTE", "SEARCH": "Buscar...",
 		"START_MATCH": "INICIAR PARTIDO", "LANG_BTN": "ESP", "CLOSE": "CERRAR", "SAVE": "GUARDAR",
@@ -197,8 +232,9 @@ var LANG = {
 		"STATS_HOME_W": "Victorias (Local)", "STATS_AWAY_W": "Vic. (Visitante)",
 		"STATS_DRAW": "Empates", "STATS_MOST_GOALS": "Más Goles", "STATS_BIGGEST_WIN": "Mayor Diferencia",
 		"SHOP_COSMETICS": "COSMÉTICOS", "SHOP_BALL_SKINS": "Apariencias de Balón",
+		"PRO_PASS_TITLE": "CLUB ÉLITE",
 		"SHOP_BUY": "0.99€ — COMPRAR", "SHOP_CANCEL": "CANCELAR",
-		"SHOP_PRO_DESC": "Desbloquea todos los temas, balones y experiencia sin anuncios",
+		"SHOP_PRO_DESC": "Experiencia sin anuncios, todos los temas, balones, coronas y partidos ilimitados",
 		"REPLAY_ASK": "¿Estás seguro de que quieres volver a jugar el mismo partido?",
 		"RANDOM": "ALEATORIO",
 		"AD_COOLDOWN_WAIT": "Por favor espera: %02d:%02d",
@@ -224,7 +260,7 @@ var LANG = {
 		"PLAYER_LIST_TITLE": "LISTA DE JUGADORES", "PLAYER_LIST_BTN": "Lista de Jugadores",
 		"NO_FAV_TEAM_WARN": "Sin Equipo Favorito",
 		"MAX_CHAR_WARN": "¡Máximo 20 caracteres!", "ADD_PLAYER": "+ AÑADIR JUGADOR",
-		"PRO_ACTIVE": "PRO ACTIVO", "PRO_OFF": "DESACTIVAR PRO", "PRO_OFF_TOAST": "PRO DESACTIVADO", "RESTORE_PURCHASES": "Restaurar Compras",
+		"PRO_ACTIVE": "ÉLITE ACTIVO", "PRO_OFF": "DESACTIVAR ÉLITE", "PRO_OFF_TOAST": "CLUB ÉLITE DESACTIVADO", "RESTORE_PURCHASES": "Restaurar Compras",
 		"PRIVACY_POLICY": "Política de Privacidad", "PRIVACY_TITLE": "POLÍTICA DE PRIVACIDAD",
 		"RESTORE_CHECK": "Comprobando compras...", "RESTORE_SUCCESS": "¡Compras restauradas!",
 		"EXIT_CONFIRM": "¿Estás seguro de que quieres salir?", "EXIT_TITLE": "SALIR", "SEC_ACCOUNT": "CUENTA Y PRIVACIDAD",
@@ -243,7 +279,7 @@ var LANG = {
 		"QUEST_PROGRESS": "Progreso", "QUEST_REWARD": "Recompensa", "REMAINING_AD_SPINS": "Giros Restantes",
 		"LEADERBOARD_OPEN": "VER CLASIFICACIÓN GLOBAL", "LEADERBOARD_SYNC": "SINCRONIZAR PUNTUACIÓN",
 		"LEADERBOARD_HINT": "¡Únete a la clasificación global de Google Play Games y compite mundialmente!",
-		"GOALS_SUFFIX": "Goles", "PRO_UPGRADE_TITLE": "Mejorar a PRO", "LEADERBOARD_LOCAL_TITLE": "Tu Tarjeta de Puntuación",
+		"GOALS_SUFFIX": "Goles", "PRO_UPGRADE_TITLE": "ÚNETE AL CLUB ÉLITE", "LEADERBOARD_LOCAL_TITLE": "Tu Tarjeta de Puntuación",
 		"LEADERBOARD_GLOBAL_TITLE": "Clasificación Global de Google Play Games",
 		"LEAGUE_TURKEY": "Liga Turca", "LEAGUE_NATIONAL": "Selecciones", "LEAGUE_ENGLAND": "Liga Inglesa", "LEAGUE_SPAIN": "Liga Española",
 		"LEAGUE_GERMANY": "Liga Alemana", "LEAGUE_ITALY": "Liga Italiana", "LEAGUE_FRANCE": "Liga Francesa",
@@ -257,23 +293,34 @@ var LANG = {
 		"EARNED_REWARD": "¡Ganaste +%s %s!",
 		"SQUAD_SUFFIX": "PLANTILLA", "TAP_TO_SWITCH_TEAM": "Toca para cambiar de equipo",
 		"SELECT_TEAM": "SELECCIONAR EQUIPO", "SEARCH_TEAM": "Buscar equipo...",
-		"VIP_TITLE": "⭐ MIEMBRO VIP ACTIVO ⭐", "VIP_DESC": "Sin Anuncios • Todos los Cosméticos • Juego Ilimitado",
-		"HOUSE_AD_WHEEL_TITLE": "🎡 RULETA DE LA SUERTE",
-		"HOUSE_AD_WHEEL_DESC": "¡Reclama tu giro gratis diario y gana monedas! Girar Ahora ➔",
-		"HOUSE_AD_FAV_TITLE": "⚽ EQUIPO FAVORITO Y RÉCORDS",
-		"HOUSE_AD_FAV_DESC": "¡Elige tu equipo favorito y sigue tus estadísticas! Ver ➔",
-		"HOUSE_AD_PRO_TITLE": "👑 MIEMBRO PRO BOL GOL",
-		"HOUSE_AD_PRO_DESC": "¡Sin anuncios, cosméticos desbloqueados y juego libre! Descubrir ➔",
-		"HOUSE_AD_QUEST_TITLE": "📋 MISIONES DIARIAS",
-		"HOUSE_AD_QUEST_DESC": "¡Completa las misiones de hoy y gana monedas extra! Misiones ➔",
-		"HOUSE_AD_TIP1_TITLE": "💡 TÁCTICA: REBOTE EN LA CURVA",
+		"VIP_TITLE": "MIEMBRO CLUB ÉLITE", "VIP_DESC": "Sin Anuncios • Todos los Cosméticos y Partidos Ilimitados",
+		"HOUSE_AD_WHEEL_TITLE": "RULETA DE LA SUERTE",
+		"HOUSE_AD_WHEEL_DESC": "¡Reclama tu giro gratis diario y gana monedas!",
+		"HOUSE_AD_FAV_TITLE": "EQUIPO FAVORITO Y RÉCORDS",
+		"HOUSE_AD_FAV_DESC": "¡Elige tu equipo favorito y sigue tus estadísticas!",
+		"HOUSE_AD_PRO_TITLE": "PRIVILEGIOS CLUB ÉLITE",
+		"HOUSE_AD_PRO_DESC": "¡Juego sin anuncios, todos los balones, coronas y partidos ilimitados!",
+		"HOUSE_AD_QUEST_TITLE": "MISIONES DIARIAS",
+		"HOUSE_AD_QUEST_DESC": "¡Completa las misiones de hoy y gana monedas extra!",
+		"HOUSE_AD_TIP1_TITLE": "TÁCTICA: REBOTE EN LA CURVA",
 		"HOUSE_AD_TIP1_DESC": "¡Usa la curvatura del estadio para dar efecto al balón y superar al portero!",
-		"HOUSE_AD_TIP2_TITLE": "🧤 EDICIÓN DE PLANTILLA Y CAPITÁN",
+		"HOUSE_AD_TIP2_TITLE": "EDICIÓN DE PLANTILLA Y CAPITÁN",
 		"HOUSE_AD_TIP2_DESC": "¡Define tu alineación titular y capitán para saltar al campo a tu estilo!",
-		"HOUSE_AD_WEB_TITLE": "🌐 CLASIFICACIÓN EN VIVO: EBSTUDYO.COM",
-		"HOUSE_AD_WEB_DESC": "¡Sigue los récords mundiales y tablas de clasificación en la web! ➔"
+		"HOUSE_AD_WEB_TITLE": "CLASIFICACIÓN EN VIVO: EBSTUDYO.COM",
+		"HOUSE_AD_WEB_DESC": "¡Sigue los récords mundiales y tablas de clasificación en la web!"
 	},
 	"POR": {
+		"TUTORIAL_TITLE_1": "BEM-VINDO!",
+		"TUTORIAL_DESC_1": "Bem-vindo ao Bol Gol Futbol!\nSelecione as ligas e escolha os dois times para a partida. Defina o seu clube favorito bem aqui!",
+		"TUTORIAL_TITLE_2": "IDIOMA E MENU RÁPIDO",
+		"TUTORIAL_DESC_2": "Mude o idioma instantaneamente no topo esquerdo.\nAbra o menu superior direito para o Criador de Elenco, editar nomes e acessar as definições!",
+		"TUTORIAL_TITLE_3": "ESTATÍSTICAS, LOJA E MOEDAS",
+		"TUTORIAL_DESC_3": "Use a barra inferior para ver estatísticas e visitar a Loja.\n\n🪙 Moedas: Ganhe moedas vencendo partidas, assistindo vídeos, girando a roleta ou com missões. Desbloqueie bolas, coroas e partidas!\n\nEntre em campo e divirta-se! ⚽🔥",
+		"TUTORIAL_BTN_NEXT": "AVANÇAR ➔",
+		"TUTORIAL_BTN_FINISH": "JOGAR AGORA! ⚽",
+		"TUTORIAL_BTN_SKIP": "PULAR",
+		"TUTORIAL_MENU_ITEM": "Guia",
+		"TUTORIAL_STEP_FMT": "PASSO %d / 3",
 		"TEAM_SELECTION": "SELEÇÃO DE EQUIPA", "SETTINGS": "DEFINIÇÕES",
 		"HOME": "CASA", "AWAY": "FORA", "SEARCH": "Pesquisar...",
 		"START_MATCH": "INICIAR JOGO", "LANG_BTN": "POR", "CLOSE": "FECHAR", "SAVE": "GUARDAR",
@@ -286,8 +333,9 @@ var LANG = {
 		"STATS_HOME_W": "Vitórias (Casa)", "STATS_AWAY_W": "Vit. (Fora)",
 		"STATS_DRAW": "Empates", "STATS_MOST_GOALS": "Mais Golos", "STATS_BIGGEST_WIN": "Maior Diferença",
 		"SHOP_COSMETICS": "COSMÉTICOS", "SHOP_BALL_SKINS": "Visuais de Bola",
+		"PRO_PASS_TITLE": "CLUBE ELITE",
 		"SHOP_BUY": "0.99€ — COMPRAR", "SHOP_CANCEL": "CANCELAR",
-		"SHOP_PRO_DESC": "Desbloqueie todos os temas, bolas e experiência sem anúncios",
+		"SHOP_PRO_DESC": "Experiência sem anúncios, todos os temas, bolas, coroas e partidas ilimitadas",
 		"REPLAY_ASK": "Tem certeza de que deseja jogar a mesma partida?",
 		"RANDOM": "ALEATÓRIO",
 		"AD_COOLDOWN_WAIT": "Por favor aguarde: %02d:%02d",
@@ -313,7 +361,7 @@ var LANG = {
 		"PLAYER_LIST_TITLE": "PLANTEL", "PLAYER_LIST_BTN": "Plantel",
 		"NO_FAV_TEAM_WARN": "Nenhuma Equipa Favorita",
 		"MAX_CHAR_WARN": "Máximo 20 caracteres!", "ADD_PLAYER": "+ ADICIONAR JUGADOR",
-		"PRO_ACTIVE": "PRO ATIVO", "PRO_OFF": "DESATIVAR PRO", "PRO_OFF_TOAST": "PRO DESATIVADO", "RESTORE_PURCHASES": "Restaurar Compras",
+		"PRO_ACTIVE": "ELITE ATIVO", "PRO_OFF": "DESATIVAR ELITE", "PRO_OFF_TOAST": "CLUBE ELITE DESATIVADO", "RESTORE_PURCHASES": "Restaurar Compras",
 		"PRIVACY_POLICY": "Política de Privacidade", "PRIVACY_TITLE": "POLÍTICA DE PRIVACIDADE",
 		"RESTORE_CHECK": "A verificar compras...", "RESTORE_SUCCESS": "Compras restauradas!",
 		"EXIT_CONFIRM": "Tem certeza de que deseja sair?", "EXIT_TITLE": "SAIR", "SEC_ACCOUNT": "CONTA E PRIVACIDADE",
@@ -332,7 +380,7 @@ var LANG = {
 		"QUEST_PROGRESS": "Progresso", "QUEST_REWARD": "Recompensa", "REMAINING_AD_SPINS": "Giros Restantes",
 		"LEADERBOARD_OPEN": "VER CLASSIFICAÇÃO GLOBAL", "LEADERBOARD_SYNC": "SINCRONIZAR PONTUAÇÃO",
 		"LEADERBOARD_HINT": "Junte-se à classificação global do Google Play Games e compita mundialmente!",
-		"GOALS_SUFFIX": "Golos", "PRO_UPGRADE_TITLE": "Melhorar para PRO", "LEADERBOARD_LOCAL_TITLE": "O Seu Cartão de Pontuação",
+		"GOALS_SUFFIX": "Golos", "PRO_UPGRADE_TITLE": "ENTRE NO CLUBE ELITE", "LEADERBOARD_LOCAL_TITLE": "O Seu Cartão de Pontuação",
 		"LEADERBOARD_GLOBAL_TITLE": "Classificação Global do Google Play Games",
 		"LEAGUE_TURKEY": "Liga Turca", "LEAGUE_NATIONAL": "Seleções", "LEAGUE_ENGLAND": "Liga Inglesa", "LEAGUE_SPAIN": "Liga Espanhola",
 		"LEAGUE_GERMANY": "Liga Alemã", "LEAGUE_ITALY": "Liga Italiana", "LEAGUE_FRANCE": "Liga Francesa",
@@ -346,23 +394,34 @@ var LANG = {
 		"EARNED_REWARD": "Ganhou +%s %s!",
 		"SQUAD_SUFFIX": "PLANTEL", "TAP_TO_SWITCH_TEAM": "Toque para mudar de equipa",
 		"SELECT_TEAM": "SELECIONAR EQUIPA", "SEARCH_TEAM": "Pesquisar equipa...",
-		"VIP_TITLE": "⭐ MEMBRO VIP ATIVO ⭐", "VIP_DESC": "Sem Anúncios • Todos os Cosméticos • Jogo Ilimitado",
-		"HOUSE_AD_WHEEL_TITLE": "🎡 RODA DA SORTE",
-		"HOUSE_AD_WHEEL_DESC": "Resgate o seu giro grátis diário e ganhe moedas! Girar Agora ➔",
-		"HOUSE_AD_FAV_TITLE": "⚽ EQUIPA FAVORITA E RECORDES",
-		"HOUSE_AD_FAV_DESC": "Escolha a sua equipa favorita e acompanhe estatísticas! Ver ➔",
-		"HOUSE_AD_PRO_TITLE": "👑 MEMBRO PRO BOL GOL",
-		"HOUSE_AD_PRO_DESC": "Sem anúncios, cosméticos desbloqueados e jogo ilimitado! Ativar ➔",
-		"HOUSE_AD_QUEST_TITLE": "📋 MISSÕES DIÁRIAS",
-		"HOUSE_AD_QUEST_DESC": "Complete as missões de hoje e ganhe moedas extras! Missões ➔",
-		"HOUSE_AD_TIP1_TITLE": "💡 TÁTICA: RESSALTO NA CURVA",
+		"VIP_TITLE": "MEMBRO CLUBE ELITE", "VIP_DESC": "Sem Anúncios • Todos os Cosméticos e Partidas Ilimitadas",
+		"HOUSE_AD_WHEEL_TITLE": "RODA DA SORTE",
+		"HOUSE_AD_WHEEL_DESC": "Resgate o seu giro grátis diário e ganhe moedas!",
+		"HOUSE_AD_FAV_TITLE": "EQUIPA FAVORITA E RECORDES",
+		"HOUSE_AD_FAV_DESC": "Escolha a sua equipa favorita e acompanhe estatísticas!",
+		"HOUSE_AD_PRO_TITLE": "PRIVILÉGIOS CLUBE ELITE",
+		"HOUSE_AD_PRO_DESC": "Jogo sem anúncios, todas as bolas, coroas e partidas ilimitadas!",
+		"HOUSE_AD_QUEST_TITLE": "MISSÕES DIÁRIAS",
+		"HOUSE_AD_QUEST_DESC": "Complete as missões de hoje e ganhe moedas extras!",
+		"HOUSE_AD_TIP1_TITLE": "TÁTICA: RESSALTO NA CURVA",
 		"HOUSE_AD_TIP1_DESC": "Use a curva da arena para dar efeito à bola e surpreender o guarda-redes!",
-		"HOUSE_AD_TIP2_TITLE": "🧤 EDIÇÃO DE PLANTEL E CAPITÃO",
+		"HOUSE_AD_TIP2_TITLE": "EDIÇÃO DE PLANTEL E CAPITÃO",
 		"HOUSE_AD_TIP2_DESC": "Defina o onze titular e o capitão da equipa para jogar à sua maneira!",
-		"HOUSE_AD_WEB_TITLE": "🌐 CLASSIFICAÇÃO ONLINE: EBSTUDYO.COM",
-		"HOUSE_AD_WEB_DESC": "Acompanhe recordes mundiais e tabelas em tempo real na web! ➔"
+		"HOUSE_AD_WEB_TITLE": "CLASSIFICAÇÃO ONLINE: EBSTUDYO.COM",
+		"HOUSE_AD_WEB_DESC": "Acompanhe recordes mundiais e tabelas em tempo real na web!"
 	},
 	"ITA": {
+		"TUTORIAL_TITLE_1": "BENVENUTO!",
+		"TUTORIAL_DESC_1": "Benvenuto a Bol Gol Futbol!\nSeleziona i campionati e scegli le due squadre per la partita. Imposta la tua squadra del cuore qui!",
+		"TUTORIAL_TITLE_2": "LINGUA & MENU RAPIDO",
+		"TUTORIAL_DESC_2": "Cambia lingua istantaneamente in alto a sinistra.\nApri il menu in alto a destra per il Creatore Rosa, modificare i nomi e accedere alle impostazioni!",
+		"TUTORIAL_TITLE_3": "STATISTICHE, NEGOZIO & MONETE",
+		"TUTORIAL_DESC_3": "Usa la barra in basso per consultare le statistiche e visitare il Negozio.\n\n🪙 Monete: Guadagna monete vincendo partite, guardando video, girando la ruota o completando missioni. Usale per palloni, corone e partite!\n\nScendi in campo e divertiti! ⚽🔥",
+		"TUTORIAL_BTN_NEXT": "AVANTI ➔",
+		"TUTORIAL_BTN_FINISH": "INIZIA ORA! ⚽",
+		"TUTORIAL_BTN_SKIP": "SALTA",
+		"TUTORIAL_MENU_ITEM": "Guida",
+		"TUTORIAL_STEP_FMT": "PASSO %d / 3",
 		"TEAM_SELECTION": "SELEZIONE SQUADRA", "SETTINGS": "IMPOSTAZIONI",
 		"HOME": "CASA", "AWAY": "TRASFERTA", "SEARCH": "Cerca Squadra...",
 		"START_MATCH": "INIZIA PARTITA", "LANG_BTN": "ITA", "CLOSE": "CHIUDI", "SAVE": "SALVA",
@@ -375,8 +434,9 @@ var LANG = {
 		"STATS_HOME_W": "Vittorie (Casa)", "STATS_AWAY_W": "Vittorie (Trasf.)",
 		"STATS_DRAW": "Pareggi", "STATS_MOST_GOALS": "Più Gol", "STATS_BIGGEST_WIN": "Miglior Vittoria",
 		"SHOP_COSMETICS": "COSMETICI", "SHOP_BALL_SKINS": "Aspetti Pallone",
+		"PRO_PASS_TITLE": "CLUB ÉLITE",
 		"SHOP_BUY": "0.99€ — ACQUISTA ORA", "SHOP_CANCEL": "ANNULLA",
-		"SHOP_PRO_DESC": "Sblocca tutti i temi, palloni, corone e rimuovi le pubblicità",
+		"SHOP_PRO_DESC": "Esperienza senza pubblicità, tutti i temi, palloni, corone e partite illimitate",
 		"REPLAY_ASK": "Sei sicuro di voler rigiocare la stessa partita?",
 		"RANDOM": "CASUALE",
 		"AD_COOLDOWN_WAIT": "Attendi: %02d:%02d",
@@ -402,7 +462,7 @@ var LANG = {
 		"PLAYER_LIST_TITLE": "ROSA", "PLAYER_LIST_BTN": "Rosa Giocatori",
 		"NO_FAV_TEAM_WARN": "Nessuna Squadra Preferita",
 		"MAX_CHAR_WARN": "Massimo 20 caratteri!", "ADD_PLAYER": "+ AGGIUNGI GIOCATORE",
-		"PRO_ACTIVE": "PRO ATTIVO", "PRO_OFF": "DISATTIVA PRO", "PRO_OFF_TOAST": "PRO DISATTIVATO", "RESTORE_PURCHASES": "Ripristina Acquisti",
+		"PRO_ACTIVE": "ÉLITE ATTIVO", "PRO_OFF": "DISATTIVA ÉLITE", "PRO_OFF_TOAST": "CLUB ÉLITE DISATTIVATO", "RESTORE_PURCHASES": "Ripristina Acquisti",
 		"PRIVACY_POLICY": "Informativa sulla Privacy", "PRIVACY_TITLE": "INFORMATIVA SULLA PRIVACY",
 		"RESTORE_CHECK": "Verifica acquisti...", "RESTORE_SUCCESS": "Acquisti ripristinati!",
 		"EXIT_CONFIRM": "Sei sicuro di voler uscire?", "EXIT_TITLE": "ESCI", "SEC_ACCOUNT": "ACCOUNT E PRIVACY",
@@ -421,7 +481,7 @@ var LANG = {
 		"QUEST_PROGRESS": "Progresso", "QUEST_REWARD": "Ricompensa", "REMAINING_AD_SPINS": "Giri Pubblicitari Rimasti",
 		"LEADERBOARD_OPEN": "VEDI CLASSIFICA MONDIALE", "LEADERBOARD_SYNC": "SINCRONIZZA PUNTEGGIO",
 		"LEADERBOARD_HINT": "Unisciti alla classifica mondiale di Google Play Games e sfida gli altri giocatori!",
-		"GOALS_SUFFIX": "Gol", "PRO_UPGRADE_TITLE": "Passa a PRO", "LEADERBOARD_LOCAL_TITLE": "La Tua Scheda Punteggio",
+		"GOALS_SUFFIX": "Gol", "PRO_UPGRADE_TITLE": "UNISCITI AL CLUB ÉLITE", "LEADERBOARD_LOCAL_TITLE": "La Tua Scheda Punteggio",
 		"LEADERBOARD_GLOBAL_TITLE": "Classifica Globale Google Play Games",
 		"LEAGUE_TURKEY": "Campionato Turco", "LEAGUE_NATIONAL": "Nazionali", "LEAGUE_ENGLAND": "Campionato Inglese", "LEAGUE_SPAIN": "Campionato Spagnolo",
 		"LEAGUE_GERMANY": "Campionato Tedesco", "LEAGUE_ITALY": "Campionato Italiano", "LEAGUE_FRANCE": "Campionato Francese",
@@ -435,21 +495,21 @@ var LANG = {
 		"EARNED_REWARD": "Hai guadagnato +%s %s!",
 		"SQUAD_SUFFIX": "ROSA", "TAP_TO_SWITCH_TEAM": "Tocca per cambiare squadra",
 		"SELECT_TEAM": "SELEZIONA SQUADRA", "SEARCH_TEAM": "Cerca squadra...",
-		"VIP_TITLE": "⭐ MEMBRO VIP ATTIVO ⭐", "VIP_DESC": "Senza Pubblicità • Tutti i Cosmetici • Gioco Illimitato",
-		"HOUSE_AD_WHEEL_TITLE": "🎡 RUOTA DELLA FORTUNA",
-		"HOUSE_AD_WHEEL_DESC": "Riscatta il tuo giro gratis giornaliero e vinci monete! Gira Ora ➔",
-		"HOUSE_AD_FAV_TITLE": "⚽ SQUADRA PREFERITA E STATS",
-		"HOUSE_AD_FAV_DESC": "Scegli la tua squadra e segui le tue statistiche! Vedi ➔",
-		"HOUSE_AD_PRO_TITLE": "👑 MEMBRO PRO BOL GOL",
-		"HOUSE_AD_PRO_DESC": "Zero pubblicità, cosmetici sbloccati e gioco illimitato! Scopri ➔",
-		"HOUSE_AD_QUEST_TITLE": "📋 MISSIONI GIORNALIERE",
-		"HOUSE_AD_QUEST_DESC": "Completa le missioni di oggi e guadagna monete! Missioni ➔",
-		"HOUSE_AD_TIP1_TITLE": "💡 TATTICA: RIMBALZO SULLA CURVA",
+		"VIP_TITLE": "MEMBRO CLUB ÉLITE", "VIP_DESC": "Senza Pubblicità • Tutti i Cosmetici e Partite Illimitate",
+		"HOUSE_AD_WHEEL_TITLE": "RUOTA DELLA FORTUNA",
+		"HOUSE_AD_WHEEL_DESC": "Riscatta il tuo giro gratis giornaliero e vinci monete!",
+		"HOUSE_AD_FAV_TITLE": "SQUADRA PREFERITA E STATS",
+		"HOUSE_AD_FAV_DESC": "Scegli la tua squadra e segui le tue statistiche!",
+		"HOUSE_AD_PRO_TITLE": "PRIVILEGI CLUB ÉLITE",
+		"HOUSE_AD_PRO_DESC": "Gioco senza pubblicità, tutti i palloni, corone e partite illimitate!",
+		"HOUSE_AD_QUEST_TITLE": "MISSIONI GIORNALIERE",
+		"HOUSE_AD_QUEST_DESC": "Completa le missioni di oggi e guadagna monete!",
+		"HOUSE_AD_TIP1_TITLE": "TATTICA: RIMBALZO SULLA CURVA",
 		"HOUSE_AD_TIP1_DESC": "Sfrutta la curva dello stadio per dare effetto alla palla e battere il portiere!",
-		"HOUSE_AD_TIP2_TITLE": "🧤 GESTIONE SQUADRA E CAPITANO",
+		"HOUSE_AD_TIP2_TITLE": "GESTIONE SQUADRA E CAPITANO",
 		"HOUSE_AD_TIP2_DESC": "Scegli l'undici titolare e il capitano della squadra per scendere in campo a modo tuo!",
-		"HOUSE_AD_WEB_TITLE": "🌐 CLASSIFICA WEB LIVE: EBSTUDYO.COM",
-		"HOUSE_AD_WEB_DESC": "Guarda i record mondiali e le classifiche globali in diretta sul web! ➔"
+		"HOUSE_AD_WEB_TITLE": "CLASSIFICA WEB LIVE: EBSTUDYO.COM",
+		"HOUSE_AD_WEB_DESC": "Guarda i record mondiali e le classifiche globali in diretta sul web!"
 	}
 }
 
@@ -486,6 +546,7 @@ var versus_badge: PanelContainer
 
 var active_theme: Dictionary
 var bg_grad: Gradient
+var bg_pattern_canvas: Control = null
 
 var fav_h_btn: Button
 var fav_a_btn: Button
@@ -498,6 +559,7 @@ var match_fee_icon: TextureRect = null
 var match_fee_chip: PanelContainer = null
 var match_fee_chip_lbl: Label = null
 var match_fee_divider: ColorRect = null
+var match_fee_dots: Control = null
 var rand_h_btn: Button
 var rand_a_btn: Button
 var single_random_btn: Button = null
@@ -524,6 +586,16 @@ var shop_hats_scroll: ScrollContainer = null
 var badge_textures: Dictionary = {}  # Preloaded at _ready() for badge overlay on preview balls
 var burger_btn: Button
 var is_refreshing_stats: bool = false
+var tutorial_overlay: Control = null
+var tutorial_step: int = 1
+var tutorial_card: PanelContainer = null
+var tutorial_canvas: Control = null
+var tutorial_step_bars: Array[Panel] = []
+var tutorial_next_btn: Button = null
+var tutorial_title_lbl: Label = null
+var tutorial_desc_lbl: Label = null
+var tutorial_finish_panel: PanelContainer = null
+var tutorial_finish_lbl: Label = null
 var vip_top_bar: Control = null
 var vip_title_lbl: Label = null
 var vip_desc_lbl: Label = null
@@ -531,10 +603,14 @@ var house_ad_bar: Control = null
 var house_ad_timer: Timer = null
 var house_ad_idx: int = 0
 var house_ad_icon_lbl: Label = null
+var house_ad_icon_rect: TextureRect = null
 var house_ad_title_lbl: Label = null
 var house_ad_desc_lbl: Label = null
 var house_ad_panel: PanelContainer = null
 
+const SKETCH_COL: Color = Color(0.95, 0.96, 0.98, 0.82)
+const SKETCH_SHADOW_COL: Color = Color(0.02, 0.06, 0.10, 0.40)
+const SKETCH_ACCENT_COL: Color = Color(0.0, 0.92, 0.80, 0.90)
 const MENU_BANNER_ID = "ca-app-pub-7323450546679743/4717442614"
 var menu_banner_ad_id: String = ""
 var shop_notification_dot: Panel
@@ -654,6 +730,13 @@ func _ready():
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 	
+	bg_pattern_canvas = Control.new()
+	bg_pattern_canvas.name = "BgWatermarkPattern"
+	bg_pattern_canvas.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	bg_pattern_canvas.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bg_pattern_canvas.draw.connect(func(): _draw_bg_watermark_pattern(bg_pattern_canvas))
+	add_child(bg_pattern_canvas)
+	
 	active_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
 	bg_grad.set_color(0, active_theme.bg_top)
 	bg_grad.set_color(1, active_theme.bg_bottom)
@@ -720,8 +803,8 @@ func _ready():
 	lang_pill_style.bg_color = active_theme.bg_bottom.darkened(0.2)
 	lang_pill_style.corner_radius_top_left = 16; lang_pill_style.corner_radius_top_right = 16
 	lang_pill_style.corner_radius_bottom_left = 16; lang_pill_style.corner_radius_bottom_right = 16
-	lang_pill_style.border_width_left = 1.5; lang_pill_style.border_width_right = 1.5
-	lang_pill_style.border_width_top = 1.5; lang_pill_style.border_width_bottom = 3.5
+	lang_pill_style.border_width_left = 2; lang_pill_style.border_width_right = 2
+	lang_pill_style.border_width_top = 2; lang_pill_style.border_width_bottom = 4
 	lang_pill_style.border_color = active_theme.accent
 	lang_pill_style.shadow_color = Color8(0, 0, 0, 100)
 	lang_pill_style.shadow_size = 6
@@ -733,7 +816,7 @@ func _ready():
 	lang_pill_hover.border_color = active_theme.accent.lightened(0.2)
 	
 	var lang_pill_pressed = lang_pill_style.duplicate()
-	lang_pill_pressed.border_width_bottom = 1.5
+	lang_pill_pressed.border_width_bottom = 2
 	lang_pill_pressed.content_margin_top = 10
 	
 	lang_btn = Button.new()
@@ -765,8 +848,8 @@ func _ready():
 	popup_style.bg_color = Color8(12, 22, 38, 248)
 	popup_style.corner_radius_top_left = 12; popup_style.corner_radius_top_right = 12
 	popup_style.corner_radius_bottom_left = 12; popup_style.corner_radius_bottom_right = 12
-	popup_style.border_width_left = 1.5; popup_style.border_width_right = 1.5
-	popup_style.border_width_top = 1.5; popup_style.border_width_bottom = 3.0
+	popup_style.border_width_left = 2; popup_style.border_width_right = 2
+	popup_style.border_width_top = 2; popup_style.border_width_bottom = 3
 	popup_style.border_color = active_theme.accent
 	popup_style.content_margin_left = 14; popup_style.content_margin_right = 14
 	popup_style.content_margin_top = 8; popup_style.content_margin_bottom = 8
@@ -824,8 +907,8 @@ func _ready():
 	burger_style.bg_color = active_theme.bg_bottom.darkened(0.2)
 	burger_style.corner_radius_top_left = 16; burger_style.corner_radius_top_right = 16
 	burger_style.corner_radius_bottom_left = 16; burger_style.corner_radius_bottom_right = 16
-	burger_style.border_width_left = 1.5; burger_style.border_width_right = 1.5
-	burger_style.border_width_top = 1.5; burger_style.border_width_bottom = 3.5
+	burger_style.border_width_left = 2; burger_style.border_width_right = 2
+	burger_style.border_width_top = 2; burger_style.border_width_bottom = 4
 	burger_style.border_color = active_theme.accent
 	burger_style.shadow_color = Color8(0, 0, 0, 100)
 	burger_style.shadow_size = 6
@@ -837,7 +920,7 @@ func _ready():
 	burger_hover.border_color = active_theme.accent.lightened(0.2)
 	
 	var burger_pressed = burger_style.duplicate()
-	burger_pressed.border_width_bottom = 1.5
+	burger_pressed.border_width_bottom = 2
 	burger_pressed.content_margin_top = 8
 
 	burger_btn.add_theme_stylebox_override("normal", burger_style)
@@ -1080,16 +1163,25 @@ func _ready():
 	away_selected = Global.away_selected
 	populate_teams()
 	
-	# --- RASTGELE & MACI BASLAT BUTONLARI (Yeni Modern Tasarim) ---
+	# --- RASTGELE, MAC HAKKI KARTI & MACI BASLAT DOCK ALANI ---
 	var pre_action_gap = Control.new()
-	pre_action_gap.custom_minimum_size = Vector2(0, 6 if is_tablet else 10)
+	pre_action_gap.custom_minimum_size = Vector2(0, 6 if is_tablet else 8)
 	list_shifter_vbox.add_child(pre_action_gap)
 
-	# 1. RASTGELE BUTONU (Ortali, Modern Cam Panel, SVG Ikon & Neon Cerceve)
+	# Ust Satir: Rastgele Butonu (Sol) & Mac Giris / Ucretsiz Mac Durum Karti (Sag)
+	var action_top_hbox = HBoxContainer.new()
+	action_top_hbox.name = "ActionTopHBox"
+	action_top_hbox.custom_minimum_size = Vector2(max_w, 50 if is_tablet else 54)
+	action_top_hbox.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	action_top_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	action_top_hbox.add_theme_constant_override("separation", 12)
+	list_shifter_vbox.add_child(action_top_hbox)
+
+	# 1. RASTGELE BUTONU (Modern Cam Panel, Crisp SVG Shuffle Ikon & Taktil 3D Cerceve)
 	single_random_btn = Button.new()
 	single_random_btn.name = "SingleRandomButton"
-	single_random_btn.custom_minimum_size = Vector2(min(max_w, 360), 48 if is_tablet else 54)
-	single_random_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	single_random_btn.custom_minimum_size = Vector2(0, 50 if is_tablet else 54)
+	single_random_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	single_random_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 	var s_rand_style = StyleBoxFlat.new()
@@ -1097,8 +1189,8 @@ func _ready():
 	s_rand_style.bg_color.a = 0.94
 	s_rand_style.corner_radius_top_left = 14; s_rand_style.corner_radius_top_right = 14
 	s_rand_style.corner_radius_bottom_left = 14; s_rand_style.corner_radius_bottom_right = 14
-	s_rand_style.border_width_left = 1.8; s_rand_style.border_width_right = 1.8
-	s_rand_style.border_width_top = 1.8; s_rand_style.border_width_bottom = 3.5
+	s_rand_style.border_width_left = 2; s_rand_style.border_width_right = 2
+	s_rand_style.border_width_top = 2; s_rand_style.border_width_bottom = 4
 	s_rand_style.border_color = active_theme.accent.lightened(0.12)
 	s_rand_style.shadow_color = Color8(0, 0, 0, 140)
 	s_rand_style.shadow_size = 8
@@ -1111,7 +1203,7 @@ func _ready():
 	single_random_btn.add_theme_stylebox_override("hover", s_rand_hover)
 
 	var s_rand_press = s_rand_style.duplicate()
-	s_rand_press.border_width_bottom = 1.8
+	s_rand_press.border_width_bottom = 2
 	s_rand_press.content_margin_top = 4
 	single_random_btn.add_theme_stylebox_override("pressed", s_rand_press)
 	single_random_btn.add_theme_stylebox_override("focus", s_rand_style)
@@ -1121,47 +1213,54 @@ func _ready():
 	rand_hb.alignment = BoxContainer.ALIGNMENT_CENTER
 	rand_hb.set_anchors_preset(Control.PRESET_FULL_RECT)
 	rand_hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	rand_hb.add_theme_constant_override("separation", 12)
+	rand_hb.add_theme_constant_override("separation", 10)
 	single_random_btn.add_child(rand_hb)
 
 	var rand_icon_rect = TextureRect.new()
-	rand_icon_rect.name = "RandIconRect"
-	rand_icon_rect.texture = preload("res://random_shuffle_icon.svg")
-	rand_icon_rect.custom_minimum_size = Vector2(24, 24)
+	rand_icon_rect.name = "RandomIcon"
+	if ResourceLoader.exists("res://random_shuffle_icon.svg"):
+		rand_icon_rect.texture = load("res://random_shuffle_icon.svg")
+	rand_icon_rect.custom_minimum_size = Vector2(22, 22)
 	rand_icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	rand_icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	rand_icon_rect.modulate = Color.WHITE
+	rand_icon_rect.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	rand_icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rand_icon_rect.modulate = active_theme.get("text", Color.WHITE)
+	rand_icon_rect.draw.connect(func():
+		if rand_icon_rect.texture == null:
+			var sz = rand_icon_rect.size
+			rand_icon_rect.draw_line(Vector2(3, sz.y - 5), Vector2(sz.x - 4, 5), Color.WHITE, 2.4, true)
+			rand_icon_rect.draw_line(Vector2(3, 5), Vector2(sz.x - 4, sz.y - 5), Color.WHITE, 2.4, true)
+	)
 	rand_hb.add_child(rand_icon_rect)
 
 	var rand_lbl = Label.new()
-	rand_lbl.name = "RandLabel"
+	rand_lbl.name = "RandomLabel"
 	rand_lbl.text = LANG[Global.current_lang]["RANDOM"]
 	rand_lbl.add_theme_font_override("font", custom_font)
-	rand_lbl.add_theme_font_size_override("font_size", 24 if is_tablet else 28)
+	rand_lbl.add_theme_font_size_override("font_size", 24 if is_tablet else 26)
 	rand_lbl.add_theme_color_override("font_color", Color.WHITE)
 	rand_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
 	rand_lbl.add_theme_constant_override("shadow_offset_y", 2)
+	rand_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	rand_hb.add_child(rand_lbl)
 
 	single_random_btn.pressed.connect(_on_single_random_pressed)
-	list_shifter_vbox.add_child(single_random_btn)
+	action_top_hbox.add_child(single_random_btn)
 	ui_labels.append({"node": rand_lbl, "key": "RANDOM", "type": "label"})
 
-	# 2. MAC HAKKI / ENERJI BILGI ROZETI (Floating Pill)
-	var post_rand_gap = Control.new()
-	post_rand_gap.custom_minimum_size = Vector2(0, 4)
-	list_shifter_vbox.add_child(post_rand_gap)
-
+	# 2. MAC HAKKI / ENERJI DURUM KARTI (Rastgele Butonuyla Dengeli 2. Sutun)
 	match_fee_badge = PanelContainer.new()
 	match_fee_badge.name = "MatchFeeBadge"
-	match_fee_badge.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	match_fee_badge.custom_minimum_size = Vector2(0, 50 if is_tablet else 54)
+	match_fee_badge.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var mfb_style = StyleBoxFlat.new()
 	mfb_style.corner_radius_top_left = 14; mfb_style.corner_radius_top_right = 14
 	mfb_style.corner_radius_bottom_left = 14; mfb_style.corner_radius_bottom_right = 14
-	mfb_style.border_width_left = 1.0; mfb_style.border_width_right = 1.0
-	mfb_style.border_width_top = 1.0; mfb_style.border_width_bottom = 2.0
-	mfb_style.content_margin_left = 12; mfb_style.content_margin_right = 14
-	mfb_style.content_margin_top = 3; mfb_style.content_margin_bottom = 4
+	mfb_style.border_width_left = 2; mfb_style.border_width_right = 2
+	mfb_style.border_width_top = 2; mfb_style.border_width_bottom = 4
+	mfb_style.content_margin_left = 12; mfb_style.content_margin_right = 12
+	mfb_style.content_margin_top = 4; mfb_style.content_margin_bottom = 5
 	match_fee_badge.add_theme_stylebox_override("panel", mfb_style)
 
 	var mfb_hbox = HBoxContainer.new()
@@ -1210,7 +1309,7 @@ func _ready():
 
 	match_fee_divider = ColorRect.new()
 	match_fee_divider.name = "MatchFeeDivider"
-	match_fee_divider.custom_minimum_size = Vector2(1, 13)
+	match_fee_divider.custom_minimum_size = Vector2(1, 16)
 	match_fee_divider.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	match_fee_divider.color = Color8(255, 215, 120, 70)
 	match_fee_divider.visible = false
@@ -1219,28 +1318,63 @@ func _ready():
 
 	match_fee_icon = TextureRect.new()
 	match_fee_icon.name = "MatchFeeIcon"
-	match_fee_icon.texture = preload("res://jeton_icon.svg")
+	if ResourceLoader.exists("res://match_ticket_icon.svg"):
+		match_fee_icon.texture = load("res://match_ticket_icon.svg")
+	else:
+		match_fee_icon.texture = preload("res://jeton_icon.svg")
 	match_fee_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	match_fee_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	match_fee_icon.custom_minimum_size = Vector2(20, 20) if is_tablet else Vector2(22, 22)
+	match_fee_icon.custom_minimum_size = Vector2(22, 22)
 	match_fee_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	match_fee_icon.visible = false
+	match_fee_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	match_fee_icon.draw.connect(func():
+		if match_fee_icon.texture == null:
+			var sz = match_fee_icon.size
+			match_fee_icon.draw_rect(Rect2(2, 5, sz.x - 4, sz.y - 10), Color.WHITE, false, 2.0)
+			match_fee_icon.draw_circle(Vector2(sz.x * 0.5, sz.y * 0.5), 2.5, Color.WHITE)
+	)
 	mfb_hbox.add_child(match_fee_icon)
 
+	var mfb_info_vbox = VBoxContainer.new()
+	mfb_info_vbox.name = "MatchFeeInfoVBox"
+	mfb_info_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	mfb_info_vbox.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	mfb_info_vbox.add_theme_constant_override("separation", 2)
+	mfb_hbox.add_child(mfb_info_vbox)
+
 	match_fee_lbl = Label.new()
-	match_fee_lbl.name = "MatchFeeLabel"
+	match_fee_lbl.name = "FeeLabel"
 	match_fee_lbl.add_theme_font_override("font", custom_font)
 	match_fee_lbl.add_theme_font_size_override("font_size", 20 if is_tablet else 22)
 	match_fee_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	match_fee_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	mfb_hbox.add_child(match_fee_lbl)
-	list_shifter_vbox.add_child(match_fee_badge)
+	mfb_info_vbox.add_child(match_fee_lbl)
+
+	match_fee_dots = Control.new()
+	match_fee_dots.name = "MatchFeeDots"
+	match_fee_dots.custom_minimum_size = Vector2(96, 5)
+	match_fee_dots.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	match_fee_dots.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	match_fee_dots.draw.connect(func():
+		var rem = Global.get_remaining_free_matches()
+		var total_dots = 5
+		var seg_w = 15.0
+		var gap = 4.5
+		var total_w = total_dots * seg_w + (total_dots - 1) * gap
+		var start_x = (match_fee_dots.size.x - total_w) * 0.5
+		for i in range(total_dots):
+			var r_box = Rect2(start_x + i * (seg_w + gap), 0.0, seg_w, 4.5)
+			var c = Color8(64, 245, 138, 245) if i < rem else Color8(255, 255, 255, 42)
+			match_fee_dots.draw_rect(r_box, c, true)
+	)
+	mfb_info_vbox.add_child(match_fee_dots)
+	action_top_hbox.add_child(match_fee_badge)
 
 	var badge_gap = Control.new()
 	badge_gap.custom_minimum_size = Vector2(0, 4)
 	list_shifter_vbox.add_child(badge_gap)
 
-	# 3. YENI MACI BASLAT BUTONU (Arcade Saha Dokusu, Neon Cerceve & Yon Oku)
+	# 3. YENI MACI BASLAT BUTONU (Arcade Saha Dokusu, Neon Cerceve & Ideal SVG Yon Oku)
 	var start_btn = Button.new()
 	start_btn.name = "StartMatchButton"
 	start_btn.custom_minimum_size = Vector2(max_w, 74 if is_tablet else 82)
@@ -1253,8 +1387,8 @@ func _ready():
 	sb_normal.bg_color.a = 0.96
 	sb_normal.corner_radius_top_left = 18; sb_normal.corner_radius_top_right = 18
 	sb_normal.corner_radius_bottom_left = 18; sb_normal.corner_radius_bottom_right = 18
-	sb_normal.border_width_left = 2.0; sb_normal.border_width_right = 2.0
-	sb_normal.border_width_top = 2.0; sb_normal.border_width_bottom = 4.5
+	sb_normal.border_width_left = 2; sb_normal.border_width_right = 2
+	sb_normal.border_width_top = 2; sb_normal.border_width_bottom = 5
 	sb_normal.border_color = active_theme.accent.lightened(0.25)
 	sb_normal.shadow_color = Color8(0, 0, 0, 160)
 	sb_normal.shadow_size = 12
@@ -1267,7 +1401,7 @@ func _ready():
 	start_btn.add_theme_stylebox_override("hover", sb_hover)
 
 	var sb_press = sb_normal.duplicate()
-	sb_press.border_width_bottom = 2.0
+	sb_press.border_width_bottom = 2
 	sb_press.content_margin_top = 4
 	start_btn.add_theme_stylebox_override("pressed", sb_press)
 	start_btn.add_theme_stylebox_override("focus", sb_normal)
@@ -1283,13 +1417,13 @@ func _ready():
 	field_tex.modulate = Color(1, 1, 1, 0.40)
 	start_btn.add_child(field_tex)
 
-	# Buton Icerigi: Ortali Baslik ve Sag Yon Oku
+	# Buton Icerigi: Ortali Baslik ve Ideal SVG Sag Yon Oku
 	var btn_hbox = HBoxContainer.new()
 	btn_hbox.name = "BtnHBox"
 	btn_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	btn_hbox.set_anchors_preset(Control.PRESET_FULL_RECT)
 	btn_hbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	btn_hbox.add_theme_constant_override("separation", 16)
+	btn_hbox.add_theme_constant_override("separation", 12)
 	start_btn.add_child(btn_hbox)
 
 	var start_lbl = Label.new()
@@ -1304,15 +1438,34 @@ func _ready():
 	start_lbl.add_theme_constant_override("shadow_offset_y", 3)
 	btn_hbox.add_child(start_lbl)
 
-	var start_arrow_lbl = Label.new()
-	start_arrow_lbl.name = "ButtonArrow"
-	start_arrow_lbl.text = ">"
-	start_arrow_lbl.add_theme_font_override("font", custom_font)
-	start_arrow_lbl.add_theme_font_size_override("font_size", 38 if is_tablet else 44)
-	start_arrow_lbl.add_theme_color_override("font_color", active_theme.accent.lightened(0.35))
-	start_arrow_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
-	start_arrow_lbl.add_theme_constant_override("shadow_offset_y", 2)
-	btn_hbox.add_child(start_arrow_lbl)
+	var start_arrow_icon = TextureRect.new()
+	start_arrow_icon.name = "ButtonArrowIcon"
+	if ResourceLoader.exists("res://match_start_arrow.svg"):
+		start_arrow_icon.texture = load("res://match_start_arrow.svg")
+	start_arrow_icon.custom_minimum_size = Vector2(26, 26) if is_tablet else Vector2(28, 28)
+	start_arrow_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	start_arrow_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	start_arrow_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	start_arrow_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	start_arrow_icon.modulate = active_theme.accent.lightened(0.35)
+	start_arrow_icon.draw.connect(func():
+		if start_arrow_icon.texture == null:
+			var sz = start_arrow_icon.size
+			var cy = sz.y * 0.5
+			var pts1 = PackedVector2Array([
+				Vector2(sz.x * 0.18, cy - sz.y * 0.34),
+				Vector2(sz.x * 0.54, cy),
+				Vector2(sz.x * 0.18, cy + sz.y * 0.34)
+			])
+			var pts2 = PackedVector2Array([
+				Vector2(sz.x * 0.48, cy - sz.y * 0.34),
+				Vector2(sz.x * 0.84, cy),
+				Vector2(sz.x * 0.48, cy + sz.y * 0.34)
+			])
+			start_arrow_icon.draw_polyline(pts1, Color.WHITE, 3.2, true)
+			start_arrow_icon.draw_polyline(pts2, Color.WHITE, 3.2, true)
+	)
+	btn_hbox.add_child(start_arrow_icon)
 
 	start_btn.pressed.connect(_on_start_match)
 	list_shifter_vbox.add_child(start_btn)
@@ -1357,9 +1510,11 @@ func _ready():
 	
 	if Global.came_from_completed_match and Global.login_method == "guest" and Global.matches_played_since_prompt >= 3:
 		Global.came_from_completed_match = false
+		call_deferred("_check_and_start_tutorial")
 		call_deferred("show_google_play_prompt")
 	else:
 		Global.came_from_completed_match = false
+		call_deferred("_check_and_start_tutorial")
 
 
 func _connect_all_buttons(node: Node):
@@ -1403,13 +1558,14 @@ func show_google_play_prompt():
 	var lang = Global.current_lang
 	
 	# Translations for prompt:
-	var titles = {"TR": "Google Play Bağlantısı", "ENG": "Google Play Connection", "ESP": "Conexión a Google Play", "POR": "Conexão Google Play"}
+	var titles = {"TR": "Google Play Bağlantısı", "ENG": "Google Play Connection", "ESP": "Conexión a Google Play", "POR": "Conexão Google Play", "ITA": "Connessione Google Play"}
 	var descs = {"TR": "Maç istatistiklerinizi kaydetmek ve liderlik tablolarına katılmak için Google Play hesabınızı bağlamak ister misiniz?",
 				 "ENG": "Would you like to connect your Google Play account to save stats and join leaderboards?",
-				 "ESP": "¿Te gustaría conectar tu cuenta de Google Play para guardar estadísticas y unirte a las tablas de classificação?",
-				 "POR": "Gostaria de ligar a sua conta Google Play para guardar estatísticas e juntar-se às tabelas de classificação?"}
-	var yes_texts = {"TR": "BAĞLAN", "ENG": "CONNECT", "ESP": "CONECTAR", "POR": "CONECTAR"}
-	var no_texts = {"TR": "DAHA SONRA", "ENG": "LATER", "ESP": "MÁS TARDE", "POR": "MAIS TARDE"}
+				 "ESP": "¿Te gustaría conectar tu cuenta de Google Play para guardar estadísticas y unirte a las tablas de clasificación?",
+				 "POR": "Gostaria de ligar a sua conta Google Play para guardar estatísticas e juntar-se às tabelas de classificação?",
+				 "ITA": "Vuoi collegare il tuo account Google Play per salvare le statistiche e partecipare alle classifiche?"}
+	var yes_texts = {"TR": "BAĞLAN", "ENG": "CONNECT", "ESP": "CONECTAR", "POR": "CONECTAR", "ITA": "CONNETTI"}
+	var no_texts = {"TR": "DAHA SONRA", "ENG": "LATER", "ESP": "MÁS TARDE", "POR": "MAIS TARDE", "ITA": "PIÙ TARDI"}
 
 	var dlg_title = Label.new()
 	dlg_title.text = titles.get(lang, titles["TR"])
@@ -1436,16 +1592,9 @@ func show_google_play_prompt():
 	var cancel_btn = Button.new()
 	cancel_btn.text = no_texts.get(lang, no_texts["TR"])
 	cancel_btn.add_theme_font_override("font", custom_font)
-	cancel_btn.add_theme_font_size_override("font_size", 28)
-	var cancel_style = StyleBoxFlat.new()
-	cancel_style.bg_color = Color8(60, 60, 80, 220)
-	cancel_style.corner_radius_top_left = 12; cancel_style.corner_radius_top_right = 12
-	cancel_style.corner_radius_bottom_left = 12; cancel_style.corner_radius_bottom_right = 12
-	cancel_btn.add_theme_stylebox_override("normal", cancel_style)
-	cancel_btn.add_theme_stylebox_override("hover", cancel_style)
-	cancel_btn.add_theme_stylebox_override("pressed", cancel_style)
-	cancel_btn.add_theme_stylebox_override("focus", cancel_style)
-	cancel_btn.custom_minimum_size = Vector2(200, 65)
+	cancel_btn.add_theme_font_size_override("font_size", 26)
+	cancel_btn.custom_minimum_size = Vector2(200, 62)
+	apply_3d_style_to_button(cancel_btn, active_theme.bg_top.lightened(0.15), active_theme.bg_bottom.darkened(0.3), 14, 4)
 	cancel_btn.pressed.connect(func():
 		Global.play_click()
 		Global.matches_played_since_prompt = 0
@@ -1457,17 +1606,10 @@ func show_google_play_prompt():
 	var confirm_btn = Button.new()
 	confirm_btn.text = yes_texts.get(lang, yes_texts["TR"])
 	confirm_btn.add_theme_font_override("font", custom_font)
-	confirm_btn.add_theme_font_size_override("font_size", 28)
+	confirm_btn.add_theme_font_size_override("font_size", 26)
 	confirm_btn.add_theme_color_override("font_color", Color.WHITE)
-	var confirm_style = StyleBoxFlat.new()
-	confirm_style.bg_color = active_theme.accent
-	confirm_style.corner_radius_top_left = 12; confirm_style.corner_radius_top_right = 12
-	confirm_style.corner_radius_bottom_left = 12; confirm_style.corner_radius_bottom_right = 12
-	confirm_btn.add_theme_stylebox_override("normal", confirm_style)
-	confirm_btn.add_theme_stylebox_override("hover", confirm_style)
-	confirm_btn.add_theme_stylebox_override("pressed", confirm_style)
-	confirm_btn.add_theme_stylebox_override("focus", confirm_style)
-	confirm_btn.custom_minimum_size = Vector2(200, 65)
+	confirm_btn.custom_minimum_size = Vector2(200, 62)
+	apply_3d_style_to_button(confirm_btn, active_theme.accent, active_theme.accent.darkened(0.35), 14, 4)
 	confirm_btn.pressed.connect(func():
 		Global.play_click()
 		# Reset counter and go to login
@@ -1582,6 +1724,8 @@ func update_theme_visuals():
 	active_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
 	bg_grad.set_color(0, active_theme.bg_top)
 	bg_grad.set_color(1, active_theme.bg_bottom)
+	if is_instance_valid(bg_pattern_canvas):
+		bg_pattern_canvas.queue_redraw()
 	Global.play_menu_music()
 	_style_matchup_block()
 	_update_fav_buttons()
@@ -1686,9 +1830,10 @@ func update_theme_visuals():
 			sb_hov.bg_color = active_theme.bg_bottom.lightened(0.08)
 			sb_hov.border_color = active_theme.accent.lightened(0.40)
 			start_match_btn.add_theme_stylebox_override("hover", sb_hov)
-		var btn_arrow = start_match_btn.get_node_or_null("BtnHBox/ButtonArrow")
-		if btn_arrow:
-			btn_arrow.add_theme_color_override("font_color", active_theme.accent.lightened(0.35))
+		var btn_arrow_icon = start_match_btn.get_node_or_null("BtnHBox/ButtonArrowIcon")
+		if btn_arrow_icon:
+			btn_arrow_icon.modulate = active_theme.accent.lightened(0.35)
+			btn_arrow_icon.queue_redraw()
 		_update_start_button_display()
 
 	if is_instance_valid(single_random_btn):
@@ -1707,6 +1852,9 @@ func update_theme_visuals():
 		if s_press is StyleBoxFlat:
 			s_press.border_color = active_theme.accent.lightened(0.12)
 			single_random_btn.add_theme_stylebox_override("pressed", s_press)
+		var r_icon = single_random_btn.get_node_or_null("RandHBox/RandomIcon")
+		if r_icon:
+			r_icon.modulate = active_theme.get("text", Color.WHITE)
 
 	# Buz (light blue) theme: force dark text on background elements, remove outline
 	var buz_active = (Global.current_theme == "Buz")
@@ -1746,6 +1894,8 @@ func update_theme_visuals():
 					entry["node"].text = price_str + " — SATIN AL"
 				elif lang == "ESP" or lang == "POR":
 					entry["node"].text = price_str + " — COMPRAR"
+				elif lang == "ITA":
+					entry["node"].text = price_str + " — ACQUISTA"
 				else:
 					entry["node"].text = price_str + " — BUY NOW"
 		elif LANG[lang].has(entry["key"]):
@@ -1817,6 +1967,8 @@ func update_theme_visuals():
 		_refresh_stats_tab()
 		is_refreshing_stats = false
 
+	_refresh_top_bars_theme()
+
 func style_popup_menu(popup: PopupMenu):
 	if not popup: return
 	var popup_style = StyleBoxFlat.new()
@@ -1852,6 +2004,9 @@ func style_popup_menu(popup: PopupMenu):
 	popup.add_theme_font_size_override("font_size", 32)
 	popup.add_theme_color_override("font_color", Color.WHITE)
 	popup.add_theme_color_override("font_hover_color", Color.BLACK)
+
+func _open_tutorial_from_menu():
+	_start_tutorial(1)
 
 func _toggle_burger_menu():
 	if is_instance_valid(burger_menu_overlay):
@@ -1905,7 +2060,8 @@ func _toggle_burger_menu():
 		{"icon": "res://squad_icon.svg", "key": "PLAYER_LIST_BTN", "fallback": "Oyuncu Kadrosu", "action": _open_player_list},
 		{"icon": "res://quest_icon.svg", "key": "DAILY_QUESTS_BTN", "fallback": "Günlük Görevler", "action": _open_daily_quests},
 		{"icon": "res://wheel_icon.svg", "key": "LUCKY_WHEEL_BTN", "fallback": "Şans Çarkı", "action": _open_lucky_wheel},
-		{"icon": "res://trophy_icon.svg", "key": "LEADERBOARD_BTN", "fallback": "Liderlik Tablosu", "action": _open_leaderboard}
+		{"icon": "res://trophy_icon.svg", "key": "LEADERBOARD_BTN", "fallback": "Liderlik Tablosu", "action": _open_leaderboard},
+		{"icon": "res://info_icon.svg", "key": "TUTORIAL_MENU_ITEM", "fallback": "Rehber", "action": _open_tutorial_from_menu}
 	]
 	
 	for item in menu_items:
@@ -2196,7 +2352,7 @@ func setup_settings_overlay():
 	priv_btn.text = LANG[Global.current_lang].get("PRIVACY_POLICY", "Gizlilik Politikası")
 	priv_btn.add_theme_font_override("font", custom_font)
 	priv_btn.add_theme_font_size_override("font_size", 24)
-	priv_btn.add_theme_color_override("font_color", Color8(210, 230, 255))
+	priv_btn.add_theme_color_override("font_color", Color.WHITE)
 	priv_btn.custom_minimum_size = Vector2(400, 55)
 	var priv_s = StyleBoxFlat.new()
 	priv_s.bg_color = Color8(255, 255, 255, 20)
@@ -2225,7 +2381,7 @@ func setup_settings_overlay():
 	web_btn.text = "ebstudyo.com ↗"
 	web_btn.add_theme_font_override("font", custom_font)
 	web_btn.add_theme_font_size_override("font_size", 24)
-	web_btn.add_theme_color_override("font_color", Color8(120, 200, 255))
+	web_btn.add_theme_color_override("font_color", Color.WHITE)
 	web_btn.custom_minimum_size = Vector2(400, 55)
 	var web_s = StyleBoxFlat.new()
 	web_s.bg_color = Color8(255, 255, 255, 18)
@@ -2250,10 +2406,10 @@ func setup_settings_overlay():
 	acc_vbox.add_child(web_btn)
 	
 	var ver_lbl = Label.new()
-	ver_lbl.text = "Bol Gol Futbol v1.0.8"
+	ver_lbl.text = "Bol Gol Futbol v" + Global.CURRENT_GAME_VERSION
 	ver_lbl.add_theme_font_override("font", custom_font)
 	ver_lbl.add_theme_font_size_override("font_size", 20)
-	ver_lbl.add_theme_color_override("font_color", Color8(120, 130, 150))
+	ver_lbl.add_theme_color_override("font_color", Color.WHITE)
 	ver_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	acc_vbox.add_child(ver_lbl)
 	
@@ -2281,7 +2437,7 @@ func setup_settings_overlay():
 	close_btn.text = LANG[Global.current_lang]["CLOSE"]
 	close_btn.add_theme_font_override("font", custom_font)
 	close_btn.add_theme_font_size_override("font_size", 30)
-	close_btn.add_theme_color_override("font_color", Color8(255, 200, 200))
+	close_btn.add_theme_color_override("font_color", Color.WHITE)
 	close_btn.add_theme_stylebox_override("normal", c_style)
 	close_btn.add_theme_stylebox_override("hover", c_hover)
 	close_btn.add_theme_stylebox_override("pressed", c_pressed)
@@ -2393,7 +2549,7 @@ func setup_player_list_overlay():
 	wtb_style.bg_color = active_theme.bg_bottom.darkened(0.1)
 	wtb_style.corner_radius_top_left = 16; wtb_style.corner_radius_top_right = 16
 	wtb_style.corner_radius_bottom_left = 16; wtb_style.corner_radius_bottom_right = 16
-	wtb_style.border_width_bottom = 2.5; wtb_style.border_color = active_theme.accent
+	wtb_style.border_width_bottom = 3; wtb_style.border_color = active_theme.accent
 	wtb_style.content_margin_top = 10; wtb_style.content_margin_bottom = 10
 	wtb_style.content_margin_left = 20; wtb_style.content_margin_right = 20
 	window_title_bg.add_theme_stylebox_override("panel", wtb_style)
@@ -2548,8 +2704,8 @@ func setup_player_list_overlay():
 				np_style.bg_color = active_theme.bg_bottom.darkened(0.35)
 				np_style.corner_radius_top_left = 10; np_style.corner_radius_top_right = 10
 				np_style.corner_radius_bottom_left = 10; np_style.corner_radius_bottom_right = 10
-				np_style.border_width_left = 1.5; np_style.border_width_right = 1.5
-				np_style.border_width_top = 1.5; np_style.border_width_bottom = 2.5
+				np_style.border_width_left = 2; np_style.border_width_right = 2
+				np_style.border_width_top = 2; np_style.border_width_bottom = 3
 				np_style.border_color = num_border_col
 				np_style.content_margin_left = 8; np_style.content_margin_right = 8
 				r["num_panel"].add_theme_stylebox_override("panel", np_style)
@@ -2562,8 +2718,8 @@ func setup_player_list_overlay():
 				ne_style.bg_color = active_theme.bg_bottom.darkened(0.3)
 				ne_style.corner_radius_top_left = 10; ne_style.corner_radius_top_right = 10
 				ne_style.corner_radius_bottom_left = 10; ne_style.corner_radius_bottom_right = 10
-				ne_style.border_width_left = 1.5; ne_style.border_width_right = 1.5
-				ne_style.border_width_top = 1.5; ne_style.border_width_bottom = 2.5
+				ne_style.border_width_left = 2; ne_style.border_width_right = 2
+				ne_style.border_width_top = 2; ne_style.border_width_bottom = 3
 				ne_style.border_color = name_border_col
 				ne_style.content_margin_left = 12; ne_style.content_margin_right = 12
 				r["name_edit"].add_theme_stylebox_override("normal", ne_style)
@@ -2610,8 +2766,8 @@ func setup_player_list_overlay():
 		var bp_style = StyleBoxFlat.new()
 		bp_style.bg_color = Color8(255, 215, 0, 35)
 		bp_style.border_color = Color8(255, 215, 0)
-		bp_style.border_width_left = 1.5; bp_style.border_width_right = 1.5
-		bp_style.border_width_top = 1.5; bp_style.border_width_bottom = 2.5
+		bp_style.border_width_left = 2; bp_style.border_width_right = 2
+		bp_style.border_width_top = 2; bp_style.border_width_bottom = 3
 		bp_style.corner_radius_top_left = 8; bp_style.corner_radius_top_right = 8
 		bp_style.corner_radius_bottom_left = 8; bp_style.corner_radius_bottom_right = 8
 		bp_style.content_margin_left = 10; bp_style.content_margin_right = 10
@@ -2641,7 +2797,7 @@ func setup_player_list_overlay():
 		name_edit.add_theme_font_override("font", custom_font)
 		name_edit.add_theme_font_size_override("font_size", 26)
 		name_edit.add_theme_color_override("font_color", Color.WHITE)
-		name_edit.add_theme_color_override("font_placeholder_color", Color8(220, 220, 230, 160))
+		name_edit.add_theme_color_override("font_placeholder_color", Color.WHITE)
 		name_edit.text_changed.connect(func(new_text: String):
 			if new_text.length() >= 20:
 				show_toast.call(LANG.get(Global.current_lang, LANG["ENG"]).get("MAX_CHAR_WARN", "Maksimum 20 karakter!"))
@@ -2758,8 +2914,8 @@ func setup_player_list_overlay():
 		pp_style.bg_color = active_theme.bg_bottom.darkened(0.2)
 		pp_style.corner_radius_top_left = 20; pp_style.corner_radius_top_right = 20
 		pp_style.corner_radius_bottom_left = 20; pp_style.corner_radius_bottom_right = 20
-		pp_style.border_width_left = 2.5; pp_style.border_width_right = 2.5
-		pp_style.border_width_top = 2.5; pp_style.border_width_bottom = 4.5
+		pp_style.border_width_left = 3; pp_style.border_width_right = 3
+		pp_style.border_width_top = 3; pp_style.border_width_bottom = 5
 		pp_style.border_color = active_theme.accent
 		pp_style.content_margin_left = 20; pp_style.content_margin_right = 20
 		pp_style.content_margin_top = 18; pp_style.content_margin_bottom = 20
@@ -2788,7 +2944,7 @@ func setup_player_list_overlay():
 		search_box.add_theme_font_override("font", custom_font)
 		search_box.add_theme_font_size_override("font_size", 24)
 		search_box.add_theme_color_override("font_color", Color.WHITE)
-		search_box.add_theme_color_override("font_placeholder_color", Color8(220, 220, 230, 160))
+		search_box.add_theme_color_override("font_placeholder_color", Color.WHITE)
 		var sb_style = StyleBoxFlat.new()
 		sb_style.bg_color = active_theme.bg_bottom.darkened(0.35)
 		sb_style.corner_radius_top_left = 12; sb_style.corner_radius_top_right = 12
@@ -3164,6 +3320,214 @@ func add_dropdown_to_grid(grid: GridContainer, id: String, lang_key: String, opt
 	grid.add_child(drop)
 	style_popup_menu(drop.get_popup())
 
+const BADGE_MAP = {
+	"FB":  "res://fb1.png",
+	"FEN": "res://fb1.png",
+	"TS":  "res://ts1.png",
+	"TRA": "res://ts1.png",
+	"GS":  "res://gs1.png",
+	"GAL": "res://gs1.png",
+	"BJK": "res://bjk1.png",
+	"BAR": "res://bar1.png",
+	"RMA": "res://rma1.png",
+	"ATM": "res://atm1.png",
+	"JUV": "res://juv1.png",
+	"INT": "res://int1.png",
+	"MIL": "res://mil1.png",
+	"NAP": "res://nap1.png",
+	"TOR": "res://tor1.png",
+	"MC":  "res://mc1.png",
+	"MCI": "res://mc1.png",
+	"MUN": "res://mun1.png",
+	"CHE": "res://che1.png",
+	"ARS": "res://ars1.png",
+	"LIV": "res://liv1.png",
+	"TUR": "res://tur1.png",
+	"ARG": "res://arg1.png",
+	"POR": "res://por1.png",
+	"ENG": "res://eng1.png",
+	"USA": "res://usa1.png",
+	"ITA": "res://ita1.png",
+	"PSG": "res://psg1.png",
+	"BAY": "res://bay1.png",
+	"BVB": "res://bvb1.png",
+	"MIA": "res://mia1.png",
+	"FRA": "res://fra1.png", "ESP": "res://esp1.png", "GER": "res://ger1.png", "BEL": "res://bel1.png",
+	"NED": "res://ned1.png", "CRO": "res://cro1.png", "DEN": "res://den1.png", "SUI": "res://sui1.png",
+	"AUT": "res://aut1.png", "POL": "res://pol1.png", "SRB": "res://srb1.png", "CZE": "res://cze1.png",
+	"SCO": "res://sco1.png", "NOR": "res://nor1.png", "BRA": "res://bra1.png", "URU": "res://uru1.png",
+	"COL": "res://col1.png", "CHI": "res://chi1.png", "PAR": "res://par1.png", "ECU": "res://ecu1.png",
+	"NGA": "res://nga1.png", "MAR": "res://mar1.png", "EGY": "res://egy1.png", "SEN": "res://sen1.png",
+	"ALG": "res://alg1.png", "CMR": "res://cmr1.png", "GHA": "res://gha1.png", "JPN": "res://jpn1.png",
+	"KOR": "res://kor1.png", "KSA": "res://ksa1.png", "IRN": "res://irn1.png", "AUS": "res://aus1.png",
+	"QAT": "res://qat1.png", "MEX": "res://mex1.png", "CAN": "res://can1.png", "GEO": "res://geo1.png",
+	"SWE": "res://swe1.png", "GRE": "res://gre1.png", "ROU": "res://rou1.png", "WAL": "res://wal1.png"
+}
+
+func _draw_bg_watermark_pattern(canvas: Control):
+	var vp = canvas.size
+	if vp.x < 10.0 or vp.y < 10.0:
+		vp = get_viewport_rect().size
+	var accent_col: Color = active_theme.get("accent", Color.WHITE) if not active_theme.is_empty() else Color.WHITE
+	var base_col: Color = Color.WHITE.lerp(accent_col, 0.25)
+	var line_col = Color(base_col.r, base_col.g, base_col.b, 0.06)
+	var faint_col = Color(base_col.r, base_col.g, base_col.b, 0.042)
+	var motif_col = Color(base_col.r, base_col.g, base_col.b, 0.072)
+	var accent_watermark = Color(accent_col.r, accent_col.g, accent_col.b, 0.065)
+
+	# 1. Subtle stadium pitch geometry across full viewport
+	var margin_x = vp.x * 0.05
+	var margin_y = vp.y * 0.06
+	var pitch_rect = Rect2(Vector2(margin_x, margin_y), Vector2(vp.x - margin_x * 2.0, vp.y - margin_y * 2.0))
+	canvas.draw_rect(pitch_rect, faint_col, false, 2.0)
+
+	# Halfway line, center circle & center spot
+	var mid_y = vp.y * 0.50
+	var center_pt = Vector2(vp.x * 0.50, mid_y)
+	canvas.draw_line(Vector2(pitch_rect.position.x, mid_y), Vector2(pitch_rect.end.x, mid_y), line_col, 2.0)
+	canvas.draw_arc(center_pt, min(vp.x, vp.y) * 0.21, 0.0, TAU, 64, line_col, 2.2, true)
+	canvas.draw_arc(center_pt, min(vp.x, vp.y) * 0.24, 0.0, TAU, 64, faint_col, 1.2, true)
+	canvas.draw_circle(center_pt, 5.0, line_col)
+
+	# Top & bottom penalty boxes and penalty arcs
+	var pen_w = pitch_rect.size.x * 0.56
+	var pen_h = pitch_rect.size.y * 0.14
+	var goal_w = pitch_rect.size.x * 0.28
+	var goal_h = pitch_rect.size.y * 0.055
+	canvas.draw_rect(Rect2(center_pt.x - pen_w * 0.5, pitch_rect.position.y, pen_w, pen_h), line_col, false, 1.8)
+	canvas.draw_rect(Rect2(center_pt.x - goal_w * 0.5, pitch_rect.position.y, goal_w, goal_h), faint_col, false, 1.5)
+	canvas.draw_arc(Vector2(center_pt.x, pitch_rect.position.y + pen_h), pen_w * 0.22, 0.15 * PI, 0.85 * PI, 32, line_col, 1.8, true)
+
+	canvas.draw_rect(Rect2(center_pt.x - pen_w * 0.5, pitch_rect.end.y - pen_h, pen_w, pen_h), line_col, false, 1.8)
+	canvas.draw_rect(Rect2(center_pt.x - goal_w * 0.5, pitch_rect.end.y - goal_h, goal_w, goal_h), faint_col, false, 1.5)
+	canvas.draw_arc(Vector2(center_pt.x, pitch_rect.end.y - pen_h), pen_w * 0.22, 1.15 * PI, 1.85 * PI, 32, line_col, 1.8, true)
+
+	# Corner arcs
+	var c_rad = 28.0
+	canvas.draw_arc(pitch_rect.position, c_rad, 0.0, 0.5 * PI, 16, line_col, 1.8, true)
+	canvas.draw_arc(Vector2(pitch_rect.end.x, pitch_rect.position.y), c_rad, 0.5 * PI, PI, 16, line_col, 1.8, true)
+	canvas.draw_arc(Vector2(pitch_rect.position.x, pitch_rect.end.y), c_rad, 1.5 * PI, TAU, 16, line_col, 1.8, true)
+	canvas.draw_arc(pitch_rect.end, c_rad, PI, 1.5 * PI, 16, line_col, 1.8, true)
+
+	# Helper lambdas for vector football/tactical motifs
+	var draw_soccer_ball_motif = func(pos: Vector2, r: float, col: Color):
+		canvas.draw_arc(pos, r, 0.0, TAU, 36, col, 2.0, true)
+		var pent_pts = PackedVector2Array()
+		var inner_r = r * 0.36
+		for i in range(5):
+			var a = -PI * 0.5 + i * TAU / 5.0
+			pent_pts.append(pos + Vector2(cos(a), sin(a)) * inner_r)
+		pent_pts.append(pent_pts[0])
+		canvas.draw_polyline(pent_pts, col, 1.6, true)
+		for i in range(5):
+			var a = -PI * 0.5 + i * TAU / 5.0
+			var p_in = pos + Vector2(cos(a), sin(a)) * inner_r
+			var p_out = pos + Vector2(cos(a), sin(a)) * (r * 0.86)
+			canvas.draw_line(p_in, p_out, col, 1.5, true)
+			var a_left = a - 0.32
+			var a_right = a + 0.32
+			canvas.draw_line(p_out, pos + Vector2(cos(a_left), sin(a_left)) * r, col, 1.4, true)
+			canvas.draw_line(p_out, pos + Vector2(cos(a_right), sin(a_right)) * r, col, 1.4, true)
+
+	var draw_trophy_motif = func(pos: Vector2, s: float, col: Color):
+		# Cup bowl
+		canvas.draw_arc(pos + Vector2(0, -s * 0.2), s * 0.45, 0.0, PI, 24, col, 2.0, true)
+		canvas.draw_line(pos + Vector2(-s * 0.45, -s * 0.2), pos + Vector2(s * 0.45, -s * 0.2), col, 2.0, true)
+		# Handles
+		canvas.draw_arc(pos + Vector2(-s * 0.45, -s * 0.02), s * 0.18, 0.5 * PI, 1.5 * PI, 14, col, 1.6, true)
+		canvas.draw_arc(pos + Vector2(s * 0.45, -s * 0.02), s * 0.18, -0.5 * PI, 0.5 * PI, 14, col, 1.6, true)
+		# Stem & pedestal base
+		canvas.draw_line(pos + Vector2(0, s * 0.25), pos + Vector2(0, s * 0.55), col, 2.2, true)
+		canvas.draw_rect(Rect2(pos.x - s * 0.34, pos.y + s * 0.55, s * 0.68, s * 0.16), col, false, 1.8)
+
+	var draw_shield_motif = func(pos: Vector2, s: float, col: Color):
+		var pts = PackedVector2Array([
+			pos + Vector2(0, -s * 0.62),
+			pos + Vector2(s * 0.52, -s * 0.42),
+			pos + Vector2(s * 0.44, s * 0.14),
+			pos + Vector2(0, s * 0.64),
+			pos + Vector2(-s * 0.44, s * 0.14),
+			pos + Vector2(-s * 0.52, -s * 0.42),
+			pos + Vector2(0, -s * 0.62)
+		])
+		canvas.draw_polyline(pts, col, 2.0, true)
+		canvas.draw_line(pos + Vector2(-s * 0.34, -s * 0.25), pos + Vector2(s * 0.32, s * 0.24), col, 1.6, true)
+
+	var draw_star_motif = func(pos: Vector2, r: float, col: Color):
+		var pts = PackedVector2Array()
+		for i in range(10):
+			var rad = r if i % 2 == 0 else r * 0.42
+			var a = -PI * 0.5 + i * PI / 5.0
+			pts.append(pos + Vector2(cos(a), sin(a)) * rad)
+		pts.append(pts[0])
+		canvas.draw_polyline(pts, col, 1.6, true)
+
+	var draw_hex_cluster = func(pos: Vector2, r: float, col: Color):
+		var offsets = [Vector2.ZERO, Vector2(r * 1.75, 0), Vector2(r * 0.875, r * 1.52)]
+		for off in offsets:
+			var c = pos + off
+			var h_pts = PackedVector2Array()
+			for i in range(6):
+				var a = i * TAU / 6.0
+				h_pts.append(c + Vector2(cos(a), sin(a)) * r)
+			h_pts.append(h_pts[0])
+			canvas.draw_polyline(h_pts, col, 1.5, true)
+
+	var draw_tactical_play = func(start_p: Vector2, end_p: Vector2, ctrl_offset: Vector2, col: Color):
+		# Draw tactical X at start and O near end
+		var x_sz = 9.0
+		canvas.draw_line(start_p + Vector2(-x_sz, -x_sz), start_p + Vector2(x_sz, x_sz), col, 2.0, true)
+		canvas.draw_line(start_p + Vector2(x_sz, -x_sz), start_p + Vector2(-x_sz, x_sz), col, 2.0, true)
+		canvas.draw_arc(end_p + Vector2(0, -18), 10.0, 0.0, TAU, 20, col, 2.0, true)
+		# Dashed quadratic bezier curve
+		var mid_p = (start_p + end_p) * 0.5 + ctrl_offset
+		var steps = 14
+		for i in range(0, steps, 2):
+			var t0 = float(i) / float(steps)
+			var t1 = float(i + 1) / float(steps)
+			var p0 = start_p.lerp(mid_p, t0).lerp(mid_p.lerp(end_p, t0), t0)
+			var p1 = start_p.lerp(mid_p, t1).lerp(mid_p.lerp(end_p, t1), t1)
+			canvas.draw_line(p0, p1, col, 1.8, true)
+		# Arrowhead at end_p
+		var dir = (end_p - mid_p).normalized()
+		var ortho = Vector2(-dir.y, dir.x)
+		canvas.draw_line(end_p, end_p - dir * 13.0 + ortho * 7.0, col, 2.0, true)
+		canvas.draw_line(end_p, end_p - dir * 13.0 - ortho * 7.0, col, 2.0, true)
+
+	# 2. Scattered football, trophy, shield, hex & tactical motifs across all vertical bands
+	draw_soccer_ball_motif.call(Vector2(vp.x * 0.14, vp.y * 0.13), 34.0, motif_col)
+	draw_trophy_motif.call(Vector2(vp.x * 0.86, vp.y * 0.14), 38.0, motif_col)
+	draw_hex_cluster.call(Vector2(vp.x * 0.08, vp.y * 0.28), 18.0, accent_watermark)
+	draw_shield_motif.call(Vector2(vp.x * 0.90, vp.y * 0.31), 36.0, motif_col)
+
+	draw_tactical_play.call(Vector2(vp.x * 0.16, vp.y * 0.23), Vector2(vp.x * 0.34, vp.y * 0.16), Vector2(-18, -28), accent_watermark)
+	draw_tactical_play.call(Vector2(vp.x * 0.84, vp.y * 0.44), Vector2(vp.x * 0.68, vp.y * 0.36), Vector2(22, -24), motif_col)
+
+	draw_soccer_ball_motif.call(Vector2(vp.x * 0.88, vp.y * 0.56), 38.0, motif_col)
+	draw_shield_motif.call(Vector2(vp.x * 0.11, vp.y * 0.58), 36.0, motif_col)
+	draw_hex_cluster.call(Vector2(vp.x * 0.83, vp.y * 0.70), 18.0, accent_watermark)
+	draw_trophy_motif.call(Vector2(vp.x * 0.14, vp.y * 0.75), 36.0, motif_col)
+
+	draw_tactical_play.call(Vector2(vp.x * 0.18, vp.y * 0.68), Vector2(vp.x * 0.36, vp.y * 0.76), Vector2(20, -26), motif_col)
+	draw_tactical_play.call(Vector2(vp.x * 0.82, vp.y * 0.84), Vector2(vp.x * 0.62, vp.y * 0.78), Vector2(-18, 24), accent_watermark)
+
+	draw_soccer_ball_motif.call(Vector2(vp.x * 0.24, vp.y * 0.89), 30.0, motif_col)
+	draw_shield_motif.call(Vector2(vp.x * 0.78, vp.y * 0.90), 32.0, motif_col)
+
+	# Accent stars scattered symmetrically
+	var star_positions = [
+		Vector2(vp.x * 0.50, vp.y * 0.11),
+		Vector2(vp.x * 0.26, vp.y * 0.38),
+		Vector2(vp.x * 0.74, vp.y * 0.26),
+		Vector2(vp.x * 0.22, vp.y * 0.50),
+		Vector2(vp.x * 0.78, vp.y * 0.50),
+		Vector2(vp.x * 0.30, vp.y * 0.64),
+		Vector2(vp.x * 0.70, vp.y * 0.66),
+		Vector2(vp.x * 0.50, vp.y * 0.88)
+	]
+	for sp in star_positions:
+		draw_star_motif.call(sp, 11.0, accent_watermark)
+
 func draw_ball_preview(ctrl: Control, is_home: bool = true, team_name_override: String = ""):
 	var team_name = team_name_override if team_name_override != "" else (Global.home_team_name if is_home else Global.away_team_name)
 	var team_data = Global.TEAMS.get(team_name)
@@ -3200,12 +3564,29 @@ func draw_ball_preview(ctrl: Control, is_home: bool = true, team_name_override: 
 		ctrl.draw_circle(center, radius + 1.5, Color(0, 0, 0, 0.45))
 		ctrl.draw_circle(center, radius, colors[0])
 
+		# Smooth polygon stripes matching ball.gd
 		var stripe_w = (radius * 2.0) / 6.0
-		for x in range(int(-radius), int(radius)):
-			var stripe_index = int((x + radius) / stripe_w)
-			if stripe_index % 2 != 0:
+		var c1 = colors[1]
+		for s_idx in [1, 3, 5]:
+			var x_start = -radius + s_idx * stripe_w
+			var x_end = -radius + (s_idx + 1) * stripe_w
+			var pts = PackedVector2Array()
+			var step = 2.0
+			var x = x_start
+			while x <= x_end:
+				var y = -sqrt(max(0.0, radius * radius - x * x))
+				pts.append(center + Vector2(x, y))
+				x += step
+			var y_end_top = -sqrt(max(0.0, radius * radius - x_end * x_end))
+			pts.append(center + Vector2(x_end, y_end_top))
+			x = x_end
+			while x >= x_start:
 				var y = sqrt(max(0.0, radius * radius - x * x))
-				ctrl.draw_line(center + Vector2(x, -y), center + Vector2(x, y), colors[1], 1.0)
+				pts.append(center + Vector2(x, y))
+				x -= step
+			var y_start_bot = sqrt(max(0.0, radius * radius - x_start * x_start))
+			pts.append(center + Vector2(x_start, y_start_bot))
+			ctrl.draw_colored_polygon(pts, c1)
 
 	var skin_id = Global.equipped_ball_skin
 	Global.draw_ball_skin(ctrl, center, radius, skin_id)
@@ -3215,17 +3596,21 @@ func draw_ball_preview(ctrl: Control, is_home: bool = true, team_name_override: 
 	ctrl.draw_arc(center, radius * 0.80, -0.82 * PI, -0.30 * PI, 24, Color(1, 1, 1, 0.18), radius * 0.13, true)
 
 	if not is_flag_ball:
-		# Crest sits on a pale disc so dark and light logos both stay readable.
-		# Teams without artwork keep the plain striped ball instead of an empty disc.
-		var crest_tex = badge_tex
-		if crest_tex == null:
-			crest_tex = Global.get_team_logo(team_name)
-		if crest_tex:
-			var crest_r = radius * 0.42
-			ctrl.draw_circle(center, crest_r + 2.0, Color(0, 0, 0, 0.28))
-			ctrl.draw_circle(center, crest_r, Color8(248, 248, 248, 242))
-			var cs = Vector2.ONE * crest_r * 1.55
-			ctrl.draw_texture_rect(crest_tex, Rect2(center - cs / 2.0, cs), false)
+		# Render team crest/badge at the exact same proportional scale as ball.gd (82/56.5 = 1.45, 80/56.5 = 1.42)
+		# without any small white disc trapping the logo.
+		var logo_tex = Global.get_team_logo(team_name)
+		if badge_tex != null:
+			var cs = Vector2.ONE * (radius * 1.45)
+			var crest_rect = Rect2(center - cs * 0.5, cs)
+			var shadow_rect = Rect2(center - cs * 0.5 + Vector2(0, radius * 0.04), cs)
+			ctrl.draw_texture_rect(badge_tex, shadow_rect, false, Color(0, 0, 0, 0.28))
+			ctrl.draw_texture_rect(badge_tex, crest_rect, false)
+		elif logo_tex != null:
+			var cs = Vector2.ONE * (radius * 1.42)
+			var crest_rect = Rect2(center - cs * 0.5, cs)
+			var shadow_rect = Rect2(center - cs * 0.5 + Vector2(0, radius * 0.04), cs)
+			ctrl.draw_texture_rect(logo_tex, shadow_rect, false, Color(0, 0, 0, 0.28))
+			ctrl.draw_texture_rect(logo_tex, crest_rect, false)
 
 	# Fine rim pass over everything for a crisp edge
 	if skin_id != "default" and skin_id != "":
@@ -3251,8 +3636,14 @@ func draw_ball_preview(ctrl: Control, is_home: bool = true, team_name_override: 
 func get_badge_texture(short_name: String) -> Texture2D:
 	if badge_textures.has(short_name):
 		return badge_textures[short_name]
-	var path = "res://" + short_name.to_lower() + "1.png"
-	if ResourceLoader.exists(path):
+	var path = ""
+	if BADGE_MAP.has(short_name):
+		path = BADGE_MAP[short_name]
+	elif BADGE_MAP.has(short_name.to_upper()):
+		path = BADGE_MAP[short_name.to_upper()]
+	else:
+		path = "res://" + short_name.to_lower() + "1.png"
+	if path != "" and ResourceLoader.exists(path):
 		var tex = load(path)
 		badge_textures[short_name] = tex
 		return tex
@@ -3287,7 +3678,7 @@ func add_centered_toggle_to_vbox(parent: Control, id: String, lang_key: String, 
 		else:
 			sb.bg_color = Color8(40, 45, 55, 230)
 			btn.text = LANG[Global.current_lang]["OFF"]
-			btn.add_theme_color_override("font_color", Color8(180, 180, 180))
+			btn.add_theme_color_override("font_color", Color.WHITE)
 		btn.add_theme_stylebox_override("normal", sb)
 		btn.add_theme_stylebox_override("hover", sb)
 		btn.add_theme_stylebox_override("pressed", sb)
@@ -3718,10 +4109,7 @@ func _update_fav_buttons():
 		lbl.text = text_val
 		lbl.add_theme_font_override("font", custom_font)
 		lbl.add_theme_font_size_override("font_size", 19)
-		if is_gold:
-			lbl.add_theme_color_override("font_color", active_theme.accent.lightened(0.45))
-		else:
-			lbl.add_theme_color_override("font_color", Color8(240, 245, 255))
+		lbl.add_theme_color_override("font_color", Color.WHITE)
 		lbl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		hbox.add_child(lbl)
 		
@@ -3826,10 +4214,16 @@ func _on_lang_dropdown_selected(idx: int):
 
 func _update_start_button_display():
 	if not is_instance_valid(start_match_btn): return
-	var btn_lbl = start_match_btn.get_node_or_null("ButtonLabel")
+	var btn_lbl = start_match_btn.get_node_or_null("BtnHBox/ButtonLabel")
+	if not btn_lbl:
+		btn_lbl = start_match_btn.get_node_or_null("ButtonLabel")
 	if btn_lbl:
 		# Main CTA is always clean, confident action verb without ugly numbers or parentheses
 		btn_lbl.text = LANG.get(Global.current_lang, LANG["ENG"]).get("START_MATCH", "MAÇI BAŞLAT")
+	var btn_arrow_ic = start_match_btn.get_node_or_null("BtnHBox/ButtonArrowIcon")
+	if btn_arrow_ic:
+		btn_arrow_ic.modulate = active_theme.get("accent", Color.WHITE).lightened(0.35)
+		btn_arrow_ic.queue_redraw()
 	
 	if not is_instance_valid(match_fee_badge) or not is_instance_valid(match_fee_lbl): return
 	
@@ -3851,8 +4245,9 @@ func _update_start_button_display():
 		if is_instance_valid(match_fee_chip): match_fee_chip.visible = true
 		if is_instance_valid(match_fee_divider): match_fee_divider.visible = true
 		if is_instance_valid(match_fee_icon): match_fee_icon.visible = false
-		match_fee_lbl.add_theme_color_override("font_color", Color8(255, 236, 173))
-		match_fee_lbl.add_theme_font_size_override("font_size", 20 if is_tablet else 22)
+		if is_instance_valid(match_fee_dots): match_fee_dots.visible = false
+		match_fee_lbl.add_theme_color_override("font_color", Color.WHITE)
+		match_fee_lbl.add_theme_font_size_override("font_size", 19 if is_tablet else 20)
 		var vip_txt = "SINIRSIZ MAÇ"
 		if Global.current_lang == "ENG": vip_txt = "UNLIMITED MATCHES"
 		elif Global.current_lang == "ESP": vip_txt = "PARTIDOS ILIMITADOS"
@@ -3867,11 +4262,21 @@ func _update_start_button_display():
 		sb.shadow_offset = Vector2(0, 2)
 		var rem_free = Global.get_remaining_free_matches()
 		if rem_free > 0:
-			sb.bg_color = Color8(12, 40, 24, 220)
+			sb.bg_color = Color8(12, 40, 24, 232)
 			sb.border_color = Color8(34, 197, 94)
-			if is_instance_valid(match_fee_icon): match_fee_icon.visible = false
-			match_fee_lbl.add_theme_color_override("font_color", Color8(130, 255, 170))
-			match_fee_lbl.add_theme_font_size_override("font_size", 20 if is_tablet else 22)
+			if is_instance_valid(match_fee_icon):
+				match_fee_icon.visible = true
+				if ResourceLoader.exists("res://match_ticket_icon.svg"):
+					match_fee_icon.texture = load("res://match_ticket_icon.svg")
+				else:
+					match_fee_icon.texture = null
+				match_fee_icon.modulate = Color8(110, 255, 160)
+				match_fee_icon.queue_redraw()
+			if is_instance_valid(match_fee_dots):
+				match_fee_dots.visible = true
+				match_fee_dots.queue_redraw()
+			match_fee_lbl.add_theme_color_override("font_color", Color.WHITE)
+			match_fee_lbl.add_theme_font_size_override("font_size", 18 if is_tablet else 19)
 			var free_txt = "ÜCRETSİZ MAÇ: %d/5" % rem_free
 			if Global.current_lang == "ENG": free_txt = "FREE MATCHES: %d/5" % rem_free
 			elif Global.current_lang == "ESP": free_txt = "PARTIDOS GRATIS: %d/5" % rem_free
@@ -3879,13 +4284,16 @@ func _update_start_button_display():
 			elif Global.current_lang == "ITA": free_txt = "PARTITE GRATUITE: %d/5" % rem_free
 			match_fee_lbl.text = free_txt
 		else:
-			sb.bg_color = Color8(38, 26, 12, 220)
+			sb.bg_color = Color8(38, 26, 12, 232)
 			sb.border_color = Color8(245, 158, 11)
 			if is_instance_valid(match_fee_icon):
 				match_fee_icon.visible = true
+				match_fee_icon.modulate = Color.WHITE
 				match_fee_icon.texture = preload("res://jeton_icon.svg")
-			match_fee_lbl.add_theme_color_override("font_color", Color8(255, 215, 100))
-			match_fee_lbl.add_theme_font_size_override("font_size", 20 if is_tablet else 22)
+			if is_instance_valid(match_fee_dots):
+				match_fee_dots.visible = false
+			match_fee_lbl.add_theme_color_override("font_color", Color.WHITE)
+			match_fee_lbl.add_theme_font_size_override("font_size", 18 if is_tablet else 19)
 			var curr = LANG.get(Global.current_lang, LANG["ENG"]).get("CURRENCY", "Jeton")
 			var cost_txt = "MAÇ ÜCRETİ: 50 " + curr.to_upper()
 			if Global.current_lang == "ENG": cost_txt = "MATCH ENTRY: 50 COINS"
@@ -3927,8 +4335,8 @@ func _show_insufficient_tokens_dialog():
 	p_style.bg_color = active_theme.bg_bottom.darkened(0.25)
 	p_style.corner_radius_top_left = 24; p_style.corner_radius_top_right = 24
 	p_style.corner_radius_bottom_left = 24; p_style.corner_radius_bottom_right = 24
-	p_style.border_width_left = 2.0; p_style.border_width_right = 2.0
-	p_style.border_width_top = 2.0; p_style.border_width_bottom = 5.0
+	p_style.border_width_left = 2; p_style.border_width_right = 2
+	p_style.border_width_top = 2; p_style.border_width_bottom = 5
 	p_style.border_color = active_theme.accent
 	p_style.shadow_color = Color8(0, 0, 0, 200)
 	p_style.shadow_size = 35
@@ -3987,7 +4395,7 @@ func _show_insufficient_tokens_dialog():
 	desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	desc_lbl.add_theme_font_override("font", custom_font)
 	desc_lbl.add_theme_font_size_override("font_size", 21)
-	desc_lbl.add_theme_color_override("font_color", Color8(210, 225, 240))
+	desc_lbl.add_theme_color_override("font_color", Color.WHITE)
 	desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(desc_lbl)
 	
@@ -4066,7 +4474,7 @@ func _show_insufficient_tokens_dialog():
 	shop_btn.custom_minimum_size = Vector2(0, 50)
 	shop_btn.add_theme_font_override("font", custom_font)
 	shop_btn.add_theme_font_size_override("font_size", 24)
-	shop_btn.add_theme_color_override("font_color", Color8(255, 230, 140))
+	shop_btn.add_theme_color_override("font_color", Color.WHITE)
 	apply_3d_style_to_button(shop_btn, active_theme.bg_bottom.darkened(0.2), active_theme.bg_bottom.darkened(0.45), 14, 3.5)
 	shop_btn.pressed.connect(func():
 		Global.play_click()
@@ -4080,7 +4488,7 @@ func _show_insufficient_tokens_dialog():
 	close_btn.custom_minimum_size = Vector2(0, 46)
 	close_btn.add_theme_font_override("font", custom_font)
 	close_btn.add_theme_font_size_override("font_size", 24)
-	close_btn.add_theme_color_override("font_color", Color8(200, 210, 225))
+	close_btn.add_theme_color_override("font_color", Color.WHITE)
 	apply_3d_style_to_button(close_btn, Color8(70, 75, 90), Color8(45, 50, 60), 12, 3)
 	close_btn.pressed.connect(func():
 		Global.play_click()
@@ -4221,6 +4629,8 @@ func _init_tab_sizes():
 		child.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 func _switch_tab(idx: int, instant: bool = false):
+	if is_instance_valid(tutorial_overlay) and tutorial_overlay.visible and idx != 1:
+		return
 	var sw = get_viewport_rect().size.x
 	var sh = get_viewport_rect().size.y
 	
@@ -4465,8 +4875,8 @@ func _build_stats_tab() -> Control:
 	lb_style.bg_color = active_theme.bg_bottom.darkened(0.2)
 	lb_style.corner_radius_top_left = 16; lb_style.corner_radius_top_right = 16
 	lb_style.corner_radius_bottom_left = 16; lb_style.corner_radius_bottom_right = 16
-	lb_style.border_width_left = 1.5; lb_style.border_width_right = 1.5
-	lb_style.border_width_top = 1.5; lb_style.border_width_bottom = 3.5
+	lb_style.border_width_left = 2; lb_style.border_width_right = 2
+	lb_style.border_width_top = 2; lb_style.border_width_bottom = 4
 	lb_style.border_color = active_theme.accent
 	lb_style.shadow_color = Color8(0, 0, 0, 100)
 	lb_style.shadow_size = 6
@@ -4478,7 +4888,7 @@ func _build_stats_tab() -> Control:
 	lb_hover.border_color = active_theme.accent.lightened(0.2)
 	
 	var lb_pressed = lb_style.duplicate()
-	lb_pressed.border_width_bottom = 1.5
+	lb_pressed.border_width_bottom = 2
 	lb_pressed.content_margin_top = 8
 	
 	lead_btn.add_theme_stylebox_override("normal", lb_style)
@@ -4548,8 +4958,8 @@ func _build_stats_tab() -> Control:
 		cs.bg_color = Color(card_bg.r, card_bg.g, card_bg.b, 0.95)
 		cs.corner_radius_top_left = 18; cs.corner_radius_top_right = 18
 		cs.corner_radius_bottom_left = 18; cs.corner_radius_bottom_right = 18
-		cs.border_width_left = 1.5; cs.border_width_right = 1.5
-		cs.border_width_top = 1.5; cs.border_width_bottom = 4.0
+		cs.border_width_left = 2; cs.border_width_right = 2
+		cs.border_width_top = 2; cs.border_width_bottom = 4
 		cs.border_color = active_theme.accent.darkened(0.25)
 		cs.shadow_color = Color8(0, 0, 0, 80)
 		cs.shadow_size = 8
@@ -4568,8 +4978,8 @@ func _build_stats_tab() -> Control:
 		ps.bg_color = Color(cell_bg.r, cell_bg.g, cell_bg.b, 0.94)
 		ps.corner_radius_top_left = 12; ps.corner_radius_top_right = 12
 		ps.corner_radius_bottom_left = 12; ps.corner_radius_bottom_right = 12
-		ps.border_width_left = 1.0; ps.border_width_right = 1.0
-		ps.border_width_top = 1.0; ps.border_width_bottom = 2.5
+		ps.border_width_left = 1; ps.border_width_right = 1
+		ps.border_width_top = 1; ps.border_width_bottom = 3
 		ps.border_color = active_theme.accent.darkened(0.4)
 		ps.content_margin_left = 10; ps.content_margin_right = 10
 		ps.content_margin_top = 6; ps.content_margin_bottom = 6
@@ -4636,8 +5046,8 @@ func _build_stats_tab() -> Control:
 		ps.bg_color = Color(cell_bg.r, cell_bg.g, cell_bg.b, 0.94)
 		ps.corner_radius_top_left = 12; ps.corner_radius_top_right = 12
 		ps.corner_radius_bottom_left = 12; ps.corner_radius_bottom_right = 12
-		ps.border_width_left = 1.0; ps.border_width_right = 1.0
-		ps.border_width_top = 1.0; ps.border_width_bottom = 2.5
+		ps.border_width_left = 1; ps.border_width_right = 1
+		ps.border_width_top = 1; ps.border_width_bottom = 3
 		ps.border_color = (Color8(50, 225, 110) if is_win else Color8(255, 85, 95)).darkened(0.3)
 		ps.content_margin_left = 10; ps.content_margin_right = 10
 		ps.content_margin_top = 6; ps.content_margin_bottom = 6
@@ -4786,7 +5196,7 @@ func _build_stats_tab() -> Control:
 			form_title.text = LANG[lang].get("STATS_FORM", "Son 5 Maç") + ":"
 			form_title.add_theme_font_override("font", custom_font)
 			form_title.add_theme_font_size_override("font_size", 20)
-			form_title.add_theme_color_override("font_color", Color8(195, 215, 240))
+			form_title.add_theme_color_override("font_color", Color.WHITE)
 			form_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 			ui_labels.append({"node": form_title, "key": "STATS_FORM", "type": "label"})
 			form_hbox.add_child(form_title)
@@ -4832,8 +5242,8 @@ func _build_stats_tab() -> Control:
 		wr_cs.bg_color = Color(cell_bg.r, cell_bg.g, cell_bg.b, 0.94)
 		wr_cs.corner_radius_top_left = 12; wr_cs.corner_radius_top_right = 12
 		wr_cs.corner_radius_bottom_left = 12; wr_cs.corner_radius_bottom_right = 12
-		wr_cs.border_width_left = 1.0; wr_cs.border_width_right = 1.0
-		wr_cs.border_width_top = 1.0; wr_cs.border_width_bottom = 2.5
+		wr_cs.border_width_left = 1; wr_cs.border_width_right = 1
+		wr_cs.border_width_top = 1; wr_cs.border_width_bottom = 3
 		wr_cs.border_color = active_theme.accent.darkened(0.4)
 		wr_cs.content_margin_left = 12; wr_cs.content_margin_right = 12
 		wr_cs.content_margin_top = 8; wr_cs.content_margin_bottom = 8
@@ -4894,8 +5304,8 @@ func _build_stats_tab() -> Control:
 		card_cs.bg_color = Color(cell_bg.r, cell_bg.g, cell_bg.b, 0.94)
 		card_cs.corner_radius_top_left = 12; card_cs.corner_radius_top_right = 12
 		card_cs.corner_radius_bottom_left = 12; card_cs.corner_radius_bottom_right = 12
-		card_cs.border_width_left = 1.0; card_cs.border_width_right = 1.0
-		card_cs.border_width_top = 1.0; card_cs.border_width_bottom = 2.5
+		card_cs.border_width_left = 1; card_cs.border_width_right = 1
+		card_cs.border_width_top = 1; card_cs.border_width_bottom = 3
 		card_cs.border_color = active_theme.accent.darkened(0.4)
 		card_cs.content_margin_left = 12; card_cs.content_margin_right = 12
 		card_cs.content_margin_top = 8; card_cs.content_margin_bottom = 8
@@ -5138,8 +5548,8 @@ func _build_stats_tab() -> Control:
 			kps.bg_color = Color(cell_bg.r, cell_bg.g, cell_bg.b, 0.94)
 			kps.corner_radius_top_left = 10; kps.corner_radius_top_right = 10
 			kps.corner_radius_bottom_left = 10; kps.corner_radius_bottom_right = 10
-			kps.border_width_left = 1.0; kps.border_width_right = 1.0
-			kps.border_width_top = 1.0; kps.border_width_bottom = 2.5
+			kps.border_width_left = 1; kps.border_width_right = 1
+			kps.border_width_top = 1; kps.border_width_bottom = 3
 			kps.border_color = active_theme.accent.darkened(0.45)
 			kps.content_margin_left = 4; kps.content_margin_right = 4
 			kps.content_margin_top = 6; kps.content_margin_bottom = 6
@@ -5156,7 +5566,7 @@ func _build_stats_tab() -> Control:
 			kl.text = LANG[lang].get(k_key, k_key)
 			kl.add_theme_font_override("font", custom_font)
 			kl.add_theme_font_size_override("font_size", 18)
-			kl.add_theme_color_override("font_color", Color8(195, 215, 240))
+			kl.add_theme_color_override("font_color", Color.WHITE)
 			kl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			ui_labels.append({"node": kl, "key": k_key, "type": "label"})
 			kvbox.add_child(kl)
@@ -5177,7 +5587,7 @@ func _build_stats_tab() -> Control:
 				ksub.text = sub_str
 				ksub.add_theme_font_override("font", custom_font)
 				ksub.add_theme_font_size_override("font_size", 16)
-				ksub.add_theme_color_override("font_color", Color8(170, 195, 225))
+				ksub.add_theme_color_override("font_color", Color.WHITE)
 				ksub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 				kvbox.add_child(ksub)
 
@@ -5256,8 +5666,8 @@ func _build_stats_tab() -> Control:
 			m_style.bg_color = Color(match_bg.r, match_bg.g, match_bg.b, 0.94)
 			m_style.corner_radius_top_left = 12; m_style.corner_radius_top_right = 12
 			m_style.corner_radius_bottom_left = 12; m_style.corner_radius_bottom_right = 12
-			m_style.border_width_left = 1.0; m_style.border_width_right = 1.0
-			m_style.border_width_top = 1.0; m_style.border_width_bottom = 2.5
+			m_style.border_width_left = 1; m_style.border_width_right = 1
+			m_style.border_width_top = 1; m_style.border_width_bottom = 3
 			m_style.border_color = active_theme.accent.darkened(0.45)
 			m_style.content_margin_left = 12; m_style.content_margin_right = 12
 			m_style.content_margin_top = 5; m_style.content_margin_bottom = 5
@@ -5342,7 +5752,7 @@ func _build_stats_tab() -> Control:
 			sc_s.bg_color = Color(sc_bg.r, sc_bg.g, sc_bg.b, 0.95)
 			sc_s.corner_radius_top_left = 8; sc_s.corner_radius_top_right = 8
 			sc_s.corner_radius_bottom_left = 8; sc_s.corner_radius_bottom_right = 8
-			sc_s.border_width_bottom = 1.5
+			sc_s.border_width_bottom = 2
 			sc_s.border_color = active_theme.accent.darkened(0.3)
 			sc_s.content_margin_left = 10; sc_s.content_margin_right = 10
 			sc_s.content_margin_top = 3; sc_s.content_margin_bottom = 3
@@ -5434,8 +5844,8 @@ func _build_shop_tab() -> Control:
 	cp_style.bg_color = active_theme.bg_bottom.darkened(0.2)
 	cp_style.corner_radius_top_left = 16; cp_style.corner_radius_top_right = 16
 	cp_style.corner_radius_bottom_left = 16; cp_style.corner_radius_bottom_right = 16
-	cp_style.border_width_left = 1.5; cp_style.border_width_right = 1.5
-	cp_style.border_width_top = 1.5; cp_style.border_width_bottom = 3.5
+	cp_style.border_width_left = 2; cp_style.border_width_right = 2
+	cp_style.border_width_top = 2; cp_style.border_width_bottom = 4
 	cp_style.border_color = active_theme.accent
 	cp_style.shadow_color = Color8(0, 0, 0, 100)
 	cp_style.shadow_size = 6
@@ -5447,7 +5857,7 @@ func _build_shop_tab() -> Control:
 	cp_hover.border_color = active_theme.accent.lightened(0.2)
 	
 	var cp_pressed = cp_style.duplicate()
-	cp_pressed.border_width_bottom = 1.5
+	cp_pressed.border_width_bottom = 2
 	cp_pressed.content_margin_top = 8
 	
 	cred_btn.add_theme_stylebox_override("normal", cp_style)
@@ -5561,11 +5971,11 @@ func _build_shop_tab() -> Control:
 	vbox.mouse_filter = Control.MOUSE_FILTER_PASS
 	shop_scroll.add_child(vbox)
 
-	# --- 2. QUICK REWARDS & FEATURES ROW (3 Buttons) ---
+	# --- 2. QUICK REWARDS ROW (Watch Video + Icon-Only Lucky Wheel) ---
 	var rewards_hbox = HBoxContainer.new()
 	rewards_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	rewards_hbox.add_theme_constant_override("separation", 10)
-	rewards_hbox.custom_minimum_size = Vector2(0, 48)
+	rewards_hbox.add_theme_constant_override("separation", 12)
+	rewards_hbox.custom_minimum_size = Vector2(0, 54)
 	rewards_hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.add_child(rewards_hbox)
 
@@ -5573,16 +5983,23 @@ func _build_shop_tab() -> Control:
 	ad_btn.text = LANG[Global.current_lang]["SHOP_WATCH_AD"]
 	ad_btn.icon = load("res://video.svg")
 	ad_btn.expand_icon = true
-	ad_btn.add_theme_constant_override("icon_max_width", 24)
-	ad_btn.add_theme_constant_override("h_separation", 6)
+	ad_btn.add_theme_constant_override("icon_max_width", 28)
+	ad_btn.add_theme_constant_override("h_separation", 10)
 	ui_labels.append({"node": ad_btn, "key": "SHOP_WATCH_AD", "type": "button"})
 	ad_btn.add_theme_font_override("font", custom_font)
-	ad_btn.add_theme_font_size_override("font_size", 21)
+	ad_btn.add_theme_font_size_override("font_size", 24)
 	ad_btn.add_theme_color_override("font_color", Color.WHITE)
-	ad_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
+	ad_btn.add_theme_color_override("font_hover_color", Color.WHITE)
+	ad_btn.add_theme_color_override("font_pressed_color", Color.WHITE)
+	ad_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 190))
 	ad_btn.add_theme_constant_override("shadow_offset_y", 2)
-	apply_3d_style_to_button(ad_btn, Color8(245, 155, 20), Color8(175, 90, 10), 12, 3.0, 10, 6)
-	ad_btn.custom_minimum_size = Vector2(200, 48)
+	apply_3d_style_to_button(ad_btn, active_theme.accent.darkened(0.14), active_theme.accent.darkened(0.46), 14, 4, 16, 8)
+	var ad_norm_sb = ad_btn.get_theme_stylebox("normal")
+	if ad_norm_sb is StyleBoxFlat:
+		ad_norm_sb.border_width_left = 2; ad_norm_sb.border_width_right = 2
+		ad_norm_sb.border_width_top = 2; ad_norm_sb.border_width_bottom = 4
+		ad_norm_sb.border_color = active_theme.accent.lightened(0.28)
+	ad_btn.custom_minimum_size = Vector2(200, 54)
 	ad_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ad_btn.pressed.connect(_show_admob_rewarded)
 
@@ -5593,7 +6010,7 @@ func _build_shop_tab() -> Control:
 			var mins = cd / 60
 			var secs = cd % 60
 			ad_btn.text = "⏳ %02d:%02d" % [mins, secs]
-			ad_btn.modulate = Color(0.85, 0.85, 0.85, 0.88)
+			ad_btn.modulate = Color(0.88, 0.88, 0.88, 0.92)
 		else:
 			ad_btn.text = LANG.get(Global.current_lang, LANG["ENG"]).get("SHOP_WATCH_AD", "VİDEO İZLE (+50 Jeton)")
 			ad_btn.modulate = Color.WHITE
@@ -5608,44 +6025,44 @@ func _build_shop_tab() -> Control:
 	rewards_hbox.add_child(ad_btn)
 
 	var wheel_btn = Button.new()
-	wheel_btn.text = LANG[Global.current_lang]["LUCKY_WHEEL_BTN"]
-	wheel_btn.add_theme_font_override("font", custom_font)
-	wheel_btn.add_theme_font_size_override("font_size", 21)
-	wheel_btn.add_theme_color_override("font_color", Color.WHITE)
-	wheel_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
-	wheel_btn.add_theme_constant_override("shadow_offset_y", 2)
-	apply_3d_style_to_button(wheel_btn, active_theme.accent, active_theme.accent.darkened(0.35), 12, 3.0, 10, 6)
-	wheel_btn.custom_minimum_size = Vector2(150, 48)
-	wheel_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	wheel_btn.text = ""
+	wheel_btn.tooltip_text = LANG[Global.current_lang].get("LUCKY_WHEEL_BTN", "Şans Çarkı")
+	apply_3d_style_to_button(wheel_btn, active_theme.bg_bottom.darkened(0.22), active_theme.bg_bottom.darkened(0.48), 14, 4, 8, 6)
+	var wh_norm_sb = wheel_btn.get_theme_stylebox("normal")
+	if wh_norm_sb is StyleBoxFlat:
+		wh_norm_sb.border_width_left = 2; wh_norm_sb.border_width_right = 2
+		wh_norm_sb.border_width_top = 2; wh_norm_sb.border_width_bottom = 4
+		wh_norm_sb.border_color = active_theme.accent.lightened(0.18)
+	wheel_btn.custom_minimum_size = Vector2(58, 54)
+	wheel_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	var wheel_ic_center = CenterContainer.new()
+	wheel_ic_center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	wheel_ic_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	wheel_btn.add_child(wheel_ic_center)
+	var wheel_ic_rect = TextureRect.new()
+	wheel_ic_rect.texture = preload("res://wheel_icon.svg")
+	wheel_ic_rect.custom_minimum_size = Vector2(34, 34)
+	wheel_ic_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	wheel_ic_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	wheel_ic_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	wheel_ic_center.add_child(wheel_ic_rect)
 	wheel_btn.pressed.connect(_open_lucky_wheel)
 	rewards_hbox.add_child(wheel_btn)
 
-	var quests_btn = Button.new()
-	quests_btn.text = LANG[Global.current_lang]["DAILY_QUESTS_BTN"]
-	quests_btn.add_theme_font_override("font", custom_font)
-	quests_btn.add_theme_font_size_override("font_size", 21)
-	quests_btn.add_theme_color_override("font_color", Color.WHITE)
-	quests_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
-	quests_btn.add_theme_constant_override("shadow_offset_y", 2)
-	apply_3d_style_to_button(quests_btn, active_theme.bg_top.lightened(0.18), active_theme.bg_bottom.darkened(0.3), 12, 3.0, 10, 6)
-	quests_btn.custom_minimum_size = Vector2(150, 48)
-	quests_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	quests_btn.pressed.connect(_open_daily_quests)
-	rewards_hbox.add_child(quests_btn)
-
-	# --- 3. PRO PASS SHOWCASE BANNER (Thick & Luxurious) ---
+	# --- 3. ELİT KULÜP SHOWCASE BANNER (Theme-Harmonized & Modern) ---
 	var prem_panel = PanelContainer.new()
 	var prem_style = StyleBoxFlat.new()
-	prem_style.bg_color = Color8(25, 14, 42, 250)
-	prem_style.corner_radius_top_left = 16; prem_style.corner_radius_top_right = 16
-	prem_style.corner_radius_bottom_left = 16; prem_style.corner_radius_bottom_right = 16
-	prem_style.border_width_top = 2.0; prem_style.border_width_bottom = 4.0
-	prem_style.border_width_left = 1.5; prem_style.border_width_right = 1.5
-	prem_style.border_color = Color8(255, 210, 60, 230)
-	prem_style.shadow_color = Color8(255, 180, 0, 40)
+	var prem_bg = active_theme.bg_bottom.darkened(0.32)
+	prem_style.bg_color = Color(prem_bg.r, prem_bg.g, prem_bg.b, 0.96)
+	prem_style.corner_radius_top_left = 18; prem_style.corner_radius_top_right = 18
+	prem_style.corner_radius_bottom_left = 18; prem_style.corner_radius_bottom_right = 18
+	prem_style.border_width_top = 2; prem_style.border_width_bottom = 4
+	prem_style.border_width_left = 2; prem_style.border_width_right = 2
+	prem_style.border_color = active_theme.accent.lightened(0.18)
+	prem_style.shadow_color = Color8(0, 0, 0, 140)
 	prem_style.shadow_size = 12
-	prem_style.content_margin_left = 14; prem_style.content_margin_right = 14
-	prem_style.content_margin_top = 10; prem_style.content_margin_bottom = 10
+	prem_style.content_margin_left = 16; prem_style.content_margin_right = 16
+	prem_style.content_margin_top = 12; prem_style.content_margin_bottom = 12
 	prem_panel.add_theme_stylebox_override("panel", prem_style)
 	vbox.add_child(prem_panel)
 
@@ -5657,36 +6074,53 @@ func _build_shop_tab() -> Control:
 	var prem_left_vb = VBoxContainer.new()
 	prem_left_vb.alignment = BoxContainer.ALIGNMENT_CENTER
 	prem_left_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	prem_left_vb.add_theme_constant_override("separation", 2)
+	prem_left_vb.add_theme_constant_override("separation", 4)
 	prem_hbox.add_child(prem_left_vb)
 
 	var prem_title_hb = HBoxContainer.new()
 	prem_title_hb.alignment = BoxContainer.ALIGNMENT_BEGIN
-	prem_title_hb.add_theme_constant_override("separation", 8)
+	prem_title_hb.add_theme_constant_override("separation", 10)
 	prem_left_vb.add_child(prem_title_hb)
+
+	var crown_badge = PanelContainer.new()
+	var cb_style = StyleBoxFlat.new()
+	cb_style.bg_color = active_theme.accent.darkened(0.52)
+	cb_style.corner_radius_top_left = 10; cb_style.corner_radius_top_right = 10
+	cb_style.corner_radius_bottom_left = 10; cb_style.corner_radius_bottom_right = 10
+	cb_style.border_width_left = 1; cb_style.border_width_right = 1
+	cb_style.border_width_top = 1; cb_style.border_width_bottom = 1
+	cb_style.border_color = active_theme.accent.lightened(0.22)
+	crown_badge.add_theme_stylebox_override("panel", cb_style)
+	crown_badge.custom_minimum_size = Vector2(38, 38)
+	crown_badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	prem_title_hb.add_child(crown_badge)
+
+	var crown_center = CenterContainer.new()
+	crown_badge.add_child(crown_center)
 
 	var crown_icon = TextureRect.new()
 	crown_icon.texture = preload("res://crownicon.svg")
-	crown_icon.custom_minimum_size = Vector2(28, 28)
+	crown_icon.custom_minimum_size = Vector2(26, 26)
 	crown_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	crown_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	crown_icon.modulate = Color8(255, 215, 0)
-	prem_title_hb.add_child(crown_icon)
+	crown_center.add_child(crown_icon)
 
 	var prem_icon_lbl = Label.new()
-	prem_icon_lbl.text = "PRO PASS"
+	prem_icon_lbl.text = LANG[Global.current_lang].get("PRO_PASS_TITLE", "ELİT KULÜP")
 	prem_icon_lbl.add_theme_font_override("font", custom_font)
 	prem_icon_lbl.add_theme_font_size_override("font_size", 30)
-	prem_icon_lbl.add_theme_color_override("font_color", Color8(255, 235, 140))
-	prem_icon_lbl.add_theme_color_override("font_shadow_color", Color8(180, 100, 0, 200))
+	prem_icon_lbl.add_theme_color_override("font_color", Color.WHITE)
+	prem_icon_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 190))
 	prem_icon_lbl.add_theme_constant_override("shadow_offset_y", 2)
+	prem_icon_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	ui_labels.append({"node": prem_icon_lbl, "key": "PRO_PASS_TITLE", "type": "label"})
 	prem_title_hb.add_child(prem_icon_lbl)
 
 	var prem_desc = Label.new()
 	prem_desc.text = LANG[Global.current_lang]["SHOP_PRO_DESC"]
 	prem_desc.add_theme_font_override("font", custom_font)
 	prem_desc.add_theme_font_size_override("font_size", 18)
-	prem_desc.add_theme_color_override("font_color", Color8(230, 220, 245))
+	prem_desc.add_theme_color_override("font_color", Color.WHITE)
 	prem_desc.autowrap_mode = TextServer.AUTOWRAP_WORD
 	ui_labels.append({"node": prem_desc, "key": "SHOP_PRO_DESC", "type": "label"})
 	prem_left_vb.add_child(prem_desc)
@@ -5698,7 +6132,7 @@ func _build_shop_tab() -> Control:
 
 	var buy_btn = Button.new()
 	if Global.is_premium:
-		buy_btn.text = " " + LANG[Global.current_lang].get("PRO_OFF", "PRO KAPAT")
+		buy_btn.text = " " + LANG[Global.current_lang].get("PRO_OFF", "ELİT KAPAT")
 		if ResourceLoader.exists("res://checkmark_icon.svg"):
 			buy_btn.icon = load("res://checkmark_icon.svg")
 			buy_btn.expand_icon = true
@@ -5717,12 +6151,16 @@ func _build_shop_tab() -> Control:
 			buy_text = price_str + " — SATIN AL"
 		elif lang == "ESP" or lang == "POR":
 			buy_text = price_str + " — COMPRAR"
+		elif lang == "ITA":
+			buy_text = price_str + " — ACQUISTA"
 		else:
 			buy_text = price_str + " — BUY NOW"
 		buy_btn.text = buy_text
 		ui_labels.append({"node": buy_btn, "key": "SHOP_BUY", "type": "button_buy_premium"})
-		apply_3d_style_to_button(buy_btn, Color8(255, 185, 0), Color8(185, 100, 0), 12, 3.5, 14, 8)
-		buy_btn.add_theme_color_override("font_color", Color8(20, 10, 0))
+		apply_3d_style_to_button(buy_btn, active_theme.accent.darkened(0.14), active_theme.accent.darkened(0.46), 12, 3.5, 14, 8)
+		buy_btn.add_theme_color_override("font_color", Color.WHITE)
+		buy_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
+		buy_btn.add_theme_constant_override("shadow_offset_y", 2)
 		buy_btn.pressed.connect(_on_buy_premium_pressed)
 	buy_btn.add_theme_font_override("font", custom_font)
 	buy_btn.add_theme_font_size_override("font_size", 20)
@@ -5733,7 +6171,7 @@ func _build_shop_tab() -> Control:
 	rest_shop_btn.text = LANG[Global.current_lang].get("RESTORE_PURCHASES", "Satın Alımları Geri Yükle")
 	rest_shop_btn.add_theme_font_override("font", custom_font)
 	rest_shop_btn.add_theme_font_size_override("font_size", 16)
-	rest_shop_btn.add_theme_color_override("font_color", Color8(230, 220, 245))
+	rest_shop_btn.add_theme_color_override("font_color", Color.WHITE)
 	rest_shop_btn.custom_minimum_size = Vector2(185, 36)
 	var rest_shop_style = StyleBoxFlat.new()
 	rest_shop_style.bg_color = Color(0, 0, 0, 0)
@@ -5748,8 +6186,8 @@ func _build_shop_tab() -> Control:
 	balls_p_style.bg_color = Color(balls_bg.r, balls_bg.g, balls_bg.b, 0.95)
 	balls_p_style.corner_radius_top_left = 16; balls_p_style.corner_radius_top_right = 16
 	balls_p_style.corner_radius_bottom_left = 16; balls_p_style.corner_radius_bottom_right = 16
-	balls_p_style.border_width_left = 1.5; balls_p_style.border_width_right = 1.5
-	balls_p_style.border_width_top = 1.5; balls_p_style.border_width_bottom = 3.5
+	balls_p_style.border_width_left = 2; balls_p_style.border_width_right = 2
+	balls_p_style.border_width_top = 2; balls_p_style.border_width_bottom = 4
 	balls_p_style.border_color = active_theme.accent.darkened(0.25)
 	balls_p_style.content_margin_left = 12; balls_p_style.content_margin_right = 12
 	balls_p_style.content_margin_top = 10; balls_p_style.content_margin_bottom = 10
@@ -5835,8 +6273,8 @@ func _build_shop_tab() -> Control:
 		card_style.bg_color = active_theme.bg_bottom.darkened(0.35)
 		card_style.corner_radius_top_left = 14; card_style.corner_radius_top_right = 14
 		card_style.corner_radius_bottom_left = 14; card_style.corner_radius_bottom_right = 14
-		card_style.border_width_bottom = 3.5
-		card_style.border_width_top = 1.5; card_style.border_width_left = 1.5; card_style.border_width_right = 1.5
+		card_style.border_width_bottom = 4
+		card_style.border_width_top = 2; card_style.border_width_left = 2; card_style.border_width_right = 2
 		var bcolor_dark = bcolor.darkened(0.2) if s_id != "chrome" else Color8(180, 190, 210)
 		card_style.border_color = bcolor_dark
 		card_style.content_margin_top = 8; card_style.content_margin_bottom = 8
@@ -5925,8 +6363,8 @@ func _build_shop_tab() -> Control:
 	hats_p_style.bg_color = Color(hats_bg.r, hats_bg.g, hats_bg.b, 0.95)
 	hats_p_style.corner_radius_top_left = 16; hats_p_style.corner_radius_top_right = 16
 	hats_p_style.corner_radius_bottom_left = 16; hats_p_style.corner_radius_bottom_right = 16
-	hats_p_style.border_width_left = 1.5; hats_p_style.border_width_right = 1.5
-	hats_p_style.border_width_top = 1.5; hats_p_style.border_width_bottom = 3.5
+	hats_p_style.border_width_left = 2; hats_p_style.border_width_right = 2
+	hats_p_style.border_width_top = 2; hats_p_style.border_width_bottom = 4
 	hats_p_style.border_color = active_theme.accent.darkened(0.25)
 	hats_p_style.content_margin_left = 12; hats_p_style.content_margin_right = 12
 	hats_p_style.content_margin_top = 10; hats_p_style.content_margin_bottom = 10
@@ -6010,8 +6448,8 @@ func _build_shop_tab() -> Control:
 		card_style.bg_color = active_theme.bg_bottom.darkened(0.35)
 		card_style.corner_radius_top_left = 14; card_style.corner_radius_top_right = 14
 		card_style.corner_radius_bottom_left = 14; card_style.corner_radius_bottom_right = 14
-		card_style.border_width_bottom = 3.5
-		card_style.border_width_top = 1.5; card_style.border_width_left = 1.5; card_style.border_width_right = 1.5
+		card_style.border_width_bottom = 4
+		card_style.border_width_top = 2; card_style.border_width_left = 2; card_style.border_width_right = 2
 		card_style.border_color = active_theme.accent.darkened(0.15) if h_id != "none" else active_theme.bg_top.lightened(0.1)
 		card_style.content_margin_top = 8; card_style.content_margin_bottom = 8
 		card_style.content_margin_left = 8; card_style.content_margin_right = 8
@@ -6102,28 +6540,54 @@ func _build_shop_tab() -> Control:
 		card_vbox.add_child(action_btn)
 		hats_hbox.add_child(card)
 
-	# --- 5. EXPOSED DAILY QUESTS SECTION (Detailed, Broad & Theme-Harmonized) ---
+	# --- 5. EXPOSED DAILY QUESTS SECTION (Clickable Card-Button Opening Quests Modal) ---
 	var quests_panel = PanelContainer.new()
+	quests_panel.mouse_filter = Control.MOUSE_FILTER_PASS
+	quests_panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	var qp_style = StyleBoxFlat.new()
-	qp_style.bg_color = active_theme.bg_bottom.darkened(0.12)
+	qp_style.bg_color = active_theme.bg_bottom.darkened(0.22)
 	qp_style.corner_radius_top_left = 18; qp_style.corner_radius_top_right = 18
 	qp_style.corner_radius_bottom_left = 18; qp_style.corner_radius_bottom_right = 18
 	qp_style.border_width_left = 2; qp_style.border_width_right = 2
 	qp_style.border_width_top = 2; qp_style.border_width_bottom = 4
-	qp_style.border_color = active_theme.accent
+	qp_style.border_color = active_theme.accent.lightened(0.15)
 	qp_style.shadow_color = Color8(0, 0, 0, 140)
 	qp_style.shadow_size = 16
 	qp_style.content_margin_left = 20; qp_style.content_margin_right = 20
 	qp_style.content_margin_top = 18; qp_style.content_margin_bottom = 18
 	quests_panel.add_theme_stylebox_override("panel", qp_style)
+
+	var qp_press_state = {"pos": Vector2.ZERO, "active": false}
+	quests_panel.gui_input.connect(func(event: InputEvent):
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				qp_press_state["pos"] = event.global_position
+				qp_press_state["active"] = true
+			elif qp_press_state["active"]:
+				qp_press_state["active"] = false
+				if event.global_position.distance_to(qp_press_state["pos"]) < 14.0:
+					Global.play_click()
+					_open_daily_quests()
+		elif event is InputEventScreenTouch:
+			if event.pressed:
+				qp_press_state["pos"] = event.position
+				qp_press_state["active"] = true
+			elif qp_press_state["active"]:
+				qp_press_state["active"] = false
+				if event.position.distance_to(qp_press_state["pos"]) < 14.0:
+					Global.play_click()
+					_open_daily_quests()
+	)
 	vbox.add_child(quests_panel)
 
 	var qp_vbox = VBoxContainer.new()
+	qp_vbox.mouse_filter = Control.MOUSE_FILTER_PASS
 	qp_vbox.add_theme_constant_override("separation", 14)
 	quests_panel.add_child(qp_vbox)
 
 	# Quests Section Header
 	var q_header_hbox = HBoxContainer.new()
+	q_header_hbox.mouse_filter = Control.MOUSE_FILTER_PASS
 	q_header_hbox.alignment = BoxContainer.ALIGNMENT_BEGIN
 	q_header_hbox.add_theme_constant_override("separation", 10)
 	qp_vbox.add_child(q_header_hbox)
@@ -6134,6 +6598,7 @@ func _build_shop_tab() -> Control:
 		q_ic.custom_minimum_size = Vector2(28, 28)
 		q_ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		q_ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		q_ic.mouse_filter = Control.MOUSE_FILTER_PASS
 		q_ic.modulate = active_theme.accent
 		q_header_hbox.add_child(q_ic)
 
@@ -6142,38 +6607,54 @@ func _build_shop_tab() -> Control:
 	q_title_lbl.add_theme_font_override("font", custom_font)
 	q_title_lbl.add_theme_font_size_override("font_size", 28)
 	q_title_lbl.add_theme_color_override("font_color", Color.WHITE)
+	q_title_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 	q_header_hbox.add_child(q_title_lbl)
 
 	var q_spacer = Control.new()
 	q_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	q_spacer.mouse_filter = Control.MOUSE_FILTER_PASS
 	q_header_hbox.add_child(q_spacer)
 
 	var q_date_lbl = Label.new()
-	q_date_lbl.text = Global.daily_date
+	q_date_lbl.text = _format_daily_date_ddmmyy(Global.daily_date)
 	q_date_lbl.add_theme_font_override("font", custom_font)
-	q_date_lbl.add_theme_font_size_override("font_size", 18)
-	q_date_lbl.add_theme_color_override("font_color", active_theme.accent)
+	q_date_lbl.add_theme_font_size_override("font_size", 20)
+	q_date_lbl.add_theme_color_override("font_color", Color.WHITE)
+	q_date_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	q_date_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 	q_header_hbox.add_child(q_date_lbl)
+
+	var q_chev_lbl = Label.new()
+	q_chev_lbl.text = "›"
+	q_chev_lbl.add_theme_font_override("font", custom_font)
+	q_chev_lbl.add_theme_font_size_override("font_size", 26)
+	q_chev_lbl.add_theme_color_override("font_color", Color.WHITE)
+	q_chev_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	q_chev_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
+	q_header_hbox.add_child(q_chev_lbl)
 
 	# Quests Cards List
 	for q in Global.daily_quests:
 		var q_card = PanelContainer.new()
+		q_card.mouse_filter = Control.MOUSE_FILTER_PASS
 		var qc_style = StyleBoxFlat.new()
 		qc_style.bg_color = active_theme.bg_top.darkened(0.15)
 		qc_style.corner_radius_top_left = 12; qc_style.corner_radius_top_right = 12
 		qc_style.corner_radius_bottom_left = 12; qc_style.corner_radius_bottom_right = 12
-		qc_style.border_width_bottom = 2.5; qc_style.border_color = active_theme.bg_bottom.darkened(0.35)
+		qc_style.border_width_bottom = 3; qc_style.border_color = active_theme.bg_bottom.darkened(0.35)
 		qc_style.content_margin_left = 14; qc_style.content_margin_right = 14
 		qc_style.content_margin_top = 10; qc_style.content_margin_bottom = 10
 		q_card.add_theme_stylebox_override("panel", qc_style)
 		qp_vbox.add_child(q_card)
 
 		var q_row = HBoxContainer.new()
+		q_row.mouse_filter = Control.MOUSE_FILTER_PASS
 		q_row.alignment = BoxContainer.ALIGNMENT_CENTER
 		q_row.add_theme_constant_override("separation", 12)
 		q_card.add_child(q_row)
 
 		var text_col = VBoxContainer.new()
+		text_col.mouse_filter = Control.MOUSE_FILTER_PASS
 		text_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		text_col.add_theme_constant_override("separation", 4)
 		q_row.add_child(text_col)
@@ -6185,6 +6666,7 @@ func _build_shop_tab() -> Control:
 		desc_lbl.add_theme_font_size_override("font_size", 20)
 		desc_lbl.add_theme_color_override("font_color", Color.WHITE)
 		desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
+		desc_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 		text_col.add_child(desc_lbl)
 
 		# Progress bar and details
@@ -6195,10 +6677,12 @@ func _build_shop_tab() -> Control:
 		var is_ready = cur_p >= tgt_p
 
 		var prog_hbox = HBoxContainer.new()
+		prog_hbox.mouse_filter = Control.MOUSE_FILTER_PASS
 		prog_hbox.add_theme_constant_override("separation", 8)
 		text_col.add_child(prog_hbox)
 
 		var pbar = ProgressBar.new()
+		pbar.mouse_filter = Control.MOUSE_FILTER_PASS
 		pbar.custom_minimum_size = Vector2(160, 14)
 		pbar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		pbar.min_value = 0
@@ -6221,7 +6705,8 @@ func _build_shop_tab() -> Control:
 		p_txt_lbl.text = str(cur_p) + "/" + str(tgt_p) + "  •  +" + str(r_amount) + " " + LANG.get(Global.current_lang, LANG["ENG"]).get("CURRENCY", "Jeton")
 		p_txt_lbl.add_theme_font_override("font", custom_font)
 		p_txt_lbl.add_theme_font_size_override("font_size", 16)
-		p_txt_lbl.add_theme_color_override("font_color", Color8(255, 215, 0))
+		p_txt_lbl.add_theme_color_override("font_color", Color.WHITE)
+		p_txt_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 		prog_hbox.add_child(p_txt_lbl)
 
 		# Action / Claim button
@@ -6239,8 +6724,9 @@ func _build_shop_tab() -> Control:
 				claim_btn.add_theme_constant_override("icon_max_width", 18)
 				claim_btn.add_theme_constant_override("h_separation", 6)
 			claim_btn.disabled = true
+			claim_btn.mouse_filter = Control.MOUSE_FILTER_PASS
 			apply_3d_style_to_button(claim_btn, Color8(30, 80, 40, 200), Color8(15, 50, 25), 10, 2)
-			claim_btn.add_theme_color_override("font_disabled_color", Color8(100, 255, 120))
+			claim_btn.add_theme_color_override("font_disabled_color", Color.WHITE)
 		elif is_ready:
 			claim_btn.text = LANG.get(Global.current_lang, LANG["ENG"]).get("QUEST_CLAIM", "ÖDÜLÜ AL")
 			apply_3d_style_to_button(claim_btn, active_theme.accent, active_theme.accent.darkened(0.35), 10, 3)
@@ -6257,8 +6743,9 @@ func _build_shop_tab() -> Control:
 		else:
 			claim_btn.text = LANG.get(Global.current_lang, LANG["ENG"]).get("QUEST_IN_PROGRESS", "DEVAM EDİYOR")
 			claim_btn.disabled = true
+			claim_btn.mouse_filter = Control.MOUSE_FILTER_PASS
 			apply_3d_style_to_button(claim_btn, Color8(45, 55, 75, 180), Color8(25, 30, 45), 10, 2)
-			claim_btn.add_theme_color_override("font_disabled_color", Color8(150, 160, 180))
+			claim_btn.add_theme_color_override("font_disabled_color", Color.WHITE)
 
 		q_row.add_child(claim_btn)
 
@@ -6269,6 +6756,13 @@ func _build_shop_tab() -> Control:
 
 	return page
 
+func _format_daily_date_ddmmyy(d_str: String) -> String:
+	var parts = d_str.split("-")
+	if parts.size() == 3:
+		var yy = parts[0].substr(parts[0].length() - 2, 2) if parts[0].length() >= 2 else parts[0]
+		return "%s/%s/%s" % [parts[2], parts[1], yy]
+	return d_str
+
 func _on_buy_premium_pressed():
 	var bg_overlay = ColorRect.new()
 	bg_overlay.color = Color(0, 0, 0, 0.75)
@@ -6277,11 +6771,11 @@ func _on_buy_premium_pressed():
 
 	var dlg = PanelContainer.new()
 	var dlg_style = StyleBoxFlat.new()
-	dlg_style.bg_color = active_theme.bg_bottom.darkened(0.15)
+	dlg_style.bg_color = active_theme.bg_bottom.darkened(0.22)
 	dlg_style.corner_radius_top_left = 22; dlg_style.corner_radius_top_right = 22
 	dlg_style.corner_radius_bottom_left = 22; dlg_style.corner_radius_bottom_right = 22
-	dlg_style.border_width_top = 2.5; dlg_style.border_width_bottom = 4.5
-	dlg_style.border_width_left = 2.5; dlg_style.border_width_right = 2.5
+	dlg_style.border_width_top = 3; dlg_style.border_width_bottom = 5
+	dlg_style.border_width_left = 3; dlg_style.border_width_right = 3
 	dlg_style.border_color = active_theme.accent
 	dlg_style.shadow_color = Color8(0, 0, 0, 180)
 	dlg_style.shadow_size = 30
@@ -6303,18 +6797,20 @@ func _on_buy_premium_pressed():
 	var lang = Global.current_lang
 	
 	var titles = {
-		"TR": "PRO'ya Yükselt",
-		"ENG": "Upgrade to PRO",
-		"ESP": "Mejorar a PRO",
-		"POR": "Melhorar para PRO"
+		"TR": "ELİT KULÜP'E KATIL",
+		"ENG": "JOIN ELITE CLUB",
+		"ESP": "ÚNETE AL CLUB ÉLITE",
+		"POR": "ENTRE NO CLUBE ELITE",
+		"ITA": "UNISCITI AL CLUB ÉLITE"
 	}
 	
 	var p_price = Global.get_formatted_premium_price()
 	var desc_dict = {
-		"TR": "%s karşılığında tüm premium özelliklere kalıcı erişim elde et. Bu satın alım Google Play üzerinden gerçekleşir." % p_price,
-		"ENG": "Get permanent access to all premium features for %s. This purchase goes through Google Play." % p_price,
-		"ESP": "Obtén acceso permanente a todas las funciones premium por %s. Esta compra se realiza a través de Google Play." % p_price,
-		"POR": "Obtenha acesso permanente a todos os recursos premium por %s. Esta compra é feita através do Google Play." % p_price
+		"TR": "%s karşılığında Elit Kulüp üyeliğiyle reklamsız deneyime, tüm özel kozmetiklere ve sınırsız maç hakkına kalıcı erişim elde et. Bu satın alım Google Play üzerinden gerçekleşir." % p_price,
+		"ENG": "Get permanent access to Elite Club perks (ad-free play, all custom cosmetics, and unlimited matches) for %s via Google Play." % p_price,
+		"ESP": "Obtén acceso permanente al Club Élite (juego sin anuncios, todos los cosméticos y partidos ilimitados) por %s a través de Google Play." % p_price,
+		"POR": "Obtenha acesso permanente ao Clube Elite (sem anúncios, todos os cosméticos e partidas ilimitadas) por %s através do Google Play." % p_price,
+		"ITA": "Ottieni l'accesso permanente al Club Élite (senza pubblicità, tutti i cosmetici e partite illimitate) per %s tramite Google Play." % p_price
 	}
 
 	var dlg_title = Label.new()
@@ -6329,7 +6825,7 @@ func _on_buy_premium_pressed():
 	dlg_desc.text = desc_dict.get(lang, desc_dict["TR"])
 	dlg_desc.add_theme_font_override("font", custom_font)
 	dlg_desc.add_theme_font_size_override("font_size", 26)
-	dlg_desc.add_theme_color_override("font_color", Color8(235, 240, 255))
+	dlg_desc.add_theme_color_override("font_color", Color.WHITE)
 	dlg_desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	dlg_desc.autowrap_mode = TextServer.AUTOWRAP_WORD
 	dlg_vbox.add_child(dlg_desc)
@@ -6343,8 +6839,9 @@ func _on_buy_premium_pressed():
 	cancel_btn.text = LANG[Global.current_lang].get("SHOP_CANCEL", "VAZGEÇ")
 	cancel_btn.add_theme_font_override("font", custom_font)
 	cancel_btn.add_theme_font_size_override("font_size", 26)
+	cancel_btn.add_theme_color_override("font_color", Color.WHITE)
 	cancel_btn.custom_minimum_size = Vector2(190, 58)
-	apply_3d_style_to_button(cancel_btn, active_theme.bg_top.lightened(0.15), active_theme.bg_bottom.darkened(0.3), 12, 3)
+	apply_3d_style_to_button(cancel_btn, active_theme.bg_top.lightened(0.15), active_theme.bg_bottom.darkened(0.3), 14, 4)
 	cancel_btn.pressed.connect(func():
 		Global.play_click()
 		bg_overlay.queue_free()
@@ -6352,12 +6849,12 @@ func _on_buy_premium_pressed():
 	dlg_hbox.add_child(cancel_btn)
 
 	var confirm_btn = Button.new()
-	confirm_btn.text = LANG[Global.current_lang].get("CONFIRM_YES", "SATIN AL")
+	confirm_btn.text = LANG[Global.current_lang].get("CONFIRM_YES", "ONAYLA")
 	confirm_btn.add_theme_font_override("font", custom_font)
 	confirm_btn.add_theme_font_size_override("font_size", 26)
-	confirm_btn.add_theme_color_override("font_color", Color8(10, 10, 10))
+	confirm_btn.add_theme_color_override("font_color", Color.WHITE)
 	confirm_btn.custom_minimum_size = Vector2(190, 58)
-	apply_3d_style_to_button(confirm_btn, Color8(255, 190, 0), Color8(190, 110, 0), 12, 4)
+	apply_3d_style_to_button(confirm_btn, active_theme.accent.darkened(0.14), active_theme.accent.darkened(0.46), 14, 4)
 	confirm_btn.pressed.connect(func():
 		Global.play_click()
 		bg_overlay.queue_free()
@@ -6400,12 +6897,13 @@ func _on_buy_premium_pressed():
 
 	if OS.is_debug_build():
 		var test_btn = Button.new()
-		test_btn.text = "🧪 TEST: PRO MODU AÇ / KAPAT"
+		test_btn.text = "TEST: ELİT MODU AÇ / KAPAT"
 		test_btn.add_theme_font_override("font", custom_font)
-		test_btn.add_theme_font_size_override("font_size", 20)
-		test_btn.custom_minimum_size = Vector2(260, 44)
+		test_btn.add_theme_font_size_override("font_size", 16)
+		test_btn.add_theme_color_override("font_color", Color.WHITE)
+		test_btn.custom_minimum_size = Vector2(220, 34)
 		test_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		apply_3d_style_to_button(test_btn, Color8(80, 50, 140), Color8(45, 25, 80), 10, 2.5, 12, 6)
+		apply_3d_style_to_button(test_btn, active_theme.bg_bottom.darkened(0.35), active_theme.bg_bottom.darkened(0.5), 10, 2, 10, 4)
 		test_btn.pressed.connect(func():
 			Global.play_click()
 			Global.is_premium = not Global.is_premium
@@ -6437,6 +6935,10 @@ func _is_pos_in_shop_carousels(pos: Vector2) -> bool:
 	return false
 
 func _input(event: InputEvent):
+	if is_instance_valid(tutorial_overlay) and tutorial_overlay.visible:
+		swipe_active = false
+		gesture_direction = "none"
+		return
 	if settings_overlay != null and settings_overlay.visible:
 		return
 	if event is InputEventKey and event.pressed:
@@ -6562,8 +7064,8 @@ func _show_exit_confirmation():
 	p_s.bg_color = active_theme.bg_bottom.darkened(0.15)
 	p_s.corner_radius_top_left = 22; p_s.corner_radius_top_right = 22
 	p_s.corner_radius_bottom_left = 22; p_s.corner_radius_bottom_right = 22
-	p_s.border_width_left = 2.5; p_s.border_width_right = 2.5
-	p_s.border_width_top = 2.5; p_s.border_width_bottom = 4.5
+	p_s.border_width_left = 3; p_s.border_width_right = 3
+	p_s.border_width_top = 3; p_s.border_width_bottom = 5
 	p_s.border_color = active_theme.accent
 	p_s.shadow_color = Color8(0, 0, 0, 180)
 	p_s.shadow_size = 25
@@ -6632,8 +7134,8 @@ func _open_privacy_policy_modal():
 	p_style.bg_color = active_theme.bg_bottom.darkened(0.15)
 	p_style.corner_radius_top_left = 24; p_style.corner_radius_top_right = 24
 	p_style.corner_radius_bottom_left = 24; p_style.corner_radius_bottom_right = 24
-	p_style.border_width_left = 2.5; p_style.border_width_right = 2.5
-	p_style.border_width_top = 2.5; p_style.border_width_bottom = 4.5
+	p_style.border_width_left = 3; p_style.border_width_right = 3
+	p_style.border_width_top = 3; p_style.border_width_bottom = 5
 	p_style.border_color = active_theme.accent
 	p_style.shadow_color = Color8(0, 0, 0, 180)
 	p_style.shadow_size = 25
@@ -6660,7 +7162,8 @@ func _open_privacy_policy_modal():
 		"TR": "Bol Gol Futbol, kullanıcı gizliliğine tam saygı duyar. Uygulamamız kişisel veri toplamaz veya satmaz. Oyun içi reklamlar (Google AdMob), uygulama içi satın alımlar (Google Play Billing) ve oturum (Play Games) Google'ın standart güvenli altyapısıyla çalışır.",
 		"ENG": "Bol Gol Futbol respects your privacy. We do not collect or sell personal data. In-game ads (Google AdMob), purchases (Google Play Billing), and sign-in (Play Games) operate under Google's standard secure privacy framework.",
 		"ESP": "Bol Gol Futbol respeta su privacidad. No recopilamos ni vendemos datos personales. Los anuncios (AdMob), compras (Google Play Billing) e inicio de sesión funcionan bajo los estándares de privacidad de Google.",
-		"POR": "Bol Gol Futbol respeita a sua privacidade. Não coletamos nem vendemos dados pessoais. Anúncios (AdMob), compras (Google Play Billing) e login funcionam sob os padrões de privacidade da Google."
+		"POR": "Bol Gol Futbol respeita a sua privacidade. Não coletamos nem vendemos dados pessoais. Anúncios (AdMob), compras (Google Play Billing) e login funcionam sob os padrões de privacidade da Google.",
+		"ITA": "Bol Gol Futbol rispetta la tua privacy. Non raccogliamo né vendiamo dati personali. Annunci (AdMob), acquisti (Google Play Billing) e accesso (Play Games) operano secondo gli standard di sicurezza di Google."
 	}
 	
 	var p_body = Label.new()
@@ -6840,22 +7343,151 @@ func _ensure_menu_top_banner():
 		is_banner_loading = false
 		admob_node.show_banner_ad()
 
+func _style_top_badge_button(btn: Button):
+	if not is_instance_valid(btn):
+		return
+	if active_theme.is_empty():
+		active_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
+	var b_style = StyleBoxFlat.new()
+	b_style.bg_color = active_theme.bg_bottom.darkened(0.30)
+	b_style.bg_color.a = 0.96
+	b_style.corner_radius_top_left = 16; b_style.corner_radius_top_right = 16
+	b_style.corner_radius_bottom_left = 16; b_style.corner_radius_bottom_right = 16
+	b_style.border_width_left = 2; b_style.border_width_right = 2
+	b_style.border_width_top = 2; b_style.border_width_bottom = 4
+	b_style.border_color = active_theme.accent.lightened(0.18)
+	b_style.shadow_color = Color8(0, 0, 0, 130)
+	b_style.shadow_size = 10
+	b_style.shadow_offset = Vector2(0, 3)
+	btn.add_theme_stylebox_override("normal", b_style)
+
+	var b_hover = b_style.duplicate()
+	b_hover.bg_color = active_theme.bg_bottom.darkened(0.18)
+	b_hover.border_color = active_theme.accent.lightened(0.32)
+	btn.add_theme_stylebox_override("hover", b_hover)
+
+	var b_press = b_style.duplicate()
+	b_press.border_width_bottom = 2
+	btn.add_theme_stylebox_override("pressed", b_press)
+	btn.add_theme_stylebox_override("focus", b_style)
+
+	var icon_bg = btn.find_child("BadgeIconBox", true, false) as PanelContainer
+	if icon_bg:
+		var ib_s = StyleBoxFlat.new()
+		ib_s.bg_color = active_theme.accent.darkened(0.52)
+		ib_s.corner_radius_top_left = 10; ib_s.corner_radius_top_right = 10
+		ib_s.corner_radius_bottom_left = 10; ib_s.corner_radius_bottom_right = 10
+		ib_s.border_width_left = 1; ib_s.border_width_right = 1
+		ib_s.border_width_top = 1; ib_s.border_width_bottom = 1
+		ib_s.border_color = active_theme.accent.lightened(0.22)
+		icon_bg.add_theme_stylebox_override("panel", ib_s)
+
+	var chev_bg = btn.find_child("BadgeChevBox", true, false) as PanelContainer
+	if chev_bg:
+		var cb_s = StyleBoxFlat.new()
+		cb_s.bg_color = active_theme.accent.darkened(0.42)
+		cb_s.corner_radius_top_left = 9; cb_s.corner_radius_top_right = 9
+		cb_s.corner_radius_bottom_left = 9; cb_s.corner_radius_bottom_right = 9
+		chev_bg.add_theme_stylebox_override("panel", cb_s)
+
+func _refresh_top_bars_theme():
+	if is_instance_valid(vip_top_bar):
+		var vip_btn = vip_top_bar.get_node_or_null("VIP_Btn") as Button
+		if vip_btn:
+			_style_top_badge_button(vip_btn)
+		_update_vip_top_bar_content()
+	if is_instance_valid(house_ad_bar):
+		var ad_btn = house_ad_bar.get_node_or_null("House_Ad_Btn") as Button
+		if ad_btn:
+			_style_top_badge_button(ad_btn)
+		_update_house_ad_content()
+
 func _update_vip_top_bar_content():
 	if not is_instance_valid(vip_title_lbl) or not is_instance_valid(vip_desc_lbl):
 		return
-	var pro_title = "PRO ÜYE"
-	if Global.current_lang == "ENG": pro_title = "PRO MEMBER"
-	elif Global.current_lang == "ESP": pro_title = "MIEMBRO PRO"
-	elif Global.current_lang == "POR": pro_title = "MEMBRO PRO"
-	elif Global.current_lang == "ITA": pro_title = "MEMBRO PRO"
-	vip_title_lbl.text = pro_title
+	var lang_data = LANG.get(Global.current_lang, LANG["ENG"])
+	vip_title_lbl.text = lang_data.get("VIP_TITLE", "ELİT KULÜP ÜYESİ")
+	vip_desc_lbl.text = lang_data.get("VIP_DESC", "Reklamsız Deneyim • Tüm Özel Kozmetikler & Sınırsız Maç Aktif")
 
-	var perks_txt = "Reklamsız • Tüm kozmetikler"
-	if Global.current_lang == "ENG": perks_txt = "Ad-free • All cosmetics"
-	elif Global.current_lang == "ESP": perks_txt = "Sin anuncios • Cosméticos"
-	elif Global.current_lang == "POR": perks_txt = "Sem anúncios • Cosméticos"
-	elif Global.current_lang == "ITA": perks_txt = "Senza pubblicità • Cosmetici"
-	vip_desc_lbl.text = perks_txt
+func _show_elite_perks_popup():
+	var bg_overlay = ColorRect.new()
+	bg_overlay.color = Color(0, 0, 0, 0.72)
+	bg_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	bg_overlay.gui_input.connect(func(event):
+		if (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
+			bg_overlay.queue_free()
+	)
+	add_child(bg_overlay)
+
+	var dlg = PanelContainer.new()
+	var dlg_style = StyleBoxFlat.new()
+	dlg_style.bg_color = active_theme.bg_bottom.darkened(0.22)
+	dlg_style.corner_radius_top_left = 22; dlg_style.corner_radius_top_right = 22
+	dlg_style.corner_radius_bottom_left = 22; dlg_style.corner_radius_bottom_right = 22
+	dlg_style.border_width_top = 2; dlg_style.border_width_bottom = 4
+	dlg_style.border_width_left = 2; dlg_style.border_width_right = 2
+	dlg_style.border_color = active_theme.accent.lightened(0.18)
+	dlg_style.shadow_color = Color8(0, 0, 0, 190)
+	dlg_style.shadow_size = 28
+	dlg_style.content_margin_left = 28; dlg_style.content_margin_right = 28
+	dlg_style.content_margin_top = 24; dlg_style.content_margin_bottom = 24
+	dlg.add_theme_stylebox_override("panel", dlg_style)
+	dlg.custom_minimum_size = Vector2(min(get_viewport_rect().size.x * 0.90, 540), 0)
+
+	var center = CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.add_child(dlg)
+	bg_overlay.add_child(center)
+
+	var vb = VBoxContainer.new()
+	vb.alignment = BoxContainer.ALIGNMENT_CENTER
+	vb.add_theme_constant_override("separation", 14)
+	dlg.add_child(vb)
+
+	var header_hb = HBoxContainer.new()
+	header_hb.alignment = BoxContainer.ALIGNMENT_CENTER
+	header_hb.add_theme_constant_override("separation", 10)
+	vb.add_child(header_hb)
+
+	var ic = TextureRect.new()
+	ic.texture = preload("res://crownicon.svg")
+	ic.custom_minimum_size = Vector2(34, 34)
+	ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	header_hb.add_child(ic)
+
+	var lang_data = LANG.get(Global.current_lang, LANG["ENG"])
+	var t_lbl = Label.new()
+	t_lbl.text = lang_data.get("VIP_TITLE", "ELİT KULÜP ÜYESİ")
+	t_lbl.add_theme_font_override("font", custom_font)
+	t_lbl.add_theme_font_size_override("font_size", 34)
+	t_lbl.add_theme_color_override("font_color", Color.WHITE)
+	header_hb.add_child(t_lbl)
+
+	var d_lbl = Label.new()
+	d_lbl.text = lang_data.get("SHOP_PRO_DESC", "")
+	d_lbl.add_theme_font_override("font", custom_font)
+	d_lbl.add_theme_font_size_override("font_size", 22)
+	d_lbl.add_theme_color_override("font_color", Color.WHITE)
+	d_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	d_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	vb.add_child(d_lbl)
+
+	var ok_btn = Button.new()
+	ok_btn.text = lang_data.get("SHOP_TITLE", "MAĞAZA")
+	ok_btn.add_theme_font_override("font", custom_font)
+	ok_btn.add_theme_font_size_override("font_size", 24)
+	ok_btn.add_theme_color_override("font_color", Color.WHITE)
+	ok_btn.custom_minimum_size = Vector2(200, 52)
+	ok_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	apply_3d_style_to_button(ok_btn, active_theme.accent.darkened(0.15), active_theme.accent.darkened(0.45), 14, 4, 18, 8)
+	ok_btn.pressed.connect(func():
+		Global.play_click()
+		bg_overlay.queue_free()
+		_switch_tab(2)
+	)
+	vb.add_child(ok_btn)
 
 func _position_top_bar(bar: Control):
 	if not is_instance_valid(bar) or not bar.is_inside_tree():
@@ -6873,7 +7505,7 @@ func _ensure_vip_top_bar():
 	if is_instance_valid(vip_top_bar):
 		vip_top_bar.visible = true
 		_position_top_bar(vip_top_bar)
-		_update_vip_top_bar_content()
+		_refresh_top_bars_theme()
 		return
 
 	if active_theme.is_empty():
@@ -6882,91 +7514,102 @@ func _ensure_vip_top_bar():
 	var vip_margin = MarginContainer.new()
 	vip_margin.name = "VIP_Top_Bar"
 	vip_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	vip_margin.add_theme_constant_override("margin_top", 42)
-	vip_margin.add_theme_constant_override("margin_left", 18)
-	vip_margin.add_theme_constant_override("margin_right", 18)
+	vip_margin.add_theme_constant_override("margin_top", 38)
+	vip_margin.add_theme_constant_override("margin_left", 24)
+	vip_margin.add_theme_constant_override("margin_right", 24)
 	vip_margin.mouse_filter = Control.MOUSE_FILTER_PASS
 	vip_top_bar = vip_margin
 	add_child(vip_margin)
 	_position_top_bar(vip_margin)
 
+	var badge_w = clampf(get_viewport_rect().size.x - 56.0, 320.0, 560.0)
 	var vip_btn = Button.new()
 	vip_btn.name = "VIP_Btn"
-	vip_btn.custom_minimum_size = Vector2(min(get_viewport_rect().size.x - 40, 660), 60)
+	vip_btn.custom_minimum_size = Vector2(badge_w, 54)
 	vip_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	vip_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-
-	var vp_style = StyleBoxFlat.new()
-	vp_style.bg_color = Color8(20, 12, 6, 245)
-	vp_style.corner_radius_top_left = 16; vp_style.corner_radius_top_right = 16
-	vp_style.corner_radius_bottom_left = 16; vp_style.corner_radius_bottom_right = 16
-	vp_style.border_width_left = 1.5; vp_style.border_width_right = 1.5
-	vp_style.border_width_top = 1.5; vp_style.border_width_bottom = 3.0
-	vp_style.border_color = Color8(255, 200, 60, 220)
-	vp_style.shadow_color = Color8(255, 160, 20, 60)
-	vp_style.shadow_size = 10
-	vp_style.shadow_offset = Vector2(0, 3)
-	vp_style.content_margin_left = 16; vp_style.content_margin_right = 16
-	vp_style.content_margin_top = 6; vp_style.content_margin_bottom = 6
-	vip_btn.add_theme_stylebox_override("normal", vp_style)
-
-	var vp_hover = vp_style.duplicate()
-	vp_hover.bg_color = Color8(34, 22, 8, 250)
-	vp_hover.border_color = Color8(255, 225, 110, 250)
-	vip_btn.add_theme_stylebox_override("hover", vp_hover)
-
-	var vp_press = vp_style.duplicate()
-	vp_press.border_width_bottom = 1.5
-	vp_press.content_margin_top = 8
-	vip_btn.add_theme_stylebox_override("pressed", vp_press)
-	vip_btn.add_theme_stylebox_override("focus", vp_style)
 	vip_margin.add_child(vip_btn)
+
+	var inner_pad = MarginContainer.new()
+	inner_pad.set_anchors_preset(Control.PRESET_FULL_RECT)
+	inner_pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	inner_pad.add_theme_constant_override("margin_left", 14)
+	inner_pad.add_theme_constant_override("margin_right", 14)
+	inner_pad.add_theme_constant_override("margin_top", 6)
+	inner_pad.add_theme_constant_override("margin_bottom", 8)
+	vip_btn.add_child(inner_pad)
 
 	var hb = HBoxContainer.new()
 	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hb.set_anchors_preset(Control.PRESET_FULL_RECT)
 	hb.alignment = BoxContainer.ALIGNMENT_CENTER
 	hb.add_theme_constant_override("separation", 12)
-	vip_btn.add_child(hb)
+	inner_pad.add_child(hb)
+
+	var icon_box = PanelContainer.new()
+	icon_box.name = "BadgeIconBox"
+	icon_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_box.custom_minimum_size = Vector2(36, 36)
+	icon_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	hb.add_child(icon_box)
+
+	var icon_center = CenterContainer.new()
+	icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_box.add_child(icon_center)
 
 	var star_rect = TextureRect.new()
-	star_rect.texture = preload("res://star_gold.svg")
-	star_rect.custom_minimum_size = Vector2(26, 26)
+	star_rect.texture = preload("res://crownicon.svg")
+	star_rect.custom_minimum_size = Vector2(22, 22)
 	star_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	star_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	star_rect.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	hb.add_child(star_rect)
+	star_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_center.add_child(star_rect)
+
+	var vb = VBoxContainer.new()
+	vb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vb.alignment = BoxContainer.ALIGNMENT_CENTER
+	vb.add_theme_constant_override("separation", -2)
+	vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hb.add_child(vb)
 
 	var title_lbl = Label.new()
 	title_lbl.add_theme_font_override("font", custom_font)
-	title_lbl.add_theme_font_size_override("font_size", 26)
-	title_lbl.add_theme_color_override("font_color", Color8(255, 225, 90))
+	title_lbl.add_theme_font_size_override("font_size", 20)
+	title_lbl.add_theme_color_override("font_color", Color.WHITE)
 	title_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	title_lbl.add_theme_constant_override("shadow_offset_y", 1)
-	title_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	hb.add_child(title_lbl)
+	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	vb.add_child(title_lbl)
 	vip_title_lbl = title_lbl
 
 	var desc_lbl = Label.new()
 	desc_lbl.add_theme_font_override("font", custom_font)
-	desc_lbl.add_theme_font_size_override("font_size", 18)
-	desc_lbl.add_theme_color_override("font_color", Color8(244, 232, 205, 230))
-	desc_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	desc_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hb.add_child(desc_lbl)
+	desc_lbl.add_theme_font_size_override("font_size", 15)
+	desc_lbl.add_theme_color_override("font_color", Color.WHITE)
+	desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	desc_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	vb.add_child(desc_lbl)
 	vip_desc_lbl = desc_lbl
+
+	var chev_box = PanelContainer.new()
+	chev_box.name = "BadgeChevBox"
+	chev_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chev_box.custom_minimum_size = Vector2(28, 28)
+	chev_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	hb.add_child(chev_box)
 
 	var arrow_lbl = Label.new()
 	arrow_lbl.text = "›"
 	arrow_lbl.add_theme_font_override("font", custom_font)
-	arrow_lbl.add_theme_font_size_override("font_size", 24)
-	arrow_lbl.add_theme_color_override("font_color", Color8(255, 210, 80))
+	arrow_lbl.add_theme_font_size_override("font_size", 22)
+	arrow_lbl.add_theme_color_override("font_color", Color.WHITE)
+	arrow_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	arrow_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	hb.add_child(arrow_lbl)
+	chev_box.add_child(arrow_lbl)
 
+	_style_top_badge_button(vip_btn)
 	vip_btn.pressed.connect(func():
 		Global.play_click()
-		_switch_tab(2)
+		_show_elite_perks_popup()
 	)
 	_update_vip_top_bar_content()
 
@@ -6979,7 +7622,7 @@ func _ensure_house_ad_bar():
 	if is_instance_valid(house_ad_bar):
 		house_ad_bar.visible = true
 		_position_top_bar(house_ad_bar)
-		_update_house_ad_content()
+		_refresh_top_bars_theme()
 		return
 	
 	if active_theme.is_empty():
@@ -6988,60 +7631,56 @@ func _ensure_house_ad_bar():
 	var ad_margin = MarginContainer.new()
 	ad_margin.name = "House_Ad_Top_Bar"
 	ad_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	ad_margin.add_theme_constant_override("margin_top", 42)
-	ad_margin.add_theme_constant_override("margin_left", 20)
-	ad_margin.add_theme_constant_override("margin_right", 20)
+	ad_margin.add_theme_constant_override("margin_top", 38)
+	ad_margin.add_theme_constant_override("margin_left", 24)
+	ad_margin.add_theme_constant_override("margin_right", 24)
 	ad_margin.mouse_filter = Control.MOUSE_FILTER_PASS
 	house_ad_bar = ad_margin
 	add_child(ad_margin)
 	_position_top_bar(ad_margin)
 	
+	var badge_w = clampf(get_viewport_rect().size.x - 56.0, 320.0, 560.0)
 	var ad_btn = Button.new()
 	ad_btn.name = "House_Ad_Btn"
-	ad_btn.custom_minimum_size = Vector2(min(get_viewport_rect().size.x - 40, 660), 54)
+	ad_btn.custom_minimum_size = Vector2(badge_w, 54)
 	ad_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	ad_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	ad_btn.pressed.connect(_on_house_ad_clicked)
 	ad_margin.add_child(ad_btn)
 	
-	var ad_style = StyleBoxFlat.new()
-	ad_style.bg_color = active_theme.bg_bottom.darkened(0.28)
-	ad_style.bg_color.a = 0.94
-	ad_style.corner_radius_top_left = 14; ad_style.corner_radius_top_right = 14
-	ad_style.corner_radius_bottom_left = 14; ad_style.corner_radius_bottom_right = 14
-	ad_style.border_width_left = 1.5; ad_style.border_width_right = 1.5
-	ad_style.border_width_top = 1.5; ad_style.border_width_bottom = 3.0
-	ad_style.border_color = active_theme.accent.lightened(0.15)
-	ad_style.shadow_color = Color8(0, 0, 0, 130)
-	ad_style.shadow_size = 8
-	ad_style.shadow_offset = Vector2(0, 2)
-	ad_style.content_margin_left = 14; ad_style.content_margin_right = 14
-	ad_style.content_margin_top = 4; ad_style.content_margin_bottom = 4
-	ad_btn.add_theme_stylebox_override("normal", ad_style)
-	
-	var ad_hover = ad_style.duplicate()
-	ad_hover.bg_color = active_theme.bg_bottom.lightened(0.08)
-	ad_btn.add_theme_stylebox_override("hover", ad_hover)
-	
-	var ad_press = ad_style.duplicate()
-	ad_press.border_width_bottom = 1.5
-	ad_press.content_margin_top = 6
-	ad_btn.add_theme_stylebox_override("pressed", ad_press)
-	ad_btn.add_theme_stylebox_override("focus", ad_style)
+	var inner_pad = MarginContainer.new()
+	inner_pad.set_anchors_preset(Control.PRESET_FULL_RECT)
+	inner_pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	inner_pad.add_theme_constant_override("margin_left", 14)
+	inner_pad.add_theme_constant_override("margin_right", 14)
+	inner_pad.add_theme_constant_override("margin_top", 6)
+	inner_pad.add_theme_constant_override("margin_bottom", 8)
+	ad_btn.add_child(inner_pad)
 	
 	var hb = HBoxContainer.new()
 	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hb.set_anchors_preset(Control.PRESET_FULL_RECT)
 	hb.alignment = BoxContainer.ALIGNMENT_CENTER
-	hb.add_theme_constant_override("separation", 10)
-	ad_btn.add_child(hb)
+	hb.add_theme_constant_override("separation", 12)
+	inner_pad.add_child(hb)
 	
-	house_ad_icon_lbl = Label.new()
-	house_ad_icon_lbl.text = "🎡"
-	house_ad_icon_lbl.add_theme_font_override("font", custom_font)
-	house_ad_icon_lbl.add_theme_font_size_override("font_size", 26)
-	house_ad_icon_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	hb.add_child(house_ad_icon_lbl)
+	var icon_box = PanelContainer.new()
+	icon_box.name = "BadgeIconBox"
+	icon_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_box.custom_minimum_size = Vector2(36, 36)
+	icon_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	hb.add_child(icon_box)
+
+	var icon_center = CenterContainer.new()
+	icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_box.add_child(icon_center)
+
+	house_ad_icon_rect = TextureRect.new()
+	house_ad_icon_rect.texture = preload("res://crownicon.svg")
+	house_ad_icon_rect.custom_minimum_size = Vector2(22, 22)
+	house_ad_icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	house_ad_icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	house_ad_icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_center.add_child(house_ad_icon_rect)
 	
 	var vb = VBoxContainer.new()
 	vb.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -7052,8 +7691,8 @@ func _ensure_house_ad_bar():
 	
 	house_ad_title_lbl = Label.new()
 	house_ad_title_lbl.add_theme_font_override("font", custom_font)
-	house_ad_title_lbl.add_theme_font_size_override("font_size", 21)
-	house_ad_title_lbl.add_theme_color_override("font_color", Color8(255, 235, 120))
+	house_ad_title_lbl.add_theme_font_size_override("font_size", 20)
+	house_ad_title_lbl.add_theme_color_override("font_color", Color.WHITE)
 	house_ad_title_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	house_ad_title_lbl.add_theme_constant_override("shadow_offset_y", 1)
 	house_ad_title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -7062,19 +7701,28 @@ func _ensure_house_ad_bar():
 	house_ad_desc_lbl = Label.new()
 	house_ad_desc_lbl.add_theme_font_override("font", custom_font)
 	house_ad_desc_lbl.add_theme_font_size_override("font_size", 15)
-	house_ad_desc_lbl.add_theme_color_override("font_color", Color8(230, 240, 255, 220))
+	house_ad_desc_lbl.add_theme_color_override("font_color", Color.WHITE)
 	house_ad_desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	house_ad_desc_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	vb.add_child(house_ad_desc_lbl)
 	
+	var chev_box = PanelContainer.new()
+	chev_box.name = "BadgeChevBox"
+	chev_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chev_box.custom_minimum_size = Vector2(28, 28)
+	chev_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	hb.add_child(chev_box)
+
 	var chevron_lbl = Label.new()
-	chevron_lbl.text = "➔"
+	chevron_lbl.text = "›"
 	chevron_lbl.add_theme_font_override("font", custom_font)
-	chevron_lbl.add_theme_font_size_override("font_size", 20)
-	chevron_lbl.add_theme_color_override("font_color", active_theme.accent.lightened(0.2))
+	chevron_lbl.add_theme_font_size_override("font_size", 22)
+	chevron_lbl.add_theme_color_override("font_color", Color.WHITE)
+	chevron_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	chevron_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	hb.add_child(chevron_lbl)
+	chev_box.add_child(chevron_lbl)
 	
+	_style_top_badge_button(ad_btn)
 	_update_house_ad_content()
 	
 	if not house_ad_timer:
@@ -7089,35 +7737,38 @@ func _update_house_ad_content():
 	if not is_instance_valid(house_ad_title_lbl) or not is_instance_valid(house_ad_desc_lbl):
 		return
 	var lang_data = LANG.get(Global.current_lang, LANG["ENG"])
+	var icon_path = "res://crownicon.svg"
 	match house_ad_idx:
 		0:
-			house_ad_icon_lbl.text = "🎡"
-			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_WHEEL_TITLE", "🎡 ŞANS ÇARKI")
-			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_WHEEL_DESC", "Günün ücretsiz çevirmesini al, altınları kap! Hemen Çevir ➔")
+			icon_path = "res://crownicon.svg"
+			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_PRO_TITLE", "ELİT KULÜP AYRICALIKLARI")
+			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_PRO_DESC", "Reklamsız deneyim, tüm özel toplar, taçlar ve sınırsız maç hakkı!")
 		1:
-			house_ad_icon_lbl.text = "⚽"
-			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_FAV_TITLE", "⚽ FAVORİ TAKIM & KARİYER")
-			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_FAV_DESC", "Takımını seç, kupa ve gol istatistiklerini takip et! İncele ➔")
+			icon_path = "res://wheel_icon.svg"
+			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_WHEEL_TITLE", "ŞANS ÇARKI")
+			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_WHEEL_DESC", "Günün ücretsiz çevirmesini kullan, jetonları kap!")
 		2:
-			house_ad_icon_lbl.text = "👑"
-			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_PRO_TITLE", "👑 BOL GOL PRO ÜYELİK")
-			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_PRO_DESC", "Sıfır reklam, tüm kozmetikler açık & sınırsız oyun! Keşfet ➔")
+			icon_path = "res://quest_icon.svg"
+			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_QUEST_TITLE", "GÜNLÜK GÖREVLER")
+			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_QUEST_DESC", "Günün görevlerini tamamla, ekstra jeton ödüllerini topla!")
 		3:
-			house_ad_icon_lbl.text = "📋"
-			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_QUEST_TITLE", "📋 GÜNLÜK GÖREVLER")
-			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_QUEST_DESC", "Günün görevlerini tamamla, bonus altınları topla! Görevler ➔")
+			icon_path = "res://squad_icon.svg"
+			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_TIP2_TITLE", "KADRO KURUCU & KAPTAN")
+			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_TIP2_DESC", "Takımının ilk 11'ini ve kaptanını belirle, sahaya kendi kadronla çık!")
 		4:
-			house_ad_icon_lbl.text = "🎯"
-			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_TIP1_TITLE", "🎯 ARENA TAKTİĞİ")
-			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_TIP1_DESC", "Duvar paslarını ve falso açılarını kullanarak kaleciyi gafil avla! Oyna ➔")
+			icon_path = "res://trophy_icon.svg"
+			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_FAV_TITLE", "FAVORİ TAKIM & KARİYER")
+			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_FAV_DESC", "Takımını seç, kupa ve gol istatistiklerini takip et!")
 		5:
-			house_ad_icon_lbl.text = "📋"
-			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_TIP2_TITLE", "📋 KADRO & TAKTİK")
-			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_TIP2_DESC", "Takımının kadrosunu düzenle, kaptanını seç ve sahaya hükmet! Kadro ➔")
+			icon_path = "res://crownicon.svg"
+			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_PRO_TITLE", "ELİT KULÜP AYRICALIKLARI")
+			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_PRO_DESC", "Reklamsız deneyim, tüm özel toplar, taçlar ve sınırsız maç hakkı!")
 		6:
-			house_ad_icon_lbl.text = "🌐"
-			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_WEB_TITLE", "🌐 EBSTUDYO.COM")
-			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_WEB_DESC", "Canlı fikstürler, skorlar ve küresel liderlik tablosu web sitemizde! Git ➔")
+			icon_path = "res://globe_icon.svg"
+			house_ad_title_lbl.text = lang_data.get("HOUSE_AD_WEB_TITLE", "CANLI SIRALAMA: EBSTUDYO.COM")
+			house_ad_desc_lbl.text = lang_data.get("HOUSE_AD_WEB_DESC", "Küresel liderlik tablosunu ve turnuva rekorlarını webden takip et!")
+	if is_instance_valid(house_ad_icon_rect) and ResourceLoader.exists(icon_path):
+		house_ad_icon_rect.texture = load(icon_path)
 
 func _on_house_ad_timer_timeout():
 	if not is_instance_valid(house_ad_bar) or not house_ad_bar.visible:
@@ -7129,17 +7780,17 @@ func _on_house_ad_clicked():
 	Global.play_click()
 	match house_ad_idx:
 		0:
-			_open_lucky_wheel()
+			_on_buy_premium_pressed()
 		1:
-			_switch_tab(0)
+			_open_lucky_wheel()
 		2:
-			_switch_tab(2)
-		3:
 			_open_daily_quests()
-		4:
-			_switch_tab(1)
-		5:
+		3:
 			_open_player_list()
+		4:
+			_switch_tab(0)
+		5:
+			_switch_tab(2)
 		6:
 			OS.shell_open("https://ebstudyo.com")
 
@@ -7201,8 +7852,8 @@ func _show_prize_dialog(title_txt: String, amount_txt: String, sub_txt: String =
 	p_style.bg_color = active_theme.bg_bottom.darkened(0.25)
 	p_style.corner_radius_top_left = 26; p_style.corner_radius_top_right = 26
 	p_style.corner_radius_bottom_left = 26; p_style.corner_radius_bottom_right = 26
-	p_style.border_width_left = 2.0; p_style.border_width_right = 2.0
-	p_style.border_width_top = 2.5; p_style.border_width_bottom = 6.0
+	p_style.border_width_left = 2; p_style.border_width_right = 2
+	p_style.border_width_top = 3; p_style.border_width_bottom = 6
 	p_style.border_color = Color8(255, 215, 0, 230) # Gold specular border
 	p_style.shadow_color = Color8(0, 0, 0, 220)
 	p_style.shadow_size = 45
@@ -7229,7 +7880,7 @@ func _show_prize_dialog(title_txt: String, amount_txt: String, sub_txt: String =
 	t_lbl.text = title_txt
 	t_lbl.add_theme_font_override("font", custom_font)
 	t_lbl.add_theme_font_size_override("font_size", 44)
-	t_lbl.add_theme_color_override("font_color", Color8(255, 235, 140))
+	t_lbl.add_theme_color_override("font_color", Color.WHITE)
 	t_lbl.add_theme_color_override("font_shadow_color", Color8(180, 100, 0, 200))
 	t_lbl.add_theme_constant_override("shadow_offset_y", 3)
 	t_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -7300,7 +7951,7 @@ func _show_prize_dialog(title_txt: String, amount_txt: String, sub_txt: String =
 		s_lbl.text = sub_txt
 		s_lbl.add_theme_font_override("font", custom_font)
 		s_lbl.add_theme_font_size_override("font_size", 24)
-		s_lbl.add_theme_color_override("font_color", Color8(220, 235, 255))
+		s_lbl.add_theme_color_override("font_color", Color.WHITE)
 		s_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		sub_panel.add_child(s_lbl)
 		
@@ -7367,6 +8018,9 @@ func _on_rewarded_video_earned(_ad_info = null, _reward_data = null):
 	elif Global.current_lang == "POR":
 		title_txt = "PARABÉNS!"
 		bal_prefix = "Saldo Atual: "
+	elif Global.current_lang == "ITA":
+		title_txt = "CONGRATULAZIONI!"
+		bal_prefix = "Saldo Attuale: "
 		
 	var curr_name = LANG.get(Global.current_lang, LANG["ENG"]).get("CURRENCY", "Jeton")
 	_show_prize_dialog(title_txt, "+50 " + curr_name, bal_prefix + str(Global.ad_credits) + " " + curr_name)
@@ -7571,10 +8225,10 @@ func _open_daily_quests():
 	vbox.add_child(title_lbl)
 	
 	var date_lbl = Label.new()
-	date_lbl.text = Global.daily_date
+	date_lbl.text = _format_daily_date_ddmmyy(Global.daily_date)
 	date_lbl.add_theme_font_override("font", custom_font)
 	date_lbl.add_theme_font_size_override("font_size", 20)
-	date_lbl.add_theme_color_override("font_color", active_theme.accent)
+	date_lbl.add_theme_color_override("font_color", Color.WHITE)
 	date_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(date_lbl)
 	
@@ -7647,7 +8301,7 @@ func _open_daily_quests():
 				claim_btn.add_theme_constant_override("h_separation", 6)
 			claim_btn.disabled = true
 			apply_3d_style_to_button(claim_btn, Color8(30, 80, 40, 200), Color8(15, 50, 25), 10, 2)
-			claim_btn.add_theme_color_override("font_disabled_color", Color8(100, 255, 120))
+			claim_btn.add_theme_color_override("font_disabled_color", Color.WHITE)
 		elif is_ready:
 			claim_btn.text = LANG.get(Global.current_lang, LANG["ENG"]).get("QUEST_CLAIM", "ÖDÜLÜ AL")
 			apply_3d_style_to_button(claim_btn, active_theme.accent, active_theme.accent.darkened(0.35), 10, 3)
@@ -7668,7 +8322,7 @@ func _open_daily_quests():
 			claim_btn.text = LANG.get(Global.current_lang, LANG["ENG"]).get("QUEST_IN_PROGRESS", "Devam Ediyor")
 			claim_btn.disabled = true
 			apply_3d_style_to_button(claim_btn, active_theme.bg_top.lightened(0.1), active_theme.bg_bottom.darkened(0.3), 10, 2)
-			claim_btn.add_theme_color_override("font_disabled_color", Color8(160, 180, 200))
+			claim_btn.add_theme_color_override("font_disabled_color", Color.WHITE)
 			
 		q_hbox.add_child(claim_btn)
 	
@@ -7743,7 +8397,7 @@ func _open_lucky_wheel():
 	var timer_lbl = Label.new()
 	timer_lbl.add_theme_font_override("font", custom_font)
 	timer_lbl.add_theme_font_size_override("font_size", 20)
-	timer_lbl.add_theme_color_override("font_color", Color8(200, 220, 245))
+	timer_lbl.add_theme_color_override("font_color", Color.WHITE)
 	timer_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(timer_lbl)
 	
@@ -7904,7 +8558,7 @@ func _open_lucky_wheel():
 			elif Global.current_lang == "POR": next_spin_prefix = "Próxima rodada grátis em: "
 			elif Global.current_lang == "ITA": next_spin_prefix = "Prossimo giro gratis tra: "
 			timer_lbl.text = next_spin_prefix + time_str
-			timer_lbl.add_theme_color_override("font_color", Color8(200, 220, 245))
+			timer_lbl.add_theme_color_override("font_color", Color.WHITE)
 			
 			var spin_now_txt = "ŞİMDİ ÇEVİR!"
 			if Global.current_lang == "ENG": spin_now_txt = "SPIN NOW!"
@@ -7927,7 +8581,7 @@ func _open_lucky_wheel():
 			elif Global.current_lang == "POR": next_spin_prefix = "Próxima rodada grátis em: "
 			elif Global.current_lang == "ITA": next_spin_prefix = "Prossimo giro gratis tra: "
 			timer_lbl.text = next_spin_prefix + time_str
-			timer_lbl.add_theme_color_override("font_color", Color8(200, 220, 245))
+			timer_lbl.add_theme_color_override("font_color", Color.WHITE)
 			
 			spin_btn.text = LANG.get(Global.current_lang, LANG["ENG"]).get("LUCKY_WHEEL_AD", "REKLAM İZLE & ÇEVİR")
 			spin_btn.disabled = false
@@ -8026,6 +8680,9 @@ func _open_lucky_wheel():
 			elif Global.current_lang == "POR":
 				title_txt = "PRÉMIO DA RODA"
 				bal_prefix = "Saldo Atual: "
+			elif Global.current_lang == "ITA":
+				title_txt = "PREMIO DELLA RUOTA"
+				bal_prefix = "Saldo Attuale: "
 			var curr_name = LANG.get(Global.current_lang, LANG["ENG"]).get("CURRENCY", "Jeton")
 			_show_prize_dialog(title_txt, "+" + str(coins_won) + " " + curr_name, bal_prefix + str(Global.ad_credits) + " " + curr_name)
 			update_wheel_status.call()
@@ -8202,8 +8859,8 @@ func _open_leaderboard():
 	gc_style.bg_color = active_theme.bg_bottom.darkened(0.35)
 	gc_style.corner_radius_top_left = 16; gc_style.corner_radius_top_right = 16
 	gc_style.corner_radius_bottom_left = 16; gc_style.corner_radius_bottom_right = 16
-	gc_style.border_width_left = 1.5; gc_style.border_width_right = 1.5
-	gc_style.border_width_top = 1.5; gc_style.border_width_bottom = 3.5
+	gc_style.border_width_left = 2; gc_style.border_width_right = 2
+	gc_style.border_width_top = 2; gc_style.border_width_bottom = 4
 	gc_style.border_color = active_theme.accent.darkened(0.35)
 	gc_style.content_margin_left = 20; gc_style.content_margin_right = 20
 	gc_style.content_margin_top = 18; gc_style.content_margin_bottom = 18
@@ -8227,7 +8884,7 @@ func _open_leaderboard():
 	g_desc.text = LANG.get(Global.current_lang, LANG["ENG"]).get("LEADERBOARD_HINT", "Google Play Games ile küresel sıralamada yerini al ve diğer oyuncularla yarış!")
 	g_desc.add_theme_font_override("font", custom_font)
 	g_desc.add_theme_font_size_override("font_size", 20)
-	g_desc.add_theme_color_override("font_color", Color8(220, 230, 245))
+	g_desc.add_theme_color_override("font_color", Color.WHITE)
 	g_desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	g_desc.autowrap_mode = TextServer.AUTOWRAP_WORD
 	global_vbox.add_child(g_desc)
@@ -8333,3 +8990,455 @@ func _sync_score_to_web(p_name: String, team: String, goals: int):
 		"device_id": OS.get_unique_id()
 	})
 	http.request(url, headers, HTTPClient.METHOD_POST, payload)
+
+
+# ======================================================
+# ONBOARDING TUTORIAL & WALKTHROUGH SYSTEM
+# ======================================================
+
+func _check_and_start_tutorial():
+	if Global.last_tutorial_version != Global.CURRENT_GAME_VERSION:
+		var t = get_tree().create_timer(0.4)
+		t.timeout.connect(func():
+			if not is_instance_valid(self): return
+			if is_instance_valid(tutorial_overlay): return
+			_start_tutorial(1)
+		)
+
+func _start_tutorial(start_step: int = 1):
+	if is_instance_valid(burger_menu_overlay):
+		burger_menu_overlay.queue_free()
+		burger_menu_overlay = null
+	if is_instance_valid(tutorial_overlay):
+		tutorial_overlay.queue_free()
+		tutorial_overlay = null
+	
+	tutorial_step = start_step
+	_switch_tab(1, true)
+	
+	var sw = get_viewport_rect().size.x
+	var sh = get_viewport_rect().size.y
+	
+	tutorial_overlay = Control.new()
+	tutorial_overlay.name = "TutorialOverlay"
+	tutorial_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	tutorial_overlay.z_index = 150
+	
+	var scrim = ColorRect.new()
+	scrim.name = "TutorialScrim"
+	scrim.color = Color(0.02, 0.05, 0.08, 0.62)
+	scrim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	scrim.mouse_filter = Control.MOUSE_FILTER_STOP
+	scrim.gui_input.connect(func(event):
+		if (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
+			_next_tutorial_step()
+	)
+	tutorial_overlay.add_child(scrim)
+	
+	tutorial_canvas = Control.new()
+	tutorial_canvas.name = "TutorialCanvas"
+	tutorial_canvas.set_anchors_preset(Control.PRESET_FULL_RECT)
+	tutorial_canvas.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	tutorial_canvas.draw.connect(func(): _draw_tutorial_sketches(tutorial_canvas))
+	tutorial_overlay.add_child(tutorial_canvas)
+	
+	# Sol üstte 3 şık gösterge çubuğu (dikdörtgen/kapsül) ve sağda zarif ATLA butonu
+	var top_bar = MarginContainer.new()
+	top_bar.name = "TutorialTopBar"
+	top_bar.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	top_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	top_bar.add_theme_constant_override("margin_left", 24)
+	top_bar.add_theme_constant_override("margin_right", 24)
+	top_bar.add_theme_constant_override("margin_top", 32)
+	tutorial_overlay.add_child(top_bar)
+	
+	var top_hb = HBoxContainer.new()
+	top_hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	top_hb.alignment = BoxContainer.ALIGNMENT_BEGIN
+	top_bar.add_child(top_hb)
+	
+	var bars_hb = HBoxContainer.new()
+	bars_hb.name = "StepBars"
+	bars_hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bars_hb.add_theme_constant_override("separation", 8)
+	top_hb.add_child(bars_hb)
+	
+	tutorial_step_bars.clear()
+	for i in range(3):
+		var bar = Panel.new()
+		bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		bar.custom_minimum_size = Vector2(34, 7)
+		bars_hb.add_child(bar)
+		tutorial_step_bars.append(bar)
+	
+	var top_spacer = Control.new()
+	top_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	top_hb.add_child(top_spacer)
+	
+	var skip_btn = Button.new()
+	skip_btn.text = LANG.get(Global.current_lang, LANG["ENG"]).get("TUTORIAL_BTN_SKIP", "ATLA")
+	skip_btn.add_theme_font_override("font", custom_font)
+	skip_btn.add_theme_font_size_override("font_size", 20)
+	skip_btn.add_theme_color_override("font_color", Color.WHITE)
+	skip_btn.add_theme_color_override("font_hover_color", Color.WHITE)
+	skip_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
+	skip_btn.add_theme_constant_override("shadow_offset_y", 1)
+	var skip_empty = StyleBoxEmpty.new()
+	skip_btn.add_theme_stylebox_override("normal", skip_empty)
+	skip_btn.add_theme_stylebox_override("hover", skip_empty)
+	skip_btn.add_theme_stylebox_override("pressed", skip_empty)
+	skip_btn.add_theme_stylebox_override("focus", skip_empty)
+	skip_btn.pressed.connect(_finish_tutorial)
+	top_hb.add_child(skip_btn)
+	
+	# Yüzen metin ve buton alanı (kapalı blok arkaplanı yok, derin gölge ve outline ile ferah görünüm)
+	tutorial_card = PanelContainer.new()
+	tutorial_card.name = "TutorialCard"
+	tutorial_card.mouse_filter = Control.MOUSE_FILTER_PASS
+	tutorial_card.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	tutorial_overlay.add_child(tutorial_card)
+	
+	var vb = VBoxContainer.new()
+	vb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vb.add_theme_constant_override("separation", 16)
+	tutorial_card.add_child(vb)
+	
+	# Cihaza duyarlı dinamik tipografi boyutları
+	var title_fsize = 36 if is_tablet else 32
+	var desc_fsize = 26 if is_tablet else 24
+	
+	tutorial_title_lbl = Label.new()
+	tutorial_title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	tutorial_title_lbl.add_theme_font_override("font", custom_font)
+	tutorial_title_lbl.add_theme_font_size_override("font_size", title_fsize)
+	tutorial_title_lbl.add_theme_color_override("font_color", Color.WHITE)
+	tutorial_title_lbl.add_theme_color_override("font_outline_color", Color8(0, 0, 0, 245))
+	tutorial_title_lbl.add_theme_constant_override("outline_size", 8)
+	tutorial_title_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 255))
+	tutorial_title_lbl.add_theme_constant_override("shadow_offset_x", 0)
+	tutorial_title_lbl.add_theme_constant_override("shadow_offset_y", 3)
+	vb.add_child(tutorial_title_lbl)
+	
+	tutorial_desc_lbl = Label.new()
+	tutorial_desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	tutorial_desc_lbl.add_theme_font_override("font", custom_font)
+	tutorial_desc_lbl.add_theme_font_size_override("font_size", desc_fsize)
+	tutorial_desc_lbl.add_theme_color_override("font_color", Color.WHITE)
+	tutorial_desc_lbl.add_theme_color_override("font_outline_color", Color8(0, 0, 0, 235))
+	tutorial_desc_lbl.add_theme_constant_override("outline_size", 6)
+	tutorial_desc_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 255))
+	tutorial_desc_lbl.add_theme_constant_override("shadow_offset_x", 0)
+	tutorial_desc_lbl.add_theme_constant_override("shadow_offset_y", 2)
+	tutorial_desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	vb.add_child(tutorial_desc_lbl)
+	
+	# 1 & 2. Aşama İleri Butonu (3. Aşamada buton gösterilmez, tüm ekran tıklanabilir olur)
+	var btn_center = CenterContainer.new()
+	btn_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vb.add_child(btn_center)
+	
+	tutorial_next_btn = Button.new()
+	tutorial_next_btn.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+	tutorial_next_btn.clip_text = false
+	tutorial_next_btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	tutorial_next_btn.add_theme_font_override("font", custom_font)
+	tutorial_next_btn.add_theme_font_size_override("font_size", 26 if is_tablet else 24)
+	tutorial_next_btn.add_theme_color_override("font_color", Color.WHITE)
+	tutorial_next_btn.add_theme_color_override("font_hover_color", Color.WHITE)
+	tutorial_next_btn.add_theme_color_override("font_pressed_color", Color.WHITE)
+	tutorial_next_btn.add_theme_color_override("font_focus_color", Color.WHITE)
+	tutorial_next_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
+	tutorial_next_btn.add_theme_constant_override("shadow_offset_y", 2)
+	apply_3d_style_to_button(tutorial_next_btn, Color8(0, 160, 142), Color8(0, 95, 85), 16, 5, 28, 12)
+	tutorial_next_btn.pressed.connect(_next_tutorial_step)
+	btn_center.add_child(tutorial_next_btn)
+	
+	add_child(tutorial_overlay)
+	_update_tutorial_display()
+
+func _update_tutorial_display():
+	if not is_instance_valid(tutorial_overlay) or not is_instance_valid(tutorial_card):
+		return
+		
+	var sw = get_viewport_rect().size.x
+	var sh = get_viewport_rect().size.y
+	var lang_dict = LANG.get(Global.current_lang, LANG["ENG"])
+	
+	var title_key = "TUTORIAL_TITLE_%d" % tutorial_step
+	var desc_key = "TUTORIAL_DESC_%d" % tutorial_step
+	
+	tutorial_title_lbl.text = lang_dict.get(title_key, "")
+	tutorial_desc_lbl.text = lang_dict.get(desc_key, "")
+	
+	# Boyutlandırma ve Buton Konfigürasyonu
+	if tutorial_step >= 3:
+		# Son aşama: Buton gizlenir, tüm ekrana dokunulduğunda rehber tamamlanır
+		tutorial_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		if is_instance_valid(tutorial_next_btn):
+			tutorial_next_btn.visible = false
+	else:
+		# 1 & 2. Aşamalar: İleri butonu aktif ve belirgin
+		tutorial_card.mouse_filter = Control.MOUSE_FILTER_PASS
+		if is_instance_valid(tutorial_next_btn):
+			tutorial_next_btn.visible = true
+			tutorial_next_btn.text = lang_dict.get("TUTORIAL_BTN_NEXT", "İLERİ ➔")
+			var btn_w = 210.0 if is_tablet else 190.0
+			var btn_h = 56.0 if is_tablet else 52.0
+			tutorial_next_btn.custom_minimum_size = Vector2(btn_w, btn_h)
+			apply_3d_style_to_button(tutorial_next_btn, Color8(0, 160, 142), Color8(0, 95, 85), 16, 5, 28, 12)
+		
+	# Sol üstte 3 tane şık gösterge dikdörtgeni (kapsül)
+	for i in range(tutorial_step_bars.size()):
+		var bar = tutorial_step_bars[i]
+		if is_instance_valid(bar):
+			var sb = StyleBoxFlat.new()
+			sb.corner_radius_top_left = 3
+			sb.corner_radius_top_right = 3
+			sb.corner_radius_bottom_left = 3
+			sb.corner_radius_bottom_right = 3
+			if i == (tutorial_step - 1):
+				sb.bg_color = SKETCH_ACCENT_COL
+				bar.custom_minimum_size = Vector2(50, 7)
+			elif i < (tutorial_step - 1):
+				sb.bg_color = Color8(0, 180, 160, 180)
+				bar.custom_minimum_size = Vector2(34, 7)
+			else:
+				sb.bg_color = Color(1.0, 1.0, 1.0, 0.28)
+				bar.custom_minimum_size = Vector2(34, 7)
+			bar.add_theme_stylebox_override("panel", sb)
+	
+	# Ekran genişliği ve oranına tam uyumlu duyarlı kart genişliği
+	var card_w = clampf(sw * 0.90, 310.0, 620.0)
+	var card_x = (sw - card_w) * 0.5
+	var card_y = sh * 0.46
+	
+	if tutorial_step == 1:
+		if is_instance_valid(team_matchup_panel):
+			var mr = team_matchup_panel.get_global_rect()
+			if mr.size.y > 40:
+				card_y = clampf(mr.position.y + mr.size.y + 24.0, 180.0, sh - 320.0)
+		else:
+			card_y = sh * 0.44
+	elif tutorial_step == 2:
+		card_y = clampf(sh * 0.27, 110.0, sh * 0.36)
+	elif tutorial_step == 3:
+		var nav_y = sh - 75.0
+		if is_instance_valid(nav_bar_panel):
+			nav_y = nav_bar_panel.get_global_rect().position.y
+		card_y = clampf(nav_y - 250.0, 120.0, sh * 0.46)
+		
+	tutorial_card.position = Vector2(card_x, card_y)
+	tutorial_card.custom_minimum_size = Vector2(card_w, 0)
+	tutorial_card.size = Vector2(card_w, 0)
+	tutorial_card.reset_size()
+	
+	if is_instance_valid(tutorial_canvas):
+		tutorial_canvas.queue_redraw()
+
+func _next_tutorial_step():
+	if not is_instance_valid(tutorial_overlay):
+		return
+	Global.play_click()
+	tutorial_step += 1
+	if tutorial_step > 3:
+		_finish_tutorial()
+	else:
+		_update_tutorial_display()
+
+func _finish_tutorial():
+	if not is_instance_valid(tutorial_overlay):
+		return
+	var overlay_ref = tutorial_overlay
+	tutorial_overlay = null
+	overlay_ref.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	Global.play_click()
+	Global.last_tutorial_version = Global.CURRENT_GAME_VERSION
+	Global.save_progression()
+	var tw = create_tween()
+	tw.tween_property(overlay_ref, "modulate:a", 0.0, 0.22).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_callback(func():
+		if is_instance_valid(overlay_ref):
+			overlay_ref.queue_free()
+	)
+
+func _draw_sketch_line(canvas: CanvasItem, p1: Vector2, p2: Vector2, col: Color, base_width: float = 2.4, passes: int = 2) -> void:
+	var diff = p2 - p1
+	var length = diff.length()
+	if length < 2.0:
+		return
+	var dir = diff.normalized()
+	var normal = Vector2(-dir.y, dir.x)
+	var seg_count = clampi(int(length / 16.0), 4, 18)
+	
+	for p_idx in range(passes):
+		var pts = PackedVector2Array()
+		var p_seed = float(p_idx) * 1.73
+		for s in range(seg_count + 1):
+			var t = float(s) / float(seg_count)
+			var base_pt = p1.lerp(p2, t)
+			var wobble = (sin(t * 8.5 + p_seed) * 1.6 + cos(t * 14.2 + p_seed * 0.7) * 0.9)
+			if s == 0 or s == seg_count:
+				wobble *= 0.25
+			pts.append(base_pt + normal * wobble)
+		var w = max(1.2, base_width - float(p_idx) * 0.4)
+		var stroke_col = col
+		stroke_col.a = clampf(col.a * (1.0 - float(p_idx) * 0.18), 0.2, 1.0)
+		canvas.draw_polyline(pts, stroke_col, w, true)
+
+func _draw_sketch_rect(canvas: CanvasItem, rect: Rect2, col: Color, base_width: float = 2.4) -> void:
+	var tl = rect.position
+	var tr = Vector2(rect.position.x + rect.size.x, rect.position.y)
+	var br = rect.position + rect.size
+	var bl = Vector2(rect.position.x, rect.position.y + rect.size.y)
+	var ov = 8.0
+	_draw_sketch_line(canvas, tl + Vector2(-ov, 0), tr + Vector2(ov, 0), col, base_width)
+	_draw_sketch_line(canvas, tr + Vector2(0, -ov), br + Vector2(0, ov), col, base_width)
+	_draw_sketch_line(canvas, br + Vector2(ov, 0), bl + Vector2(-ov, 0), col, base_width)
+	_draw_sketch_line(canvas, bl + Vector2(0, ov), tl + Vector2(0, -ov), col, base_width)
+
+func _draw_sketch_oval(canvas: CanvasItem, center: Vector2, rx: float, ry: float, col: Color, base_width: float = 2.4) -> void:
+	if rx <= 1.0 or ry <= 1.0:
+		return
+	var segs = 36
+	for pass_idx in range(2):
+		var pts = PackedVector2Array()
+		var start_a = -0.15 + float(pass_idx) * 0.25
+		var end_a = TAU + 0.35 + float(pass_idx) * 0.2
+		var angle_span = end_a - start_a
+		for s in range(segs + 1):
+			var t = float(s) / float(segs)
+			var a = start_a + t * angle_span
+			var wobble = 1.0 + sin(a * 4.0 + float(pass_idx) * 2.1) * 0.045 + cos(a * 7.0) * 0.02
+			var pt = center + Vector2(cos(a) * rx * wobble, sin(a) * ry * wobble)
+			pts.append(pt)
+		var stroke_col = col
+		stroke_col.a = clampf(col.a * (1.0 - float(pass_idx) * 0.22), 0.2, 1.0)
+		canvas.draw_polyline(pts, stroke_col, base_width - float(pass_idx) * 0.4, true)
+
+func _draw_sketch_arrow(canvas: CanvasItem, from_pt: Vector2, to_pt: Vector2, ctrl_pt: Vector2, col: Color, base_width: float = 2.4) -> void:
+	if from_pt.distance_squared_to(to_pt) < 4.0:
+		return
+	var segs = 20
+	for pass_idx in range(2):
+		var pts = PackedVector2Array()
+		for s in range(segs + 1):
+			var t = float(s) / float(segs)
+			var pt = (1.0 - t) * (1.0 - t) * from_pt + 2.0 * (1.0 - t) * t * ctrl_pt + t * t * to_pt
+			var wobble = (sin(t * 9.2 + float(pass_idx) * 2.5) * 1.8) * (1.0 - abs(t - 0.5) * 1.5)
+			pts.append(pt + Vector2(-wobble * 0.4, wobble))
+		canvas.draw_polyline(pts, col, base_width, true)
+	
+	var tangent = (to_pt - ctrl_pt).normalized()
+	if tangent.length() < 0.1:
+		tangent = (to_pt - from_pt).normalized()
+	var normal = Vector2(-tangent.y, tangent.x)
+	var head_len = 18.0
+	var head_w = 11.0
+	var wing1 = to_pt - tangent * head_len + normal * head_w
+	var wing2 = to_pt - tangent * head_len - normal * head_w
+	_draw_sketch_line(canvas, to_pt, wing1, col, base_width, 2)
+	_draw_sketch_line(canvas, to_pt, wing2, col, base_width, 2)
+
+func _draw_sketch_star(canvas: CanvasItem, center: Vector2, size: float, col: Color) -> void:
+	var r = size * 0.5
+	_draw_sketch_line(canvas, center + Vector2(0, -r), center + Vector2(0, r), col, 2.0, 1)
+	_draw_sketch_line(canvas, center + Vector2(-r, 0), center + Vector2(r, 0), col, 2.0, 1)
+	_draw_sketch_line(canvas, center + Vector2(-r * 0.7, -r * 0.7), center + Vector2(r * 0.7, r * 0.7), col, 1.8, 1)
+	_draw_sketch_line(canvas, center + Vector2(r * 0.7, -r * 0.7), center + Vector2(-r * 0.7, r * 0.7), col, 1.8, 1)
+
+func _draw_sketch_coin(canvas: CanvasItem, center: Vector2, radius: float, col: Color) -> void:
+	_draw_sketch_oval(canvas, center, radius, radius, col, 2.4)
+	_draw_sketch_oval(canvas, center, radius * 0.72, radius * 0.72, col, 1.8)
+	_draw_sketch_star(canvas, center + Vector2(-radius * 0.2, -radius * 0.2), radius * 0.5, SKETCH_ACCENT_COL)
+
+func _draw_tutorial_sketches(canvas: CanvasItem) -> void:
+	var sw = get_viewport_rect().size.x
+	var sh = get_viewport_rect().size.y
+	var col = SKETCH_COL
+	var accent_col = SKETCH_ACCENT_COL
+	
+	if tutorial_step == 1:
+		var target_rect = Rect2(Vector2(sw * 0.05, sh * 0.16), Vector2(sw * 0.90, sh * 0.28))
+		if is_instance_valid(team_matchup_panel):
+			var r = team_matchup_panel.get_global_rect()
+			if r.size.x > 50 and r.size.y > 50:
+				target_rect = r.grow(14.0)
+		
+		_draw_sketch_rect(canvas, target_rect, col, 2.6)
+		
+		var center_y = target_rect.position.y + target_rect.size.y * 0.5
+		_draw_sketch_star(canvas, Vector2(target_rect.position.x + 35, center_y - 25), 18.0, accent_col)
+		_draw_sketch_star(canvas, Vector2(target_rect.position.x + target_rect.size.x - 35, center_y - 25), 18.0, accent_col)
+		
+		var card_top = sh * 0.52
+		if is_instance_valid(tutorial_card):
+			card_top = tutorial_card.position.y
+		var arrow_start = Vector2(sw * 0.5, card_top - 10)
+		var arrow_end = Vector2(sw * 0.5, target_rect.position.y + target_rect.size.y + 6)
+		var ctrl = Vector2(sw * 0.44, (arrow_start.y + arrow_end.y) * 0.5)
+		_draw_sketch_arrow(canvas, arrow_start, arrow_end, ctrl, col, 2.5)
+
+	elif tutorial_step == 2:
+		var lang_rect = Rect2(Vector2(20, 20), Vector2(70, 50))
+		if is_instance_valid(lang_btn):
+			var r = lang_btn.get_global_rect()
+			if r.size.x > 20: lang_rect = r
+		
+		var burger_rect = Rect2(Vector2(sw - 90, 20), Vector2(70, 50))
+		if is_instance_valid(burger_btn):
+			var r = burger_btn.get_global_rect()
+			if r.size.x > 20: burger_rect = r
+			
+		_draw_sketch_oval(canvas, lang_rect.get_center(), lang_rect.size.x * 0.62, lang_rect.size.y * 0.62, col, 2.4)
+		_draw_sketch_oval(canvas, burger_rect.get_center(), burger_rect.size.x * 0.62, burger_rect.size.y * 0.62, col, 2.4)
+		
+		var card_top = sh * 0.36
+		if is_instance_valid(tutorial_card):
+			card_top = tutorial_card.position.y
+		
+		var arrow1_start = Vector2(sw * 0.32, card_top + 10)
+		var arrow1_end = lang_rect.get_center() + Vector2(10, lang_rect.size.y * 0.5 + 8)
+		var ctrl1 = Vector2(sw * 0.22, (arrow1_start.y + arrow1_end.y) * 0.5 - 15)
+		_draw_sketch_arrow(canvas, arrow1_start, arrow1_end, ctrl1, col, 2.4)
+		
+		var arrow2_start = Vector2(sw * 0.68, card_top + 10)
+		var arrow2_end = burger_rect.get_center() + Vector2(-10, burger_rect.size.y * 0.5 + 8)
+		var ctrl2 = Vector2(sw * 0.78, (arrow2_start.y + arrow2_end.y) * 0.5 - 15)
+		_draw_sketch_arrow(canvas, arrow2_start, arrow2_end, ctrl2, col, 2.4)
+		
+		_draw_sketch_star(canvas, burger_rect.get_center() + Vector2(-burger_rect.size.x * 0.65, 0), 16.0, accent_col)
+
+	elif tutorial_step == 3:
+		var nav_y = sh - 68.0
+		if is_instance_valid(nav_bar_panel):
+			var r = nav_bar_panel.get_global_rect()
+			if r.size.y > 20: nav_y = r.position.y
+		
+		var stats_pos = Vector2(sw * 0.20, nav_y)
+		var shop_pos = Vector2(sw * 0.80, nav_y)
+		
+		var card_bottom = sh * 0.68
+		if is_instance_valid(tutorial_card):
+			var card_h = tutorial_card.size.y
+			if card_h < 80.0:
+				card_h = tutorial_card.get_minimum_size().y
+			if card_h < 80.0:
+				card_h = 240.0
+			card_bottom = tutorial_card.position.y + card_h
+			
+		var arrow_s_start = Vector2(sw * 0.28, card_bottom + 10)
+		var arrow_s_end = stats_pos + Vector2(0, -8)
+		_draw_sketch_arrow(canvas, arrow_s_start, arrow_s_end, Vector2(sw * 0.25, (arrow_s_start.y + arrow_s_end.y) * 0.5), col, 2.4)
+		
+		var arrow_m_start = Vector2(sw * 0.72, card_bottom + 10)
+		var arrow_m_end = shop_pos + Vector2(0, -8)
+		_draw_sketch_arrow(canvas, arrow_m_start, arrow_m_end, Vector2(sw * 0.75, (arrow_m_start.y + arrow_m_end.y) * 0.5), col, 2.4)
+		
+		var bracket_y = nav_y - 12.0
+		_draw_sketch_line(canvas, Vector2(sw * 0.08, bracket_y), Vector2(sw * 0.92, bracket_y), col, 2.0, 1)
+		
+		var coin_center = Vector2(sw * 0.5, (tutorial_card.position.y - 35.0) if is_instance_valid(tutorial_card) else (sh * 0.22))
+		_draw_sketch_coin(canvas, coin_center, 24.0, accent_col)
+		_draw_sketch_star(canvas, coin_center + Vector2(-36, -10), 16.0, accent_col)
+		_draw_sketch_star(canvas, coin_center + Vector2(36, 10), 16.0, accent_col)

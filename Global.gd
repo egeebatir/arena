@@ -36,7 +36,7 @@ var vol_settings = {
 	"whistle": 0.4
 }
 
-var current_theme = "Mavi"
+var current_theme = "Turkuaz"
 var shake_enabled = true
 var vibration_enabled = true
 var match_duration = 1 # 0 = Kısa (24s), 1 = Normal (36s), 2 = Uzun (48s)
@@ -77,6 +77,8 @@ var last_selected_league_away: int = 1
 var custom_player_names: Dictionary = {}
 var unlocked_achievements: Array = []
 var favorite_team_goals_scored: int = 0
+const CURRENT_GAME_VERSION: String = "1.1.3"
+var last_tutorial_version: String = ""
 
 # --- DAILY QUESTS, LUCKY WHEEL & MATCH ECONOMY ---
 var daily_date: String = ""
@@ -970,7 +972,8 @@ func save_progression():
 			"vol_settings": vol_settings,
 			"current_theme": current_theme,
 			"shake_enabled": shake_enabled,
-			"match_duration": match_duration
+			"match_duration": match_duration,
+			"last_tutorial_version": last_tutorial_version
 		}
 		var json_str = JSON.stringify(data)
 		var hash_val = generate_save_hash(json_str)
@@ -1039,6 +1042,7 @@ func load_progression():
 			if data_to_load.has("current_theme"): current_theme = data_to_load["current_theme"]
 			if data_to_load.has("shake_enabled"): shake_enabled = bool(data_to_load["shake_enabled"])
 			if data_to_load.has("match_duration"): match_duration = int(data_to_load["match_duration"])
+			if data_to_load.has("last_tutorial_version"): last_tutorial_version = str(data_to_load["last_tutorial_version"])
 		check_daily_reset()
 
 
@@ -1764,11 +1768,11 @@ func _ensure_loading_overlay():
 	card_sb.corner_radius_top_right = 24
 	card_sb.corner_radius_bottom_left = 24
 	card_sb.corner_radius_bottom_right = 24
-	card_sb.border_width_left = 1.5
-	card_sb.border_width_right = 1.5
-	card_sb.border_width_top = 1.5
-	card_sb.border_width_bottom = 3.5
-	var theme_accent = THEMES.get(current_theme, THEMES["Mavi"]).accent
+	card_sb.border_width_left = 2
+	card_sb.border_width_right = 2
+	card_sb.border_width_top = 2
+	card_sb.border_width_bottom = 4
+	var theme_accent = THEMES.get(current_theme, THEMES["Turkuaz"]).accent
 	card_sb.border_color = theme_accent.lightened(0.15)
 	card_sb.shadow_color = Color8(0, 0, 0, 160)
 	card_sb.shadow_size = 24
@@ -1791,7 +1795,7 @@ func _ensure_loading_overlay():
 	_loading_spinner.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_loading_spinner.draw.connect(func():
 		var c = Vector2(42, 42)
-		var acc = THEMES.get(current_theme, THEMES["Mavi"]).accent
+		var acc = THEMES.get(current_theme, THEMES["Turkuaz"]).accent
 		
 		# 1. Subtle ambient aura
 		_loading_spinner.draw_circle(c, 38.0, Color(acc.r, acc.g, acc.b, 0.08))
@@ -1833,8 +1837,7 @@ func _ensure_loading_overlay():
 	_loading_sublabel.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_loading_sublabel.add_theme_font_override("font", custom_font)
 	_loading_sublabel.add_theme_font_size_override("font_size", 18)
-	var theme_acc = THEMES.get(current_theme, THEMES["Mavi"]).accent
-	_loading_sublabel.add_theme_color_override("font_color", theme_acc.lightened(0.2))
+	_loading_sublabel.add_theme_color_override("font_color", Color.WHITE)
 	box.add_child(_loading_sublabel)
 
 func change_scene_with_loading(target_scene_path: String, custom_message: String = ""):

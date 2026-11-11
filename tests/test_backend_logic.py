@@ -5,21 +5,15 @@ import io
 # Ensure UTF-8 output on Windows console
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-def test_global_theme_mavi():
+def test_global_theme_turkuaz():
     print("--- Testing Global.gd Default Theme ---")
     with open(r"c:\Users\egebatir\Documents\futbol\Global.gd", "r", encoding="utf-8") as f:
         content = f.read()
 
-    if 'var current_theme = "Mavi"' in content:
-        print("PASS: Default theme is set to 'Mavi'!")
+    if 'var current_theme = "Turkuaz"' in content:
+        print("PASS: Default theme is set to 'Turkuaz'!")
     else:
-        print("FAIL: Default theme is not 'Mavi'")
-        return False
-
-    if 'current_theme = "Mavi"' in content:
-        print("PASS: Fallback theme in load_progression is 'Mavi'!")
-    else:
-        print("FAIL: Fallback theme is not 'Mavi'")
+        print("FAIL: Default theme is not 'Turkuaz'")
         return False
     return True
 
@@ -274,7 +268,7 @@ def test_admob_safety_guard():
     return True
 
 if __name__ == "__main__":
-    r1 = test_global_theme_mavi()
+    r1 = test_global_theme_turkuaz()
     r2 = test_main_menu_lang()
     r3 = test_global_quests()
     r4 = test_shop_and_squad()

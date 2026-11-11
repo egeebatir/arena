@@ -1,6 +1,6 @@
 # 🏛️ BOL GOL FUTBOL: ÇOKLU-AJAN MECLİSİ (COUNCIL BOARD)
 > **Ekosistem Durum ve Karar Masası (Blackboard)**  
-> *Son Güncelleme: 2026-09-28* | *Durum: v1.1.2 (Build 32) — Fikstür v4.0 Rebuild: UCL/UEL/NL 2026-27 Gerçek Kura, 189 Maç, 0 Skip*
+> *Son Güncelleme: 2026-11-11* | *Durum: v1.1.3 (Build 34) — Elit Kulüp, Üst Rozet, Mağaza & Günlük Görevler Rework, Modern Jeton, Beyaz Tipografi & Rehber Güncellemesi*
 
 ---
 
@@ -8,10 +8,10 @@
 
 | Proje | Konum / Repo | Odak Alanı | Canlı Durum |
 | :--- | :--- | :--- | :--- |
-| **⚽ Mobil Oyun (futbol)** | `c:\Users\egebatir\Documents\futbol`<br>*(arena.git - master)* | Godot 4.6 GDScript, UI/UX, AdMob, Google Play | ✅ 100% Hazır (v1.1.2 Build 32 Dağıtıldı) |
+| **⚽ Mobil Oyun (futbol)** | `c:\Users\egebatir\Documents\futbol`<br>*(arena.git - master)* | Godot 4.6 GDScript, UI/UX, AdMob, Google Play | ✅ 100% Hazır (v1.1.3 Build 34 Dağıtıldı) |
 | **🎬 Otomasyon (futbol_automation)** | `c:\Users\egebatir\Documents\futbol_automation`<br>*(bolgolfutbolotonom.git - main)* | 9:16 Shorts/Reels Video, AI Metadata, Rastgele Tema & Skin | ✅ 100% Hazır (46 Milli Takım, 232 Takım Eşleşmesi) |
-| **🌐 Web & Landing (webfutbol)** | `c:\Users\egebatir\Documents\Bol Gol Futbol\webfutbol`<br>*(webfutbol.git - main / ebstudyo.com)* | Canlı Web Sitesi (HTML5/WASM), On-Demand Yükleme, Kapalı Beta Hunisi & SEO | ✅ v1.1.0 Hazır (Canlı Sunucuya Dağıtıldı) |
-| **📱 Google Play Store** | *Console / ASO (com.ebstudyo.bolgol)* | 5 Dil (TR, EN, ES, PT, IT), İkon, Tanıtım, Güncelleme Notları | 🟢 v1.1.2 Paketi Yayında (Build 32) |
+| **🌐 Web & Landing (webfutbol)** | `c:\Users\egebatir\Documents\Bol Gol Futbol\webfutbol`<br>*(webfutbol.git - main / ebstudyo.com)* | Canlı Web Sitesi (HTML5/WASM), On-Demand Yükleme, Kapalı Beta Hunisi & SEO | ✅ v1.1.3 Hazır (Canlı Sunucuya Dağıtıldı) |
+| **📱 Google Play Store** | *Console / ASO (com.ebstudyo.bolgol)* | 5 Dil (TR, EN, ES, PT, IT), İkon, Tanıtım, Güncelleme Notları | 🟢 v1.1.3 Paketi Yayında (Build 34) |
 
 ---
 
@@ -306,14 +306,21 @@
   - Sağ üst burger menüsü (`burger_btn`), sağ ve sol ekranlar (İstatistikler & Mağaza geçişleri), lig ve takım bolluğu (7 lig, 46 milli takım, 232 kulüp) ve maçı başlatma çağrısını kapsayan 4 adımlı dinamik ok ve kısa metin mimarisi çalışıldı (kod uygulanmadı).
 - [x] **Doğrulamalar:** `python tests/test_backend_logic.py` %100 BAŞARILI, Godot 4.6.1 headless canlı ağaç doğrulaması sıfır hata ile geçti. Versiyon artırılmadı ve git push yapılmadı.
 
-
-
-
-
-
-
-
-
-
-
+### 2026-11-11: v1.1.3 (Build 34) — Elit Kulüp, Üst Rozet, Mağaza & Günlük Görevler Rework, Modern Jeton, Beyaz Tipografi & Rehber Güncellemesi
+- [x] **Rehber (Tutorial) İyileştirmeleri:**
+  - 3. aşamadaki *"Keyfini Çıkar"* butonu kaldırıldı; son aşamada ekranda herhangi bir yere tıklandığında rehber tamamlanacak şekilde yapılandırıldı.
+  - Rehber aktifken ekranın sağa/sola kaydırılması (`_input` swipe ve `_switch_tab`) kilitlendi.
+- [x] **Üst Rozet (`vip_top_bar` & `house_ad_bar`) Yeniden Tasarımı:**
+  - Kırpılan sol yıldız ve sağ ok ikonu `MarginContainer` ve yuvarlatılmış rozet çerçevesi (`36x36` sol ikon kutusu, `28x28` sağ ok rozeti) ile düzeltildi.
+  - Elit üyeler için aktif üyelik avantajlarını gösteren (`ELİT KULÜP ÜYESİ • Reklamsız Deneyim • Tüm Özel Kozmetikler & Sınırsız Maç Aktif`) ve tıklanınca Elit Kulüp avantajları penceresini açan rozet; üye olmayanlar için ise `ELİT KULÜP AYRICALIKLARI` tanıtımı ve oyun içi özellikleri döndüren modern bar devreye alındı.
+- [x] **PRO PASS -> ELİT KULÜP Yeniden Markalama & Mağaza Bloğu:**
+  - 5 dilde (`TR: ELİT KULÜP`, `ENG: ELITE CLUB`, `ESP: CLUB ÉLITE`, `POR: CLUBE ELITE`, `ITA: CLUB ÉLITE`) yeniden adlandırıldı; `crownicon.svg` şampiyonluk kalkanı amblemi ve aktif temayla uyumlu vitrin kartı tasarlandı.
+- [x] **Mağaza Üst Butonları & Tıklanabilir Günlük Görevler Kartı (`gg/aa/yy`):**
+  - Mağaza üst satırındaki *"Günlük Görevler"* butonu kaldırıldı; yalnızca dikkat çekici 3D *"Video İzle (+50 Jeton)"* butonu ve yalnızca ikon içeren kompakt *"Şans Çarkı"* (`wheel_icon.svg`) butonu bırakıldı.
+  - Mağaza altındaki Günlük Görevler listesi komple tıklanabilir bir kart-buton haline getirildi ve tarih formatı `gg/aa/yy` (`DD/MM/YY`) olarak standartlaştırıldı.
+- [x] **Modern Minimalist Jeton (`jeton_icon.svg`) & Saf Beyaz Yazı Standardı:**
+  - Antik sikke görünümü yerine modern, basit geometrik altın-kehribar jeton ikonu (`jeton_icon.svg`) tasarlandı.
+  - Oyun genelindeki (`main_menu.gd`, `welcome_screen.gd`, `pitch.gd`, `Global.gd`) tüm gri, açık bej, açık krem ve açık mavimsi metin renkleri saf beyaz (`Color.WHITE`) olarak standartlaştırıldı.
+- [x] **Sürüm Yükseltme (`v1.1.3` / Build 34) & Dağıtım:**
+  - `Global.CURRENT_GAME_VERSION = "1.1.3"`, `welcome_screen.gd`, `main_menu.gd` ayarlar sürüm etiketi ve `export_presets.cfg` (`version/code=34`, `version/name="1.1.3"`) güncellendi; GitHub ve Google Play Console dağıtımları tamamlandı.
 

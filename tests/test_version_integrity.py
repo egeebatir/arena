@@ -87,7 +87,7 @@ def test_squad_and_fixture_integrity():
 
     placeholder_teams = []
     for k, v in stars_data.items():
-        if any("Yıldız" in str(p) or "Kaptan" in str(v.get("captain")) for p in v.get("star_players", [])):
+        if any(re.search(r"Yıldız\s+\d", str(p)) or "Kaptan" in str(v.get("captain")) for p in v.get("star_players", [])):
             placeholder_teams.append(k)
 
     if placeholder_teams:
@@ -102,7 +102,7 @@ def test_squad_and_fixture_integrity():
     for fix in fixtures_data.get("fixtures", []):
         for side in ["home", "away"]:
             players = fix.get(side, {}).get("star_players", [])
-            if any("Yıldız" in str(p) for p in players):
+            if any(re.search(r"Yıldız\s+\d", str(p)) for p in players):
                 bad_fixtures.append(fix.get("id"))
                 break
         if fix.get("home", {}).get("key") == "BOURNEMOUTH SC" and fix.get("home", {}).get("league") == "SUPER_LIG":

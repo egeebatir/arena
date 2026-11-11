@@ -734,7 +734,7 @@ func setup_scoreboard():
 	dash.text = "-"
 	dash.add_theme_font_override("font", custom_font)
 	dash.add_theme_font_size_override("font_size", 40)
-	dash.add_theme_color_override("font_color", Color(1, 1, 1, 0.7))
+	dash.add_theme_color_override("font_color", Color.WHITE)
 	dash.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	dash.add_theme_constant_override("shadow_offset_y", 2)
 	score_hbox.add_child(dash)
@@ -788,7 +788,7 @@ func setup_scoreboard():
 	time_lbl = Label.new()
 	time_lbl.add_theme_font_override("font", custom_font)
 	time_lbl.add_theme_font_size_override("font_size", 24)
-	time_lbl.add_theme_color_override("font_color", Color8(255, 235, 120))
+	time_lbl.add_theme_color_override("font_color", Color.WHITE)
 	time_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 	time_lbl.add_theme_constant_override("shadow_offset_y", 2)
 	time_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1053,7 +1053,7 @@ func _on_restart_pressed():
 	no_btn.text = no_txt
 	no_btn.add_theme_font_override("font", custom_font)
 	no_btn.add_theme_font_size_override("font_size", 30)
-	no_btn.add_theme_color_override("font_color", Color8(220, 230, 245))
+	no_btn.add_theme_color_override("font_color", Color.WHITE)
 	var n_style = StyleBoxFlat.new()
 	n_style.bg_color = active_theme.bg_top.lightened(0.12)
 	n_style.corner_radius_top_left = 14; n_style.corner_radius_top_right = 14
