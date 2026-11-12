@@ -99,27 +99,27 @@ def upload_aab(aab_path, tracks=["internal", "alpha"], release_name=None, releas
             release_notes = [
                 {
                     "language": "tr-TR",
-                    "text": "• Elit Kulüp & Üst Rozet: Modern rozet tasarımı, Elit Kulüp ayrıcalıkları ve tema uyumlu mağaza vitrini.\n• Mağaza & Günlük Görevler: Tıklanabilir günlük görevler kartı (gg/aa/yy tarih), ikonlu Şans Çarkı ve yenilenen Video İzle butonu.\n• Modern Jeton & Beyaz Yazılar: Minimalist geometrik jeton ikonu ve tüm ekranlarda net beyaz tipografi.\n• Rehber İyileştirmesi: Son adımda tam ekran dokunuşla tamamlama ve kaydırma kilidi."
+                    "text": "• Tam Genişlik Üst Rozet: Ekranın iki yanına yayılan sade rozet ve 12 sn bilgi döngüsü.\n• Ekrana Sığan Mağaza ve İstatistikler: Kaydırma gerektirmeyen kompakt görünüm.\n• Dengeli Reklam Akışı: İlk 5 maçta geçiş reklamı yok, ardından 2 maçta bir.\n• Günlük Görevler, Rehber ve Özel Kum Saati İkonu İyileştirmeleri."
                 },
                 {
                     "language": "en-US",
-                    "text": "• Elite Club & Top Badge: Redesigned top badge, Elite Club perks showcase, and theme-harmonized shop card.\n• Shop & Daily Quests: Clickable Daily Quests card (DD/MM/YY date), compact Lucky Wheel icon button, and refined Watch Video CTA.\n• Modern Token & Crisp Text: Minimalist geometric token icon and pure white typography across all screens.\n• Guide Polish: Full-screen tap-to-finish on the final step and swipe lock."
+                    "text": "• Edge-to-Edge Top Badge: Full-width minimalist banner with 12s cycling tips.\n• Scroll-Free Shop & Stats: Compact screen-fit layouts on both phones and tablets.\n• Balanced Interstitials: No post-match ads in the first 5 matches, then every 2 matches.\n• Daily Quests, Tutorial positioning, and custom Hourglass icon polish."
                 },
                 {
                     "language": "es-ES",
-                    "text": "• Club Élite e Insignia Superior: Nuevo diseño de insignia, ventajas del Club Élite y tarjeta temática en la tienda.\n• Tienda y Misiones Diarias: Tarjeta interactiva de Misiones Diarias (DD/MM/AA), botón icono de Ruleta y Ver Video mejorado.\n• Ficha Moderna y Texto Blanco: Nuevo icono geométrico de ficha y tipografía blanca en todo el juego.\n• Guía Mejorada: Toque en pantalla completa al finalizar y bloqueo de deslizamiento."
+                    "text": "• Insignia Superior Completa: Diseño ancho sin bordes y ciclo de 12 s.\n• Tienda y Estadísticas Compactas: Todo visible en pantalla sin desplazamiento vertical.\n• Anuncios Equilibrados: Sin intersticiales en los primeros 5 partidos y luego cada 2 partidos.\n• Mejoras en Misiones Diarias, Tutorial e icono de reloj de arena."
                 },
                 {
                     "language": "pt-BR",
-                    "text": "• Clube Elite e Emblema Superior: Novo emblema no topo, vantagens do Clube Elite e cartão temático na loja.\n• Loja e Missões Diárias: Cartão interativo de Missões Diárias (DD/MM/AA), botão ícone da Roleta e Assistir Vídeo aprimorado.\n• Moeda Moderna e Texto Branco: Novo ícone geométrico de moeda e textos em branco puro.\n• Guia Aprimorado: Toque em tela cheia no passo final e bloqueio de deslize."
+                    "text": "• Emblema Superior Amplo: Barra em largura total com rotação de 12 s.\n• Loja e Estatísticas Compactas: Tudo ajustado à tela sem rolagem vertical.\n• Anúncios Equilibrados: Sem intersticiais nas 5 primeiras partidas e depois a cada 2.\n• Ajustes em Missões Diárias, Tutorial e ícone de ampulheta."
                 },
                 {
                     "language": "it-IT",
-                    "text": "• Club Élite e Badge Superiore: Nuovo badge superiore, vantaggi Club Élite e scheda negozio armonizzata.\n• Negozio e Missioni Giornaliere: Scheda Missioni Giornaliere cliccabile (GG/MM/AA), pulsante icona Ruota e Guarda Video migliorato.\n• Gettone Moderno e Testo Bianco: Nuova icona geometrica del gettone e testi in bianco puro.\n• Guida Migliorata: Tocco a tutto schermo nel passo finale e blocco scorrimento."
+                    "text": "• Badge Superiore Full-Width: Barra a tutta larghezza con rotazione di 12 s.\n• Negozio e Statistiche Compatte: Tutto visibile su schermo senza scorrimento verticale.\n• Pubblicità Bilanciata: Nessun interstitial nelle prime 5 partite, poi ogni 2.\n• Migliorie a Missioni Giornaliere, Tutorial e icona clessidra."
                 }
             ]
 
-        rel_name = release_name or f"{version_code} (1.1.3)"
+        rel_name = release_name or f"{version_code} (1.1.4)"
 
         # 3. Assign bundle to each requested track
         for track in tracks:

@@ -67,6 +67,8 @@ var favorite_team: String = ""
 var player_name: String = ""
 var login_method: String = ""
 var matches_played_since_prompt: int = 0
+var lifetime_matches_played: int = 0
+var interstitial_return_counter: int = 0
 var came_from_completed_match: bool = false
 var is_premium: bool = false
 var premium_price_formatted: String = ""
@@ -77,7 +79,7 @@ var last_selected_league_away: int = 1
 var custom_player_names: Dictionary = {}
 var unlocked_achievements: Array = []
 var favorite_team_goals_scored: int = 0
-const CURRENT_GAME_VERSION: String = "1.1.3"
+const CURRENT_GAME_VERSION: String = "1.1.4"
 var last_tutorial_version: String = ""
 
 # --- DAILY QUESTS, LUCKY WHEEL & MATCH ECONOMY ---
@@ -350,6 +352,22 @@ func show_interstitial_ad(on_complete: Callable = Callable()):
 		if on_complete.is_valid():
 			on_complete.call()
 		return
+
+	if lifetime_matches_played <= 5:
+		print("[Global] Skipping Interstitial ad (first 5 matches grace period: %d/5)." % lifetime_matches_played)
+		preload_interstitial_ad()
+		if on_complete.is_valid():
+			on_complete.call()
+		return
+
+	interstitial_return_counter += 1
+	save_progression()
+	if (interstitial_return_counter % 2) != 1:
+		print("[Global] Skipping Interstitial ad (2-match cadence, return #%d)." % interstitial_return_counter)
+		preload_interstitial_ad()
+		if on_complete.is_valid():
+			on_complete.call()
+		return
 	
 	var admob_node = get_admob()
 	if admob_node and admob_node.has_method("is_interstitial_ad_loaded") and admob_node.is_interstitial_ad_loaded():
@@ -444,9 +462,10 @@ const HATS = {
 }
 
 func increment_matches_played():
+	lifetime_matches_played += 1
 	if login_method == "guest":
 		matches_played_since_prompt += 1
-		save_progression()
+	save_progression()
 
 
 var THEMES = {
@@ -952,6 +971,8 @@ func save_progression():
 			"player_name": player_name,
 			"login_method": login_method,
 			"matches_played_since_prompt": matches_played_since_prompt,
+			"lifetime_matches_played": lifetime_matches_played,
+			"interstitial_return_counter": interstitial_return_counter,
 			"is_premium": is_premium,
 			"vibration_enabled": vibration_enabled,
 			"home_team_name": home_team_name,
@@ -1021,6 +1042,11 @@ func load_progression():
 			if data_to_load.has("player_name"): player_name = str(data_to_load["player_name"])
 			if data_to_load.has("login_method"): login_method = data_to_load["login_method"]
 			if data_to_load.has("matches_played_since_prompt"): matches_played_since_prompt = int(data_to_load["matches_played_since_prompt"])
+			if data_to_load.has("lifetime_matches_played"):
+				lifetime_matches_played = int(data_to_load["lifetime_matches_played"])
+			elif not match_history.is_empty():
+				lifetime_matches_played = match_history.size()
+			if data_to_load.has("interstitial_return_counter"): interstitial_return_counter = int(data_to_load["interstitial_return_counter"])
 			if data_to_load.has("is_premium"): is_premium = bool(data_to_load["is_premium"])
 			if data_to_load.has("vibration_enabled"): vibration_enabled = bool(data_to_load["vibration_enabled"])
 			if data_to_load.has("home_team_name"): home_team_name = data_to_load["home_team_name"]
@@ -1059,6 +1085,22 @@ func check_daily_reset():
 	elif daily_quests.is_empty():
 		generate_daily_quests()
 		save_progression()
+
+func has_custom_captain_configured() -> bool:
+	var team = favorite_team if favorite_team != "" else home_team_name
+	if team != "" and custom_player_names.has(team):
+		var p_data = custom_player_names[team]
+		if typeof(p_data) == TYPE_DICTIONARY:
+			for key in p_data:
+				var p_str = String(p_data[key]).strip_edges()
+				if p_str != "" and p_str != "Kaptan":
+					return true
+		elif p_data is Array and p_data.size() > 0:
+			for p in p_data:
+				var p_str = String(p).strip_edges()
+				if p_str != "" and p_str != "Kaptan":
+					return true
+	return false
 
 func get_active_custom_player_name() -> String:
 	var team = favorite_team if favorite_team != "" else home_team_name
@@ -1359,14 +1401,29 @@ const QUEST_POOL = {
 }
 
 func generate_daily_quests():
-	var fav = favorite_team if favorite_team != "" else home_team_name
-	if fav == "":
-		fav = "GALATA FK"
+	var has_fav = (favorite_team != "")
+	var fav = favorite_team if has_fav else (home_team_name if home_team_name != "" else "GALATA FK")
+	var has_cap = has_custom_captain_configured()
 	var captain = get_active_custom_player_name()
 
-	var easy_pool = QUEST_POOL.get("easy", [])
-	var med_pool = QUEST_POOL.get("medium", [])
-	var hard_pool = QUEST_POOL.get("hard", [])
+	var filter_pool = func(pool_list: Array) -> Array:
+		var valid_items = []
+		for item in pool_list:
+			var qtype = item.get("type", "")
+			# If user hasn't set a favorite team, don't generate favorite team quests
+			if (qtype == "fav_win" or qtype == "fav_goals" or qtype == "comeback_win") and not has_fav:
+				continue
+			# If user hasn't created a custom captain, don't generate captain quests
+			if (qtype == "captain_goals" or qtype == "player_goals") and not has_cap:
+				continue
+			valid_items.append(item)
+		if valid_items.is_empty():
+			return pool_list
+		return valid_items
+
+	var easy_pool = filter_pool.call(QUEST_POOL.get("easy", []))
+	var med_pool = filter_pool.call(QUEST_POOL.get("medium", []))
+	var hard_pool = filter_pool.call(QUEST_POOL.get("hard", []))
 
 	var selected_easy = easy_pool[randi() % easy_pool.size()] if easy_pool.size() > 0 else {}
 	var selected_med = med_pool[randi() % med_pool.size()] if med_pool.size() > 0 else {}
@@ -1466,11 +1523,16 @@ func record_match_result(home: String, away: String, home_score: int, away_score
 		var trailed = match_data.get("team1_trailed", false) if is_player_home else match_data.get("team2_trailed", false)
 		is_comeback = player_won and bool(trailed)
 	
-	# Captain goals scored (defaults to player_score if not explicitly specified)
-	var captain_goals_scored = int(match_data.get("captain_goals", player_score))
+	var has_fav_configured = (fav != "" and fav != "GALATA FK")
+	var has_captain_configured = has_custom_captain_configured()
+
+	# Captain goals scored: only valid if a custom captain is configured and team scored
+	var captain_goals_scored = 0
+	if has_captain_configured:
+		captain_goals_scored = int(match_data.get("captain_goals", player_score))
 	
 	# Update Leaderboard goals
-	if fav_played and fav_score > 0:
+	if fav_played and fav_score > 0 and has_fav_configured:
 		favorite_team_goals_scored += fav_score
 	
 	# Update Daily Quests
@@ -1488,22 +1550,22 @@ func record_match_result(home: String, away: String, home_score: int, away_score
 				if player_won:
 					q["progress"] = min(tgt, cur_p + 1)
 			"fav_win":
-				if fav_played and fav_won:
+				if fav_played and fav_won and has_fav_configured:
 					q["progress"] = min(tgt, cur_p + 1)
 			"fav_goals":
-				if fav_played and fav_score > 0:
+				if fav_played and fav_score > 0 and has_fav_configured:
 					q["progress"] = min(tgt, cur_p + fav_score)
 			"total_goals":
 				if player_score > 0:
 					q["progress"] = min(tgt, cur_p + player_score)
 			"captain_goals", "player_goals":
-				if captain_goals_scored > 0:
+				if captain_goals_scored > 0 and has_captain_configured:
 					q["progress"] = min(tgt, cur_p + captain_goals_scored)
 			"clean_sheet":
 				if clean_sheet:
 					q["progress"] = min(tgt, cur_p + 1)
 			"comeback_win":
-				if is_comeback:
+				if is_comeback and (not has_fav_configured or fav_played):
 					q["progress"] = min(tgt, cur_p + 1)
 			"goals_in_match":
 				if player_score >= tgt:

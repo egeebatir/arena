@@ -12,9 +12,9 @@ var LANG = {
 		"TUTORIAL_TITLE_2": "DİL & HIZLI MENÜ",
 		"TUTORIAL_DESC_2": "Sol üstten oyun dilini anında değiştirebilirsin.\nSağ üstteki menüden ise Kadro Kurucu ile özel kadronu oluşturabilir, oyuncu isimlerini düzenleyebilir ve ayarlara ulaşabilirsin!",
 		"TUTORIAL_TITLE_3": "İSTATİSTİKLER, MAĞAZA & JETONLAR",
-		"TUTORIAL_DESC_3": "Alt çubuktan geçmiş maç istatistiklerini görebilir ve Mağaza'ya geçebilirsin.\n\n🪙 Jetonlar: Maç kazanarak, video izleyerek, çark çevirerek veya görevlerle jeton kazanabilir; bunlarla özel top görünümleri, taçlar ve maç hakları alabilirsin!\n\nSahaya çık ve keyfini çıkar! ⚽🔥",
+		"TUTORIAL_DESC_3": "Alt çubuktan geçmiş maç istatistiklerini görebilir ve Mağaza'ya geçebilirsin.\n\nJetonlar: Maç kazanarak, video izleyerek, çark çevirerek veya görevlerle jeton kazanabilir; bunlarla özel top görünümleri, taçlar ve maç hakları alabilirsin!\n\nSahaya çık ve keyfini çıkar!",
 		"TUTORIAL_BTN_NEXT": "İLERİ ➔",
-		"TUTORIAL_BTN_FINISH": "KEYFİNİ ÇIKAR! ⚽",
+		"TUTORIAL_BTN_FINISH": "KEYFİNİ ÇIKAR!",
 		"TUTORIAL_BTN_SKIP": "ATLA",
 		"TUTORIAL_MENU_ITEM": "Rehber",
 		"TUTORIAL_STEP_FMT": "AŞAMA %d / 3",
@@ -113,9 +113,9 @@ var LANG = {
 		"TUTORIAL_TITLE_2": "LANGUAGE & QUICK MENU",
 		"TUTORIAL_DESC_2": "Switch the game language instantly at top-left.\nTap the top-right menu for Squad Builder to create custom lineups, edit player names, and access settings!",
 		"TUTORIAL_TITLE_3": "STATS, SHOP & COINS",
-		"TUTORIAL_DESC_3": "Use the bottom navigation bar to review match stats and browse the Shop.\n\n🪙 Coins: Earn coins by winning matches, watching videos, spinning the wheel, or completing quests. Spend coins on ball skins, crowns, and match entries!\n\nHit the pitch and have fun! ⚽🔥",
+		"TUTORIAL_DESC_3": "Use the bottom navigation bar to review match stats and browse the Shop.\n\nCoins: Earn coins by winning matches, watching videos, spinning the wheel, or completing quests. Spend coins on ball skins, crowns, and match entries!\n\nHit the pitch and have fun!",
 		"TUTORIAL_BTN_NEXT": "NEXT ➔",
-		"TUTORIAL_BTN_FINISH": "LET'S PLAY! ⚽",
+		"TUTORIAL_BTN_FINISH": "LET'S PLAY!",
 		"TUTORIAL_BTN_SKIP": "SKIP",
 		"TUTORIAL_MENU_ITEM": "Guide",
 		"TUTORIAL_STEP_FMT": "STEP %d / 3",
@@ -214,9 +214,9 @@ var LANG = {
 		"TUTORIAL_TITLE_2": "IDIOMA Y MENÚ RÁPIDO",
 		"TUTORIAL_DESC_2": "Cambia el idioma al instante arriba a la izquierda.\n¡Abre el menú superior derecho para el Creador de Plantillas, editar nombres y configurar ajustes!",
 		"TUTORIAL_TITLE_3": "ESTADÍSTICAS, TIENDA Y MONEDAS",
-		"TUTORIAL_DESC_3": "Usa la barra inferior para ver tus estadísticas y visitar la Tienda.\n\n🪙 Monedas: Gana monedas ganando partidos, viendo videos, girando la ruleta o con misiones. ¡Úsalas para balones, coronas y entradas!\n\n¡Entra a la cancha y disfruta! ⚽🔥",
+		"TUTORIAL_DESC_3": "Usa la barra inferior para ver tus estadísticas y visitar la Tienda.\n\nMonedas: Gana monedas ganando partidos, viendo videos, girando la ruleta o con misiones. ¡Úsalas para balones, coronas y entradas!\n\n¡Entra a la cancha y disfruta!",
 		"TUTORIAL_BTN_NEXT": "SIGUIENTE ➔",
-		"TUTORIAL_BTN_FINISH": "¡A JUGAR! ⚽",
+		"TUTORIAL_BTN_FINISH": "¡A JUGAR!",
 		"TUTORIAL_BTN_SKIP": "SALTAR",
 		"TUTORIAL_MENU_ITEM": "Guía",
 		"TUTORIAL_STEP_FMT": "PASO %d / 3",
@@ -315,9 +315,9 @@ var LANG = {
 		"TUTORIAL_TITLE_2": "IDIOMA E MENU RÁPIDO",
 		"TUTORIAL_DESC_2": "Mude o idioma instantaneamente no topo esquerdo.\nAbra o menu superior direito para o Criador de Elenco, editar nomes e acessar as definições!",
 		"TUTORIAL_TITLE_3": "ESTATÍSTICAS, LOJA E MOEDAS",
-		"TUTORIAL_DESC_3": "Use a barra inferior para ver estatísticas e visitar a Loja.\n\n🪙 Moedas: Ganhe moedas vencendo partidas, assistindo vídeos, girando a roleta ou com missões. Desbloqueie bolas, coroas e partidas!\n\nEntre em campo e divirta-se! ⚽🔥",
+		"TUTORIAL_DESC_3": "Use a barra inferior para ver estatísticas e visitar a Loja.\n\nMoedas: Ganhe moedas vencendo partidas, assistindo vídeos, girando a roleta ou com missões. Desbloqueie bolas, coroas e partidas!\n\nEntre em campo e divirta-se!",
 		"TUTORIAL_BTN_NEXT": "AVANÇAR ➔",
-		"TUTORIAL_BTN_FINISH": "JOGAR AGORA! ⚽",
+		"TUTORIAL_BTN_FINISH": "JOGAR AGORA!",
 		"TUTORIAL_BTN_SKIP": "PULAR",
 		"TUTORIAL_MENU_ITEM": "Guia",
 		"TUTORIAL_STEP_FMT": "PASSO %d / 3",
@@ -416,9 +416,9 @@ var LANG = {
 		"TUTORIAL_TITLE_2": "LINGUA & MENU RAPIDO",
 		"TUTORIAL_DESC_2": "Cambia lingua istantaneamente in alto a sinistra.\nApri il menu in alto a destra per il Creatore Rosa, modificare i nomi e accedere alle impostazioni!",
 		"TUTORIAL_TITLE_3": "STATISTICHE, NEGOZIO & MONETE",
-		"TUTORIAL_DESC_3": "Usa la barra in basso per consultare le statistiche e visitare il Negozio.\n\n🪙 Monete: Guadagna monete vincendo partite, guardando video, girando la ruota o completando missioni. Usale per palloni, corone e partite!\n\nScendi in campo e divertiti! ⚽🔥",
+		"TUTORIAL_DESC_3": "Usa la barra in basso per consultare le statistiche e visitare il Negozio.\n\nMonete: Guadagna monete vincendo partite, guardando video, girando la ruota o completando missioni. Usale per palloni, corone e partite!\n\nScendi in campo e divertiti!",
 		"TUTORIAL_BTN_NEXT": "AVANTI ➔",
-		"TUTORIAL_BTN_FINISH": "INIZIA ORA! ⚽",
+		"TUTORIAL_BTN_FINISH": "INIZIA ORA!",
 		"TUTORIAL_BTN_SKIP": "SALTA",
 		"TUTORIAL_MENU_ITEM": "Guida",
 		"TUTORIAL_STEP_FMT": "PASSO %d / 3",
@@ -4908,40 +4908,22 @@ func _build_stats_tab() -> Control:
 	ui_separators.append(stats_sep)
 
 	# --- Scroll Container for Cards ---
+	var avail_h = max(480.0, sh - (305.0 if is_tablet else 320.0))
+	var ui_s = clamp(avail_h / 1050.0, 0.84, 1.32)
+	var is_compact_h = (avail_h < 880.0)
 	var scroll = ScrollContainer.new()
 	stats_scroll = scroll
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS
-	var v_sc_stats = scroll.get_v_scroll_bar()
-	v_sc_stats.custom_minimum_size.x = 8
-	
-	var sb_style_s = StyleBoxFlat.new()
-	sb_style_s.bg_color = Color8(255, 255, 255, 12)
-	sb_style_s.corner_radius_top_left = 4; sb_style_s.corner_radius_top_right = 4
-	sb_style_s.corner_radius_bottom_left = 4; sb_style_s.corner_radius_bottom_right = 4
-	
-	var gb_style_s = StyleBoxFlat.new()
-	gb_style_s.bg_color = active_theme.accent.lightened(0.2)
-	gb_style_s.corner_radius_top_left = 4; gb_style_s.corner_radius_top_right = 4
-	gb_style_s.corner_radius_bottom_left = 4; gb_style_s.corner_radius_bottom_right = 4
-	gb_style_s.expand_margin_top = -8
-	gb_style_s.expand_margin_bottom = -8
-	
-	var gb_hover_s = gb_style_s.duplicate()
-	gb_hover_s.bg_color = active_theme.accent.lightened(0.4)
-	
-	v_sc_stats.add_theme_stylebox_override("scroll", sb_style_s)
-	v_sc_stats.add_theme_stylebox_override("grabber", gb_style_s)
-	v_sc_stats.add_theme_stylebox_override("grabber_highlight", gb_hover_s)
-	v_sc_stats.add_theme_stylebox_override("grabber_pressed", gb_hover_s)
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	main_vbox.add_child(scroll)
 
 	var vbox = VBoxContainer.new()
 	vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
-	vbox.add_theme_constant_override("separation", 8)
+	vbox.add_theme_constant_override("separation", int(clamp(round(8.0 * ui_s), 5, 14)))
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	vbox.mouse_filter = Control.MOUSE_FILTER_PASS
 	scroll.add_child(vbox)
 
@@ -4953,54 +4935,64 @@ func _build_stats_tab() -> Control:
 	var create_card_panel = func() -> PanelContainer:
 		var card = PanelContainer.new()
 		card.mouse_filter = Control.MOUSE_FILTER_PASS
+		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var cs = StyleBoxFlat.new()
 		var card_bg = active_theme.bg_bottom.darkened(0.65) if is_buz else active_theme.bg_bottom.darkened(0.18)
 		cs.bg_color = Color(card_bg.r, card_bg.g, card_bg.b, 0.95)
-		cs.corner_radius_top_left = 18; cs.corner_radius_top_right = 18
-		cs.corner_radius_bottom_left = 18; cs.corner_radius_bottom_right = 18
+		cs.corner_radius_top_left = 16; cs.corner_radius_top_right = 16
+		cs.corner_radius_bottom_left = 16; cs.corner_radius_bottom_right = 16
 		cs.border_width_left = 2; cs.border_width_right = 2
-		cs.border_width_top = 2; cs.border_width_bottom = 4
+		cs.border_width_top = 2; cs.border_width_bottom = 3
 		cs.border_color = active_theme.accent.darkened(0.25)
 		cs.shadow_color = Color8(0, 0, 0, 80)
 		cs.shadow_size = 8
 		cs.shadow_offset = Vector2(0, 4)
-		cs.content_margin_left = 14; cs.content_margin_right = 14
-		cs.content_margin_top = 8; cs.content_margin_bottom = 8
+		cs.content_margin_left = 12; cs.content_margin_right = 12
+		var card_pad_v = int(clamp(round(8.0 * ui_s), 5, 14))
+		cs.content_margin_top = card_pad_v
+		cs.content_margin_bottom = card_pad_v
 		card.add_theme_stylebox_override("panel", cs)
 		return card
 
 	# Helper to create large, readable stat tile
+	var tile_lbl_fs = int(clamp(round(16.0 * ui_s), 14, 21))
+	var tile_val_fs = int(clamp(round(22.0 * ui_s), 18, 29))
+	var tile_val_long_fs = int(clamp(round(18.0 * ui_s), 15, 24))
+	var tile_sub_fs = int(clamp(round(14.0 * ui_s), 12, 18))
+	var tile_pad_v = int(clamp(round(5.0 * ui_s), 3, 10))
 	var create_stat_tile = func(label_key: String, val_str: String, sub_str: String = "", sub_color: Color = Color.WHITE, icon_tex: Texture2D = null) -> PanelContainer:
 		var p = PanelContainer.new()
 		p.mouse_filter = Control.MOUSE_FILTER_PASS
 		var ps = StyleBoxFlat.new()
 		var cell_bg = active_theme.bg_bottom.darkened(0.75) if is_buz else active_theme.bg_bottom.darkened(0.38)
 		ps.bg_color = Color(cell_bg.r, cell_bg.g, cell_bg.b, 0.94)
-		ps.corner_radius_top_left = 12; ps.corner_radius_top_right = 12
-		ps.corner_radius_bottom_left = 12; ps.corner_radius_bottom_right = 12
+		ps.corner_radius_top_left = 10; ps.corner_radius_top_right = 10
+		ps.corner_radius_bottom_left = 10; ps.corner_radius_bottom_right = 10
 		ps.border_width_left = 1; ps.border_width_right = 1
-		ps.border_width_top = 1; ps.border_width_bottom = 3
+		ps.border_width_top = 1; ps.border_width_bottom = 2
 		ps.border_color = active_theme.accent.darkened(0.4)
-		ps.content_margin_left = 10; ps.content_margin_right = 10
-		ps.content_margin_top = 6; ps.content_margin_bottom = 6
+		ps.content_margin_left = 8; ps.content_margin_right = 8
+		ps.content_margin_top = tile_pad_v
+		ps.content_margin_bottom = tile_pad_v
 		p.add_theme_stylebox_override("panel", ps)
 		p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		p.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 		var inner_vb = VBoxContainer.new()
 		inner_vb.mouse_filter = Control.MOUSE_FILTER_PASS
 		inner_vb.alignment = BoxContainer.ALIGNMENT_CENTER
-		inner_vb.add_theme_constant_override("separation", 2)
+		inner_vb.add_theme_constant_override("separation", 2 if ui_s >= 1.1 else 0)
 		p.add_child(inner_vb)
 
 		var top_hb = HBoxContainer.new()
 		top_hb.alignment = BoxContainer.ALIGNMENT_CENTER
-		top_hb.add_theme_constant_override("separation", 6)
+		top_hb.add_theme_constant_override("separation", 5)
 		inner_vb.add_child(top_hb)
 
 		if icon_tex != null:
 			var ic = TextureRect.new()
 			ic.texture = icon_tex
-			ic.custom_minimum_size = Vector2(20, 20)
+			ic.custom_minimum_size = Vector2(16, 16)
 			ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			ic.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -5009,30 +5001,38 @@ func _build_stats_tab() -> Control:
 		var l = Label.new()
 		l.text = LANG[lang].get(label_key, label_key)
 		l.add_theme_font_override("font", custom_font)
-		l.add_theme_font_size_override("font_size", 18)
+		l.add_theme_font_size_override("font_size", tile_lbl_fs)
 		l.add_theme_color_override("font_color", Color.WHITE)
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		l.clip_text = true
+		l.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		l.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		ui_labels.append({"node": l, "key": label_key, "type": "label"})
 		top_hb.add_child(l)
 
 		var v = Label.new()
 		v.text = val_str
 		v.add_theme_font_override("font", custom_font)
-		v.add_theme_font_size_override("font_size", 24)
+		var v_fs = tile_val_long_fs if val_str.length() > 14 else tile_val_fs
+		v.add_theme_font_size_override("font_size", v_fs)
 		v.add_theme_color_override("font_color", active_theme.accent)
 		v.add_theme_color_override("font_shadow_color", active_theme.accent.darkened(0.55))
 		v.add_to_group("ThemeStatValueNodes")
 		v.add_theme_constant_override("shadow_offset_y", 1)
 		v.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		v.clip_text = true
+		v.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		inner_vb.add_child(v)
 
 		if sub_str != "":
 			var sub_lbl = Label.new()
 			sub_lbl.text = sub_str
 			sub_lbl.add_theme_font_override("font", custom_font)
-			sub_lbl.add_theme_font_size_override("font_size", 15)
+			sub_lbl.add_theme_font_size_override("font_size", tile_sub_fs)
 			sub_lbl.add_theme_color_override("font_color", sub_color)
 			sub_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			sub_lbl.clip_text = true
+			sub_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 			inner_vb.add_child(sub_lbl)
 
 		return p
@@ -5044,26 +5044,28 @@ func _build_stats_tab() -> Control:
 		var ps = StyleBoxFlat.new()
 		var cell_bg = active_theme.bg_bottom.darkened(0.75) if is_buz else active_theme.bg_bottom.darkened(0.38)
 		ps.bg_color = Color(cell_bg.r, cell_bg.g, cell_bg.b, 0.94)
-		ps.corner_radius_top_left = 12; ps.corner_radius_top_right = 12
-		ps.corner_radius_bottom_left = 12; ps.corner_radius_bottom_right = 12
+		ps.corner_radius_top_left = 10; ps.corner_radius_top_right = 10
+		ps.corner_radius_bottom_left = 10; ps.corner_radius_bottom_right = 10
 		ps.border_width_left = 1; ps.border_width_right = 1
-		ps.border_width_top = 1; ps.border_width_bottom = 3
+		ps.border_width_top = 1; ps.border_width_bottom = 2
 		ps.border_color = (Color8(50, 225, 110) if is_win else Color8(255, 85, 95)).darkened(0.3)
-		ps.content_margin_left = 10; ps.content_margin_right = 10
-		ps.content_margin_top = 6; ps.content_margin_bottom = 6
+		ps.content_margin_left = 8; ps.content_margin_right = 8
+		ps.content_margin_top = tile_pad_v
+		ps.content_margin_bottom = tile_pad_v
 		p.add_theme_stylebox_override("panel", ps)
 		p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		p.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 		var inner_vbox = VBoxContainer.new()
 		inner_vbox.mouse_filter = Control.MOUSE_FILTER_PASS
 		inner_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-		inner_vbox.add_theme_constant_override("separation", 2)
+		inner_vbox.add_theme_constant_override("separation", 2 if ui_s >= 1.1 else 0)
 		p.add_child(inner_vbox)
 
 		var hdr_lbl = Label.new()
 		hdr_lbl.text = LANG[lang].get(title_key, title_key)
 		hdr_lbl.add_theme_font_override("font", custom_font)
-		hdr_lbl.add_theme_font_size_override("font_size", 18)
+		hdr_lbl.add_theme_font_size_override("font_size", tile_lbl_fs)
 		hdr_lbl.add_theme_color_override("font_color", Color.WHITE)
 		hdr_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		ui_labels.append({"node": hdr_lbl, "key": title_key, "type": "label"})
@@ -5072,7 +5074,7 @@ func _build_stats_tab() -> Control:
 		var val_lbl = Label.new()
 		val_lbl.text = score_str
 		val_lbl.add_theme_font_override("font", custom_font)
-		val_lbl.add_theme_font_size_override("font_size", 24)
+		val_lbl.add_theme_font_size_override("font_size", tile_val_fs)
 		if score_str == "-":
 			val_lbl.add_theme_color_override("font_color", Color.WHITE)
 		elif is_win:
@@ -5089,9 +5091,11 @@ func _build_stats_tab() -> Control:
 			var opp_lbl = Label.new()
 			opp_lbl.text = opp_str
 			opp_lbl.add_theme_font_override("font", custom_font)
-			opp_lbl.add_theme_font_size_override("font_size", 15)
+			opp_lbl.add_theme_font_size_override("font_size", tile_sub_fs)
 			opp_lbl.add_theme_color_override("font_color", Color.WHITE)
 			opp_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			opp_lbl.clip_text = true
+			opp_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 			inner_vbox.add_child(opp_lbl)
 
 		return p
@@ -5163,39 +5167,45 @@ func _build_stats_tab() -> Control:
 		var win_rate = int((float(f_wins) / float(f_played)) * 100.0) if f_played > 0 else 0
 
 		var fav_card = create_card_panel.call()
+		fav_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		fav_card.size_flags_stretch_ratio = 1.15
 		var fav_vbox = VBoxContainer.new()
-		fav_vbox.add_theme_constant_override("separation", 8)
+		fav_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		fav_vbox.add_theme_constant_override("separation", int(clamp(round(5.0 * ui_s), 4, 10)))
 		fav_card.add_child(fav_vbox)
 
-		# Hero Title Header Row with Badge & Form
+		# Hero Title Header Row with Badge & Form on One Line
 		var fav_header_hbox = HBoxContainer.new()
 		fav_header_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-		fav_header_hbox.add_theme_constant_override("separation", 10)
+		fav_header_hbox.add_theme_constant_override("separation", 8)
 		fav_vbox.add_child(fav_header_hbox)
 
 		var f_title = Label.new()
 		var f_template = LANG[lang]["STATS_TEAM"]
 		f_title.text = (f_template % Global.favorite_team).to_upper()
 		f_title.add_theme_font_override("font", custom_font)
-		f_title.add_theme_font_size_override("font_size", 30)
+		f_title.add_theme_font_size_override("font_size", int(clamp(round(24.0 * ui_s), 21, 30)))
 		f_title.add_theme_color_override("font_color", Color.WHITE)
 		f_title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 		f_title.add_theme_constant_override("shadow_offset_y", 2)
-		f_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		f_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if fav_recent_results.size() > 0 else HORIZONTAL_ALIGNMENT_CENTER
+		f_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		f_title.clip_text = true
+		f_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		ui_labels.append({"node": f_title, "key": "STATS_TEAM", "type": "label_team_stats"})
 		fav_header_hbox.add_child(f_title)
 
-		# Form Guide Badges Row (Last 5 Matches)
+		# Form Guide Badges inline with Favorite Team Header
 		if fav_recent_results.size() > 0:
 			var form_hbox = HBoxContainer.new()
-			form_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-			form_hbox.add_theme_constant_override("separation", 8)
-			fav_vbox.add_child(form_hbox)
+			form_hbox.alignment = BoxContainer.ALIGNMENT_END
+			form_hbox.add_theme_constant_override("separation", 5)
+			fav_header_hbox.add_child(form_hbox)
 
 			var form_title = Label.new()
 			form_title.text = LANG[lang].get("STATS_FORM", "Son 5 Maç") + ":"
 			form_title.add_theme_font_override("font", custom_font)
-			form_title.add_theme_font_size_override("font_size", 20)
+			form_title.add_theme_font_size_override("font_size", int(clamp(round(16.0 * ui_s), 14, 20)))
 			form_title.add_theme_color_override("font_color", Color.WHITE)
 			form_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 			ui_labels.append({"node": form_title, "key": "STATS_FORM", "type": "label"})
@@ -5205,18 +5215,19 @@ func _build_stats_tab() -> Control:
 				var fb_panel = PanelContainer.new()
 				var fbs = StyleBoxFlat.new()
 				fbs.bg_color = r["col"]
-				fbs.corner_radius_top_left = 6; fbs.corner_radius_top_right = 6
-				fbs.corner_radius_bottom_left = 6; fbs.corner_radius_bottom_right = 6
-				fbs.content_margin_left = 5; fbs.content_margin_right = 5
-				fbs.content_margin_top = 2; fbs.content_margin_bottom = 2
+				fbs.corner_radius_top_left = 5; fbs.corner_radius_top_right = 5
+				fbs.corner_radius_bottom_left = 5; fbs.corner_radius_bottom_right = 5
+				fbs.content_margin_left = 4; fbs.content_margin_right = 4
+				fbs.content_margin_top = 1; fbs.content_margin_bottom = 1
 				fb_panel.add_theme_stylebox_override("panel", fbs)
-				fb_panel.custom_minimum_size = Vector2(24, 24)
+				var fb_sz = int(clamp(round(22.0 * ui_s), 20, 28))
+				fb_panel.custom_minimum_size = Vector2(fb_sz, fb_sz)
 				fb_panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
 				var fbl = Label.new()
 				fbl.text = r["char"]
 				fbl.add_theme_font_override("font", custom_font)
-				fbl.add_theme_font_size_override("font_size", 16)
+				fbl.add_theme_font_size_override("font_size", int(clamp(round(14.0 * ui_s), 13, 18)))
 				fbl.add_theme_color_override("font_color", Color.WHITE)
 				fbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 				fbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -5226,9 +5237,11 @@ func _build_stats_tab() -> Control:
 		# 2-column Grid for stats (Row 1 & Row 2)
 		var fav_grid = GridContainer.new()
 		fav_grid.columns = 2
-		fav_grid.add_theme_constant_override("h_separation", 10)
-		fav_grid.add_theme_constant_override("v_separation", 6)
+		fav_grid.add_theme_constant_override("h_separation", 8)
+		fav_grid.add_theme_constant_override("v_separation", int(clamp(round(5.0 * ui_s), 4, 8)))
 		fav_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		fav_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		fav_grid.size_flags_stretch_ratio = 2.0
 		fav_vbox.add_child(fav_grid)
 
 		# Cell 1: Matches Played & Wins Breakdown
@@ -5240,25 +5253,26 @@ func _build_stats_tab() -> Control:
 		var wr_cs = StyleBoxFlat.new()
 		var cell_bg = active_theme.bg_bottom.darkened(0.75) if is_buz else active_theme.bg_bottom.darkened(0.38)
 		wr_cs.bg_color = Color(cell_bg.r, cell_bg.g, cell_bg.b, 0.94)
-		wr_cs.corner_radius_top_left = 12; wr_cs.corner_radius_top_right = 12
-		wr_cs.corner_radius_bottom_left = 12; wr_cs.corner_radius_bottom_right = 12
+		wr_cs.corner_radius_top_left = 10; wr_cs.corner_radius_top_right = 10
+		wr_cs.corner_radius_bottom_left = 10; wr_cs.corner_radius_bottom_right = 10
 		wr_cs.border_width_left = 1; wr_cs.border_width_right = 1
-		wr_cs.border_width_top = 1; wr_cs.border_width_bottom = 3
+		wr_cs.border_width_top = 1; wr_cs.border_width_bottom = 2
 		wr_cs.border_color = active_theme.accent.darkened(0.4)
-		wr_cs.content_margin_left = 12; wr_cs.content_margin_right = 12
-		wr_cs.content_margin_top = 8; wr_cs.content_margin_bottom = 8
+		wr_cs.content_margin_left = 8; wr_cs.content_margin_right = 8
+		wr_cs.content_margin_top = tile_pad_v; wr_cs.content_margin_bottom = tile_pad_v
 		wr_cell.add_theme_stylebox_override("panel", wr_cs)
 		wr_cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		wr_cell.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 		var wr_inner_vb = VBoxContainer.new()
 		wr_inner_vb.alignment = BoxContainer.ALIGNMENT_CENTER
-		wr_inner_vb.add_theme_constant_override("separation", 2)
+		wr_inner_vb.add_theme_constant_override("separation", 2 if ui_s >= 1.1 else 1)
 		wr_cell.add_child(wr_inner_vb)
 
 		var wr_lbl = Label.new()
 		wr_lbl.text = LANG[lang].get("FAV_STATS_WINRATE", "Galibiyet Oranı")
 		wr_lbl.add_theme_font_override("font", custom_font)
-		wr_lbl.add_theme_font_size_override("font_size", 22)
+		wr_lbl.add_theme_font_size_override("font_size", tile_lbl_fs)
 		wr_lbl.add_theme_color_override("font_color", Color.WHITE)
 		wr_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		ui_labels.append({"node": wr_lbl, "key": "FAV_STATS_WINRATE", "type": "label"})
@@ -5267,7 +5281,7 @@ func _build_stats_tab() -> Control:
 		var wr_v = Label.new()
 		wr_v.text = "%" + str(win_rate)
 		wr_v.add_theme_font_override("font", custom_font)
-		wr_v.add_theme_font_size_override("font_size", 30)
+		wr_v.add_theme_font_size_override("font_size", tile_val_fs)
 		wr_v.add_theme_color_override("font_color", active_theme.accent)
 		wr_v.add_theme_color_override("font_shadow_color", active_theme.accent.darkened(0.55))
 		wr_v.add_to_group("ThemeStatValueNodes")
@@ -5276,7 +5290,7 @@ func _build_stats_tab() -> Control:
 		wr_inner_vb.add_child(wr_v)
 
 		var mini_prog = Control.new()
-		mini_prog.custom_minimum_size = Vector2(80, 6)
+		mini_prog.custom_minimum_size = Vector2(int(clamp(round(85.0 * ui_s), 75, 115)), 6)
 		mini_prog.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		var wr_ratio = clamp(float(win_rate) / 100.0, 0.0, 1.0)
 		var bar_acc = active_theme.accent
@@ -5302,25 +5316,27 @@ func _build_stats_tab() -> Control:
 		var card_cell = PanelContainer.new()
 		var card_cs = StyleBoxFlat.new()
 		card_cs.bg_color = Color(cell_bg.r, cell_bg.g, cell_bg.b, 0.94)
-		card_cs.corner_radius_top_left = 12; card_cs.corner_radius_top_right = 12
-		card_cs.corner_radius_bottom_left = 12; card_cs.corner_radius_bottom_right = 12
+		card_cs.corner_radius_top_left = 10; card_cs.corner_radius_top_right = 10
+		card_cs.corner_radius_bottom_left = 10; card_cs.corner_radius_bottom_right = 10
 		card_cs.border_width_left = 1; card_cs.border_width_right = 1
-		card_cs.border_width_top = 1; card_cs.border_width_bottom = 3
+		card_cs.border_width_top = 1; card_cs.border_width_bottom = 2
 		card_cs.border_color = active_theme.accent.darkened(0.4)
-		card_cs.content_margin_left = 12; card_cs.content_margin_right = 12
-		card_cs.content_margin_top = 8; card_cs.content_margin_bottom = 8
+		card_cs.content_margin_left = 8; card_cs.content_margin_right = 8
+		card_cs.content_margin_top = tile_pad_v
+		card_cs.content_margin_bottom = tile_pad_v
 		card_cell.add_theme_stylebox_override("panel", card_cs)
 		card_cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		card_cell.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 		var card_inner_vb = VBoxContainer.new()
 		card_inner_vb.alignment = BoxContainer.ALIGNMENT_CENTER
-		card_inner_vb.add_theme_constant_override("separation", 3)
+		card_inner_vb.add_theme_constant_override("separation", 2 if ui_s >= 1.1 else 1)
 		card_cell.add_child(card_inner_vb)
 
 		var cards_title_lbl = Label.new()
 		cards_title_lbl.text = LANG[lang].get("FAV_STATS_CARDS", "Kartlar")
 		cards_title_lbl.add_theme_font_override("font", custom_font)
-		cards_title_lbl.add_theme_font_size_override("font_size", 22)
+		cards_title_lbl.add_theme_font_size_override("font_size", tile_lbl_fs)
 		cards_title_lbl.add_theme_color_override("font_color", Color.WHITE)
 		cards_title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		ui_labels.append({"node": cards_title_lbl, "key": "FAV_STATS_CARDS", "type": "label"})
@@ -5328,23 +5344,24 @@ func _build_stats_tab() -> Control:
 
 		var card_chips_hb = HBoxContainer.new()
 		card_chips_hb.alignment = BoxContainer.ALIGNMENT_CENTER
-		card_chips_hb.add_theme_constant_override("separation", 12)
+		card_chips_hb.add_theme_constant_override("separation", 10)
 		card_inner_vb.add_child(card_chips_hb)
 
 		# Yellow chip
 		var y_hb = HBoxContainer.new()
 		y_hb.alignment = BoxContainer.ALIGNMENT_CENTER
 		y_hb.add_theme_constant_override("separation", 4)
+		var card_ic_sz = int(clamp(round(16.0 * ui_s), 14, 21))
 		if y_icon:
 			var yic = TextureRect.new(); yic.texture = y_icon
-			yic.custom_minimum_size = Vector2(18, 18)
+			yic.custom_minimum_size = Vector2(card_ic_sz, card_ic_sz)
 			yic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			yic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			y_hb.add_child(yic)
 		var yv = Label.new()
 		yv.text = str(int(f_yellow))
 		yv.add_theme_font_override("font", custom_font)
-		yv.add_theme_font_size_override("font_size", 26)
+		yv.add_theme_font_size_override("font_size", tile_val_fs)
 		yv.add_theme_color_override("font_color", Color8(255, 230, 80))
 		y_hb.add_child(yv)
 		card_chips_hb.add_child(y_hb)
@@ -5355,14 +5372,14 @@ func _build_stats_tab() -> Control:
 		r_hb.add_theme_constant_override("separation", 4)
 		if r_icon:
 			var ric = TextureRect.new(); ric.texture = r_icon
-			ric.custom_minimum_size = Vector2(18, 18)
+			ric.custom_minimum_size = Vector2(card_ic_sz, card_ic_sz)
 			ric.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			ric.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			r_hb.add_child(ric)
 		var rv = Label.new()
 		rv.text = str(int(f_red))
 		rv.add_theme_font_override("font", custom_font)
-		rv.add_theme_font_size_override("font_size", 26)
+		rv.add_theme_font_size_override("font_size", tile_val_fs)
 		rv.add_theme_color_override("font_color", Color8(255, 90, 90))
 		r_hb.add_child(rv)
 		card_chips_hb.add_child(r_hb)
@@ -5371,7 +5388,7 @@ func _build_stats_tab() -> Control:
 		var cs_lbl = Label.new()
 		cs_lbl.text = LANG[lang].get("STATS_CLEAN_SHEETS", "%d Maç Gol Yemedi") % f_clean_sheets
 		cs_lbl.add_theme_font_override("font", custom_font)
-		cs_lbl.add_theme_font_size_override("font_size", 17)
+		cs_lbl.add_theme_font_size_override("font_size", tile_sub_fs)
 		cs_lbl.add_theme_color_override("font_color", Color.WHITE)
 		cs_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		card_inner_vb.add_child(cs_lbl)
@@ -5381,9 +5398,11 @@ func _build_stats_tab() -> Control:
 		# Row 3 (2 columns): Biggest Win & Biggest Defeat (Vertical Layout - Zero Overflow!)
 		var win_loss_grid = GridContainer.new()
 		win_loss_grid.columns = 2
-		win_loss_grid.add_theme_constant_override("h_separation", 10)
-		win_loss_grid.add_theme_constant_override("v_separation", 6)
+		win_loss_grid.add_theme_constant_override("h_separation", 8)
+		win_loss_grid.add_theme_constant_override("v_separation", 4)
 		win_loss_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		win_loss_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		win_loss_grid.size_flags_stretch_ratio = 1.0
 		fav_vbox.add_child(win_loss_grid)
 
 		win_loss_grid.add_child(create_win_loss_box.call("FAV_STATS_BIGGEST_WIN", f_biggest_win_score, f_biggest_win_opp, true))
@@ -5393,9 +5412,12 @@ func _build_stats_tab() -> Control:
 	else:
 		# Call-to-action Card: Prompt player to select a favorite team!
 		var cta_card = create_card_panel.call()
+		cta_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		cta_card.size_flags_stretch_ratio = 0.85
 		var cta_vbox = VBoxContainer.new()
 		cta_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-		cta_vbox.add_theme_constant_override("separation", 12)
+		cta_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		cta_vbox.add_theme_constant_override("separation", int(clamp(round(14.0 * ui_s), 10, 22)))
 		cta_card.add_child(cta_vbox)
 
 		var cta_header = HBoxContainer.new()
@@ -5406,7 +5428,8 @@ func _build_stats_tab() -> Control:
 		var star_ic = TextureRect.new()
 		star_ic.texture = preload("res://star_gold.svg") if ResourceLoader.exists("res://star_gold.svg") else null
 		if star_ic.texture:
-			star_ic.custom_minimum_size = Vector2(26, 26)
+			var st_sz = int(clamp(round(28.0 * ui_s), 24, 38))
+			star_ic.custom_minimum_size = Vector2(st_sz, st_sz)
 			star_ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			star_ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			cta_header.add_child(star_ic)
@@ -5414,7 +5437,7 @@ func _build_stats_tab() -> Control:
 		var cta_title = Label.new()
 		cta_title.text = LANG[lang].get("FAV_CONFIRM_TITLE", "Favori Takımı Belirle")
 		cta_title.add_theme_font_override("font", custom_font)
-		cta_title.add_theme_font_size_override("font_size", 28)
+		cta_title.add_theme_font_size_override("font_size", int(clamp(round(28.0 * ui_s), 24, 36)))
 		cta_title.add_theme_color_override("font_color", Color.WHITE)
 		cta_title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 		cta_title.add_theme_constant_override("shadow_offset_y", 2)
@@ -5423,7 +5446,7 @@ func _build_stats_tab() -> Control:
 		var cta_desc = Label.new()
 		cta_desc.text = LANG[lang].get("STATS_SELECT_FAV_PROMPT", "Takımına özel rekorları ve detaylı istatistikleri görmek için favori takımını seç!")
 		cta_desc.add_theme_font_override("font", custom_font)
-		cta_desc.add_theme_font_size_override("font_size", 22)
+		cta_desc.add_theme_font_size_override("font_size", int(clamp(round(21.0 * ui_s), 18, 27)))
 		cta_desc.add_theme_color_override("font_color", Color.WHITE)
 		cta_desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		cta_desc.autowrap_mode = TextServer.AUTOWRAP_WORD
@@ -5432,8 +5455,8 @@ func _build_stats_tab() -> Control:
 		var cta_btn = Button.new()
 		cta_btn.text = LANG[lang].get("STATS_CHOOSE_FAV_BTN", "FAVORİ TAKIM SEÇ")
 		cta_btn.add_theme_font_override("font", custom_font)
-		cta_btn.add_theme_font_size_override("font_size", 24)
-		cta_btn.custom_minimum_size = Vector2(220, 52)
+		cta_btn.add_theme_font_size_override("font_size", int(clamp(round(24.0 * ui_s), 21, 30)))
+		cta_btn.custom_minimum_size = Vector2(int(clamp(round(230.0 * ui_s), 210, 290)), int(clamp(round(54.0 * ui_s), 48, 68)))
 		cta_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		apply_3d_style_to_button(cta_btn, active_theme.accent, active_theme.accent.darkened(0.35), 14, 4, 20, 10)
 		cta_btn.pressed.connect(func():
@@ -5447,16 +5470,20 @@ func _build_stats_tab() -> Control:
 	# --- 2. GENERAL STATS & RECENT MATCHES ---
 	if history.is_empty():
 		var empty_card = create_card_panel.call()
+		empty_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		empty_card.size_flags_stretch_ratio = 1.25
 		var empty_vbox = VBoxContainer.new()
 		empty_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-		empty_vbox.add_theme_constant_override("separation", 16)
+		empty_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		empty_vbox.add_theme_constant_override("separation", int(clamp(round(18.0 * ui_s), 12, 28)))
 		empty_card.add_child(empty_vbox)
 
 		var ball_icon = TextureRect.new()
 		if ResourceLoader.exists("res://soccer_ball_icon.svg"):
 			ball_icon.texture = load("res://soccer_ball_icon.svg")
 		if ball_icon.texture:
-			ball_icon.custom_minimum_size = Vector2(64, 64)
+			var b_sz = int(clamp(round(76.0 * ui_s), 58, 108))
+			ball_icon.custom_minimum_size = Vector2(b_sz, b_sz)
 			ball_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			ball_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			ball_icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -5465,7 +5492,7 @@ func _build_stats_tab() -> Control:
 		var no_data_lbl = Label.new()
 		no_data_lbl.text = LANG[lang]["STATS_NO_DATA"]
 		no_data_lbl.add_theme_font_override("font", custom_font)
-		no_data_lbl.add_theme_font_size_override("font_size", 28)
+		no_data_lbl.add_theme_font_size_override("font_size", int(clamp(round(27.0 * ui_s), 23, 35)))
 		no_data_lbl.add_theme_color_override("font_color", Color.WHITE)
 		no_data_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		no_data_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
@@ -5475,8 +5502,8 @@ func _build_stats_tab() -> Control:
 		var start_btn = Button.new()
 		start_btn.text = LANG[lang].get("START_MATCH", "MAÇI BAŞLAT")
 		start_btn.add_theme_font_override("font", custom_font)
-		start_btn.add_theme_font_size_override("font_size", 26)
-		start_btn.custom_minimum_size = Vector2(220, 58)
+		start_btn.add_theme_font_size_override("font_size", int(clamp(round(26.0 * ui_s), 22, 32)))
+		start_btn.custom_minimum_size = Vector2(int(clamp(round(230.0 * ui_s), 210, 300)), int(clamp(round(58.0 * ui_s), 52, 74)))
 		start_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		apply_3d_style_to_button(start_btn, active_theme.accent, active_theme.accent.darkened(0.35), 14, 4, 24, 12)
 		start_btn.pressed.connect(func():
@@ -5517,14 +5544,17 @@ func _build_stats_tab() -> Control:
 
 		# General Stats Card
 		var gen_card = create_card_panel.call()
+		gen_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		gen_card.size_flags_stretch_ratio = 1.2
 		var gen_vbox = VBoxContainer.new()
-		gen_vbox.add_theme_constant_override("separation", 8)
+		gen_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		gen_vbox.add_theme_constant_override("separation", int(clamp(round(6.0 * ui_s), 4, 10)))
 		gen_card.add_child(gen_vbox)
 
 		var gen_title = Label.new()
 		gen_title.text = LANG[lang]["STATS_GENERAL"].to_upper()
 		gen_title.add_theme_font_override("font", custom_font)
-		gen_title.add_theme_font_size_override("font_size", 30)
+		gen_title.add_theme_font_size_override("font_size", int(clamp(round(24.0 * ui_s), 21, 30)))
 		gen_title.add_theme_color_override("font_color", Color.WHITE)
 		gen_title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 		gen_title.add_theme_constant_override("shadow_offset_y", 2)
@@ -5538,6 +5568,7 @@ func _build_stats_tab() -> Control:
 		kpi_grid.add_theme_constant_override("h_separation", 6)
 		kpi_grid.add_theme_constant_override("v_separation", 4)
 		kpi_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		kpi_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		gen_vbox.add_child(kpi_grid)
 
 		var add_kpi = func(k_key: String, k_val: String, sub_str: String = ""):
@@ -5549,23 +5580,25 @@ func _build_stats_tab() -> Control:
 			kps.corner_radius_top_left = 10; kps.corner_radius_top_right = 10
 			kps.corner_radius_bottom_left = 10; kps.corner_radius_bottom_right = 10
 			kps.border_width_left = 1; kps.border_width_right = 1
-			kps.border_width_top = 1; kps.border_width_bottom = 3
+			kps.border_width_top = 1; kps.border_width_bottom = 2
 			kps.border_color = active_theme.accent.darkened(0.45)
 			kps.content_margin_left = 4; kps.content_margin_right = 4
-			kps.content_margin_top = 6; kps.content_margin_bottom = 6
+			kps.content_margin_top = tile_pad_v
+			kps.content_margin_bottom = tile_pad_v
 			kp.add_theme_stylebox_override("panel", kps)
 			kp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			kp.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 			var kvbox = VBoxContainer.new()
 			kvbox.mouse_filter = Control.MOUSE_FILTER_PASS
 			kvbox.alignment = BoxContainer.ALIGNMENT_CENTER
-			kvbox.add_theme_constant_override("separation", 2)
+			kvbox.add_theme_constant_override("separation", 2 if ui_s >= 1.1 else 0)
 			kp.add_child(kvbox)
 
 			var kl = Label.new()
 			kl.text = LANG[lang].get(k_key, k_key)
 			kl.add_theme_font_override("font", custom_font)
-			kl.add_theme_font_size_override("font_size", 18)
+			kl.add_theme_font_size_override("font_size", int(clamp(round(15.0 * ui_s), 13, 19)))
 			kl.add_theme_color_override("font_color", Color.WHITE)
 			kl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			ui_labels.append({"node": kl, "key": k_key, "type": "label"})
@@ -5574,7 +5607,7 @@ func _build_stats_tab() -> Control:
 			var kv = Label.new()
 			kv.text = k_val
 			kv.add_theme_font_override("font", custom_font)
-			kv.add_theme_font_size_override("font_size", 28)
+			kv.add_theme_font_size_override("font_size", int(clamp(round(23.0 * ui_s), 19, 30)))
 			kv.add_theme_color_override("font_color", active_theme.accent)
 			kv.add_theme_color_override("font_shadow_color", active_theme.accent.darkened(0.55))
 			kv.add_to_group("ThemeStatValueNodes")
@@ -5586,7 +5619,7 @@ func _build_stats_tab() -> Control:
 				var ksub = Label.new()
 				ksub.text = sub_str
 				ksub.add_theme_font_override("font", custom_font)
-				ksub.add_theme_font_size_override("font_size", 16)
+				ksub.add_theme_font_size_override("font_size", tile_sub_fs)
 				ksub.add_theme_color_override("font_color", Color.WHITE)
 				ksub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 				kvbox.add_child(ksub)
@@ -5605,9 +5638,10 @@ func _build_stats_tab() -> Control:
 		# 2-Column Grid for Tournament Goals & Average Goals per match
 		var goals_grid = GridContainer.new()
 		goals_grid.columns = 2
-		goals_grid.add_theme_constant_override("h_separation", 10)
+		goals_grid.add_theme_constant_override("h_separation", 8)
 		goals_grid.add_theme_constant_override("v_separation", 4)
 		goals_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		goals_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		gen_vbox.add_child(goals_grid)
 
 		var avg_goals_val = (float(total_goals_tournament) / float(total)) if total > 0 else 0.0
@@ -5616,42 +5650,52 @@ func _build_stats_tab() -> Control:
 		goals_grid.add_child(create_stat_tile.call("STATS_TOTAL_GOALS", str(total_goals_tournament), LANG[lang].get("GOALS_SUFFIX", "Gol")))
 		goals_grid.add_child(create_stat_tile.call("STATS_AVG_GOALS", avg_goals_str, LANG[lang].get("GOALS_SUFFIX", "Gol") + " / " + (LANG[lang].get("STATS_TOTAL", "Maç")).to_lower()))
 
-		# Highlight Record Rows
+		# Highlight Record Rows side-by-side in 2 columns to fit cleanly without scrolling
+		var records_grid = GridContainer.new()
+		records_grid.columns = 2
+		records_grid.add_theme_constant_override("h_separation", 8)
+		records_grid.add_theme_constant_override("v_separation", 4)
+		records_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		records_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		gen_vbox.add_child(records_grid)
+
 		var mg = most_goals_match
 		var mg_h = int(mg.get("home_score", mg.get("score_h", 0)))
 		var mg_a = int(mg.get("away_score", mg.get("score_a", 0)))
 		var mg_total = mg_h + mg_a
-		gen_vbox.add_child(create_stat_tile.call("STATS_MOST_GOALS", "%s %d - %d %s" % [mg.get("home", ""), mg_h, mg_a, mg.get("away", "")], "(%d %s)" % [int(mg_total), LANG[lang].get("GOALS_SUFFIX", "Gol")]))
+		records_grid.add_child(create_stat_tile.call("STATS_MOST_GOALS", "%s %d - %d %s" % [mg.get("home", ""), mg_h, mg_a, mg.get("away", "")], "(%d %s)" % [int(mg_total), LANG[lang].get("GOALS_SUFFIX", "Gol")]))
 
 		if most_diff_val > 0:
 			var md = most_diff_match
 			var md_h = int(md.get("home_score", md.get("score_h", 0)))
 			var md_a = int(md.get("away_score", md.get("score_a", 0)))
-			gen_vbox.add_child(create_stat_tile.call("STATS_BIGGEST_WIN", "%s %d - %d %s" % [md.get("home", ""), md_h, md_a, md.get("away", "")]))
+			records_grid.add_child(create_stat_tile.call("STATS_BIGGEST_WIN", "%s %d - %d %s" % [md.get("home", ""), md_h, md_a, md.get("away", "")]))
 		else:
-			gen_vbox.add_child(create_stat_tile.call("STATS_BIGGEST_WIN", "-"))
+			records_grid.add_child(create_stat_tile.call("STATS_BIGGEST_WIN", "-"))
 
 		vbox.add_child(gen_card)
 
 		# --- 3. RECENT MATCHES CARD ---
 		var rec_card = create_card_panel.call()
+		rec_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		rec_card.size_flags_stretch_ratio = 1.35
 		var rec_vbox = VBoxContainer.new()
-		rec_vbox.add_theme_constant_override("separation", 6)
+		rec_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		rec_vbox.add_theme_constant_override("separation", int(clamp(round(5.0 * ui_s), 3, 9)))
 		rec_card.add_child(rec_vbox)
 
 		var recent_title = Label.new()
 		recent_title.text = LANG[lang]["STATS_RECENT"].to_upper().replace("I", "I")
 		recent_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		recent_title.add_theme_font_override("font", custom_font)
-		recent_title.add_theme_font_size_override("font_size", 30)
+		recent_title.add_theme_font_size_override("font_size", int(clamp(round(24.0 * ui_s), 21, 30)))
 		recent_title.add_theme_color_override("font_color", Color.WHITE)
 		recent_title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 		recent_title.add_theme_constant_override("shadow_offset_y", 2)
 		ui_labels.append({"node": recent_title, "key": "STATS_RECENT", "type": "label_upper"})
 		rec_vbox.add_child(recent_title)
 
-		# Show up to last 5 matches for clean screen utilization
-		var shown = min(history.size(), 5)
+		var shown = min(history.size(), 4 if is_compact_h else 5)
 		for i in range(history.size() - 1, history.size() - 1 - shown, -1):
 			var m = history[i]
 			var m_home = m.get("home", "")
@@ -5664,20 +5708,23 @@ func _build_stats_tab() -> Control:
 			var m_style = StyleBoxFlat.new()
 			var match_bg = active_theme.bg_bottom.darkened(0.75) if is_buz else active_theme.bg_bottom.darkened(0.38)
 			m_style.bg_color = Color(match_bg.r, match_bg.g, match_bg.b, 0.94)
-			m_style.corner_radius_top_left = 12; m_style.corner_radius_top_right = 12
-			m_style.corner_radius_bottom_left = 12; m_style.corner_radius_bottom_right = 12
+			m_style.corner_radius_top_left = 10; m_style.corner_radius_top_right = 10
+			m_style.corner_radius_bottom_left = 10; m_style.corner_radius_bottom_right = 10
 			m_style.border_width_left = 1; m_style.border_width_right = 1
-			m_style.border_width_top = 1; m_style.border_width_bottom = 3
+			m_style.border_width_top = 1; m_style.border_width_bottom = 2
 			m_style.border_color = active_theme.accent.darkened(0.45)
-			m_style.content_margin_left = 12; m_style.content_margin_right = 12
-			m_style.content_margin_top = 5; m_style.content_margin_bottom = 5
+			m_style.content_margin_left = 10; m_style.content_margin_right = 10
+			var m_pad_v = int(clamp(round(4.0 * ui_s), 2, 9))
+			m_style.content_margin_top = m_pad_v
+			m_style.content_margin_bottom = m_pad_v
 			m_panel.add_theme_stylebox_override("panel", m_style)
 			m_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			m_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 			var m_hbox = HBoxContainer.new()
 			m_hbox.mouse_filter = Control.MOUSE_FILTER_PASS
 			m_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-			m_hbox.add_theme_constant_override("separation", 10)
+			m_hbox.add_theme_constant_override("separation", 8)
 			m_panel.add_child(m_hbox)
 
 			# Result Badge
@@ -5711,18 +5758,19 @@ func _build_stats_tab() -> Control:
 			var badge_p = PanelContainer.new()
 			var bps = StyleBoxFlat.new()
 			bps.bg_color = badge_bg_col
-			bps.corner_radius_top_left = 6; bps.corner_radius_top_right = 6
-			bps.corner_radius_bottom_left = 6; bps.corner_radius_bottom_right = 6
-			bps.content_margin_left = 6; bps.content_margin_right = 6
-			bps.content_margin_top = 2; bps.content_margin_bottom = 2
+			bps.corner_radius_top_left = 5; bps.corner_radius_top_right = 5
+			bps.corner_radius_bottom_left = 5; bps.corner_radius_bottom_right = 5
+			bps.content_margin_left = 4; bps.content_margin_right = 4
+			bps.content_margin_top = 1; bps.content_margin_bottom = 1
 			badge_p.add_theme_stylebox_override("panel", bps)
-			badge_p.custom_minimum_size = Vector2(26, 26)
+			var b_sz = int(clamp(round(23.0 * ui_s), 21, 29))
+			badge_p.custom_minimum_size = Vector2(b_sz, b_sz)
 			badge_p.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
 			var bl = Label.new()
 			bl.text = badge_char
 			bl.add_theme_font_override("font", custom_font)
-			bl.add_theme_font_size_override("font_size", 18)
+			bl.add_theme_font_size_override("font_size", int(clamp(round(15.0 * ui_s), 14, 19)))
 			bl.add_theme_color_override("font_color", Color.WHITE)
 			bl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			bl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -5730,10 +5778,11 @@ func _build_stats_tab() -> Control:
 			m_hbox.add_child(badge_p)
 
 			# Home team (overflow protected + ellipsis)
+			var m_team_fs = int(clamp(round(19.0 * ui_s), 16, 24))
 			var hl = Label.new()
 			hl.text = m_home
 			hl.add_theme_font_override("font", custom_font)
-			hl.add_theme_font_size_override("font_size", 21)
+			hl.add_theme_font_size_override("font_size", m_team_fs)
 			if fav != "" and m_home == fav:
 				hl.add_theme_color_override("font_color", active_theme.accent)
 			else:
@@ -5750,20 +5799,20 @@ func _build_stats_tab() -> Control:
 			var sc_s = StyleBoxFlat.new()
 			var sc_bg = active_theme.bg_bottom.darkened(0.85) if is_buz else active_theme.bg_bottom.darkened(0.55)
 			sc_s.bg_color = Color(sc_bg.r, sc_bg.g, sc_bg.b, 0.95)
-			sc_s.corner_radius_top_left = 8; sc_s.corner_radius_top_right = 8
-			sc_s.corner_radius_bottom_left = 8; sc_s.corner_radius_bottom_right = 8
+			sc_s.corner_radius_top_left = 6; sc_s.corner_radius_top_right = 6
+			sc_s.corner_radius_bottom_left = 6; sc_s.corner_radius_bottom_right = 6
 			sc_s.border_width_bottom = 2
 			sc_s.border_color = active_theme.accent.darkened(0.3)
-			sc_s.content_margin_left = 10; sc_s.content_margin_right = 10
-			sc_s.content_margin_top = 3; sc_s.content_margin_bottom = 3
+			sc_s.content_margin_left = 8; sc_s.content_margin_right = 8
+			sc_s.content_margin_top = 1; sc_s.content_margin_bottom = 1
 			sc_p.add_theme_stylebox_override("panel", sc_s)
-			sc_p.custom_minimum_size = Vector2(70, 30)
+			sc_p.custom_minimum_size = Vector2(int(clamp(round(60.0 * ui_s), 54, 78)), int(clamp(round(25.0 * ui_s), 23, 34)))
 			sc_p.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
 			var scl = Label.new()
 			scl.text = "%d - %d" % [m_h_score, m_a_score]
 			scl.add_theme_font_override("font", custom_font)
-			scl.add_theme_font_size_override("font_size", 24)
+			scl.add_theme_font_size_override("font_size", int(clamp(round(20.0 * ui_s), 17, 26)))
 			scl.add_theme_color_override("font_color", Color8(255, 220, 70))
 			scl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			scl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -5774,7 +5823,7 @@ func _build_stats_tab() -> Control:
 			var al = Label.new()
 			al.text = m_away
 			al.add_theme_font_override("font", custom_font)
-			al.add_theme_font_size_override("font_size", 21)
+			al.add_theme_font_size_override("font_size", m_team_fs)
 			if fav != "" and m_away == fav:
 				al.add_theme_color_override("font_color", active_theme.accent)
 			else:
@@ -5790,9 +5839,9 @@ func _build_stats_tab() -> Control:
 
 		vbox.add_child(rec_card)
 
-	# Bottom spacer for comfortable scrolling above navigation bar
+	# Bottom minimal breathing spacer (content fits on screen without vertical scrolling)
 	var sp_bot = Control.new()
-	sp_bot.custom_minimum_size = Vector2(0, 120)
+	sp_bot.custom_minimum_size = Vector2(0, 4)
 	vbox.add_child(sp_bot)
 
 	return page
@@ -5933,49 +5982,32 @@ func _build_shop_tab() -> Control:
 	main_vbox.add_child(shop_sep)
 	ui_separators.append(shop_sep)
 
-	# --- SCROLL CONTAINER FOR SHOP CONTENT (Scrolls smoothly underneath pinned header) ---
+	# --- SCROLL CONTAINER FOR SHOP CONTENT (Adaptive viewport height, zero vertical dead space) ---
+	var avail_h = max(480.0, sh - (305.0 if is_tablet else 320.0))
+	var ui_s = clamp(avail_h / 1050.0, 0.84, 1.38)
+	var is_compact_h = (avail_h < 880.0)
 	var shop_scroll = ScrollContainer.new()
 	shop_scroll_node = shop_scroll
 	shop_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	shop_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	shop_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	shop_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS
-	var v_sc_shop = shop_scroll.get_v_scroll_bar()
-	v_sc_shop.custom_minimum_size.x = 8
-	
-	var sb_style_sh = StyleBoxFlat.new()
-	sb_style_sh.bg_color = Color8(255, 255, 255, 12)
-	sb_style_sh.corner_radius_top_left = 4; sb_style_sh.corner_radius_top_right = 4
-	sb_style_sh.corner_radius_bottom_left = 4; sb_style_sh.corner_radius_bottom_right = 4
-	
-	var gb_style_sh = StyleBoxFlat.new()
-	gb_style_sh.bg_color = active_theme.accent.lightened(0.2)
-	gb_style_sh.corner_radius_top_left = 4; gb_style_sh.corner_radius_top_right = 4
-	gb_style_sh.corner_radius_bottom_left = 4; gb_style_sh.corner_radius_bottom_right = 4
-	gb_style_sh.expand_margin_top = -8
-	gb_style_sh.expand_margin_bottom = -8
-	
-	var gb_hover_sh = gb_style_sh.duplicate()
-	gb_hover_sh.bg_color = active_theme.accent.lightened(0.4)
-	
-	v_sc_shop.add_theme_stylebox_override("scroll", sb_style_sh)
-	v_sc_shop.add_theme_stylebox_override("grabber", gb_style_sh)
-	v_sc_shop.add_theme_stylebox_override("grabber_highlight", gb_hover_sh)
-	v_sc_shop.add_theme_stylebox_override("grabber_pressed", gb_hover_sh)
+	shop_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	main_vbox.add_child(shop_scroll)
 
 	var vbox = VBoxContainer.new()
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
-	vbox.add_theme_constant_override("separation", 10 if is_tablet else 14)
+	vbox.add_theme_constant_override("separation", int(clamp(round(9.0 * ui_s), 5, 16)))
 	vbox.mouse_filter = Control.MOUSE_FILTER_PASS
 	shop_scroll.add_child(vbox)
 
 	# --- 2. QUICK REWARDS ROW (Watch Video + Icon-Only Lucky Wheel) ---
+	var reward_btn_h = int(clamp(round(52.0 * ui_s), 46, 72))
 	var rewards_hbox = HBoxContainer.new()
 	rewards_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	rewards_hbox.add_theme_constant_override("separation", 12)
-	rewards_hbox.custom_minimum_size = Vector2(0, 54)
+	rewards_hbox.add_theme_constant_override("separation", 10)
+	rewards_hbox.custom_minimum_size = Vector2(0, reward_btn_h)
 	rewards_hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.add_child(rewards_hbox)
 
@@ -5983,35 +6015,39 @@ func _build_shop_tab() -> Control:
 	ad_btn.text = LANG[Global.current_lang]["SHOP_WATCH_AD"]
 	ad_btn.icon = load("res://video.svg")
 	ad_btn.expand_icon = true
-	ad_btn.add_theme_constant_override("icon_max_width", 28)
-	ad_btn.add_theme_constant_override("h_separation", 10)
+	ad_btn.add_theme_constant_override("icon_max_width", int(clamp(round(26.0 * ui_s), 22, 34)))
+	ad_btn.add_theme_constant_override("h_separation", 8)
 	ui_labels.append({"node": ad_btn, "key": "SHOP_WATCH_AD", "type": "button"})
 	ad_btn.add_theme_font_override("font", custom_font)
-	ad_btn.add_theme_font_size_override("font_size", 24)
+	ad_btn.add_theme_font_size_override("font_size", int(clamp(round(22.0 * ui_s), 19, 28)))
 	ad_btn.add_theme_color_override("font_color", Color.WHITE)
 	ad_btn.add_theme_color_override("font_hover_color", Color.WHITE)
 	ad_btn.add_theme_color_override("font_pressed_color", Color.WHITE)
 	ad_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 190))
 	ad_btn.add_theme_constant_override("shadow_offset_y", 2)
-	apply_3d_style_to_button(ad_btn, active_theme.accent.darkened(0.14), active_theme.accent.darkened(0.46), 14, 4, 16, 8)
+	apply_3d_style_to_button(ad_btn, active_theme.accent.darkened(0.14), active_theme.accent.darkened(0.46), 12, 3, 14, 6)
 	var ad_norm_sb = ad_btn.get_theme_stylebox("normal")
 	if ad_norm_sb is StyleBoxFlat:
 		ad_norm_sb.border_width_left = 2; ad_norm_sb.border_width_right = 2
-		ad_norm_sb.border_width_top = 2; ad_norm_sb.border_width_bottom = 4
+		ad_norm_sb.border_width_top = 2; ad_norm_sb.border_width_bottom = 3
 		ad_norm_sb.border_color = active_theme.accent.lightened(0.28)
-	ad_btn.custom_minimum_size = Vector2(200, 54)
+	ad_btn.custom_minimum_size = Vector2(200, reward_btn_h)
 	ad_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ad_btn.pressed.connect(_show_admob_rewarded)
 
+	var hourglass_tex = load("res://hourglass_icon.svg")
+	var video_tex = load("res://video.svg")
 	var update_btn_display = func():
 		if not is_instance_valid(ad_btn): return
 		if not Global.is_rewarded_ad_ready():
 			var cd = int(Global.get_rewarded_ad_cooldown_left())
 			var mins = cd / 60
 			var secs = cd % 60
-			ad_btn.text = "⏳ %02d:%02d" % [mins, secs]
+			ad_btn.icon = hourglass_tex
+			ad_btn.text = "%02d:%02d" % [mins, secs]
 			ad_btn.modulate = Color(0.88, 0.88, 0.88, 0.92)
 		else:
+			ad_btn.icon = video_tex
 			ad_btn.text = LANG.get(Global.current_lang, LANG["ENG"]).get("SHOP_WATCH_AD", "VİDEO İZLE (+50 Jeton)")
 			ad_btn.modulate = Color.WHITE
 
@@ -6027,13 +6063,13 @@ func _build_shop_tab() -> Control:
 	var wheel_btn = Button.new()
 	wheel_btn.text = ""
 	wheel_btn.tooltip_text = LANG[Global.current_lang].get("LUCKY_WHEEL_BTN", "Şans Çarkı")
-	apply_3d_style_to_button(wheel_btn, active_theme.bg_bottom.darkened(0.22), active_theme.bg_bottom.darkened(0.48), 14, 4, 8, 6)
+	apply_3d_style_to_button(wheel_btn, active_theme.bg_bottom.darkened(0.22), active_theme.bg_bottom.darkened(0.48), 12, 3, 8, 5)
 	var wh_norm_sb = wheel_btn.get_theme_stylebox("normal")
 	if wh_norm_sb is StyleBoxFlat:
 		wh_norm_sb.border_width_left = 2; wh_norm_sb.border_width_right = 2
-		wh_norm_sb.border_width_top = 2; wh_norm_sb.border_width_bottom = 4
+		wh_norm_sb.border_width_top = 2; wh_norm_sb.border_width_bottom = 3
 		wh_norm_sb.border_color = active_theme.accent.lightened(0.18)
-	wheel_btn.custom_minimum_size = Vector2(58, 54)
+	wheel_btn.custom_minimum_size = Vector2(int(clamp(round(58.0 * ui_s), 52, 76)), reward_btn_h)
 	wheel_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var wheel_ic_center = CenterContainer.new()
 	wheel_ic_center.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -6041,7 +6077,8 @@ func _build_shop_tab() -> Control:
 	wheel_btn.add_child(wheel_ic_center)
 	var wheel_ic_rect = TextureRect.new()
 	wheel_ic_rect.texture = preload("res://wheel_icon.svg")
-	wheel_ic_rect.custom_minimum_size = Vector2(34, 34)
+	var wh_ic_sz = int(clamp(round(32.0 * ui_s), 26, 42))
+	wheel_ic_rect.custom_minimum_size = Vector2(wh_ic_sz, wh_ic_sz)
 	wheel_ic_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	wheel_ic_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	wheel_ic_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -6051,47 +6088,54 @@ func _build_shop_tab() -> Control:
 
 	# --- 3. ELİT KULÜP SHOWCASE BANNER (Theme-Harmonized & Modern) ---
 	var prem_panel = PanelContainer.new()
+	prem_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	prem_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	prem_panel.size_flags_stretch_ratio = 0.80
 	var prem_style = StyleBoxFlat.new()
 	var prem_bg = active_theme.bg_bottom.darkened(0.32)
 	prem_style.bg_color = Color(prem_bg.r, prem_bg.g, prem_bg.b, 0.96)
-	prem_style.corner_radius_top_left = 18; prem_style.corner_radius_top_right = 18
-	prem_style.corner_radius_bottom_left = 18; prem_style.corner_radius_bottom_right = 18
-	prem_style.border_width_top = 2; prem_style.border_width_bottom = 4
+	prem_style.corner_radius_top_left = 16; prem_style.corner_radius_top_right = 16
+	prem_style.corner_radius_bottom_left = 16; prem_style.corner_radius_bottom_right = 16
+	prem_style.border_width_top = 2; prem_style.border_width_bottom = 3
 	prem_style.border_width_left = 2; prem_style.border_width_right = 2
 	prem_style.border_color = active_theme.accent.lightened(0.18)
 	prem_style.shadow_color = Color8(0, 0, 0, 140)
-	prem_style.shadow_size = 12
-	prem_style.content_margin_left = 16; prem_style.content_margin_right = 16
-	prem_style.content_margin_top = 12; prem_style.content_margin_bottom = 12
+	prem_style.shadow_size = 10
+	prem_style.content_margin_left = 14; prem_style.content_margin_right = 14
+	var prem_pad_v = int(clamp(round(9.0 * ui_s), 6, 15))
+	prem_style.content_margin_top = prem_pad_v
+	prem_style.content_margin_bottom = prem_pad_v
 	prem_panel.add_theme_stylebox_override("panel", prem_style)
 	vbox.add_child(prem_panel)
 
 	var prem_hbox = HBoxContainer.new()
 	prem_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	prem_hbox.add_theme_constant_override("separation", 14)
+	prem_hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	prem_hbox.add_theme_constant_override("separation", 12)
 	prem_panel.add_child(prem_hbox)
 
 	var prem_left_vb = VBoxContainer.new()
 	prem_left_vb.alignment = BoxContainer.ALIGNMENT_CENTER
 	prem_left_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	prem_left_vb.add_theme_constant_override("separation", 4)
+	prem_left_vb.add_theme_constant_override("separation", 3)
 	prem_hbox.add_child(prem_left_vb)
 
 	var prem_title_hb = HBoxContainer.new()
 	prem_title_hb.alignment = BoxContainer.ALIGNMENT_BEGIN
-	prem_title_hb.add_theme_constant_override("separation", 10)
+	prem_title_hb.add_theme_constant_override("separation", 8)
 	prem_left_vb.add_child(prem_title_hb)
 
 	var crown_badge = PanelContainer.new()
 	var cb_style = StyleBoxFlat.new()
 	cb_style.bg_color = active_theme.accent.darkened(0.52)
-	cb_style.corner_radius_top_left = 10; cb_style.corner_radius_top_right = 10
-	cb_style.corner_radius_bottom_left = 10; cb_style.corner_radius_bottom_right = 10
+	cb_style.corner_radius_top_left = 9; cb_style.corner_radius_top_right = 9
+	cb_style.corner_radius_bottom_left = 9; cb_style.corner_radius_bottom_right = 9
 	cb_style.border_width_left = 1; cb_style.border_width_right = 1
 	cb_style.border_width_top = 1; cb_style.border_width_bottom = 1
 	cb_style.border_color = active_theme.accent.lightened(0.22)
 	crown_badge.add_theme_stylebox_override("panel", cb_style)
-	crown_badge.custom_minimum_size = Vector2(38, 38)
+	var cb_sz = int(clamp(round(34.0 * ui_s), 30, 44))
+	crown_badge.custom_minimum_size = Vector2(cb_sz, cb_sz)
 	crown_badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	prem_title_hb.add_child(crown_badge)
 
@@ -6100,7 +6144,8 @@ func _build_shop_tab() -> Control:
 
 	var crown_icon = TextureRect.new()
 	crown_icon.texture = preload("res://crownicon.svg")
-	crown_icon.custom_minimum_size = Vector2(26, 26)
+	var ci_sz = int(clamp(round(21.0 * ui_s), 18, 28))
+	crown_icon.custom_minimum_size = Vector2(ci_sz, ci_sz)
 	crown_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	crown_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	crown_center.add_child(crown_icon)
@@ -6108,7 +6153,7 @@ func _build_shop_tab() -> Control:
 	var prem_icon_lbl = Label.new()
 	prem_icon_lbl.text = LANG[Global.current_lang].get("PRO_PASS_TITLE", "ELİT KULÜP")
 	prem_icon_lbl.add_theme_font_override("font", custom_font)
-	prem_icon_lbl.add_theme_font_size_override("font_size", 30)
+	prem_icon_lbl.add_theme_font_size_override("font_size", int(clamp(round(26.0 * ui_s), 22, 34)))
 	prem_icon_lbl.add_theme_color_override("font_color", Color.WHITE)
 	prem_icon_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 190))
 	prem_icon_lbl.add_theme_constant_override("shadow_offset_y", 2)
@@ -6119,7 +6164,7 @@ func _build_shop_tab() -> Control:
 	var prem_desc = Label.new()
 	prem_desc.text = LANG[Global.current_lang]["SHOP_PRO_DESC"]
 	prem_desc.add_theme_font_override("font", custom_font)
-	prem_desc.add_theme_font_size_override("font_size", 18)
+	prem_desc.add_theme_font_size_override("font_size", int(clamp(round(16.0 * ui_s), 14, 21)))
 	prem_desc.add_theme_color_override("font_color", Color.WHITE)
 	prem_desc.autowrap_mode = TextServer.AUTOWRAP_WORD
 	ui_labels.append({"node": prem_desc, "key": "SHOP_PRO_DESC", "type": "label"})
@@ -6127,7 +6172,7 @@ func _build_shop_tab() -> Control:
 
 	var prem_right_vb = VBoxContainer.new()
 	prem_right_vb.alignment = BoxContainer.ALIGNMENT_CENTER
-	prem_right_vb.add_theme_constant_override("separation", 4)
+	prem_right_vb.add_theme_constant_override("separation", 3)
 	prem_hbox.add_child(prem_right_vb)
 
 	var buy_btn = Button.new()
@@ -6136,10 +6181,10 @@ func _build_shop_tab() -> Control:
 		if ResourceLoader.exists("res://checkmark_icon.svg"):
 			buy_btn.icon = load("res://checkmark_icon.svg")
 			buy_btn.expand_icon = true
-			buy_btn.add_theme_constant_override("icon_max_width", 20)
+			buy_btn.add_theme_constant_override("icon_max_width", 18)
 			buy_btn.add_theme_constant_override("h_separation", 6)
 		buy_btn.disabled = false
-		apply_3d_style_to_button(buy_btn, Color8(34, 140, 60, 230), Color8(18, 75, 30), 12, 3.0, 14, 8)
+		apply_3d_style_to_button(buy_btn, Color8(34, 140, 60, 230), Color8(18, 75, 30), 10, 3.0, 12, 6)
 		buy_btn.add_theme_color_override("font_color", Color.WHITE)
 		buy_btn.pressed.connect(_on_toggle_premium_off)
 		ui_labels.append({"node": buy_btn, "key": "SHOP_BUY", "type": "button_buy_premium"})
@@ -6157,22 +6202,23 @@ func _build_shop_tab() -> Control:
 			buy_text = price_str + " — BUY NOW"
 		buy_btn.text = buy_text
 		ui_labels.append({"node": buy_btn, "key": "SHOP_BUY", "type": "button_buy_premium"})
-		apply_3d_style_to_button(buy_btn, active_theme.accent.darkened(0.14), active_theme.accent.darkened(0.46), 12, 3.5, 14, 8)
+		apply_3d_style_to_button(buy_btn, active_theme.accent.darkened(0.14), active_theme.accent.darkened(0.46), 10, 3.0, 12, 6)
 		buy_btn.add_theme_color_override("font_color", Color.WHITE)
 		buy_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 		buy_btn.add_theme_constant_override("shadow_offset_y", 2)
 		buy_btn.pressed.connect(_on_buy_premium_pressed)
 	buy_btn.add_theme_font_override("font", custom_font)
-	buy_btn.add_theme_font_size_override("font_size", 20)
-	buy_btn.custom_minimum_size = Vector2(185, 48)
+	buy_btn.add_theme_font_size_override("font_size", int(clamp(round(19.0 * ui_s), 16, 24)))
+	var p_btn_w = int(clamp(round(188.0 * ui_s), 172, 235))
+	buy_btn.custom_minimum_size = Vector2(p_btn_w, int(clamp(round(44.0 * ui_s), 38, 56)))
 	prem_right_vb.add_child(buy_btn)
 
 	var rest_shop_btn = Button.new()
 	rest_shop_btn.text = LANG[Global.current_lang].get("RESTORE_PURCHASES", "Satın Alımları Geri Yükle")
 	rest_shop_btn.add_theme_font_override("font", custom_font)
-	rest_shop_btn.add_theme_font_size_override("font_size", 16)
+	rest_shop_btn.add_theme_font_size_override("font_size", int(clamp(round(15.0 * ui_s), 13, 19)))
 	rest_shop_btn.add_theme_color_override("font_color", Color.WHITE)
-	rest_shop_btn.custom_minimum_size = Vector2(185, 36)
+	rest_shop_btn.custom_minimum_size = Vector2(p_btn_w, int(clamp(round(28.0 * ui_s), 24, 34)))
 	var rest_shop_style = StyleBoxFlat.new()
 	rest_shop_style.bg_color = Color(0, 0, 0, 0)
 	rest_shop_btn.add_theme_stylebox_override("normal", rest_shop_style)
@@ -6180,6 +6226,15 @@ func _build_shop_tab() -> Control:
 	prem_right_vb.add_child(rest_shop_btn)
 
 	# --- 4. SECTION A: BALL SKINS CAROUSEL ---
+	var card_w = int(clamp(round(148.0 * ui_s), 136, 178))
+	var card_h = int(clamp(round(154.0 * ui_s), 132, 212))
+	var prev_sz = int(clamp(round(62.0 * ui_s), 48, 86))
+	var card_name_fs = int(clamp(round(19.0 * ui_s), 16, 24))
+	var card_btn_fs = int(clamp(round(18.0 * ui_s), 16, 22))
+	var card_btn_h = int(clamp(round(40.0 * ui_s), 35, 50))
+	var sec_pad_v = int(clamp(round(8.0 * ui_s), 6, 14))
+	var sec_title_fs = int(clamp(round(22.0 * ui_s), 19, 28))
+
 	var balls_panel = PanelContainer.new()
 	var balls_p_style = StyleBoxFlat.new()
 	var balls_bg = active_theme.bg_bottom.darkened(0.18)
@@ -6189,15 +6244,19 @@ func _build_shop_tab() -> Control:
 	balls_p_style.border_width_left = 2; balls_p_style.border_width_right = 2
 	balls_p_style.border_width_top = 2; balls_p_style.border_width_bottom = 4
 	balls_p_style.border_color = active_theme.accent.darkened(0.25)
-	balls_p_style.content_margin_left = 12; balls_p_style.content_margin_right = 12
-	balls_p_style.content_margin_top = 10; balls_p_style.content_margin_bottom = 10
+	balls_p_style.content_margin_left = 10; balls_p_style.content_margin_right = 10
+	balls_p_style.content_margin_top = sec_pad_v
+	balls_p_style.content_margin_bottom = sec_pad_v
 	balls_panel.add_theme_stylebox_override("panel", balls_p_style)
 	balls_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	balls_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	balls_panel.size_flags_stretch_ratio = 1.25
 	vbox.add_child(balls_panel)
 
 	var balls_vbox = VBoxContainer.new()
 	balls_vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
-	balls_vbox.add_theme_constant_override("separation", 8)
+	balls_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	balls_vbox.add_theme_constant_override("separation", int(clamp(round(6.0 * ui_s), 3, 10)))
 	balls_panel.add_child(balls_vbox)
 
 	balls_panel.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -6211,7 +6270,7 @@ func _build_shop_tab() -> Control:
 	var balls_title = Label.new()
 	balls_title.text = LANG[Global.current_lang]["SHOP_BALL_SKINS"]
 	balls_title.add_theme_font_override("font", custom_font)
-	balls_title.add_theme_font_size_override("font_size", 24)
+	balls_title.add_theme_font_size_override("font_size", sec_title_fs)
 	balls_title.add_theme_color_override("font_color", Color.WHITE)
 	balls_title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
 	balls_title.add_theme_constant_override("shadow_offset_y", 2)
@@ -6221,34 +6280,17 @@ func _build_shop_tab() -> Control:
 
 	var balls_scroll = ScrollContainer.new()
 	balls_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	balls_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS
-	balls_scroll.custom_minimum_size = Vector2(0, 240)
+	balls_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	balls_scroll.custom_minimum_size = Vector2(0, card_h + 6)
 	balls_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	
-	var h_sc_b = balls_scroll.get_h_scroll_bar()
-	h_sc_b.custom_minimum_size.y = 6
-	var h_sb_b = StyleBoxFlat.new()
-	h_sb_b.bg_color = Color8(255, 255, 255, 12)
-	h_sb_b.corner_radius_top_left = 3; h_sb_b.corner_radius_top_right = 3
-	h_sb_b.corner_radius_bottom_left = 3; h_sb_b.corner_radius_bottom_right = 3
-	var h_gb_b = StyleBoxFlat.new()
-	h_gb_b.bg_color = active_theme.accent.lightened(0.2)
-	h_gb_b.corner_radius_top_left = 3; h_gb_b.corner_radius_top_right = 3
-	h_gb_b.corner_radius_bottom_left = 3; h_gb_b.corner_radius_bottom_right = 3
-	h_sc_b.add_theme_stylebox_override("scroll", h_sb_b)
-	h_sc_b.add_theme_stylebox_override("grabber", h_gb_b)
-
-	balls_scroll.gui_input.connect(func(event: InputEvent):
-		if event is InputEventScreenDrag or event is InputEventMouseMotion:
-			if abs(event.relative.y) > abs(event.relative.x) * 1.15:
-				shop_scroll.scroll_vertical -= int(event.relative.y)
-	)
+	balls_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 	balls_vbox.add_child(balls_scroll)
 	shop_balls_scroll = balls_scroll
 
 	var balls_hbox = HBoxContainer.new()
-	balls_hbox.add_theme_constant_override("separation", 12)
+	balls_hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	balls_hbox.add_theme_constant_override("separation", 10)
 	balls_scroll.add_child(balls_hbox)
 
 	var ball_skin_names = [
@@ -6271,46 +6313,47 @@ func _build_shop_tab() -> Control:
 		card.mouse_filter = Control.MOUSE_FILTER_PASS
 		var card_style = StyleBoxFlat.new()
 		card_style.bg_color = active_theme.bg_bottom.darkened(0.35)
-		card_style.corner_radius_top_left = 14; card_style.corner_radius_top_right = 14
-		card_style.corner_radius_bottom_left = 14; card_style.corner_radius_bottom_right = 14
-		card_style.border_width_bottom = 4
+		card_style.corner_radius_top_left = 12; card_style.corner_radius_top_right = 12
+		card_style.corner_radius_bottom_left = 12; card_style.corner_radius_bottom_right = 12
+		card_style.border_width_bottom = 3
 		card_style.border_width_top = 2; card_style.border_width_left = 2; card_style.border_width_right = 2
 		var bcolor_dark = bcolor.darkened(0.2) if s_id != "chrome" else Color8(180, 190, 210)
 		card_style.border_color = bcolor_dark
-		card_style.content_margin_top = 8; card_style.content_margin_bottom = 8
-		card_style.content_margin_left = 8; card_style.content_margin_right = 8
+		card_style.content_margin_top = 6; card_style.content_margin_bottom = 6
+		card_style.content_margin_left = 6; card_style.content_margin_right = 6
 		card.add_theme_stylebox_override("panel", card_style)
-		card.custom_minimum_size = Vector2(168, 225)
+		card.custom_minimum_size = Vector2(card_w, card_h)
+		card.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 		var card_vbox = VBoxContainer.new()
 		card_vbox.mouse_filter = Control.MOUSE_FILTER_PASS
 		card_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-		card_vbox.add_theme_constant_override("separation", 6)
+		card_vbox.add_theme_constant_override("separation", int(clamp(round(4.0 * ui_s), 3, 8)))
 		card.add_child(card_vbox)
 
 		var ball_preview = Control.new()
 		ball_preview.mouse_filter = Control.MOUSE_FILTER_PASS
-		ball_preview.custom_minimum_size = Vector2(80, 80)
+		ball_preview.custom_minimum_size = Vector2(prev_sz, prev_sz)
 		ball_preview.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		ball_preview.draw.connect(func():
 			var c = ball_preview.size / 2.0
-			var r = 34.0
+			var r = float(prev_sz) * 0.43
 			ball_preview.draw_circle(c, r, Color.WHITE)
 			Global.draw_ball_skin(ball_preview, c, r, s_id)
 		)
 		card_vbox.add_child(ball_preview)
 
-		var name_lbl = create_label_node(s_name_key, Color.WHITE, 22)
+		var name_lbl = create_label_node(s_name_key, Color.WHITE, card_name_fs)
 		name_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		card_vbox.add_child(name_lbl)
 
 		var action_btn = Button.new()
 		action_btn.add_theme_font_override("font", custom_font)
-		action_btn.add_theme_font_size_override("font_size", 20)
+		action_btn.add_theme_font_size_override("font_size", card_btn_fs)
 		action_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
 		action_btn.add_theme_constant_override("shadow_offset_y", 2)
-		action_btn.custom_minimum_size = Vector2(148, 44)
+		action_btn.custom_minimum_size = Vector2(card_w - 16, card_btn_h)
 		action_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 
 		if Global.is_skin_unlocked(s_id):
@@ -6366,15 +6409,19 @@ func _build_shop_tab() -> Control:
 	hats_p_style.border_width_left = 2; hats_p_style.border_width_right = 2
 	hats_p_style.border_width_top = 2; hats_p_style.border_width_bottom = 4
 	hats_p_style.border_color = active_theme.accent.darkened(0.25)
-	hats_p_style.content_margin_left = 12; hats_p_style.content_margin_right = 12
-	hats_p_style.content_margin_top = 10; hats_p_style.content_margin_bottom = 10
+	hats_p_style.content_margin_left = 10; hats_p_style.content_margin_right = 10
+	hats_p_style.content_margin_top = sec_pad_v
+	hats_p_style.content_margin_bottom = sec_pad_v
 	hats_panel.add_theme_stylebox_override("panel", hats_p_style)
 	hats_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hats_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	hats_panel.size_flags_stretch_ratio = 1.25
 	vbox.add_child(hats_panel)
 
 	var hats_vbox = VBoxContainer.new()
 	hats_vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
-	hats_vbox.add_theme_constant_override("separation", 8)
+	hats_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	hats_vbox.add_theme_constant_override("separation", int(clamp(round(6.0 * ui_s), 3, 10)))
 	hats_panel.add_child(hats_vbox)
 
 	hats_panel.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -6388,7 +6435,7 @@ func _build_shop_tab() -> Control:
 	var hats_title = Label.new()
 	hats_title.text = LANG[Global.current_lang]["SHOP_HATS"]
 	hats_title.add_theme_font_override("font", custom_font)
-	hats_title.add_theme_font_size_override("font_size", 24)
+	hats_title.add_theme_font_size_override("font_size", sec_title_fs)
 	hats_title.add_theme_color_override("font_color", Color.WHITE)
 	hats_title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
 	hats_title.add_theme_constant_override("shadow_offset_y", 2)
@@ -6398,34 +6445,17 @@ func _build_shop_tab() -> Control:
 
 	var hats_scroll = ScrollContainer.new()
 	hats_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	hats_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS
-	hats_scroll.custom_minimum_size = Vector2(0, 240)
+	hats_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	hats_scroll.custom_minimum_size = Vector2(0, card_h + 6)
 	hats_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	
-	var h_sc_h = hats_scroll.get_h_scroll_bar()
-	h_sc_h.custom_minimum_size.y = 6
-	var h_sb_h = StyleBoxFlat.new()
-	h_sb_h.bg_color = Color8(255, 255, 255, 12)
-	h_sb_h.corner_radius_top_left = 3; h_sb_h.corner_radius_top_right = 3
-	h_sb_h.corner_radius_bottom_left = 3; h_sb_h.corner_radius_bottom_right = 3
-	var h_gb_h = StyleBoxFlat.new()
-	h_gb_h.bg_color = active_theme.accent.lightened(0.2)
-	h_gb_h.corner_radius_top_left = 3; h_gb_h.corner_radius_top_right = 3
-	h_gb_h.corner_radius_bottom_left = 3; h_gb_h.corner_radius_bottom_right = 3
-	h_sc_h.add_theme_stylebox_override("scroll", h_sb_h)
-	h_sc_h.add_theme_stylebox_override("grabber", h_gb_h)
-
-	hats_scroll.gui_input.connect(func(event: InputEvent):
-		if event is InputEventScreenDrag or event is InputEventMouseMotion:
-			if abs(event.relative.y) > abs(event.relative.x) * 1.15:
-				shop_scroll.scroll_vertical -= int(event.relative.y)
-	)
+	hats_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 	hats_vbox.add_child(hats_scroll)
 	shop_hats_scroll = hats_scroll
 
 	var hats_hbox = HBoxContainer.new()
-	hats_hbox.add_theme_constant_override("separation", 12)
+	hats_hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	hats_hbox.add_theme_constant_override("separation", 10)
 	hats_scroll.add_child(hats_hbox)
 
 	var hat_list = [
@@ -6446,55 +6476,55 @@ func _build_shop_tab() -> Control:
 		card.mouse_filter = Control.MOUSE_FILTER_PASS
 		var card_style = StyleBoxFlat.new()
 		card_style.bg_color = active_theme.bg_bottom.darkened(0.35)
-		card_style.corner_radius_top_left = 14; card_style.corner_radius_top_right = 14
-		card_style.corner_radius_bottom_left = 14; card_style.corner_radius_bottom_right = 14
-		card_style.border_width_bottom = 4
+		card_style.corner_radius_top_left = 12; card_style.corner_radius_top_right = 12
+		card_style.corner_radius_bottom_left = 12; card_style.corner_radius_bottom_right = 12
+		card_style.border_width_bottom = 3
 		card_style.border_width_top = 2; card_style.border_width_left = 2; card_style.border_width_right = 2
 		card_style.border_color = active_theme.accent.darkened(0.15) if h_id != "none" else active_theme.bg_top.lightened(0.1)
-		card_style.content_margin_top = 8; card_style.content_margin_bottom = 8
-		card_style.content_margin_left = 8; card_style.content_margin_right = 8
+		card_style.content_margin_top = 6; card_style.content_margin_bottom = 6
+		card_style.content_margin_left = 6; card_style.content_margin_right = 6
 		card.add_theme_stylebox_override("panel", card_style)
-		card.custom_minimum_size = Vector2(168, 225)
+		card.custom_minimum_size = Vector2(card_w, card_h)
+		card.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 		var card_vbox = VBoxContainer.new()
 		card_vbox.mouse_filter = Control.MOUSE_FILTER_PASS
 		card_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-		card_vbox.add_theme_constant_override("separation", 6)
+		card_vbox.add_theme_constant_override("separation", int(clamp(round(4.0 * ui_s), 3, 8)))
 		card.add_child(card_vbox)
 
 		var preview_box = Control.new()
 		preview_box.mouse_filter = Control.MOUSE_FILTER_PASS
-		preview_box.custom_minimum_size = Vector2(80, 80)
+		preview_box.custom_minimum_size = Vector2(prev_sz, prev_sz)
 		preview_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		preview_box.draw.connect(func():
-			var c = Vector2(preview_box.size.x / 2.0, preview_box.size.y / 2.0 + 8.0)
-			var r = 26.0
+			var sc = float(prev_sz) / 76.0
+			var c = Vector2(preview_box.size.x / 2.0, preview_box.size.y / 2.0 + 5.0 * sc)
+			var r = 25.0 * sc
 			preview_box.draw_circle(c, r, Color.WHITE)
-			preview_box.draw_arc(c, r, 0, TAU, 32, active_theme.accent, 2.2, true)
+			preview_box.draw_arc(c, r, 0, TAU, 32, active_theme.accent, 2.0, true)
 			if h_icon != null:
-				var cr_w = 42.0
-				var cr_h = 30.0
-				if h_id == "viking_helmet":
-					cr_w = 52.0
-					cr_h = 36.0
-				var cr_rect = Rect2(c.x - cr_w / 2.0, c.y - r - cr_h + 6.0, cr_w, cr_h)
+				var cr_w = (52.0 if h_id == "viking_helmet" else 42.0) * sc
+				var cr_h = (36.0 if h_id == "viking_helmet" else 30.0) * sc
+				var cr_rect = Rect2(c.x - cr_w / 2.0, c.y - r - cr_h + 6.0 * sc, cr_w, cr_h)
 				preview_box.draw_texture_rect(h_icon, cr_rect, false)
 			else:
-				preview_box.draw_line(Vector2(c.x - 10, c.y - 10), Vector2(c.x + 10, c.y + 10), Color8(220, 50, 50), 2.5)
+				var x_d = 9.0 * sc
+				preview_box.draw_line(Vector2(c.x - x_d, c.y - x_d), Vector2(c.x + x_d, c.y + x_d), Color8(220, 50, 50), 2.5)
 		)
 		card_vbox.add_child(preview_box)
 
-		var name_lbl = create_label_node(h_name_key, Color.WHITE, 22)
+		var name_lbl = create_label_node(h_name_key, Color.WHITE, card_name_fs)
 		name_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		card_vbox.add_child(name_lbl)
 
 		var action_btn = Button.new()
 		action_btn.add_theme_font_override("font", custom_font)
-		action_btn.add_theme_font_size_override("font_size", 20)
+		action_btn.add_theme_font_size_override("font_size", card_btn_fs)
 		action_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
 		action_btn.add_theme_constant_override("shadow_offset_y", 2)
-		action_btn.custom_minimum_size = Vector2(148, 44)
+		action_btn.custom_minimum_size = Vector2(card_w - 16, card_btn_h)
 		action_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 
 		if Global.is_hat_unlocked(h_id):
@@ -6542,19 +6572,24 @@ func _build_shop_tab() -> Control:
 
 	# --- 5. EXPOSED DAILY QUESTS SECTION (Clickable Card-Button Opening Quests Modal) ---
 	var quests_panel = PanelContainer.new()
+	quests_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	quests_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	quests_panel.size_flags_stretch_ratio = 1.55
 	quests_panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	quests_panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	var qp_style = StyleBoxFlat.new()
 	qp_style.bg_color = active_theme.bg_bottom.darkened(0.22)
-	qp_style.corner_radius_top_left = 18; qp_style.corner_radius_top_right = 18
-	qp_style.corner_radius_bottom_left = 18; qp_style.corner_radius_bottom_right = 18
+	qp_style.corner_radius_top_left = 16; qp_style.corner_radius_top_right = 16
+	qp_style.corner_radius_bottom_left = 16; qp_style.corner_radius_bottom_right = 16
 	qp_style.border_width_left = 2; qp_style.border_width_right = 2
-	qp_style.border_width_top = 2; qp_style.border_width_bottom = 4
+	qp_style.border_width_top = 2; qp_style.border_width_bottom = 3
 	qp_style.border_color = active_theme.accent.lightened(0.15)
 	qp_style.shadow_color = Color8(0, 0, 0, 140)
-	qp_style.shadow_size = 16
-	qp_style.content_margin_left = 20; qp_style.content_margin_right = 20
-	qp_style.content_margin_top = 18; qp_style.content_margin_bottom = 18
+	qp_style.shadow_size = 12
+	qp_style.content_margin_left = 14; qp_style.content_margin_right = 14
+	var qp_pad_v = int(clamp(round(10.0 * ui_s), 7, 16))
+	qp_style.content_margin_top = qp_pad_v
+	qp_style.content_margin_bottom = qp_pad_v
 	quests_panel.add_theme_stylebox_override("panel", qp_style)
 
 	var qp_press_state = {"pos": Vector2.ZERO, "active": false}
@@ -6581,21 +6616,23 @@ func _build_shop_tab() -> Control:
 	vbox.add_child(quests_panel)
 
 	var qp_vbox = VBoxContainer.new()
+	qp_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	qp_vbox.mouse_filter = Control.MOUSE_FILTER_PASS
-	qp_vbox.add_theme_constant_override("separation", 14)
+	qp_vbox.add_theme_constant_override("separation", int(clamp(round(8.0 * ui_s), 5, 13)))
 	quests_panel.add_child(qp_vbox)
 
 	# Quests Section Header
 	var q_header_hbox = HBoxContainer.new()
 	q_header_hbox.mouse_filter = Control.MOUSE_FILTER_PASS
 	q_header_hbox.alignment = BoxContainer.ALIGNMENT_BEGIN
-	q_header_hbox.add_theme_constant_override("separation", 10)
+	q_header_hbox.add_theme_constant_override("separation", 8)
 	qp_vbox.add_child(q_header_hbox)
 
 	if ResourceLoader.exists("res://quest_icon.svg"):
 		var q_ic = TextureRect.new()
 		q_ic.texture = load("res://quest_icon.svg")
-		q_ic.custom_minimum_size = Vector2(28, 28)
+		var q_ic_sz = int(clamp(round(24.0 * ui_s), 20, 32))
+		q_ic.custom_minimum_size = Vector2(q_ic_sz, q_ic_sz)
 		q_ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		q_ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		q_ic.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -6605,7 +6642,7 @@ func _build_shop_tab() -> Control:
 	var q_title_lbl = Label.new()
 	q_title_lbl.text = LANG.get(Global.current_lang, LANG["ENG"]).get("DAILY_QUESTS_TITLE", "GÜNLÜK GÖREVLER")
 	q_title_lbl.add_theme_font_override("font", custom_font)
-	q_title_lbl.add_theme_font_size_override("font_size", 28)
+	q_title_lbl.add_theme_font_size_override("font_size", int(clamp(round(23.0 * ui_s), 20, 30)))
 	q_title_lbl.add_theme_color_override("font_color", Color.WHITE)
 	q_title_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 	q_header_hbox.add_child(q_title_lbl)
@@ -6618,7 +6655,7 @@ func _build_shop_tab() -> Control:
 	var q_date_lbl = Label.new()
 	q_date_lbl.text = _format_daily_date_ddmmyy(Global.daily_date)
 	q_date_lbl.add_theme_font_override("font", custom_font)
-	q_date_lbl.add_theme_font_size_override("font_size", 20)
+	q_date_lbl.add_theme_font_size_override("font_size", int(clamp(round(17.0 * ui_s), 15, 22)))
 	q_date_lbl.add_theme_color_override("font_color", Color.WHITE)
 	q_date_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	q_date_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -6627,7 +6664,7 @@ func _build_shop_tab() -> Control:
 	var q_chev_lbl = Label.new()
 	q_chev_lbl.text = "›"
 	q_chev_lbl.add_theme_font_override("font", custom_font)
-	q_chev_lbl.add_theme_font_size_override("font_size", 26)
+	q_chev_lbl.add_theme_font_size_override("font_size", int(clamp(round(24.0 * ui_s), 20, 30)))
 	q_chev_lbl.add_theme_color_override("font_color", Color.WHITE)
 	q_chev_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	q_chev_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -6636,34 +6673,38 @@ func _build_shop_tab() -> Control:
 	# Quests Cards List
 	for q in Global.daily_quests:
 		var q_card = PanelContainer.new()
+		q_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		q_card.mouse_filter = Control.MOUSE_FILTER_PASS
 		var qc_style = StyleBoxFlat.new()
 		qc_style.bg_color = active_theme.bg_top.darkened(0.15)
-		qc_style.corner_radius_top_left = 12; qc_style.corner_radius_top_right = 12
-		qc_style.corner_radius_bottom_left = 12; qc_style.corner_radius_bottom_right = 12
-		qc_style.border_width_bottom = 3; qc_style.border_color = active_theme.bg_bottom.darkened(0.35)
-		qc_style.content_margin_left = 14; qc_style.content_margin_right = 14
-		qc_style.content_margin_top = 10; qc_style.content_margin_bottom = 10
+		qc_style.corner_radius_top_left = 10; qc_style.corner_radius_top_right = 10
+		qc_style.corner_radius_bottom_left = 10; qc_style.corner_radius_bottom_right = 10
+		qc_style.border_width_bottom = 2; qc_style.border_color = active_theme.bg_bottom.darkened(0.35)
+		qc_style.content_margin_left = 12; qc_style.content_margin_right = 12
+		var qc_pad_v = int(clamp(round(7.0 * ui_s), 4, 13))
+		qc_style.content_margin_top = qc_pad_v
+		qc_style.content_margin_bottom = qc_pad_v
 		q_card.add_theme_stylebox_override("panel", qc_style)
 		qp_vbox.add_child(q_card)
 
 		var q_row = HBoxContainer.new()
 		q_row.mouse_filter = Control.MOUSE_FILTER_PASS
 		q_row.alignment = BoxContainer.ALIGNMENT_CENTER
-		q_row.add_theme_constant_override("separation", 12)
+		q_row.add_theme_constant_override("separation", 10)
 		q_card.add_child(q_row)
 
 		var text_col = VBoxContainer.new()
 		text_col.mouse_filter = Control.MOUSE_FILTER_PASS
+		text_col.alignment = BoxContainer.ALIGNMENT_CENTER
 		text_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		text_col.add_theme_constant_override("separation", 4)
+		text_col.add_theme_constant_override("separation", int(clamp(round(3.0 * ui_s), 2, 6)))
 		q_row.add_child(text_col)
 
 		var desc_lbl = Label.new()
 		var desc_dict = q.get("desc", {})
 		desc_lbl.text = desc_dict.get(Global.current_lang, desc_dict.get("ENG", "Görev"))
 		desc_lbl.add_theme_font_override("font", custom_font)
-		desc_lbl.add_theme_font_size_override("font_size", 20)
+		desc_lbl.add_theme_font_size_override("font_size", int(clamp(round(18.0 * ui_s), 16, 23)))
 		desc_lbl.add_theme_color_override("font_color", Color.WHITE)
 		desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
 		desc_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -6683,7 +6724,7 @@ func _build_shop_tab() -> Control:
 
 		var pbar = ProgressBar.new()
 		pbar.mouse_filter = Control.MOUSE_FILTER_PASS
-		pbar.custom_minimum_size = Vector2(160, 14)
+		pbar.custom_minimum_size = Vector2(int(clamp(round(145.0 * ui_s), 120, 200)), int(clamp(round(13.0 * ui_s), 11, 16)))
 		pbar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		pbar.min_value = 0
 		pbar.max_value = tgt_p
@@ -6704,7 +6745,7 @@ func _build_shop_tab() -> Control:
 		var p_txt_lbl = Label.new()
 		p_txt_lbl.text = str(cur_p) + "/" + str(tgt_p) + "  •  +" + str(r_amount) + " " + LANG.get(Global.current_lang, LANG["ENG"]).get("CURRENCY", "Jeton")
 		p_txt_lbl.add_theme_font_override("font", custom_font)
-		p_txt_lbl.add_theme_font_size_override("font_size", 16)
+		p_txt_lbl.add_theme_font_size_override("font_size", int(clamp(round(15.0 * ui_s), 13, 19)))
 		p_txt_lbl.add_theme_color_override("font_color", Color.WHITE)
 		p_txt_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 		prog_hbox.add_child(p_txt_lbl)
@@ -6712,8 +6753,8 @@ func _build_shop_tab() -> Control:
 		# Action / Claim button
 		var claim_btn = Button.new()
 		claim_btn.add_theme_font_override("font", custom_font)
-		claim_btn.add_theme_font_size_override("font_size", 20)
-		claim_btn.custom_minimum_size = Vector2(140, 48)
+		claim_btn.add_theme_font_size_override("font_size", int(clamp(round(18.0 * ui_s), 15, 22)))
+		claim_btn.custom_minimum_size = Vector2(int(clamp(round(138.0 * ui_s), 124, 168)), int(clamp(round(41.0 * ui_s), 36, 52)))
 		claim_btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
 		if is_claimed:
@@ -6721,7 +6762,7 @@ func _build_shop_tab() -> Control:
 			if ResourceLoader.exists("res://checkmark_icon.svg"):
 				claim_btn.icon = load("res://checkmark_icon.svg")
 				claim_btn.expand_icon = true
-				claim_btn.add_theme_constant_override("icon_max_width", 18)
+				claim_btn.add_theme_constant_override("icon_max_width", 16)
 				claim_btn.add_theme_constant_override("h_separation", 6)
 			claim_btn.disabled = true
 			claim_btn.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -6749,9 +6790,9 @@ func _build_shop_tab() -> Control:
 
 		q_row.add_child(claim_btn)
 
-	# Bottom spacing for comfortable vertical scroll above bottom nav bar
+	# Minimal bottom breathing spacer (content fits on screen without vertical scrolling)
 	var sp_bottom = Control.new()
-	sp_bottom.custom_minimum_size = Vector2(0, 140)
+	sp_bottom.custom_minimum_size = Vector2(0, 4)
 	vbox.add_child(sp_bottom)
 
 	return page
@@ -7351,10 +7392,10 @@ func _style_top_badge_button(btn: Button):
 	var b_style = StyleBoxFlat.new()
 	b_style.bg_color = active_theme.bg_bottom.darkened(0.30)
 	b_style.bg_color.a = 0.96
-	b_style.corner_radius_top_left = 16; b_style.corner_radius_top_right = 16
-	b_style.corner_radius_bottom_left = 16; b_style.corner_radius_bottom_right = 16
-	b_style.border_width_left = 2; b_style.border_width_right = 2
-	b_style.border_width_top = 2; b_style.border_width_bottom = 4
+	b_style.corner_radius_top_left = 0; b_style.corner_radius_top_right = 0
+	b_style.corner_radius_bottom_left = 0; b_style.corner_radius_bottom_right = 0
+	b_style.border_width_left = 0; b_style.border_width_right = 0
+	b_style.border_width_top = 2; b_style.border_width_bottom = 3
 	b_style.border_color = active_theme.accent.lightened(0.18)
 	b_style.shadow_color = Color8(0, 0, 0, 130)
 	b_style.shadow_size = 10
@@ -7381,14 +7422,6 @@ func _style_top_badge_button(btn: Button):
 		ib_s.border_width_top = 1; ib_s.border_width_bottom = 1
 		ib_s.border_color = active_theme.accent.lightened(0.22)
 		icon_bg.add_theme_stylebox_override("panel", ib_s)
-
-	var chev_bg = btn.find_child("BadgeChevBox", true, false) as PanelContainer
-	if chev_bg:
-		var cb_s = StyleBoxFlat.new()
-		cb_s.bg_color = active_theme.accent.darkened(0.42)
-		cb_s.corner_radius_top_left = 9; cb_s.corner_radius_top_right = 9
-		cb_s.corner_radius_bottom_left = 9; cb_s.corner_radius_bottom_right = 9
-		chev_bg.add_theme_stylebox_override("panel", cb_s)
 
 func _refresh_top_bars_theme():
 	if is_instance_valid(vip_top_bar):
@@ -7496,6 +7529,106 @@ func _position_top_bar(bar: Control):
 		var target_idx = tab_container.get_index() + 1
 		move_child(bar, target_idx)
 
+func _get_top_bar_margin_top() -> int:
+	var vp_h = max(get_viewport_rect().size.y, 1.0)
+	var scr_h = max(float(DisplayServer.screen_get_size().y), 1.0)
+	var safe_top_px = DisplayServer.get_display_safe_area().position.y
+	var safe_vp = int(ceil(float(safe_top_px) * (vp_h / scr_h)))
+	return clampi(max(26, safe_vp + 6), 26, 48)
+
+func _create_top_badge_shell(margin_name: String, btn_name: String) -> Dictionary:
+	if active_theme.is_empty():
+		active_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
+	var top_margin = MarginContainer.new()
+	top_margin.name = margin_name
+	top_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	top_margin.add_theme_constant_override("margin_top", _get_top_bar_margin_top())
+	top_margin.add_theme_constant_override("margin_left", 0)
+	top_margin.add_theme_constant_override("margin_right", 0)
+	top_margin.mouse_filter = Control.MOUSE_FILTER_PASS
+	add_child(top_margin)
+	_position_top_bar(top_margin)
+
+	var badge_btn = Button.new()
+	badge_btn.name = btn_name
+	badge_btn.custom_minimum_size = Vector2(0, 62)
+	badge_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	badge_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	top_margin.add_child(badge_btn)
+
+	var inner_pad = MarginContainer.new()
+	inner_pad.set_anchors_preset(Control.PRESET_FULL_RECT)
+	inner_pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	inner_pad.add_theme_constant_override("margin_left", 22)
+	inner_pad.add_theme_constant_override("margin_right", 22)
+	inner_pad.add_theme_constant_override("margin_top", 5)
+	inner_pad.add_theme_constant_override("margin_bottom", 6)
+	badge_btn.add_child(inner_pad)
+
+	var hb = HBoxContainer.new()
+	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hb.alignment = BoxContainer.ALIGNMENT_BEGIN
+	hb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hb.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	hb.add_theme_constant_override("separation", 14)
+	inner_pad.add_child(hb)
+
+	var icon_box = PanelContainer.new()
+	icon_box.name = "BadgeIconBox"
+	icon_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_box.custom_minimum_size = Vector2(38, 38)
+	icon_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	hb.add_child(icon_box)
+
+	var icon_center = CenterContainer.new()
+	icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_box.add_child(icon_center)
+
+	var icon_rect = TextureRect.new()
+	icon_rect.texture = preload("res://crownicon.svg")
+	icon_rect.custom_minimum_size = Vector2(22, 22)
+	icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_center.add_child(icon_rect)
+
+	var vb = VBoxContainer.new()
+	vb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vb.alignment = BoxContainer.ALIGNMENT_CENTER
+	vb.add_theme_constant_override("separation", -5)
+	vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vb.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	hb.add_child(vb)
+
+	var title_lbl = Label.new()
+	title_lbl.add_theme_font_override("font", custom_font)
+	title_lbl.add_theme_font_size_override("font_size", 19)
+	title_lbl.add_theme_color_override("font_color", Color.WHITE)
+	title_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
+	title_lbl.add_theme_constant_override("shadow_offset_y", 1)
+	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	title_lbl.clip_text = true
+	title_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	vb.add_child(title_lbl)
+
+	var desc_lbl = Label.new()
+	desc_lbl.add_theme_font_override("font", custom_font)
+	desc_lbl.add_theme_font_size_override("font_size", 15)
+	desc_lbl.add_theme_color_override("font_color", Color.WHITE)
+	desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	desc_lbl.clip_text = true
+	desc_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	vb.add_child(desc_lbl)
+
+	_style_top_badge_button(badge_btn)
+	return {
+		"margin": top_margin,
+		"btn": badge_btn,
+		"icon_rect": icon_rect,
+		"title_lbl": title_lbl,
+		"desc_lbl": desc_lbl
+	}
+
 func _ensure_vip_top_bar():
 	if not Global.is_premium:
 		if is_instance_valid(vip_top_bar):
@@ -7504,109 +7637,16 @@ func _ensure_vip_top_bar():
 
 	if is_instance_valid(vip_top_bar):
 		vip_top_bar.visible = true
+		vip_top_bar.add_theme_constant_override("margin_top", _get_top_bar_margin_top())
 		_position_top_bar(vip_top_bar)
 		_refresh_top_bars_theme()
 		return
 
-	if active_theme.is_empty():
-		active_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
-
-	var vip_margin = MarginContainer.new()
-	vip_margin.name = "VIP_Top_Bar"
-	vip_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	vip_margin.add_theme_constant_override("margin_top", 38)
-	vip_margin.add_theme_constant_override("margin_left", 24)
-	vip_margin.add_theme_constant_override("margin_right", 24)
-	vip_margin.mouse_filter = Control.MOUSE_FILTER_PASS
-	vip_top_bar = vip_margin
-	add_child(vip_margin)
-	_position_top_bar(vip_margin)
-
-	var badge_w = clampf(get_viewport_rect().size.x - 56.0, 320.0, 560.0)
-	var vip_btn = Button.new()
-	vip_btn.name = "VIP_Btn"
-	vip_btn.custom_minimum_size = Vector2(badge_w, 54)
-	vip_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	vip_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	vip_margin.add_child(vip_btn)
-
-	var inner_pad = MarginContainer.new()
-	inner_pad.set_anchors_preset(Control.PRESET_FULL_RECT)
-	inner_pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	inner_pad.add_theme_constant_override("margin_left", 14)
-	inner_pad.add_theme_constant_override("margin_right", 14)
-	inner_pad.add_theme_constant_override("margin_top", 6)
-	inner_pad.add_theme_constant_override("margin_bottom", 8)
-	vip_btn.add_child(inner_pad)
-
-	var hb = HBoxContainer.new()
-	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hb.alignment = BoxContainer.ALIGNMENT_CENTER
-	hb.add_theme_constant_override("separation", 12)
-	inner_pad.add_child(hb)
-
-	var icon_box = PanelContainer.new()
-	icon_box.name = "BadgeIconBox"
-	icon_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon_box.custom_minimum_size = Vector2(36, 36)
-	icon_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	hb.add_child(icon_box)
-
-	var icon_center = CenterContainer.new()
-	icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon_box.add_child(icon_center)
-
-	var star_rect = TextureRect.new()
-	star_rect.texture = preload("res://crownicon.svg")
-	star_rect.custom_minimum_size = Vector2(22, 22)
-	star_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	star_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	star_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon_center.add_child(star_rect)
-
-	var vb = VBoxContainer.new()
-	vb.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	vb.alignment = BoxContainer.ALIGNMENT_CENTER
-	vb.add_theme_constant_override("separation", -2)
-	vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hb.add_child(vb)
-
-	var title_lbl = Label.new()
-	title_lbl.add_theme_font_override("font", custom_font)
-	title_lbl.add_theme_font_size_override("font_size", 20)
-	title_lbl.add_theme_color_override("font_color", Color.WHITE)
-	title_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
-	title_lbl.add_theme_constant_override("shadow_offset_y", 1)
-	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	vb.add_child(title_lbl)
-	vip_title_lbl = title_lbl
-
-	var desc_lbl = Label.new()
-	desc_lbl.add_theme_font_override("font", custom_font)
-	desc_lbl.add_theme_font_size_override("font_size", 15)
-	desc_lbl.add_theme_color_override("font_color", Color.WHITE)
-	desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	desc_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	vb.add_child(desc_lbl)
-	vip_desc_lbl = desc_lbl
-
-	var chev_box = PanelContainer.new()
-	chev_box.name = "BadgeChevBox"
-	chev_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	chev_box.custom_minimum_size = Vector2(28, 28)
-	chev_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	hb.add_child(chev_box)
-
-	var arrow_lbl = Label.new()
-	arrow_lbl.text = "›"
-	arrow_lbl.add_theme_font_override("font", custom_font)
-	arrow_lbl.add_theme_font_size_override("font_size", 22)
-	arrow_lbl.add_theme_color_override("font_color", Color.WHITE)
-	arrow_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	arrow_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	chev_box.add_child(arrow_lbl)
-
-	_style_top_badge_button(vip_btn)
+	var shell = _create_top_badge_shell("VIP_Top_Bar", "VIP_Btn")
+	vip_top_bar = shell["margin"]
+	vip_title_lbl = shell["title_lbl"]
+	vip_desc_lbl = shell["desc_lbl"]
+	var vip_btn = shell["btn"] as Button
 	vip_btn.pressed.connect(func():
 		Global.play_click()
 		_show_elite_perks_popup()
@@ -7621,113 +7661,23 @@ func _ensure_house_ad_bar():
 	
 	if is_instance_valid(house_ad_bar):
 		house_ad_bar.visible = true
+		house_ad_bar.add_theme_constant_override("margin_top", _get_top_bar_margin_top())
 		_position_top_bar(house_ad_bar)
 		_refresh_top_bars_theme()
 		return
 	
-	if active_theme.is_empty():
-		active_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
-	
-	var ad_margin = MarginContainer.new()
-	ad_margin.name = "House_Ad_Top_Bar"
-	ad_margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	ad_margin.add_theme_constant_override("margin_top", 38)
-	ad_margin.add_theme_constant_override("margin_left", 24)
-	ad_margin.add_theme_constant_override("margin_right", 24)
-	ad_margin.mouse_filter = Control.MOUSE_FILTER_PASS
-	house_ad_bar = ad_margin
-	add_child(ad_margin)
-	_position_top_bar(ad_margin)
-	
-	var badge_w = clampf(get_viewport_rect().size.x - 56.0, 320.0, 560.0)
-	var ad_btn = Button.new()
-	ad_btn.name = "House_Ad_Btn"
-	ad_btn.custom_minimum_size = Vector2(badge_w, 54)
-	ad_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	ad_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	var shell = _create_top_badge_shell("House_Ad_Top_Bar", "House_Ad_Btn")
+	house_ad_bar = shell["margin"]
+	house_ad_icon_rect = shell["icon_rect"]
+	house_ad_title_lbl = shell["title_lbl"]
+	house_ad_desc_lbl = shell["desc_lbl"]
+	var ad_btn = shell["btn"] as Button
 	ad_btn.pressed.connect(_on_house_ad_clicked)
-	ad_margin.add_child(ad_btn)
-	
-	var inner_pad = MarginContainer.new()
-	inner_pad.set_anchors_preset(Control.PRESET_FULL_RECT)
-	inner_pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	inner_pad.add_theme_constant_override("margin_left", 14)
-	inner_pad.add_theme_constant_override("margin_right", 14)
-	inner_pad.add_theme_constant_override("margin_top", 6)
-	inner_pad.add_theme_constant_override("margin_bottom", 8)
-	ad_btn.add_child(inner_pad)
-	
-	var hb = HBoxContainer.new()
-	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hb.alignment = BoxContainer.ALIGNMENT_CENTER
-	hb.add_theme_constant_override("separation", 12)
-	inner_pad.add_child(hb)
-	
-	var icon_box = PanelContainer.new()
-	icon_box.name = "BadgeIconBox"
-	icon_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon_box.custom_minimum_size = Vector2(36, 36)
-	icon_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	hb.add_child(icon_box)
-
-	var icon_center = CenterContainer.new()
-	icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon_box.add_child(icon_center)
-
-	house_ad_icon_rect = TextureRect.new()
-	house_ad_icon_rect.texture = preload("res://crownicon.svg")
-	house_ad_icon_rect.custom_minimum_size = Vector2(22, 22)
-	house_ad_icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	house_ad_icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	house_ad_icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon_center.add_child(house_ad_icon_rect)
-	
-	var vb = VBoxContainer.new()
-	vb.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	vb.alignment = BoxContainer.ALIGNMENT_CENTER
-	vb.add_theme_constant_override("separation", -2)
-	vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hb.add_child(vb)
-	
-	house_ad_title_lbl = Label.new()
-	house_ad_title_lbl.add_theme_font_override("font", custom_font)
-	house_ad_title_lbl.add_theme_font_size_override("font_size", 20)
-	house_ad_title_lbl.add_theme_color_override("font_color", Color.WHITE)
-	house_ad_title_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
-	house_ad_title_lbl.add_theme_constant_override("shadow_offset_y", 1)
-	house_ad_title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	vb.add_child(house_ad_title_lbl)
-	
-	house_ad_desc_lbl = Label.new()
-	house_ad_desc_lbl.add_theme_font_override("font", custom_font)
-	house_ad_desc_lbl.add_theme_font_size_override("font_size", 15)
-	house_ad_desc_lbl.add_theme_color_override("font_color", Color.WHITE)
-	house_ad_desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	house_ad_desc_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	vb.add_child(house_ad_desc_lbl)
-	
-	var chev_box = PanelContainer.new()
-	chev_box.name = "BadgeChevBox"
-	chev_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	chev_box.custom_minimum_size = Vector2(28, 28)
-	chev_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	hb.add_child(chev_box)
-
-	var chevron_lbl = Label.new()
-	chevron_lbl.text = "›"
-	chevron_lbl.add_theme_font_override("font", custom_font)
-	chevron_lbl.add_theme_font_size_override("font_size", 22)
-	chevron_lbl.add_theme_color_override("font_color", Color.WHITE)
-	chevron_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	chevron_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	chev_box.add_child(chevron_lbl)
-	
-	_style_top_badge_button(ad_btn)
 	_update_house_ad_content()
 	
 	if not house_ad_timer:
 		house_ad_timer = Timer.new()
-		house_ad_timer.wait_time = 7.0
+		house_ad_timer.wait_time = 12.0
 		house_ad_timer.one_shot = false
 		house_ad_timer.timeout.connect(_on_house_ad_timer_timeout)
 		add_child(house_ad_timer)
@@ -9043,13 +8993,16 @@ func _start_tutorial(start_step: int = 1):
 	tutorial_overlay.add_child(tutorial_canvas)
 	
 	# Sol üstte 3 şık gösterge çubuğu (dikdörtgen/kapsül) ve sağda zarif ATLA butonu
+	# Pro olmayan oyuncularda üstteki adaptif AdMob banner'ı (120-145px) altında kalmaması için
+	# margin_top güvenli bölgeye (banner altı) dinamik olarak yerleştirilir.
 	var top_bar = MarginContainer.new()
 	top_bar.name = "TutorialTopBar"
 	top_bar.set_anchors_preset(Control.PRESET_TOP_WIDE)
 	top_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	top_bar.add_theme_constant_override("margin_left", 24)
 	top_bar.add_theme_constant_override("margin_right", 24)
-	top_bar.add_theme_constant_override("margin_top", 32)
+	var safe_top_margin = 32 if Global.is_premium else (140 if is_tablet else 150)
+	top_bar.add_theme_constant_override("margin_top", safe_top_margin)
 	tutorial_overlay.add_child(top_bar)
 	
 	var top_hb = HBoxContainer.new()

@@ -267,6 +267,42 @@ def test_admob_safety_guard():
 
     return True
 
+def test_v114_ui_and_ad_rules():
+    import os
+    print("\n--- Testing v1.1.4 UI, Quest, Hourglass & Interstitial Rules ---")
+    with open("Global.gd", "r", encoding="utf-8") as f:
+        g_content = f.read()
+    with open("main_menu.gd", "r", encoding="utf-8") as f:
+        m_content = f.read()
+
+    if not os.path.exists("hourglass_icon.svg"):
+        print("FAIL: Missing hourglass_icon.svg")
+        return False
+    if "hourglass_icon.svg" not in m_content or "⏳" in m_content:
+        print("FAIL: Shop cooldown button does not use hourglass_icon.svg cleanly")
+        return False
+    print("PASS: Shop cooldown uses custom SVG hourglass icon!")
+
+    if "lifetime_matches_played <= 5" in g_content and "interstitial_return_counter % 2" in g_content:
+        print("PASS: Interstitial ad skips first 5 matches and runs every 2 matches afterwards!")
+    else:
+        print("FAIL: Interstitial frequency/grace guard missing in Global.gd")
+        return False
+
+    if "house_ad_timer.wait_time = 12.0" in m_content and "_create_top_badge_shell" in m_content:
+        print("PASS: Top badge uses unified full-width shell with 12s cycling timer!")
+    else:
+        print("FAIL: Top badge full-width shell or 12s timer missing")
+        return False
+
+    if "has_custom_captain_configured()" in g_content:
+        print("PASS: Daily quests validate favorite team & custom captain before generation/progression!")
+    else:
+        print("FAIL: Custom captain guard missing in Global.gd")
+        return False
+
+    return True
+
 if __name__ == "__main__":
     r1 = test_global_theme_turkuaz()
     r2 = test_main_menu_lang()
@@ -276,7 +312,8 @@ if __name__ == "__main__":
     r6 = test_pitch_layout_and_contrast()
     r7 = test_lucky_wheel_logic()
     r8 = test_admob_safety_guard()
-    if r1 and r2 and r3 and r4 and r5 and r6 and r7 and r8:
+    r9 = test_v114_ui_and_ad_rules()
+    if r1 and r2 and r3 and r4 and r5 and r6 and r7 and r8 and r9:
         print("\nALL BACKEND VERIFICATION TESTS PASSED SUCCESSFULLY!")
         sys.exit(0)
     else:
