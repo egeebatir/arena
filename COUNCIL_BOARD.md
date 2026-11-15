@@ -1,6 +1,6 @@
 # 🏛️ BOL GOL FUTBOL: ÇOKLU-AJAN MECLİSİ (COUNCIL BOARD)
 > **Ekosistem Durum ve Karar Masası (Blackboard)**  
-> *Son Güncelleme: 2026-11-12* | *Durum: v1.1.4 (Build 35) — Tam Genişlik Üst Rozet, Ekrana Sığan Mağaza & İstatistikler, 5 Maç Reklamsız Başlangıç + 2 Maçta Bir Interstitial, Görev & Rehber Düzeltmeleri*
+> *Son Güncelleme: 2026-11-16* | *Durum: v1.1.4 (Build 35) — Tam Genişlik Üst Rozet, Ekrana Sığan Mağaza & İstatistikler, 5 Maç Reklamsız Başlangıç + 2 Maçta Bir Interstitial, Görev & Rehber Düzeltmeleri*
 
 ---
 
@@ -8,10 +8,10 @@
 
 | Proje | Konum / Repo | Odak Alanı | Canlı Durum |
 | :--- | :--- | :--- | :--- |
-| **⚽ Mobil Oyun (futbol)** | `c:\Users\egebatir\Documents\futbol`<br>*(arena.git - master)* | Godot 4.6 GDScript, UI/UX, AdMob, Google Play | ✅ Hazır (v1.1.4 Build 35 Derlendi — Play Console Onayı Bekliyor) |
+| **⚽ Mobil Oyun (futbol)** | `c:\Users\egebatir\Documents\futbol`<br>*(arena.git - master)* | Godot 4.6 GDScript, UI/UX, AdMob, Google Play | ✅ 100% Hazır (v1.1.4 Build 35 Dağıtıldı) |
 | **🎬 Otomasyon (futbol_automation)** | `c:\Users\egebatir\Documents\futbol_automation`<br>*(bolgolfutbolotonom.git - main)* | 9:16 Shorts/Reels Video, AI Metadata, Rastgele Tema & Skin | ✅ 100% Hazır (46 Milli Takım, 232 Takım Eşleşmesi) |
 | **🌐 Web & Landing (webfutbol)** | `c:\Users\egebatir\Documents\Bol Gol Futbol\webfutbol`<br>*(webfutbol.git - main / ebstudyo.com)* | Canlı Web Sitesi (HTML5/WASM), On-Demand Yükleme, Kapalı Beta Hunisi & SEO | ✅ v1.1.3 Hazır (Canlı Sunucuya Dağıtıldı) |
-| **📱 Google Play Store** | *Console / ASO (com.ebstudyo.bolgol)* | 5 Dil (TR, EN, ES, PT, IT), İkon, Tanıtım, Güncelleme Notları | 🟡 v1.1.3 Yayında / v1.1.4 Build 35 Yükleme Onayı Bekleniyor |
+| **📱 Google Play Store** | *Console / ASO (com.ebstudyo.bolgol)* | 5 Dil (TR, EN, ES, PT, IT), İkon, Tanıtım, Güncelleme Notları | 🟢 v1.1.4 Paketi Yayında (Build 35 — internal & alpha) |
 
 ---
 
@@ -331,5 +331,5 @@
 - [x] **Ekrana Sığan İstatistik & Mağaza Ekranları:** Dikey kaydırma çubukları (`SCROLL_MODE_SHOW_NEVER`) kaldırılıp kartlar/ızgaralar (2 sütunlu rekor ızgarası, tek satırlı favori takım başlık/form şeridi, kompakt top/şapka kartları, 140px ölü boşluğun kaldırılması) tablet ve telefonda kaydırmasız tam sığacak biçimde yeniden boyutlandırıldı.
 - [x] **Mağaza Kum Saati SVG İkonu (`hourglass_icon.svg`):** 5 dakikalık ödüllü reklam bekleme sayacındaki emoji yerine özel çizim vektörel `res://hourglass_icon.svg` entegre edildi.
 - [x] **Interstitial Reklam Akışı (`Global.gd`):** İlk 5 maçtan dönüşte geçiş reklamı gösterilmeyecek (`lifetime_matches_played <= 5`) ve sonrasında yalnızca 2 maçta bir (`interstitial_return_counter % 2 == 1`) çıkacak şekilde kalıcı sayaç eklendi.
-- [x] **Sürüm Yükseltme (`v1.1.4` / Build 35):** `Global.gd`, `export_presets.cfg`, `tools/play_console_deploy.py` ve `dist_share/index.html` güncellendi.
+- [x] **Sürüm Yükseltme (`v1.1.4` / Build 35) & Dağıtım:** `Global.gd`, `export_presets.cfg`, `tools/play_console_deploy.py` ve `dist_share/index.html` güncellendi; Google Play Console (`internal` & `alpha`, Edit ID: `01060806176771247412`) ve GitHub (`master` + `v1.1.4`) dağıtımları tamamlandı.
 
