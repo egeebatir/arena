@@ -94,32 +94,32 @@ def upload_aab(aab_path, tracks=["internal", "alpha"], release_name=None, releas
         print(f"  - SHA256: {sha256}")
         sys.stdout.flush()
 
-        # Default release notes if none provided
+        # Default release notes if none provided (strictly <= 500 chars per language for Play Console API)
         if not release_notes:
             release_notes = [
                 {
                     "language": "tr-TR",
-                    "text": "• Tam Genişlik Üst Rozet: Ekranın iki yanına yayılan sade rozet ve 12 sn bilgi döngüsü.\n• Ekrana Sığan Mağaza ve İstatistikler: Kaydırma gerektirmeyen kompakt görünüm.\n• Dengeli Reklam Akışı: İlk 5 maçta geçiş reklamı yok, ardından 2 maçta bir.\n• Günlük Görevler, Rehber ve Özel Kum Saati İkonu İyileştirmeleri."
+                    "text": "• Elit Kulüp Düzeltmesi: Google Play satın almaları artık anında aktifleşir, otomatik onaylanır ve Geri Yükle ile her cihazda tanınır.\n• Kulüp & Bayrak Düzeltmesi: Porto, Brann, Marsilya gibi kısaltması çakışan kulüplerde yanlış milli bayrak çıkması giderildi.\n• Şans Çarkı & Reklamlar: Çark reklamının ekstra jeton/bekleme tetiklemesi çözüldü; mağaza reklam süresi 60 sn oldu.\n• Güncelleme Bildirimi & Görsel: Yeni sürüm uyarısı, yenilenen logo ve temiz açılış."
                 },
                 {
                     "language": "en-US",
-                    "text": "• Edge-to-Edge Top Badge: Full-width minimalist banner with 12s cycling tips.\n• Scroll-Free Shop & Stats: Compact screen-fit layouts on both phones and tablets.\n• Balanced Interstitials: No post-match ads in the first 5 matches, then every 2 matches.\n• Daily Quests, Tutorial positioning, and custom Hourglass icon polish."
+                    "text": "• Elite Club Fix: Google Play purchases now activate instantly, acknowledge automatically, and restore reliably across devices.\n• Club Crest & Flag Fix: Fixed national flags appearing on clubs with matching short codes (Porto, Brann, Marseille, etc.).\n• Lucky Wheel & Ads: Isolated wheel ad spins from shop coin rewards and lowered shop ad cooldown to 60s.\n• Update Notice & Polish: Added an in-game update banner, ball-forward app logo, and clean startup splash."
                 },
                 {
                     "language": "es-ES",
-                    "text": "• Insignia Superior Completa: Diseño ancho sin bordes y ciclo de 12 s.\n• Tienda y Estadísticas Compactas: Todo visible en pantalla sin desplazamiento vertical.\n• Anuncios Equilibrados: Sin intersticiales en los primeros 5 partidos y luego cada 2 partidos.\n• Mejoras en Misiones Diarias, Tutorial e icono de reloj de arena."
+                    "text": "• Club Élite: Las compras de Google Play se activan al instante, se confirman automáticamente y se restauran sin fallos.\n• Escudos y Banderas: Corregido el error de banderas en clubes con siglas iguales (Porto, Brann, Marsella, etc.).\n• Ruleta y Anuncios: Giros de ruleta separados de las recompensas de tienda y espera reducida a 60s.\n• Aviso y Pulido: Nuevo aviso de actualización en el menú, logotipo renovado e inicio limpio."
                 },
                 {
                     "language": "pt-BR",
-                    "text": "• Emblema Superior Amplo: Barra em largura total com rotação de 12 s.\n• Loja e Estatísticas Compactas: Tudo ajustado à tela sem rolagem vertical.\n• Anúncios Equilibrados: Sem intersticiais nas 5 primeiras partidas e depois a cada 2.\n• Ajustes em Missões Diárias, Tutorial e ícone de ampulheta."
+                    "text": "• Clube Elite: Compras no Google Play ativam na hora, confirmam automaticamente e restauram em qualquer dispositivo.\n• Escudos e Bandeiras: Corrigido o erro de bandeiras em clubes com siglas iguais (Porto, Brann, Marselha, etc.).\n• Roda da Sorte e Anúncios: Giros da roleta isolados dos prêmios da loja e espera reduzida para 60s.\n• Aviso e Polimento: Novo aviso de atualização no menu, ícone renovado e início limpo."
                 },
                 {
                     "language": "it-IT",
-                    "text": "• Badge Superiore Full-Width: Barra a tutta larghezza con rotazione di 12 s.\n• Negozio e Statistiche Compatte: Tutto visibile su schermo senza scorrimento verticale.\n• Pubblicità Bilanciata: Nessun interstitial nelle prime 5 partite, poi ogni 2.\n• Migliorie a Missioni Giornaliere, Tutorial e icona clessidra."
+                    "text": "• Club Élite: Gli acquisti Google Play si attivano subito, si confermano in automatico e si ripristinano senza errori.\n• Stemmi e Bandiere: Risolto l'errore delle bandiere nazionali su club con sigle uguali (Porto, Brann, Marsiglia, ecc.).\n• Ruota e Annunci: Giri della ruota separati dai premi del negozio e attesa ridotta a 60s.\n• Avviso e Rifiniture: Nuovo avviso di aggiornamento nel menu, logo aggiornato e avvio pulito."
                 }
             ]
 
-        rel_name = release_name or f"{version_code} (1.1.4)"
+        rel_name = release_name or f"{version_code} (1.1.6)"
 
         # 3. Assign bundle to each requested track
         for track in tracks:
@@ -157,7 +157,7 @@ def upload_aab(aab_path, tracks=["internal", "alpha"], release_name=None, releas
             pass
         return False
 
-def update_graphics(icon_path=None, feature_graphic_path=None, language="tr-TR", key_path=None):
+def update_graphics(icon_path=None, feature_graphic_path=None, screenshots_dir=None, language="tr-TR", key_path=None):
     key = check_credentials(key_path)
     if not key:
         return False
@@ -218,7 +218,32 @@ def update_graphics(icon_path=None, feature_graphic_path=None, language="tr-TR",
             ).execute()
             print("[Play Console] Feature graphic uploaded successfully.")
 
-        # 4. Commit edit
+        # 4. Upload phone screenshots if specified
+        if screenshots_dir and os.path.isdir(screenshots_dir):
+            ss_files = sorted(
+                [
+                    os.path.join(screenshots_dir, f)
+                    for f in os.listdir(screenshots_dir)
+                    if f.lower().endswith((".png", ".jpg", ".jpeg"))
+                ]
+            )[:8]
+            if ss_files:
+                print(f"[Play Console] Uploading {len(ss_files)} phoneScreenshots from {screenshots_dir}...")
+                try:
+                    service.edits().images().deleteall(
+                        packageName=PACKAGE_NAME, editId=edit_id, language=language, imageType="phoneScreenshots"
+                    ).execute()
+                except Exception:
+                    pass
+                for ss_file in ss_files:
+                    mime = "image/jpeg" if ss_file.lower().endswith((".jpg", ".jpeg")) else "image/png"
+                    media = MediaFileUpload(ss_file, mimetype=mime)
+                    service.edits().images().upload(
+                        packageName=PACKAGE_NAME, editId=edit_id, language=language, imageType="phoneScreenshots", media_body=media
+                    ).execute()
+                    print(f"  - Uploaded screenshot: {os.path.basename(ss_file)}")
+
+        # 5. Commit edit
         service.edits().commit(packageName=PACKAGE_NAME, editId=edit_id).execute()
         print("[Play Console] Successfully committed and published graphic changes!")
         return True
@@ -238,6 +263,7 @@ if __name__ == "__main__":
     parser.add_argument("--name", type=str, default=None, help="Release name e.g. '8 (1.0.8)'")
     parser.add_argument("--icon", type=str, default=r"c:\Users\egebatir\Documents\futbol\store_assets\icon_512x512.png")
     parser.add_argument("--feature", type=str, default=r"c:\Users\egebatir\Documents\futbol\store_assets\feature_graphic_1024x500.png")
+    parser.add_argument("--screenshots", type=str, default=None, help="Directory of phoneScreenshots to upload")
     parser.add_argument("--lang", type=str, default="tr-TR")
     parser.add_argument("--key", type=str, help="Path to Service Account JSON key")
     args = parser.parse_args()
@@ -250,5 +276,5 @@ if __name__ == "__main__":
             sys.exit(1)
         upload_aab(args.aab, tracks=args.track, release_name=args.name, key_path=args.key)
     elif args.action == "update_graphics":
-        update_graphics(icon_path=args.icon, feature_graphic_path=args.feature, language=args.lang, key_path=args.key)
+        update_graphics(icon_path=args.icon, feature_graphic_path=args.feature, screenshots_dir=args.screenshots, language=args.lang, key_path=args.key)
 

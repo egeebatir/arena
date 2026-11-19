@@ -397,6 +397,20 @@ func _ready():
 	var top_limit = 207.0
 	var bottom_limit = screen_size.y - 130.0
 	CENTER = Vector2(screen_size.x / 2.0, (top_limit + bottom_limit) / 2.0 - 58.0)
+
+	# Transparent greyish-white stadium watermark over gradient background (underneath everything)
+	var bg_watermark = Node2D.new()
+	bg_watermark.draw.connect(func(): _draw_match_watermark(bg_watermark, screen_size, CENTER))
+	bg_layer.add_child(bg_watermark)
+	bg_watermark.queue_redraw()
+
+	# Subtle whitish stadium halo + curved orbital team-colored pennants (underneath pitch turf & UI)
+	var arena_backdrop = Node2D.new()
+	arena_backdrop.position = CENTER
+	arena_backdrop.z_index = -3
+	arena_backdrop.draw.connect(func(): _draw_arena_backdrop(arena_backdrop))
+	add_child(arena_backdrop)
+	arena_backdrop.queue_redraw()
 	
 	static_pitch_node = StaticPitch.new()
 	static_pitch_node.arena_radius = ARENA_RADIUS
@@ -650,8 +664,9 @@ func setup_scoreboard():
 			Global.came_from_completed_match = true
 		if is_instance_valid(stadium_player):
 			stadium_player.stop()
+		Global.stop_goal_music()
 		if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
-			Global.bg_music_player.play()
+			Global.play_menu_music(true)
 		abandon_btn.disabled = true
 		_clean_match_banner()
 		if state == "FIRST_HALF" or state == "INTRO":
@@ -1371,6 +1386,8 @@ func _physics_process(delta):
 					Global.unlock_achievement("FAVORITE_CHAMPION")
 					
 			_report_match_to_server()
+			if Global.favorite_team != "":
+				Global.sync_web_leaderboard()
 					
 		if end_match_timer > 2.0 * FPS_TARGET and not restart_btn.visible:
 			restart_btn.visible = true
@@ -1677,6 +1694,171 @@ func trigger_popup(msg: String, color: Color = Color.WHITE, outline_col: Color =
 	event_timer = 1.3
 	# Performance: skip high-step drawing during cooldown
 
+func _draw_match_watermark(canvas: Node2D, vp: Vector2, arena_center: Vector2):
+	var base_col = Color(0.92, 0.94, 0.97)
+	var line_col = Color(base_col.r, base_col.g, base_col.b, 0.065)
+	var faint_col = Color(base_col.r, base_col.g, base_col.b, 0.042)
+	var motif_col = Color(base_col.r, base_col.g, base_col.b, 0.075)
+
+	var mx = vp.x * 0.045
+	var my = vp.y * 0.035
+	var pr = Rect2(mx, my, vp.x - mx * 2.0, vp.y - my * 2.0)
+	canvas.draw_rect(pr, faint_col, false, 2.0)
+	canvas.draw_line(Vector2(pr.position.x, arena_center.y), Vector2(pr.end.x, arena_center.y), faint_col, 1.8)
+	var c_rad = 32.0
+	canvas.draw_arc(pr.position, c_rad, 0.0, 0.5 * PI, 16, line_col, 1.8, true)
+	canvas.draw_arc(Vector2(pr.end.x, pr.position.y), c_rad, 0.5 * PI, PI, 16, line_col, 1.8, true)
+	canvas.draw_arc(Vector2(pr.position.x, pr.end.y), c_rad, 1.5 * PI, TAU, 16, line_col, 1.8, true)
+	canvas.draw_arc(pr.end, c_rad, PI, 1.5 * PI, 16, line_col, 1.8, true)
+
+	var pen_w = pr.size.x * 0.54
+	var pen_h = pr.size.y * 0.10
+	canvas.draw_rect(Rect2(vp.x * 0.5 - pen_w * 0.5, pr.position.y, pen_w, pen_h), faint_col, false, 1.6)
+	canvas.draw_rect(Rect2(vp.x * 0.5 - pen_w * 0.5, pr.end.y - pen_h, pen_w, pen_h), faint_col, false, 1.6)
+
+	var draw_hex = func(pos: Vector2, r: float, col: Color):
+		for off in [Vector2.ZERO, Vector2(r * 1.75, 0), Vector2(r * 0.875, r * 1.52)]:
+			var c = pos + off
+			var pts = PackedVector2Array()
+			for i in range(6):
+				var a = i * TAU / 6.0
+				pts.append(c + Vector2(cos(a), sin(a)) * r)
+			pts.append(pts[0])
+			canvas.draw_polyline(pts, col, 1.5, true)
+
+	var draw_star = func(pos: Vector2, r: float, col: Color):
+		var pts = PackedVector2Array()
+		for i in range(10):
+			var rad = r if i % 2 == 0 else r * 0.42
+			var a = -PI * 0.5 + i * PI / 5.0
+			pts.append(pos + Vector2(cos(a), sin(a)) * rad)
+		pts.append(pts[0])
+		canvas.draw_polyline(pts, col, 1.5, true)
+
+	var draw_trophy = func(pos: Vector2, s: float, col: Color):
+		canvas.draw_arc(pos + Vector2(0, -s * 0.2), s * 0.45, 0.0, PI, 24, col, 1.8, true)
+		canvas.draw_line(pos + Vector2(-s * 0.45, -s * 0.2), pos + Vector2(s * 0.45, -s * 0.2), col, 1.8, true)
+		canvas.draw_arc(pos + Vector2(-s * 0.45, -s * 0.02), s * 0.18, 0.5 * PI, 1.5 * PI, 14, col, 1.5, true)
+		canvas.draw_arc(pos + Vector2(s * 0.45, -s * 0.02), s * 0.18, -0.5 * PI, 0.5 * PI, 14, col, 1.5, true)
+		canvas.draw_line(pos + Vector2(0, s * 0.25), pos + Vector2(0, s * 0.55), col, 2.0, true)
+		canvas.draw_rect(Rect2(pos.x - s * 0.34, pos.y + s * 0.55, s * 0.68, s * 0.16), col, false, 1.6)
+
+	var draw_ball_m = func(pos: Vector2, r: float, col: Color):
+		canvas.draw_arc(pos, r, 0.0, TAU, 32, col, 1.8, true)
+		var pts = PackedVector2Array()
+		for i in range(5):
+			var a = -PI * 0.5 + i * TAU / 5.0
+			pts.append(pos + Vector2(cos(a), sin(a)) * (r * 0.38))
+		pts.append(pts[0])
+		canvas.draw_polyline(pts, col, 1.5, true)
+		for i in range(5):
+			var a = -PI * 0.5 + i * TAU / 5.0
+			canvas.draw_line(pos + Vector2(cos(a), sin(a)) * (r * 0.38), pos + Vector2(cos(a), sin(a)) * (r * 0.92), col, 1.3, true)
+
+	var draw_shield = func(pos: Vector2, s: float, col: Color):
+		var pts = PackedVector2Array([
+			pos + Vector2(0, -s * 0.62), pos + Vector2(s * 0.52, -s * 0.42),
+			pos + Vector2(s * 0.44, s * 0.14), pos + Vector2(0, s * 0.64),
+			pos + Vector2(-s * 0.44, s * 0.14), pos + Vector2(-s * 0.52, -s * 0.42),
+			pos + Vector2(0, -s * 0.62)
+		])
+		canvas.draw_polyline(pts, col, 1.8, true)
+		canvas.draw_line(pos + Vector2(-s * 0.34, -s * 0.25), pos + Vector2(s * 0.32, s * 0.24), col, 1.5, true)
+
+	var draw_tactical = func(start_p: Vector2, end_p: Vector2, ctrl_offset: Vector2, col: Color):
+		var x_sz = 8.0
+		canvas.draw_line(start_p + Vector2(-x_sz, -x_sz), start_p + Vector2(x_sz, x_sz), col, 1.6, true)
+		canvas.draw_line(start_p + Vector2(x_sz, -x_sz), start_p + Vector2(-x_sz, x_sz), col, 1.6, true)
+		canvas.draw_arc(end_p, 9.0, 0.0, TAU, 18, col, 1.6, true)
+		var mid_p = (start_p + end_p) * 0.5 + ctrl_offset
+		for i in range(0, 12, 2):
+			var t0 = float(i) / 12.0; var t1 = float(i + 1) / 12.0
+			canvas.draw_line(start_p.lerp(mid_p, t0).lerp(mid_p.lerp(end_p, t0), t0), start_p.lerp(mid_p, t1).lerp(mid_p.lerp(end_p, t1), t1), col, 1.5, true)
+
+	draw_ball_m.call(Vector2(vp.x * 0.12, vp.y * 0.11), 30.0, motif_col)
+	draw_trophy.call(Vector2(vp.x * 0.88, vp.y * 0.11), 32.0, motif_col)
+	draw_star.call(Vector2(vp.x * 0.50, vp.y * 0.20), 22.0, faint_col)
+	draw_hex.call(Vector2(vp.x * 0.07, vp.y * 0.76), 17.0, line_col)
+	draw_shield.call(Vector2(vp.x * 0.88, vp.y * 0.77), 34.0, motif_col)
+	draw_tactical.call(Vector2(vp.x * 0.15, vp.y * 0.86), Vector2(vp.x * 0.35, vp.y * 0.80), Vector2(18, -22), motif_col)
+	draw_tactical.call(Vector2(vp.x * 0.85, vp.y * 0.86), Vector2(vp.x * 0.65, vp.y * 0.80), Vector2(-18, -22), line_col)
+	draw_ball_m.call(Vector2(vp.x * 0.50, vp.y * 0.87), 34.0, line_col)
+	draw_star.call(Vector2(vp.x * 0.14, vp.y * 0.22), 14.0, faint_col)
+	draw_star.call(Vector2(vp.x * 0.86, vp.y * 0.22), 14.0, faint_col)
+
+func _draw_team_curved_pennant(node: Node2D, r_in: float, r_out: float, a_start: float, a_end: float, team_cols: Array):
+	var steps = 32
+	var cols: Array = team_cols if team_cols.size() > 0 else [Color.WHITE]
+	var c0: Color = cols[0]
+	var c1: Color = cols[1] if cols.size() > 1 else c0
+
+	# Draw curved radial stripes filling the banner interior cleanly from flat top (a_start) to lower end (a_end)
+	var band_count = 5
+	for b in range(band_count):
+		var t0 = float(b) / float(band_count)
+		var t1 = float(b + 1) / float(band_count)
+		var ba0 = lerp(a_start, a_end, t0)
+		var ba1 = lerp(a_start, a_end, t1)
+		var seg_steps = 8
+		var seg_poly = PackedVector2Array()
+		for i in range(seg_steps + 1):
+			var a = lerp(ba0, ba1, float(i) / float(seg_steps))
+			seg_poly.append(Vector2(cos(a), sin(a)) * r_out)
+		for i in range(seg_steps, -1, -1):
+			var a = lerp(ba0, ba1, float(i) / float(seg_steps))
+			seg_poly.append(Vector2(cos(a), sin(a)) * r_in)
+		var band_col: Color = c0 if (b % 2 == 0) else c1
+		if cols.size() >= 3:
+			band_col = cols[b % cols.size()]
+		band_col.a = 0.78
+		node.draw_colored_polygon(seg_poly, band_col)
+
+	# Full outer contour (flat radial cut at both ends, zero triangular tips)
+	var poly = PackedVector2Array()
+	for i in range(steps + 1):
+		var a = lerp(a_start, a_end, float(i) / float(steps))
+		poly.append(Vector2(cos(a), sin(a)) * r_out)
+	for i in range(steps, -1, -1):
+		var a = lerp(a_start, a_end, float(i) / float(steps))
+		poly.append(Vector2(cos(a), sin(a)) * r_in)
+
+	# Subtle translucent gloss sheen on outer half & whitish-grey rim border
+	var mid_r = (r_in + r_out) * 0.5
+	var gloss = PackedVector2Array()
+	for i in range(steps + 1):
+		var a = lerp(a_start, a_end, float(i) / float(steps))
+		gloss.append(Vector2(cos(a), sin(a)) * r_out)
+	for i in range(steps, -1, -1):
+		var a = lerp(a_start, a_end, float(i) / float(steps))
+		gloss.append(Vector2(cos(a), sin(a)) * mid_r)
+	node.draw_colored_polygon(gloss, Color(1.0, 1.0, 1.0, 0.11))
+
+	var closed_outline = poly.duplicate()
+	closed_outline.append(poly[0])
+	node.draw_polyline(closed_outline, Color(0.93, 0.95, 0.98, 0.76), 2.8, true)
+	node.draw_arc(Vector2.ZERO, r_in + 6.0, min(a_start, a_end), max(a_start, a_end), steps, Color(1.0, 1.0, 1.0, 0.28), 1.2, true)
+	node.draw_arc(Vector2.ZERO, r_out - 6.0, min(a_start, a_end), max(a_start, a_end), steps, Color(1.0, 1.0, 1.0, 0.28), 1.2, true)
+
+func _draw_arena_backdrop(node: Node2D):
+	# Ultra-subtle pure whitish-grey stadium halo around pitch (smooth continuous falloff, zero accent tint)
+	var halo_steps = 8
+	for i in range(halo_steps):
+		var t = float(i) / float(halo_steps - 1)
+		var r_halo = ARENA_RADIUS + lerp(2.0, 32.0, t)
+		var w_halo = lerp(4.5, 11.0, t)
+		var a_halo = pow(1.0 - t, 1.9) * 0.085
+		if a_halo >= 0.004:
+			node.draw_arc(Vector2.ZERO, r_halo, 0.0, TAU, 96, Color(0.95, 0.97, 1.0, a_halo), w_halo, true)
+
+	# Curved orbital team-colored pennants (flat top, thicker band, shorter arc, spaced outward)
+	var gap_scale = clamp((CENTER.y - 210.0) / 395.0, 0.72, 1.0)
+	var r_in = ARENA_RADIUS + 40.0 * gap_scale
+	var r_out = r_in + 74.0 * gap_scale
+	var home_cols = Global.TEAMS.get(Global.home_team_name, {}).get("colors", [Color.RED, Color.WHITE])
+	var away_cols = Global.TEAMS.get(Global.away_team_name, {}).get("colors", [Color.BLUE, Color.WHITE])
+	_draw_team_curved_pennant(node, r_in, r_out, -PI * 0.62, -PI * 0.85, home_cols)
+	_draw_team_curved_pennant(node, r_in, r_out, -PI * 0.38, -PI * 0.15, away_cols)
+
 func _report_match_to_server():
 	var http = HTTPRequest.new()
 	http.timeout = 5.0
@@ -1686,6 +1868,15 @@ func _report_match_to_server():
 			http.queue_free()
 	)
 	var url = "https://www.ebstudyo.com/api/report_match.php"
-	var err = http.request(url, ["User-Agent: BolGolFutbolApp/1.0"], HTTPClient.METHOD_POST, "")
+	var headers = [
+		"Content-Type: application/json",
+		"User-Agent: BolGolFutbolApp/" + Global.CURRENT_GAME_VERSION
+	]
+	var body = JSON.stringify({
+		"mode": "player",
+		"home": Global.home_team_name,
+		"away": Global.away_team_name
+	})
+	var err = http.request(url, headers, HTTPClient.METHOD_POST, body)
 	if err != OK and is_instance_valid(http):
 		http.queue_free()

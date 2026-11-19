@@ -4,6 +4,12 @@ var custom_font = preload("res://Teko-Bold.ttf")
 var bg_music_player: AudioStreamPlayer
 var click_player: AudioStreamPlayer
 var goal_music_player: AudioStreamPlayer
+var wheel_tick_players: Array[AudioStreamPlayer] = []
+var wheel_tick_idx: int = 0
+var prize_win_player: AudioStreamPlayer
+var shop_buy_player: AudioStreamPlayer
+var ui_error_player: AudioStreamPlayer
+var tab_whoosh_player: AudioStreamPlayer
 
 var current_lang = "TR"
 var home_team_name = "GALATA FK"
@@ -26,12 +32,16 @@ var LANG = {
 	}
 }
 
+const MENU_MUSIC_GAIN = 0.65
+var menu_music_tween: Tween = null
+
 # --- NEW SETTINGS & THEMES ---
 var master_vol = 1.0
 var vol_settings = {
 	"stadium": 0.55,
-	"menu_music": 0.4,
+	"menu_music": 0.20,
 	"music": 0.85,
+	"sfx": 0.75,
 	"collision": 0.02,
 	"whistle": 0.4
 }
@@ -46,7 +56,7 @@ var is_automation_mode = false
 # --- PROGRESSION & ADS ---
 var ad_credits: int = 0
 var last_rewarded_ad_time: float = 0.0
-const REWARDED_AD_COOLDOWN_SEC: float = 300.0 # 5 minutes (300 seconds) ideal retention cooldown
+const REWARDED_AD_COOLDOWN_SEC: float = 60.0 # 1 minute (60s): optimal AdMob fill-rate/eCPM buffer & player-friendly UX
 
 func get_rewarded_ad_cooldown_left() -> float:
 	var now = Time.get_unix_time_from_system()
@@ -79,8 +89,19 @@ var last_selected_league_away: int = 1
 var custom_player_names: Dictionary = {}
 var unlocked_achievements: Array = []
 var favorite_team_goals_scored: int = 0
-const CURRENT_GAME_VERSION: String = "1.1.4"
+const CURRENT_GAME_VERSION: String = "1.1.6"
+const CURRENT_VERSION_CODE: int = 37
+const VERSION_CHECK_URL: String = "https://www.ebstudyo.com/api/version.json"
+const PLAY_STORE_URL: String = "https://play.google.com/store/apps/details?id=com.ebstudyo.bolgol"
 var last_tutorial_version: String = ""
+
+signal update_available_detected(version_name: String, store_url: String)
+var update_check_started: bool = false
+var update_available: bool = false
+var latest_remote_version_name: String = ""
+var latest_remote_version_code: int = 0
+var latest_store_url: String = PLAY_STORE_URL
+var update_notice_dismissed_this_session: bool = false
 
 # --- DAILY QUESTS, LUCKY WHEEL & MATCH ECONOMY ---
 var daily_date: String = ""
@@ -243,9 +264,9 @@ func unlock_achievement(achievement_key: String):
 func show_achievements():
 	if not play_games_achievements_client and not Engine.has_singleton("GodotPlayGameServices"):
 		init_google_play_services()
-	if play_games_sign_in_client and play_games_sign_in_client.has_method("sign_in"):
-		play_games_sign_in_client.sign_in()
 	if play_games_achievements_client and play_games_achievements_client.has_method("show_achievements"):
+		if login_method != "google" and play_games_sign_in_client and play_games_sign_in_client.has_method("sign_in"):
+			play_games_sign_in_client.sign_in()
 		play_games_achievements_client.show_achievements()
 	elif Engine.has_singleton("GodotPlayGameServices"):
 		var gps = Engine.get_singleton("GodotPlayGameServices")
@@ -255,7 +276,11 @@ func show_achievements():
 		print("[Global] Play Games Achievements not available on this platform.")
 
 func show_leaderboards():
+	if not play_games_leaderboards_client and not Engine.has_singleton("GodotPlayGameServices"):
+		init_google_play_services()
 	if play_games_leaderboards_client and play_games_leaderboards_client.has_method("show_all_leaderboards"):
+		if login_method != "google" and play_games_sign_in_client and play_games_sign_in_client.has_method("sign_in"):
+			play_games_sign_in_client.sign_in()
 		play_games_leaderboards_client.show_all_leaderboards()
 	elif Engine.has_singleton("GodotPlayGameServices"):
 		var gps = Engine.get_singleton("GodotPlayGameServices")
@@ -411,6 +436,18 @@ func remove_all_banners():
 
 
 const HATS = {
+	"player_mask": {
+		"id": "player_mask",
+		"price": 1000,
+		"texture_path": "res://hat_player_mask.png",
+		"name": {
+			"TR": "Futbolcu Maskesi",
+			"ENG": "Player Mask",
+			"ESP": "Máscara de Jugador",
+			"POR": "Máscara de Jogador",
+			"ITA": "Maschera da Giocatore"
+		}
+	},
 	"viking_helmet": {
 		"id": "viking_helmet",
 		"price": 1000,
@@ -545,6 +582,51 @@ const LEAGUES = {
 }
 
 var TEAM_LOGOS = {}
+var TEAM_BADGES = {}
+
+# Strictly separate club crests from national flags so short-code collisions (e.g. POR/PORTO, BRA/BRANN) never leak flags onto clubs.
+const CLUB_BADGE_MAP = {
+	"FB":  "res://fb1.png",
+	"FEN": "res://fb1.png",
+	"TS":  "res://ts1.png",
+	"TRA": "res://ts1.png",
+	"GS":  "res://gs1.png",
+	"GAL": "res://gs1.png",
+	"BJK": "res://bjk1.png",
+	"BAR": "res://bar1.png",
+	"RMA": "res://rma1.png",
+	"ATM": "res://atm1.png",
+	"JUV": "res://juv1.png",
+	"INT": "res://int1.png",
+	"MIL": "res://mil1.png",
+	"NAP": "res://nap1.png",
+	"TOR": "res://tor1.png",
+	"MC":  "res://mc1.png",
+	"MCI": "res://mc1.png",
+	"MUN": "res://mun1.png",
+	"CHE": "res://che1.png",
+	"ARS": "res://ars1.png",
+	"LIV": "res://liv1.png",
+	"PSG": "res://psg1.png",
+	"BAY": "res://bay1.png",
+	"BVB": "res://bvb1.png",
+	"MIA": "res://mia1.png"
+}
+
+const NATIONAL_FLAG_MAP = {
+	"TUR": "res://tur1.png", "ARG": "res://arg1.png", "POR": "res://por1.png", "ENG": "res://eng1.png",
+	"USA": "res://usa1.png", "ITA": "res://ita1.png", "FRA": "res://fra1.png", "ESP": "res://esp1.png",
+	"GER": "res://ger1.png", "BEL": "res://bel1.png", "NED": "res://ned1.png", "CRO": "res://cro1.png",
+	"DEN": "res://den1.png", "SUI": "res://sui1.png", "AUT": "res://aut1.png", "POL": "res://pol1.png",
+	"SRB": "res://srb1.png", "CZE": "res://cze1.png", "SCO": "res://sco1.png", "NOR": "res://nor1.png",
+	"BRA": "res://bra1.png", "URU": "res://uru1.png", "COL": "res://col1.png", "CHI": "res://chi1.png",
+	"PAR": "res://par1.png", "ECU": "res://ecu1.png", "NGA": "res://nga1.png", "MAR": "res://mar1.png",
+	"EGY": "res://egy1.png", "SEN": "res://sen1.png", "ALG": "res://alg1.png", "CMR": "res://cmr1.png",
+	"GHA": "res://gha1.png", "JPN": "res://jpn1.png", "KOR": "res://kor1.png", "KSA": "res://ksa1.png",
+	"IRN": "res://irn1.png", "AUS": "res://aus1.png", "QAT": "res://qat1.png", "MEX": "res://mex1.png",
+	"CAN": "res://can1.png", "GEO": "res://geo1.png", "SWE": "res://swe1.png", "GRE": "res://gre1.png",
+	"ROU": "res://rou1.png", "WAL": "res://wal1.png"
+}
 
 var TEAMS = {
 	# --- MİLLİ TAKIMLAR ---
@@ -804,13 +886,41 @@ var TEAMS = {
 	"CELTIC SC":      {"colors": [Color8(0, 128, 0), Color8(255, 255, 255)],   "short": "CLT", "league": "WORLD", "type": "club"}
 }
 
+func get_team_badge_texture(team_name: String) -> Texture2D:
+	if TEAM_BADGES.has(team_name):
+		return TEAM_BADGES[team_name]
+	if not TEAMS.has(team_name):
+		TEAM_BADGES[team_name] = null
+		return null
+	var team_data = TEAMS[team_name]
+	var is_national = (team_data.get("type", "") == "national")
+	var short_upper = str(team_data.get("short", "")).to_upper()
+	var path = ""
+	if is_national:
+		if NATIONAL_FLAG_MAP.has(short_upper):
+			path = NATIONAL_FLAG_MAP[short_upper]
+		else:
+			path = "res://" + short_upper.to_lower() + "1.png"
+	else:
+		if CLUB_BADGE_MAP.has(short_upper):
+			path = CLUB_BADGE_MAP[short_upper]
+	if path != "" and ResourceLoader.exists(path):
+		var tex = load(path)
+		TEAM_BADGES[team_name] = tex
+		return tex
+	TEAM_BADGES[team_name] = null
+	return null
+
 func get_team_logo(team_name: String) -> Texture2D:
 	if TEAM_LOGOS.has(team_name):
 		return TEAM_LOGOS[team_name]
 	if not TEAMS.has(team_name):
 		TEAM_LOGOS[team_name] = null
 		return null
-	var short_name = TEAMS[team_name].get("short", "")
+	var team_data = TEAMS[team_name]
+	var is_national = (team_data.get("type", "") == "national")
+	var short_name = str(team_data.get("short", ""))
+	var short_upper = short_name.to_upper()
 	var generic_fallback = "res://generic_logo.png"
 	var mapped_path = "res://assets/generic_" + short_name.to_lower() + ".png"
 	var tex: Texture2D = null
@@ -818,16 +928,10 @@ func get_team_logo(team_name: String) -> Texture2D:
 		tex = load(mapped_path)
 	elif ResourceLoader.exists("res://assets/" + short_name.to_lower() + ".png"):
 		tex = load("res://assets/" + short_name.to_lower() + ".png")
-	elif ResourceLoader.exists("res://" + short_name.to_lower() + "1.png"):
+	elif is_national and ResourceLoader.exists("res://" + short_name.to_lower() + "1.png"):
 		tex = load("res://" + short_name.to_lower() + "1.png")
-	elif (short_name == "FEN" or short_name == "FB") and ResourceLoader.exists("res://fb1.png"):
-		tex = load("res://fb1.png")
-	elif (short_name == "GAL" or short_name == "GS") and ResourceLoader.exists("res://gs1.png"):
-		tex = load("res://gs1.png")
-	elif (short_name == "TRA" or short_name == "TS") and ResourceLoader.exists("res://ts1.png"):
-		tex = load("res://ts1.png")
-	elif (short_name == "MCI" or short_name == "MC") and ResourceLoader.exists("res://mc1.png"):
-		tex = load("res://mc1.png")
+	elif not is_national and CLUB_BADGE_MAP.has(short_upper) and ResourceLoader.exists(CLUB_BADGE_MAP[short_upper]):
+		tex = load(CLUB_BADGE_MAP[short_upper])
 	elif ResourceLoader.exists(generic_fallback):
 		tex = load(generic_fallback)
 	TEAM_LOGOS[team_name] = tex
@@ -838,13 +942,17 @@ func _ready():
 	if OS.has_feature("mobile") or OS.get_name() in ["Android", "iOS"]:
 		DisplayServer.screen_set_orientation(DisplayServer.SCREEN_PORTRAIT)
 	
+	# Load persisted audio & progression settings BEFORE initializing or playing audio
+	load_progression()
+	
 	bg_music_player = AudioStreamPlayer.new()
 	bg_music_player.stream = preload("res://main_menu.mp3")
 	if bg_music_player.stream is AudioStreamMP3:
 		bg_music_player.stream.loop = true
+	bg_music_player.volume_db = -80.0
 	bg_music_player.finished.connect(func():
 		if is_instance_valid(bg_music_player) and not is_on_match_pitch():
-			bg_music_player.play()
+			play_menu_music(false)
 	)
 	add_child(bg_music_player)
 	_update_bg_music_volume()
@@ -864,13 +972,37 @@ func _ready():
 		goal_music_player.stream = g_stream
 	add_child(goal_music_player)
 	_update_goal_music_volume()
+
+	# UI, Shop & Lucky Wheel SFX Players (isolated pools to prevent overlap/cutting)
+	for _i in range(3):
+		var wt = AudioStreamPlayer.new()
+		wt.stream = preload("res://wheel_tick.ogg")
+		add_child(wt)
+		wheel_tick_players.append(wt)
+
+	prize_win_player = AudioStreamPlayer.new()
+	prize_win_player.stream = preload("res://prize_win.ogg")
+	add_child(prize_win_player)
+
+	shop_buy_player = AudioStreamPlayer.new()
+	shop_buy_player.stream = preload("res://shop_buy.ogg")
+	add_child(shop_buy_player)
+
+	ui_error_player = AudioStreamPlayer.new()
+	ui_error_player.stream = preload("res://ui_error.ogg")
+	add_child(ui_error_player)
+
+	tab_whoosh_player = AudioStreamPlayer.new()
+	tab_whoosh_player.stream = preload("res://tab_whoosh.ogg")
+	add_child(tab_whoosh_player)
+
+	_update_sfx_volumes()
 	
-	# Initial delay before starting menu music
+	# Initial delay before starting menu music with smooth fade-in
 	get_tree().create_timer(0.5).timeout.connect(func():
-		play_menu_music()
+		play_menu_music(true)
 	)
 	
-	load_progression()
 	load_stats()
 	init_google_play_services()
 	init_admob()
@@ -882,27 +1014,124 @@ func is_on_match_pitch() -> bool:
 		return false
 	return cur.name == "Pitch" or (cur.scene_file_path != "" and cur.scene_file_path.ends_with("pitch.tscn"))
 
-func play_menu_music():
-	if is_instance_valid(bg_music_player):
-		_update_bg_music_volume()
-		if not bg_music_player.playing and not is_on_match_pitch():
+func get_menu_music_linear_volume(m_vol: float, menu_vol: float) -> float:
+	return clamp(m_vol * menu_vol * MENU_MUSIC_GAIN, 0.0, 1.0)
+
+func play_menu_music(fade_in: bool = true):
+	if not is_instance_valid(bg_music_player) or is_on_match_pitch():
+		return
+	var target_vol = get_menu_music_linear_volume(master_vol, vol_settings.get("menu_music", 0.20))
+	if target_vol <= 0.01:
+		bg_music_player.volume_db = -80.0
+		return
+	var target_db = linear_to_db(target_vol)
+	if not bg_music_player.playing:
+		if is_instance_valid(menu_music_tween):
+			menu_music_tween.kill()
+		if fade_in:
+			bg_music_player.volume_db = min(-42.0, target_db - 18.0)
 			bg_music_player.play()
+			menu_music_tween = create_tween()
+			menu_music_tween.tween_property(bg_music_player, "volume_db", target_db, 0.9)
+		else:
+			bg_music_player.volume_db = target_db
+			bg_music_player.play()
+	else:
+		if not is_instance_valid(menu_music_tween) or not menu_music_tween.is_running():
+			bg_music_player.volume_db = target_db
 
 func play_click():
 	if is_instance_valid(click_player):
-		var target_vol = master_vol * vol_settings.get("collision", 0.4) * 8.64 # Boost volume by 8x + 8%
-		click_player.volume_db = linear_to_db(clamp(target_vol, 0.0, 1.0))
+		var sfx_factor = vol_settings.get("sfx", 0.75) / 0.75
+		var target_vol = master_vol * sfx_factor * vol_settings.get("collision", 0.4) * 8.64 # Boost volume by 8x + 8%
+		if target_vol <= 0.01:
+			click_player.volume_db = -80.0
+			return
+		click_player.volume_db = linear_to_db(clamp(target_vol, 0.0001, 1.0))
 		click_player.play()
+
+func get_sfx_linear_volume(m_vol: float, sfx_vol: float, scale: float = 1.0) -> float:
+	return clamp(m_vol * sfx_vol * 0.55 * scale, 0.0, 1.0)
+
+func _apply_player_linear_vol(player: AudioStreamPlayer, linear_v: float):
+	if not is_instance_valid(player):
+		return
+	if linear_v <= 0.01:
+		player.volume_db = -80.0
+	else:
+		player.volume_db = linear_to_db(clamp(linear_v, 0.0001, 1.0))
+
+func _update_sfx_volumes():
+	var sfx_v = vol_settings.get("sfx", 0.75)
+	for wt in wheel_tick_players:
+		_apply_player_linear_vol(wt, get_sfx_linear_volume(master_vol, sfx_v, 0.75))
+	_apply_player_linear_vol(prize_win_player, get_sfx_linear_volume(master_vol, sfx_v, 0.90))
+	_apply_player_linear_vol(shop_buy_player, get_sfx_linear_volume(master_vol, sfx_v, 0.85))
+	_apply_player_linear_vol(ui_error_player, get_sfx_linear_volume(master_vol, sfx_v, 0.80))
+	_apply_player_linear_vol(tab_whoosh_player, get_sfx_linear_volume(master_vol, sfx_v, 0.55))
+
+func play_wheel_tick(speed_ratio: float = 0.5):
+	if wheel_tick_players.is_empty():
+		return
+	var target_vol = get_sfx_linear_volume(master_vol, vol_settings.get("sfx", 0.75), 0.75)
+	if target_vol <= 0.01:
+		return
+	var wt = wheel_tick_players[wheel_tick_idx]
+	wheel_tick_idx = (wheel_tick_idx + 1) % wheel_tick_players.size()
+	if is_instance_valid(wt):
+		wt.volume_db = linear_to_db(clamp(target_vol, 0.0001, 1.0))
+		wt.pitch_scale = lerp(0.95, 1.07, clamp(speed_ratio, 0.0, 1.0))
+		wt.play()
+
+func play_prize_win():
+	var target_vol = get_sfx_linear_volume(master_vol, vol_settings.get("sfx", 0.75), 0.90)
+	if target_vol <= 0.01 or not is_instance_valid(prize_win_player):
+		return
+	prize_win_player.volume_db = linear_to_db(clamp(target_vol, 0.0001, 1.0))
+	if prize_win_player.playing:
+		prize_win_player.stop()
+	prize_win_player.play()
+
+func play_shop_buy():
+	var target_vol = get_sfx_linear_volume(master_vol, vol_settings.get("sfx", 0.75), 0.85)
+	if target_vol <= 0.01 or not is_instance_valid(shop_buy_player):
+		return
+	shop_buy_player.volume_db = linear_to_db(clamp(target_vol, 0.0001, 1.0))
+	if shop_buy_player.playing:
+		shop_buy_player.stop()
+	shop_buy_player.play()
+
+func play_ui_error():
+	var target_vol = get_sfx_linear_volume(master_vol, vol_settings.get("sfx", 0.75), 0.80)
+	if target_vol <= 0.01 or not is_instance_valid(ui_error_player):
+		return
+	ui_error_player.volume_db = linear_to_db(clamp(target_vol, 0.0001, 1.0))
+	if ui_error_player.playing:
+		ui_error_player.stop()
+	ui_error_player.play()
+
+func play_tab_whoosh():
+	var target_vol = get_sfx_linear_volume(master_vol, vol_settings.get("sfx", 0.75), 0.55)
+	if target_vol <= 0.01 or not is_instance_valid(tab_whoosh_player):
+		return
+	tab_whoosh_player.volume_db = linear_to_db(clamp(target_vol, 0.0001, 1.0))
+	if tab_whoosh_player.playing:
+		tab_whoosh_player.stop()
+	tab_whoosh_player.play()
+
+func stop_goal_music():
+	if is_instance_valid(goal_music_player) and goal_music_player.playing:
+		goal_music_player.stop()
 
 func _update_bg_music_volume():
 	if is_instance_valid(bg_music_player):
-		var target_vol = master_vol * vol_settings.get("menu_music", 0.4) * 1.113
+		if is_instance_valid(menu_music_tween):
+			menu_music_tween.kill()
+		var target_vol = get_menu_music_linear_volume(master_vol, vol_settings.get("menu_music", 0.20))
 		if target_vol <= 0.01:
 			bg_music_player.volume_db = -80.0
 		else:
 			bg_music_player.volume_db = linear_to_db(target_vol)
-			if not bg_music_player.playing and not is_on_match_pitch():
-				bg_music_player.play()
 
 func _update_goal_music_volume():
 	if is_instance_valid(goal_music_player):
@@ -922,6 +1151,67 @@ func play_goal_music():
 func trigger_vibration(duration_ms: int = 500):
 	if vibration_enabled:
 		Input.vibrate_handheld(duration_ms)
+
+# ======================================================
+# IN-GAME VERSION UPDATE CHECK
+# ======================================================
+func compare_semver(remote_v: String, local_v: String) -> int:
+	var r_parts = remote_v.strip_edges().lstrip("vV").split(".")
+	var l_parts = local_v.strip_edges().lstrip("vV").split(".")
+	var max_len = max(r_parts.size(), l_parts.size())
+	for i in range(max_len):
+		var rv = int(r_parts[i]) if i < r_parts.size() and r_parts[i].is_valid_int() else 0
+		var lv = int(l_parts[i]) if i < l_parts.size() and l_parts[i].is_valid_int() else 0
+		if rv > lv:
+			return 1
+		elif rv < lv:
+			return -1
+	return 0
+
+func check_for_app_update():
+	if update_check_started or OS.get_name() == "Web":
+		return
+	update_check_started = true
+	var http = HTTPRequest.new()
+	http.timeout = 4.5
+	add_child(http)
+	http.request_completed.connect(func(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray):
+		_process_update_check_response(result, response_code, body)
+		if is_instance_valid(http):
+			http.queue_free()
+	)
+	var err = http.request(VERSION_CHECK_URL, PackedStringArray(["Accept: application/json", "User-Agent: BolGolFutbol/" + CURRENT_GAME_VERSION]))
+	if err != OK:
+		if is_instance_valid(http):
+			http.queue_free()
+
+func _process_update_check_response(result: int, response_code: int, body: PackedByteArray) -> bool:
+	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
+		return false
+	var text = body.get_string_from_utf8()
+	var parsed = JSON.parse_string(text)
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return false
+	var remote_code = int(parsed.get("version_code", 0))
+	var remote_name = str(parsed.get("version_name", "")).strip_edges()
+	var store_url = str(parsed.get("store_url", PLAY_STORE_URL)).strip_edges()
+	if store_url == "":
+		store_url = PLAY_STORE_URL
+
+	var is_newer = false
+	if remote_code > CURRENT_VERSION_CODE:
+		is_newer = true
+	elif remote_code == 0 and remote_name != "" and compare_semver(remote_name, CURRENT_GAME_VERSION) > 0:
+		is_newer = true
+
+	if is_newer:
+		update_available = true
+		latest_remote_version_code = remote_code
+		latest_remote_version_name = remote_name if remote_name != "" else str(remote_code)
+		latest_store_url = store_url
+		update_available_detected.emit(latest_remote_version_name, latest_store_url)
+		return true
+	return false
 
 # ======================================================
 # STATS PERSISTENCE  (user://stats.json)
@@ -951,6 +1241,52 @@ func load_stats():
 				match_history = match_history.slice(match_history.size() - 100)
 			recalculate_favorite_team_goals()
 
+
+func sync_web_leaderboard(custom_player_name: String = "", on_done: Callable = Callable()):
+	if favorite_team == "":
+		if on_done.is_valid():
+			on_done.call(false, 0)
+		return
+	recalculate_favorite_team_goals()
+	var p_name = custom_player_name.strip_edges()
+	if p_name == "":
+		p_name = player_name.strip_edges()
+	if p_name == "":
+		p_name = get_active_custom_player_name().strip_edges()
+	if p_name == "" or p_name == "Kaptan":
+		p_name = favorite_team + " Yıldızı"
+	var dev_id = OS.get_unique_id()
+	if dev_id.strip_edges() == "":
+		dev_id = "web-" + (p_name + "::" + favorite_team).sha256_text().substr(0, 12)
+	var http = HTTPRequest.new()
+	add_child(http)
+	http.timeout = 10.0
+	var goals = int(favorite_team_goals_scored)
+	http.request_completed.connect(func(_result, response_code, _headers, _body):
+		if is_instance_valid(http):
+			http.queue_free()
+		var ok = (response_code == 200)
+		print("[LeaderboardSync] Status=", response_code, " player=", p_name, " team=", favorite_team, " goals=", goals)
+		if on_done.is_valid():
+			on_done.call(ok, goals)
+	)
+	var url = "https://www.ebstudyo.com/api/sync_score.php"
+	var headers = [
+		"Content-Type: application/json",
+		"User-Agent: BolGolFutbol/" + CURRENT_GAME_VERSION
+	]
+	var payload = JSON.stringify({
+		"player_name": p_name,
+		"team_name": favorite_team,
+		"goals": goals,
+		"device_id": dev_id
+	})
+	var err = http.request(url, headers, HTTPClient.METHOD_POST, payload)
+	if err != OK:
+		if is_instance_valid(http):
+			http.queue_free()
+		if on_done.is_valid():
+			on_done.call(false, goals)
 
 const SAVE_SALT = "bol_gol_futbol_anti_cheat_salt_2026"
 func generate_save_hash(data_str: String) -> String:
@@ -1064,7 +1400,12 @@ func load_progression():
 			if data_to_load.has("daily_quests"): daily_quests = data_to_load["daily_quests"]
 			if data_to_load.has("current_lang"): current_lang = data_to_load["current_lang"]
 			if data_to_load.has("master_vol"): master_vol = float(data_to_load["master_vol"])
-			if data_to_load.has("vol_settings"): vol_settings = data_to_load["vol_settings"]
+			if data_to_load.has("vol_settings"):
+				vol_settings = data_to_load["vol_settings"]
+				if not vol_settings.has("sfx"): vol_settings["sfx"] = 0.75
+				if not vol_settings.has("menu_music"): vol_settings["menu_music"] = 0.20
+				if not vol_settings.has("stadium"): vol_settings["stadium"] = 0.55
+				if not vol_settings.has("music"): vol_settings["music"] = 0.85
 			if data_to_load.has("current_theme"): current_theme = data_to_load["current_theme"]
 			if data_to_load.has("shake_enabled"): shake_enabled = bool(data_to_load["shake_enabled"])
 			if data_to_load.has("match_duration"): match_duration = int(data_to_load["match_duration"])

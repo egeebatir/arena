@@ -19,52 +19,6 @@ var hat_texture: Texture2D    # Crown cosmetic worn by favorite team
 var is_favorite_team: bool = false
 var ball_skin: String = ""
 
-# Map short team names to mascot overlay images
-const BADGE_MAP = {
-	"FB":  "res://fb1.png",
-	"FEN": "res://fb1.png",
-	"TS":  "res://ts1.png",
-	"TRA": "res://ts1.png",
-	"GS":  "res://gs1.png",
-	"GAL": "res://gs1.png",
-	"BJK": "res://bjk1.png",
-	"BAR": "res://bar1.png",
-	"RMA": "res://rma1.png",
-	"ATM": "res://atm1.png",
-	"JUV": "res://juv1.png",
-	"INT": "res://int1.png",
-	"MIL": "res://mil1.png",
-	"NAP": "res://nap1.png",
-	"TOR": "res://tor1.png",
-	"MC":  "res://mc1.png",
-	"MCI": "res://mc1.png",
-	"MUN": "res://mun1.png",
-	"CHE": "res://che1.png",
-	"ARS": "res://ars1.png",
-	"LIV": "res://liv1.png",
-	"TUR": "res://tur1.png",
-	"ARG": "res://arg1.png",
-	"POR": "res://por1.png",
-	"ENG": "res://eng1.png",
-	"USA": "res://usa1.png",
-	"ITA": "res://ita1.png",
-	"PSG": "res://psg1.png",
-	"BAY": "res://bay1.png",
-	"BVB": "res://bvb1.png",
-	"MIA": "res://mia1.png",
-	# 40 National Teams
-	"FRA": "res://fra1.png", "ESP": "res://esp1.png", "GER": "res://ger1.png", "BEL": "res://bel1.png",
-	"NED": "res://ned1.png", "CRO": "res://cro1.png", "DEN": "res://den1.png", "SUI": "res://sui1.png",
-	"AUT": "res://aut1.png", "POL": "res://pol1.png", "SRB": "res://srb1.png", "CZE": "res://cze1.png",
-	"SCO": "res://sco1.png", "NOR": "res://nor1.png", "BRA": "res://bra1.png", "URU": "res://uru1.png",
-	"COL": "res://col1.png", "CHI": "res://chi1.png", "PAR": "res://par1.png", "ECU": "res://ecu1.png",
-	"NGA": "res://nga1.png", "MAR": "res://mar1.png", "EGY": "res://egy1.png", "SEN": "res://sen1.png",
-	"ALG": "res://alg1.png", "CMR": "res://cmr1.png", "GHA": "res://gha1.png", "JPN": "res://jpn1.png",
-	"KOR": "res://kor1.png", "KSA": "res://ksa1.png", "IRN": "res://irn1.png", "AUS": "res://aus1.png",
-	"QAT": "res://qat1.png", "MEX": "res://mex1.png", "CAN": "res://can1.png", "GEO": "res://geo1.png",
-	"SWE": "res://swe1.png", "GRE": "res://gre1.png", "ROU": "res://rou1.png", "WAL": "res://wal1.png"
-}
-
 var velocity = Vector2.ZERO
 var mass = 1.0
 var nerf_timer = 0
@@ -84,7 +38,7 @@ func init_ball(team_name: String, center_pos: Vector2, _r_limit: float, avoid_po
 	team_colors = Global.TEAMS[team_name]["colors"]
 	team_short_name = Global.TEAMS[team_name]["short"]
 	
-	is_favorite_team = (current_team_name == Global.favorite_team or (Global.favorite_team != "" and team_short_name == Global.TEAMS.get(Global.favorite_team, {}).get("short", "")))
+	is_favorite_team = (current_team_name == Global.favorite_team)
 	
 	hat_texture = null
 	if is_favorite_team and Global.equipped_hat != "none" and Global.HATS.has(Global.equipped_hat):
@@ -98,12 +52,8 @@ func init_ball(team_name: String, center_pos: Vector2, _r_limit: float, avoid_po
 	logo_texture = Global.get_team_logo(team_name)
 	self.set("current_logo_path", team_name)
 
-	# Assign mascot badge if available for this team
-	badge_texture = null
-	if BADGE_MAP.has(team_short_name):
-		badge_texture = load(BADGE_MAP[team_short_name])
-	elif ResourceLoader.exists("res://" + team_short_name.to_lower() + "1.png"):
-		badge_texture = load("res://" + team_short_name.to_lower() + "1.png")
+	# Assign mascot crest or national flag cleanly using team type (prevents POR/BRA club-vs-flag collisions)
+	badge_texture = Global.get_team_badge_texture(team_name)
 	
 	var valid_spawn = false
 	var attempts = 0
@@ -295,5 +245,9 @@ func _draw():
 			hat_w = 50.0
 			hat_h = 42.0
 			y_overlap = 12.0
+		elif Global.equipped_hat == "player_mask":
+			hat_w = 62.0
+			hat_h = 44.0
+			y_overlap = 25.0
 		var hat_rect = Rect2(-hat_w / 2.0, -BALL_RADIUS - hat_h + y_overlap, hat_w, hat_h)
 		draw_texture_rect(hat_texture, hat_rect, false)

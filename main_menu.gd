@@ -2,6 +2,14 @@ extends Control
 
 var custom_font = preload("res://Teko-Bold.ttf")
 var billing
+var premium_purchase_option_id: String = ""
+var premium_offer_id: String = ""
+
+func _apply_text_outline(ctrl: Control, outline_sz: int = 3, outline_col: Color = Color8(0, 0, 0, 235)):
+	if not is_instance_valid(ctrl):
+		return
+	ctrl.add_theme_color_override("font_outline_color", outline_col)
+	ctrl.add_theme_constant_override("outline_size", outline_sz)
 
 
 
@@ -21,7 +29,7 @@ var LANG = {
 		"TEAM_SELECTION": "TAKIM SEÇİMİ", "SETTINGS": "AYARLAR",
 		"HOME": "EV SAHİBİ", "AWAY": "DEPLASMAN", "SEARCH": "Takım Ara...",
 		"START_MATCH": "MAÇI BAŞLAT", "LANG_BTN": "TR", "CLOSE": "KAPAT", "SAVE": "KAYDET",
-		"LBL_MASTER": "GENEL SES", "LBL_MENU_MUSIC": "MENÜ MÜZİĞİ", "LBL_STADIUM": "STADYUM", "LBL_MUSIC": "GOL MÜZİĞİ",
+		"LBL_MASTER": "GENEL SES", "LBL_MENU_MUSIC": "MENÜ MÜZİĞİ", "LBL_STADIUM": "STADYUM", "LBL_MUSIC": "GOL MÜZİĞİ", "LBL_SFX": "EFEKT SESİ",
 		"LBL_THEME": "TEMA SEÇİMİ", "LBL_SHAKE": "EKRAN TİTREŞİMİ", "LBL_VIBRATION": "TİTREŞİM", "LBL_SPEED": "MAÇ SÜRESİ",
 		"SEC_THEME": "TEMA", "SEC_GAME": "OYUN AYARLARI", "SEC_AUDIO": "SES AYARLARI",
 		"STATS_TITLE": "İSTATİSTİKLER", "SHOP_TITLE": "MAĞAZA",
@@ -63,7 +71,7 @@ var LANG = {
 		"RESTORE_CHECK": "Satın alımlar kontrol ediliyor...", "RESTORE_SUCCESS": "Satın alımlar geri yüklendi!",
 		"EXIT_CONFIRM": "Çıkmak istediğinize emin misiniz?", "EXIT_TITLE": "ÇIKIŞ", "SEC_ACCOUNT": "HESAP & GİZLİLİK",
 		"SHOP_HATS": "Taçlar & Aksesuarlar", "HAT_KINGS_CROWN": "Kral Tacı", "HAT_QUEENS_CROWN": "Kraliçe Tacı",
-		"HAT_VIKING": "Viking Miğferi", "HAT_MAGIC": "Büyücü Şapkası",
+		"HAT_VIKING": "Viking Miğferi", "HAT_MAGIC": "Büyücü Şapkası", "HAT_PLAYER_MASK": "Futbolcu Maskesi",
 		"HAT_NONE": "Taç Yok", "HAT_FAV_NOTICE": "Taçlar yalnızca favori takımının topunda görünür.",
 		"SHOP_UNEQUIP": "ÇIKAR", "NEED_MORE_COINS": "Yetersiz Jeton!",
 		"ACHIEVEMENTS_BTN": "Google Play Başarımları", "AD_PREPARING": "Reklam hazırlanıyor, lütfen birkaç saniye sonra tekrar deneyin...",
@@ -77,7 +85,7 @@ var LANG = {
 		"QUEST_PROGRESS": "İlerleme", "QUEST_REWARD": "Ödül", "REMAINING_AD_SPINS": "Kalan Reklamlı Çevirme",
 		"LEADERBOARD_OPEN": "DÜNYA SIRALAMASINI GÖR", "LEADERBOARD_SYNC": "SKORU EŞİTLE",
 		"LEADERBOARD_HINT": "Google Play Games ile dünya sıralamasına katıl ve diğer oyuncularla yarış!",
-		"GOALS_SUFFIX": "Gol", "PRO_UPGRADE_TITLE": "ELİT KULÜP'E KATIL", "LEADERBOARD_LOCAL_TITLE": "Skor Kartın",
+		"GOALS_SUFFIX": "Gol", "STATS_DIFF_FORMAT": "(%d Gol Fark)", "SAME_TEAM_WARN": "Aynı iki takım karşı karşıya getirilemez!", "PRO_UPGRADE_TITLE": "ELİT KULÜP'E KATIL", "LEADERBOARD_LOCAL_TITLE": "Skor Kartın",
 		"LEADERBOARD_GLOBAL_TITLE": "Google Play Games Dünya Sıralaması",
 		"LEAGUE_TURKEY": "Türkiye Ligi", "LEAGUE_NATIONAL": "Milli Takımlar", "LEAGUE_ENGLAND": "İngiltere Ligi", "LEAGUE_SPAIN": "İspanya Ligi",
 		"LEAGUE_GERMANY": "Almanya Ligi", "LEAGUE_ITALY": "İtalya Ligi", "LEAGUE_FRANCE": "Fransa Ligi",
@@ -105,7 +113,9 @@ var LANG = {
 		"HOUSE_AD_TIP2_TITLE": "KADRO KURUCU & KAPTAN",
 		"HOUSE_AD_TIP2_DESC": "Takımının ilk 11'ini ve kaptanını belirle, sahaya kendi kadronla çık!",
 		"HOUSE_AD_WEB_TITLE": "CANLI SIRALAMA: EBSTUDYO.COM",
-		"HOUSE_AD_WEB_DESC": "Küresel liderlik tablosunu ve turnuva rekorlarını webden takip et!"
+		"HOUSE_AD_WEB_DESC": "Küresel liderlik tablosunu ve turnuva rekorlarını webden takip et!",
+		"UPDATE_BANNER_FMT": "Yeni sürüm (v%s) yayında! Güncellemeyi indir.",
+		"UPDATE_BTN": "GÜNCELLE"
 	},
 	"ENG": {
 		"TUTORIAL_TITLE_1": "WELCOME!",
@@ -122,7 +132,7 @@ var LANG = {
 		"TEAM_SELECTION": "TEAM SELECTION", "SETTINGS": "SETTINGS",
 		"HOME": "HOME", "AWAY": "AWAY", "SEARCH": "Search Team...",
 		"START_MATCH": "START MATCH", "LANG_BTN": "ENG", "CLOSE": "CLOSE", "SAVE": "SAVE",
-		"LBL_MASTER": "MASTER VOL", "LBL_MENU_MUSIC": "MENU MUSIC", "LBL_STADIUM": "STADIUM", "LBL_MUSIC": "GOAL MUSIC",
+		"LBL_MASTER": "MASTER VOL", "LBL_MENU_MUSIC": "MENU MUSIC", "LBL_STADIUM": "STADIUM", "LBL_MUSIC": "GOAL MUSIC", "LBL_SFX": "SFX VOL",
 		"LBL_THEME": "SELECT THEME", "LBL_SHAKE": "SCREEN SHAKE", "LBL_VIBRATION": "VIBRATION", "LBL_SPEED": "MATCH DURATION",
 		"SEC_THEME": "THEME", "SEC_GAME": "GAME SETTINGS", "SEC_AUDIO": "AUDIO SETTINGS",
 		"STATS_TITLE": "STATISTICS", "SHOP_TITLE": "SHOP",
@@ -164,7 +174,7 @@ var LANG = {
 		"RESTORE_CHECK": "Checking purchases...", "RESTORE_SUCCESS": "Purchases restored!",
 		"EXIT_CONFIRM": "Are you sure you want to exit?", "EXIT_TITLE": "EXIT", "SEC_ACCOUNT": "ACCOUNT & PRIVACY",
 		"SHOP_HATS": "Crowns & Accessories", "HAT_KINGS_CROWN": "King's Crown", "HAT_QUEENS_CROWN": "Queen's Crown",
-		"HAT_VIKING": "Viking Helmet", "HAT_MAGIC": "Magic Hat",
+		"HAT_VIKING": "Viking Helmet", "HAT_MAGIC": "Magic Hat", "HAT_PLAYER_MASK": "Player Mask",
 		"HAT_NONE": "No Crown", "HAT_FAV_NOTICE": "Crowns only appear on your favorite team's ball.",
 		"SHOP_UNEQUIP": "UNEQUIP", "NEED_MORE_COINS": "Insufficient Coins!",
 		"ACHIEVEMENTS_BTN": "Google Play Achievements", "AD_PREPARING": "Ad is preparing, please try again in a few seconds...",
@@ -178,7 +188,7 @@ var LANG = {
 		"QUEST_PROGRESS": "Progress", "QUEST_REWARD": "Reward", "REMAINING_AD_SPINS": "Remaining Ad Spins",
 		"LEADERBOARD_OPEN": "VIEW GLOBAL LEADERBOARD", "LEADERBOARD_SYNC": "SYNC SCORE",
 		"LEADERBOARD_HINT": "Join Google Play Games global leaderboard and compete worldwide!",
-		"GOALS_SUFFIX": "Goals", "PRO_UPGRADE_TITLE": "JOIN ELITE CLUB", "LEADERBOARD_LOCAL_TITLE": "Your Scorecard",
+		"GOALS_SUFFIX": "Goals", "STATS_DIFF_FORMAT": "(%d Goal Diff)", "SAME_TEAM_WARN": "The same team cannot play against itself!", "PRO_UPGRADE_TITLE": "JOIN ELITE CLUB", "LEADERBOARD_LOCAL_TITLE": "Your Scorecard",
 		"LEADERBOARD_GLOBAL_TITLE": "Google Play Games Global Leaderboard",
 		"LEAGUE_TURKEY": "Turkish League", "LEAGUE_NATIONAL": "National Teams", "LEAGUE_ENGLAND": "English League", "LEAGUE_SPAIN": "Spanish League",
 		"LEAGUE_GERMANY": "German League", "LEAGUE_ITALY": "Italian League", "LEAGUE_FRANCE": "French League",
@@ -206,7 +216,9 @@ var LANG = {
 		"HOUSE_AD_TIP2_TITLE": "SQUAD BUILDER & CAPTAIN",
 		"HOUSE_AD_TIP2_DESC": "Customize your team's starting lineup & captain to play your way!",
 		"HOUSE_AD_WEB_TITLE": "LIVE LEADERBOARD: EBSTUDYO.COM",
-		"HOUSE_AD_WEB_DESC": "Check global live rankings and tournament records online!"
+		"HOUSE_AD_WEB_DESC": "Check global live rankings and tournament records online!",
+		"UPDATE_BANNER_FMT": "New update (v%s) is live!",
+		"UPDATE_BTN": "UPDATE"
 	},
 	"ESP": {
 		"TUTORIAL_TITLE_1": "¡BIENVENIDO!",
@@ -223,7 +235,7 @@ var LANG = {
 		"TEAM_SELECTION": "SELECCIÓN DE EQUIPO", "SETTINGS": "AJUSTES",
 		"HOME": "LOCAL", "AWAY": "VISITANTE", "SEARCH": "Buscar...",
 		"START_MATCH": "INICIAR PARTIDO", "LANG_BTN": "ESP", "CLOSE": "CERRAR", "SAVE": "GUARDAR",
-		"LBL_MASTER": "VOL MAESTRO", "LBL_MENU_MUSIC": "MÚSICA DEL MENÚ", "LBL_STADIUM": "ESTADIO", "LBL_MUSIC": "MÚSICA",
+		"LBL_MASTER": "VOL MAESTRO", "LBL_MENU_MUSIC": "MÚSICA DEL MENÚ", "LBL_STADIUM": "ESTADIO", "LBL_MUSIC": "MÚSICA", "LBL_SFX": "EFECTOS",
 		"LBL_THEME": "TEMA", "LBL_SHAKE": "VIBRACIÓN", "LBL_VIBRATION": "VIBRACIÓN", "LBL_SPEED": "DURACIÓN",
 		"SEC_THEME": "TEMA", "SEC_GAME": "AJUSTES DE JUEGO", "SEC_AUDIO": "AUDIO",
 		"STATS_TITLE": "ESTADÍSTICAS", "SHOP_TITLE": "TIENDA",
@@ -265,7 +277,7 @@ var LANG = {
 		"RESTORE_CHECK": "Comprobando compras...", "RESTORE_SUCCESS": "¡Compras restauradas!",
 		"EXIT_CONFIRM": "¿Estás seguro de que quieres salir?", "EXIT_TITLE": "SALIR", "SEC_ACCOUNT": "CUENTA Y PRIVACIDAD",
 		"SHOP_HATS": "Coronas y Accesorios", "HAT_KINGS_CROWN": "Corona de Rey", "HAT_QUEENS_CROWN": "Corona de Reina",
-		"HAT_VIKING": "Casco Vikingo", "HAT_MAGIC": "Sombrero Mágico",
+		"HAT_VIKING": "Casco Vikingo", "HAT_MAGIC": "Sombrero Mágico", "HAT_PLAYER_MASK": "Máscara de Jugador",
 		"HAT_NONE": "Sin Corona", "HAT_FAV_NOTICE": "Las coronas solo aparecen en el balón favorito.",
 		"SHOP_UNEQUIP": "QUITAR", "NEED_MORE_COINS": "¡Monedas insuficientes!",
 		"ACHIEVEMENTS_BTN": "Logros de Google Play", "AD_PREPARING": "El anuncio se está preparando, por favor intenta en unos segundos...",
@@ -279,7 +291,7 @@ var LANG = {
 		"QUEST_PROGRESS": "Progreso", "QUEST_REWARD": "Recompensa", "REMAINING_AD_SPINS": "Giros Restantes",
 		"LEADERBOARD_OPEN": "VER CLASIFICACIÓN GLOBAL", "LEADERBOARD_SYNC": "SINCRONIZAR PUNTUACIÓN",
 		"LEADERBOARD_HINT": "¡Únete a la clasificación global de Google Play Games y compite mundialmente!",
-		"GOALS_SUFFIX": "Goles", "PRO_UPGRADE_TITLE": "ÚNETE AL CLUB ÉLITE", "LEADERBOARD_LOCAL_TITLE": "Tu Tarjeta de Puntuación",
+		"GOALS_SUFFIX": "Goles", "STATS_DIFF_FORMAT": "(Dif. %d Goles)", "SAME_TEAM_WARN": "¡El mismo equipo no puede enfrentarse a sí mismo!", "PRO_UPGRADE_TITLE": "ÚNETE AL CLUB ÉLITE", "LEADERBOARD_LOCAL_TITLE": "Tu Tarjeta de Puntuación",
 		"LEADERBOARD_GLOBAL_TITLE": "Clasificación Global de Google Play Games",
 		"LEAGUE_TURKEY": "Liga Turca", "LEAGUE_NATIONAL": "Selecciones", "LEAGUE_ENGLAND": "Liga Inglesa", "LEAGUE_SPAIN": "Liga Española",
 		"LEAGUE_GERMANY": "Liga Alemana", "LEAGUE_ITALY": "Liga Italiana", "LEAGUE_FRANCE": "Liga Francesa",
@@ -307,7 +319,9 @@ var LANG = {
 		"HOUSE_AD_TIP2_TITLE": "EDICIÓN DE PLANTILLA Y CAPITÁN",
 		"HOUSE_AD_TIP2_DESC": "¡Define tu alineación titular y capitán para saltar al campo a tu estilo!",
 		"HOUSE_AD_WEB_TITLE": "CLASIFICACIÓN EN VIVO: EBSTUDYO.COM",
-		"HOUSE_AD_WEB_DESC": "¡Sigue los récords mundiales y tablas de clasificación en la web!"
+		"HOUSE_AD_WEB_DESC": "¡Sigue los récords mundiales y tablas de clasificación en la web!",
+		"UPDATE_BANNER_FMT": "¡Nueva versión (v%s) disponible!",
+		"UPDATE_BTN": "ACTUALIZAR"
 	},
 	"POR": {
 		"TUTORIAL_TITLE_1": "BEM-VINDO!",
@@ -324,7 +338,7 @@ var LANG = {
 		"TEAM_SELECTION": "SELEÇÃO DE EQUIPA", "SETTINGS": "DEFINIÇÕES",
 		"HOME": "CASA", "AWAY": "FORA", "SEARCH": "Pesquisar...",
 		"START_MATCH": "INICIAR JOGO", "LANG_BTN": "POR", "CLOSE": "FECHAR", "SAVE": "GUARDAR",
-		"LBL_MASTER": "VOL PRINCIPAL", "LBL_MENU_MUSIC": "MÚSICA DO MENU", "LBL_STADIUM": "ESTÁDIO", "LBL_MUSIC": "MÚSICA",
+		"LBL_MASTER": "VOL PRINCIPAL", "LBL_MENU_MUSIC": "MÚSICA DO MENU", "LBL_STADIUM": "ESTÁDIO", "LBL_MUSIC": "MÚSICA", "LBL_SFX": "EFEITOS",
 		"LBL_THEME": "TEMA", "LBL_SHAKE": "VIBRAÇÃO", "LBL_VIBRATION": "VIBRAÇÃO", "LBL_SPEED": "DURAÇÃO",
 		"SEC_THEME": "TEMA", "SEC_GAME": "DEFINIÇÕES DE JOGO", "SEC_AUDIO": "ÁUDIO",
 		"STATS_TITLE": "ESTATÍSTICAS", "SHOP_TITLE": "LOJA",
@@ -366,7 +380,7 @@ var LANG = {
 		"RESTORE_CHECK": "A verificar compras...", "RESTORE_SUCCESS": "Compras restauradas!",
 		"EXIT_CONFIRM": "Tem certeza de que deseja sair?", "EXIT_TITLE": "SAIR", "SEC_ACCOUNT": "CONTA E PRIVACIDADE",
 		"SHOP_HATS": "Coroas e Acessórios", "HAT_KINGS_CROWN": "Coroa de Rei", "HAT_QUEENS_CROWN": "Coroa de Rainha",
-		"HAT_VIKING": "Capacete Viking", "HAT_MAGIC": "Chapéu Mágico",
+		"HAT_VIKING": "Capacete Viking", "HAT_MAGIC": "Chapéu Mágico", "HAT_PLAYER_MASK": "Máscara de Jogador",
 		"HAT_NONE": "Sem Coroa", "HAT_FAV_NOTICE": "As coroas só aparecem na bola favorita.",
 		"SHOP_UNEQUIP": "REMOVER", "NEED_MORE_COINS": "Moedas insuficientes!",
 		"ACHIEVEMENTS_BTN": "Conquistas do Google Play", "AD_PREPARING": "O anúncio está a preparar-se, tente novamente em algun segundos...",
@@ -380,7 +394,7 @@ var LANG = {
 		"QUEST_PROGRESS": "Progresso", "QUEST_REWARD": "Recompensa", "REMAINING_AD_SPINS": "Giros Restantes",
 		"LEADERBOARD_OPEN": "VER CLASSIFICAÇÃO GLOBAL", "LEADERBOARD_SYNC": "SINCRONIZAR PONTUAÇÃO",
 		"LEADERBOARD_HINT": "Junte-se à classificação global do Google Play Games e compita mundialmente!",
-		"GOALS_SUFFIX": "Golos", "PRO_UPGRADE_TITLE": "ENTRE NO CLUBE ELITE", "LEADERBOARD_LOCAL_TITLE": "O Seu Cartão de Pontuação",
+		"GOALS_SUFFIX": "Golos", "STATS_DIFF_FORMAT": "(Dif. %d Golos)", "SAME_TEAM_WARN": "A mesma equipa não pode jogar contra si mesma!", "PRO_UPGRADE_TITLE": "ENTRE NO CLUBE ELITE", "LEADERBOARD_LOCAL_TITLE": "O Seu Cartão de Pontuação",
 		"LEADERBOARD_GLOBAL_TITLE": "Classificação Global do Google Play Games",
 		"LEAGUE_TURKEY": "Liga Turca", "LEAGUE_NATIONAL": "Seleções", "LEAGUE_ENGLAND": "Liga Inglesa", "LEAGUE_SPAIN": "Liga Espanhola",
 		"LEAGUE_GERMANY": "Liga Alemã", "LEAGUE_ITALY": "Liga Italiana", "LEAGUE_FRANCE": "Liga Francesa",
@@ -408,7 +422,9 @@ var LANG = {
 		"HOUSE_AD_TIP2_TITLE": "EDIÇÃO DE PLANTEL E CAPITÃO",
 		"HOUSE_AD_TIP2_DESC": "Defina o onze titular e o capitão da equipa para jogar à sua maneira!",
 		"HOUSE_AD_WEB_TITLE": "CLASSIFICAÇÃO ONLINE: EBSTUDYO.COM",
-		"HOUSE_AD_WEB_DESC": "Acompanhe recordes mundiais e tabelas em tempo real na web!"
+		"HOUSE_AD_WEB_DESC": "Acompanhe recordes mundiais e tabelas em tempo real na web!",
+		"UPDATE_BANNER_FMT": "Nova versão (v%s) disponível!",
+		"UPDATE_BTN": "ATUALIZAR"
 	},
 	"ITA": {
 		"TUTORIAL_TITLE_1": "BENVENUTO!",
@@ -425,7 +441,7 @@ var LANG = {
 		"TEAM_SELECTION": "SELEZIONE SQUADRA", "SETTINGS": "IMPOSTAZIONI",
 		"HOME": "CASA", "AWAY": "TRASFERTA", "SEARCH": "Cerca Squadra...",
 		"START_MATCH": "INIZIA PARTITA", "LANG_BTN": "ITA", "CLOSE": "CHIUDI", "SAVE": "SALVA",
-		"LBL_MASTER": "VOLUME GENERALE", "LBL_MENU_MUSIC": "MUSICA MENU", "LBL_STADIUM": "STADIO", "LBL_MUSIC": "MUSICA GOL",
+		"LBL_MASTER": "VOLUME GENERALE", "LBL_MENU_MUSIC": "MUSICA MENU", "LBL_STADIUM": "STADIO", "LBL_MUSIC": "MUSICA GOL", "LBL_SFX": "EFFETTI",
 		"LBL_THEME": "TEMA", "LBL_SHAKE": "VIBRAZIONE SCHERMO", "LBL_VIBRATION": "VIBRAZIONE", "LBL_SPEED": "DURATA PARTITA",
 		"SEC_THEME": "TEMA", "SEC_GAME": "IMPOSTAZIONI DI GIOCO", "SEC_AUDIO": "AUDIO",
 		"STATS_TITLE": "STATISTICHE", "SHOP_TITLE": "NEGOZIO",
@@ -467,7 +483,7 @@ var LANG = {
 		"RESTORE_CHECK": "Verifica acquisti...", "RESTORE_SUCCESS": "Acquisti ripristinati!",
 		"EXIT_CONFIRM": "Sei sicuro di voler uscire?", "EXIT_TITLE": "ESCI", "SEC_ACCOUNT": "ACCOUNT E PRIVACY",
 		"SHOP_HATS": "Corone e Accessori", "HAT_KINGS_CROWN": "Corona del Re", "HAT_QUEENS_CROWN": "Corona della Regina",
-		"HAT_VIKING": "Elmo Vichingo", "HAT_MAGIC": "Cappello Magico",
+		"HAT_VIKING": "Elmo Vichingo", "HAT_MAGIC": "Cappello Magico", "HAT_PLAYER_MASK": "Maschera da Giocatore",
 		"HAT_NONE": "Nessuna Corona", "HAT_FAV_NOTICE": "Le corone appaiono solo sul pallone della squadra preferita.",
 		"SHOP_UNEQUIP": "RIMUOVI", "NEED_MORE_COINS": "Monete insufficienti!",
 		"ACHIEVEMENTS_BTN": "Obiettivi Google Play", "AD_PREPARING": "Annuncio in preparazione, riprova tra qualche secondo...",
@@ -481,7 +497,7 @@ var LANG = {
 		"QUEST_PROGRESS": "Progresso", "QUEST_REWARD": "Ricompensa", "REMAINING_AD_SPINS": "Giri Pubblicitari Rimasti",
 		"LEADERBOARD_OPEN": "VEDI CLASSIFICA MONDIALE", "LEADERBOARD_SYNC": "SINCRONIZZA PUNTEGGIO",
 		"LEADERBOARD_HINT": "Unisciti alla classifica mondiale di Google Play Games e sfida gli altri giocatori!",
-		"GOALS_SUFFIX": "Gol", "PRO_UPGRADE_TITLE": "UNISCITI AL CLUB ÉLITE", "LEADERBOARD_LOCAL_TITLE": "La Tua Scheda Punteggio",
+		"GOALS_SUFFIX": "Gol", "STATS_DIFF_FORMAT": "(Diff. %d Gol)", "SAME_TEAM_WARN": "La stessa squadra non può affrontare se stessa!", "PRO_UPGRADE_TITLE": "UNISCITI AL CLUB ÉLITE", "LEADERBOARD_LOCAL_TITLE": "La Tua Scheda Punteggio",
 		"LEADERBOARD_GLOBAL_TITLE": "Classifica Globale Google Play Games",
 		"LEAGUE_TURKEY": "Campionato Turco", "LEAGUE_NATIONAL": "Nazionali", "LEAGUE_ENGLAND": "Campionato Inglese", "LEAGUE_SPAIN": "Campionato Spagnolo",
 		"LEAGUE_GERMANY": "Campionato Tedesco", "LEAGUE_ITALY": "Campionato Italiano", "LEAGUE_FRANCE": "Campionato Francese",
@@ -509,7 +525,9 @@ var LANG = {
 		"HOUSE_AD_TIP2_TITLE": "GESTIONE SQUADRA E CAPITANO",
 		"HOUSE_AD_TIP2_DESC": "Scegli l'undici titolare e il capitano della squadra per scendere in campo a modo tuo!",
 		"HOUSE_AD_WEB_TITLE": "CLASSIFICA WEB LIVE: EBSTUDYO.COM",
-		"HOUSE_AD_WEB_DESC": "Guarda i record mondiali e le classifiche globali in diretta sul web!"
+		"HOUSE_AD_WEB_DESC": "Guarda i record mondiali e le classifiche globali in diretta sul web!",
+		"UPDATE_BANNER_FMT": "Nuova versione (v%s) disponibile!",
+		"UPDATE_BTN": "AGGIORNA"
 	}
 }
 
@@ -614,6 +632,7 @@ const SKETCH_ACCENT_COL: Color = Color(0.0, 0.92, 0.80, 0.90)
 const MENU_BANNER_ID = "ca-app-pub-7323450546679743/4717442614"
 var menu_banner_ad_id: String = ""
 var shop_notification_dot: Panel
+var update_notice_banner: Control = null
 
 var is_banner_loading: bool = false
 var menu_banner_retry_count: int = 0
@@ -1467,6 +1486,7 @@ func _ready():
 	)
 	btn_hbox.add_child(start_arrow_icon)
 
+	start_btn.set_meta("custom_sfx", true)
 	start_btn.pressed.connect(_on_start_match)
 	list_shifter_vbox.add_child(start_btn)
 	ui_labels.append({"node": start_lbl, "key": "START_MATCH", "type": "label"})
@@ -1516,12 +1536,45 @@ func _ready():
 		Global.came_from_completed_match = false
 		call_deferred("_check_and_start_tutorial")
 
+	if not Global.update_available_detected.is_connected(_on_update_available_detected):
+		Global.update_available_detected.connect(_on_update_available_detected)
+	Global.check_for_app_update()
+	if Global.update_available and not Global.update_notice_dismissed_this_session:
+		call_deferred("_show_update_notice_banner", Global.latest_remote_version_name, Global.latest_store_url)
+
 
 func _connect_all_buttons(node: Node):
-	if node is Button:
+	if node is Button and not node.has_meta("custom_sfx"):
 		node.pressed.connect(Global.play_click)
 	for child in node.get_children():
 		_connect_all_buttons(child)
+
+func _connect_tap_handler(ctrl: Control, on_tap: Callable):
+	var state = {"pos": Vector2.ZERO, "active": false, "last_ms": 0}
+	ctrl.gui_input.connect(func(event: InputEvent):
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				state["pos"] = event.global_position
+				state["active"] = true
+			elif state["active"]:
+				state["active"] = false
+				var now_ms = Time.get_ticks_msec()
+				if now_ms - int(state["last_ms"]) >= 150 and event.global_position.distance_to(state["pos"]) < 14.0:
+					state["last_ms"] = now_ms
+					get_viewport().set_input_as_handled()
+					on_tap.call()
+		elif event is InputEventScreenTouch:
+			if event.pressed:
+				state["pos"] = event.position
+				state["active"] = true
+			elif state["active"]:
+				state["active"] = false
+				var now_ms = Time.get_ticks_msec()
+				if now_ms - int(state["last_ms"]) >= 150 and event.position.distance_to(state["pos"]) < 14.0:
+					state["last_ms"] = now_ms
+					get_viewport().set_input_as_handled()
+					on_tap.call()
+	)
 
 func show_google_play_prompt():
 	# Dimmed background overlay
@@ -1630,6 +1683,41 @@ func _on_billing_connected():
 	if billing:
 		billing.query_product_details(PackedStringArray(["premium_unlock"]), BillingClient.ProductType.INAPP)
 		billing.query_purchases(BillingClient.ProductType.INAPP)
+		billing.query_purchases(BillingClient.ProductType.SUBS)
+
+func _safe_billing_str(val) -> String:
+	if val == null:
+		return ""
+	var s = str(val)
+	return "" if s == "<null>" else s
+
+func _extract_purchase_product_ids(purchase: Dictionary) -> Array:
+	var out: Array = []
+	for key in ["product_ids", "products", "skus"]:
+		if purchase.has(key):
+			var raw = purchase[key]
+			if raw is Array or raw is PackedStringArray:
+				for item in raw:
+					out.append(str(item))
+				return out
+	for single_key in ["sku", "product_id", "productId"]:
+		if purchase.has(single_key) and purchase[single_key] != null:
+			out.append(str(purchase[single_key]))
+			return out
+	return out
+
+func _activate_premium_entitlement(show_feedback: bool = true):
+	var was_premium = Global.is_premium
+	Global.set_premium(true)
+	Global.remove_all_banners()
+	_set_house_ad_visible(false)
+	if is_inside_tree() and is_instance_valid(tabs_hbox):
+		_ensure_vip_top_bar()
+	_update_start_button_display()
+	_refresh_shop_tab()
+	if show_feedback and not was_premium:
+		Global.play_prize_win()
+		_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("PRO_ACTIVE", "ELİT AKTİF"))
 
 func _on_billing_query_product_details_response(response: Dictionary):
 	print("Billing query product details response: ", response)
@@ -1638,25 +1726,38 @@ func _on_billing_query_product_details_response(response: Dictionary):
 		var product_details = response.get("product_details", [])
 		print("Found product details: ", product_details)
 		for p in product_details:
+			if not (p is Dictionary):
+				continue
 			var p_id = p.get("productId", p.get("product_id", ""))
 			if p_id == "premium_unlock":
 				var price_str = ""
-				if p.has("formattedPrice"):
-					price_str = str(p.get("formattedPrice"))
-				elif p.has("formatted_price"):
-					price_str = str(p.get("formatted_price"))
-				elif p.has("oneTimePurchaseOfferDetails"):
-					var ot = p.get("oneTimePurchaseOfferDetails")
-					if ot is Dictionary:
-						price_str = str(ot.get("formattedPrice", ot.get("formatted_price", "")))
-				elif p.has("one_time_purchase_offer_details"):
-					var ot = p.get("one_time_purchase_offer_details")
-					if ot is Dictionary:
-						price_str = str(ot.get("formattedPrice", ot.get("formatted_price", "")))
+				if p.has("one_time_purchase_offer_details_list"):
+					var ot_list = p.get("one_time_purchase_offer_details_list")
+					if ot_list is Array and ot_list.size() > 0 and ot_list[0] is Dictionary:
+						var first_offer = ot_list[0]
+						price_str = _safe_billing_str(first_offer.get("formatted_price", first_offer.get("formattedPrice", "")))
+						premium_purchase_option_id = _safe_billing_str(first_offer.get("purchase_option_id", ""))
+						premium_offer_id = _safe_billing_str(first_offer.get("offer_id", ""))
+				if price_str == "":
+					if p.has("formattedPrice"):
+						price_str = _safe_billing_str(p.get("formattedPrice"))
+					elif p.has("formatted_price"):
+						price_str = _safe_billing_str(p.get("formatted_price"))
+					elif p.has("oneTimePurchaseOfferDetails"):
+						var ot = p.get("oneTimePurchaseOfferDetails")
+						if ot is Dictionary:
+							price_str = _safe_billing_str(ot.get("formattedPrice", ot.get("formatted_price", "")))
+					elif p.has("one_time_purchase_offer_details"):
+						var ot = p.get("one_time_purchase_offer_details")
+						if ot is Dictionary:
+							price_str = _safe_billing_str(ot.get("formattedPrice", ot.get("formatted_price", "")))
+							if premium_purchase_option_id == "":
+								premium_purchase_option_id = _safe_billing_str(ot.get("purchase_option_id", ""))
+								premium_offer_id = _safe_billing_str(ot.get("offer_id", ""))
 				
 				if price_str != "":
 					Global.premium_price_formatted = price_str
-					print("[Billing] Loaded dynamic regional price: ", price_str)
+					print("[Billing] Loaded dynamic regional price: ", price_str, " option_id=", premium_purchase_option_id, " offer_id='", premium_offer_id, "'")
 					_refresh_shop_tab()
 	else:
 		print("Product details query returned code: ", response_code, " msg: ", response.get("debug_message", ""))
@@ -1669,56 +1770,66 @@ func _on_billing_connect_error(response_code, debug_message):
 
 func _on_billing_purchases_updated_dict(response: Dictionary):
 	print("Billing purchases updated dict: ", response)
-	var response_code = response.get("response_code", -1)
-	if response_code == 0: # OK
+	var response_code = int(response.get("response_code", -1))
+	if response_code == BillingClient.BillingResponseCode.OK:
 		if response.has("purchases"):
 			_on_billing_purchases_updated(response.purchases)
+	elif response_code == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED:
+		if billing and billing.is_ready():
+			billing.query_purchases(BillingClient.ProductType.INAPP)
 	else:
-		_on_billing_purchase_error(response_code, response.get("debug_message", ""))
+		_on_billing_purchase_error(response_code, _safe_billing_str(response.get("debug_message", "")))
 
 func _on_billing_purchases_updated(purchases):
 	print("Billing purchases updated: ", purchases)
-	for purchase in purchases:
-		var product_id = ""
-		if purchase.has("sku"):
-			product_id = purchase.sku
-		elif purchase.has("products") and purchase.products is Array and purchase.products.size() > 0:
-			product_id = purchase.products[0]
-			
-		if product_id == "premium_unlock":
-			if purchase.purchase_state == 1: # PURCHASED = 1
-				if not purchase.is_acknowledged:
-					billing.acknowledge_purchase(purchase.purchase_token)
-				else:
-					Global.is_premium = true
-					Global.save_progression()
-					_refresh_shop_tab()
+	var purchase_list: Array = []
+	if purchases is Array or purchases is PackedStringArray:
+		for item in purchases:
+			purchase_list.append(item)
+	elif purchases is Dictionary:
+		purchase_list.append(purchases)
+
+	for purchase in purchase_list:
+		if not (purchase is Dictionary):
+			continue
+		var product_ids = _extract_purchase_product_ids(purchase)
+		if "premium_unlock" in product_ids:
+			var p_state = int(purchase.get("purchase_state", 0))
+			var p_ack = bool(purchase.get("is_acknowledged", false))
+			var p_token = _safe_billing_str(purchase.get("purchase_token", purchase.get("token", "")))
+			if p_state == BillingClient.PurchaseState.PURCHASED:
+				# Grant entitlement immediately on verified PURCHASED state; acknowledge async to prevent 3-day refund
+				_activate_premium_entitlement(true)
+				if not p_ack and p_token != "" and billing:
+					billing.acknowledge_purchase(p_token)
+			elif p_state == BillingClient.PurchaseState.PENDING:
+				var pending_msg = "Ödemeniz Google Play onayı bekliyor." if Global.current_lang == "TR" else "Payment is pending Google Play confirmation."
+				_show_toast(pending_msg)
 
 func _on_billing_query_purchases_response(query_result):
-	var response_code = query_result.get("response_code", -1)
-	if response_code == 0 and query_result.has("purchases"): # OK
+	var response_code = int(query_result.get("response_code", -1))
+	if response_code == BillingClient.BillingResponseCode.OK and query_result.has("purchases"):
 		_on_billing_purchases_updated(query_result.purchases)
 
 func _on_billing_purchase_acknowledged(purchase_token):
 	print("Billing purchase acknowledged! Token: ", purchase_token)
-	Global.is_premium = true
-	Global.save_progression()
-	_refresh_shop_tab()
-	_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("PRO_ACTIVE", "PRO AKTİF!"))
+	_activate_premium_entitlement(true)
 
 func _on_billing_acknowledge_purchase_response(response: Dictionary):
-	var response_code = response.get("response_code", -1)
-	if response_code == 0: # OK
-		var purchase_token = response.get("purchase_token", "")
+	var response_code = int(response.get("response_code", -1))
+	if response_code == BillingClient.BillingResponseCode.OK:
+		var purchase_token = _safe_billing_str(response.get("token", response.get("purchase_token", "")))
 		_on_billing_purchase_acknowledged(purchase_token)
 	else:
-		_on_billing_purchase_acknowledgement_error(response_code, response.get("debug_message", ""))
+		_on_billing_purchase_acknowledgement_error(response_code, _safe_billing_str(response.get("debug_message", "")))
 
 func _on_billing_purchase_acknowledgement_error(response_code, debug_message):
 	print("Billing acknowledgement error: ", response_code, " msg: ", debug_message)
 
 func _on_billing_purchase_error(response_code, debug_message):
 	print("Billing purchase error: ", response_code, " msg: ", debug_message)
+	if int(response_code) == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED and billing and billing.is_ready():
+		billing.query_purchases(BillingClient.ProductType.INAPP)
 
 func update_theme_visuals():
 	active_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
@@ -1887,7 +1998,10 @@ func update_theme_visuals():
 			entry["node"].text = str(Global.ad_credits) + " " + LANG[lang]["CURRENCY"]
 		elif t == "button_buy_premium" and entry["node"] is Button:
 			if Global.is_premium:
-				entry["node"].text = " " + LANG[lang].get("PRO_OFF", "PRO KAPAT")
+				if OS.is_debug_build():
+					entry["node"].text = " " + LANG[lang].get("PRO_OFF", "ELİT KAPAT")
+				else:
+					entry["node"].text = " " + LANG[lang].get("PRO_ACTIVE", "ELİT AKTİF")
 			else:
 				var price_str = Global.get_formatted_premium_price()
 				if lang == "TR":
@@ -2029,30 +2143,30 @@ func _toggle_burger_menu():
 	)
 	add_child(burger_menu_overlay)
 	
+	var panel_w = clamp(sw * 0.64, 340.0, 410.0)
 	var pop_panel = PanelContainer.new()
 	var pp_style = StyleBoxFlat.new()
 	pp_style.bg_color = active_theme.bg_bottom.darkened(0.24)
-	pp_style.corner_radius_top_left = 18; pp_style.corner_radius_top_right = 18
-	pp_style.corner_radius_bottom_left = 18; pp_style.corner_radius_bottom_right = 18
+	pp_style.corner_radius_top_left = 22; pp_style.corner_radius_top_right = 22
+	pp_style.corner_radius_bottom_left = 22; pp_style.corner_radius_bottom_right = 22
 	pp_style.border_width_left = 2; pp_style.border_width_right = 2
 	pp_style.border_width_top = 2; pp_style.border_width_bottom = 4
 	pp_style.border_color = active_theme.accent
 	pp_style.shadow_color = Color8(0, 0, 0, 180)
 	pp_style.shadow_size = 28
-	pp_style.content_margin_left = 12; pp_style.content_margin_right = 12
-	pp_style.content_margin_top = 12; pp_style.content_margin_bottom = 12
+	pp_style.content_margin_left = 16; pp_style.content_margin_right = 16
+	pp_style.content_margin_top = 16; pp_style.content_margin_bottom = 16
 	pop_panel.add_theme_stylebox_override("panel", pp_style)
-	pop_panel.custom_minimum_size = Vector2(290, 0)
+	pop_panel.custom_minimum_size = Vector2(panel_w, 0)
 	
 	var btn_pos = burger_btn.global_position
-	var panel_w = 290.0
 	var px = clamp(btn_pos.x + burger_btn.size.x - panel_w, 16.0, sw - panel_w - 16.0)
 	var py = btn_pos.y + burger_btn.size.y + 10.0
 	pop_panel.position = Vector2(px, py)
 	burger_menu_overlay.add_child(pop_panel)
 	
 	var vb = VBoxContainer.new()
-	vb.add_theme_constant_override("separation", 8)
+	vb.add_theme_constant_override("separation", 12)
 	pop_panel.add_child(vb)
 	
 	var menu_items = [
@@ -2066,22 +2180,22 @@ func _toggle_burger_menu():
 	
 	for item in menu_items:
 		var btn = Button.new()
-		btn.custom_minimum_size = Vector2(266, 54)
-		apply_3d_style_to_button(btn, active_theme.bg_bottom.darkened(0.32), active_theme.bg_bottom.darkened(0.52), 12, 3, 10, 6)
+		btn.custom_minimum_size = Vector2(panel_w - 32.0, 68)
+		apply_3d_style_to_button(btn, active_theme.bg_bottom.darkened(0.32), active_theme.bg_bottom.darkened(0.52), 14, 3.5, 14, 8)
 		
 		var hb = HBoxContainer.new()
 		hb.set_anchors_preset(Control.PRESET_FULL_RECT)
 		hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		hb.add_theme_constant_override("separation", 14)
+		hb.add_theme_constant_override("separation", 16)
 		
 		var m_left = MarginContainer.new()
 		m_left.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		m_left.add_theme_constant_override("margin_left", 8)
+		m_left.add_theme_constant_override("margin_left", 12)
 		hb.add_child(m_left)
 		
 		var ic = TextureRect.new()
 		ic.texture = load(item["icon"])
-		ic.custom_minimum_size = Vector2(28, 28)
+		ic.custom_minimum_size = Vector2(36, 36)
 		ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		ic.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -2091,10 +2205,11 @@ func _toggle_burger_menu():
 		var lbl = Label.new()
 		lbl.text = LANG.get(Global.current_lang, LANG["ENG"]).get(item["key"], item["fallback"])
 		lbl.add_theme_font_override("font", custom_font)
-		lbl.add_theme_font_size_override("font_size", 24)
+		lbl.add_theme_font_size_override("font_size", 30)
 		lbl.add_theme_color_override("font_color", Color.WHITE)
-		lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
+		lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 		lbl.add_theme_constant_override("shadow_offset_y", 2)
+		_apply_text_outline(lbl, 3, Color8(0, 0, 0, 220))
 		lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2257,10 +2372,11 @@ func setup_settings_overlay():
 	audio_grid.add_theme_constant_override("v_separation", 25)
 	scroll_vbox.add_child(audio_grid)
 	add_slider_to_grid(audio_grid, "MASTER", "LBL_MASTER", temp_settings["master_vol"], 0.0, 1.0)
-	var menu_m_vol = temp_settings["vol_settings"].get("menu_music", 0.4)
+	var menu_m_vol = temp_settings["vol_settings"].get("menu_music", 0.20)
 	add_slider_to_grid(audio_grid, "menu_music", "LBL_MENU_MUSIC", menu_m_vol, 0.0, 1.0)
 	add_slider_to_grid(audio_grid, "stadium", "LBL_STADIUM", temp_settings["vol_settings"]["stadium"], 0.0, 1.0)
 	add_slider_to_grid(audio_grid, "music", "LBL_MUSIC", temp_settings["vol_settings"]["music"], 0.0, 1.0)
+	add_slider_to_grid(audio_grid, "sfx", "LBL_SFX", temp_settings["vol_settings"].get("sfx", 0.75), 0.0, 1.0)
 	
 	# SECTION 4: HESAP VE GİZLİLİK
 	add_section_header(scroll_vbox, "SEC_ACCOUNT")
@@ -2446,6 +2562,10 @@ func setup_settings_overlay():
 	close_btn.pressed.connect(func():
 		Global.current_theme = temp_settings.get("original_theme", Global.current_theme)
 		update_theme_visuals()
+		Global._update_bg_music_volume()
+		Global._update_goal_music_volume()
+		Global._update_sfx_volumes()
+		Global.play_click()
 		settings_overlay.visible = false
 	)
 	bot_hbox.add_child(close_btn)
@@ -2489,6 +2609,8 @@ func setup_settings_overlay():
 		update_theme_visuals()
 		Global._update_bg_music_volume()
 		Global._update_goal_music_volume()
+		Global._update_sfx_volumes()
+		Global.play_click()
 		settings_overlay.visible = false
 	)
 	bot_hbox.add_child(save_btn)
@@ -3161,9 +3283,11 @@ func add_slider_to_grid(grid: GridContainer, id: String, lang_key: String, defau
 	slider.value_changed.connect(func(val):
 		if id == "MASTER": 
 			temp_settings["master_vol"] = val
-			# Optional: preview the master volume bound live on menu music
+			# Preview the master volume bound live on menu music
 			if is_instance_valid(Global.bg_music_player):
-				var live_target = val * temp_settings["vol_settings"].get("menu_music", 0.4) * 1.113
+				if is_instance_valid(Global.menu_music_tween):
+					Global.menu_music_tween.kill()
+				var live_target = Global.get_menu_music_linear_volume(val, temp_settings["vol_settings"].get("menu_music", 0.20))
 				if live_target <= 0.01:
 					Global.bg_music_player.volume_db = -80.0
 				else:
@@ -3182,13 +3306,28 @@ func add_slider_to_grid(grid: GridContainer, id: String, lang_key: String, defau
 			if id == "menu_music":
 				# Live preview for menu music slider
 				if is_instance_valid(Global.bg_music_player):
-					var live_target = temp_settings["master_vol"] * val * 1.113
+					if is_instance_valid(Global.menu_music_tween):
+						Global.menu_music_tween.kill()
+					var live_target = Global.get_menu_music_linear_volume(temp_settings["master_vol"], val)
 					if live_target <= 0.01:
 						Global.bg_music_player.volume_db = -80.0
 					else:
 						Global.bg_music_player.volume_db = linear_to_db(live_target)
 						if not Global.bg_music_player.playing and not Global.is_on_match_pitch():
 							Global.bg_music_player.play()
+			if id == "sfx":
+				var live_sfx = Global.get_sfx_linear_volume(temp_settings["master_vol"], val)
+				if is_instance_valid(Global.click_player):
+					if live_sfx <= 0.01:
+						Global.click_player.volume_db = -80.0
+					else:
+						Global.click_player.volume_db = linear_to_db(clamp(live_sfx, 0.0001, 1.0))
+						var now_ms = Time.get_ticks_msec()
+						var prev_ms = int(slider.get_meta("last_sfx_ms", 0))
+						if (now_ms - prev_ms) >= 140:
+							slider.set_meta("last_sfx_ms", now_ms)
+							Global.click_player.pitch_scale = randf_range(0.96, 1.04)
+							Global.click_player.play()
 	)
 	
 	apply_modern_slider(slider)
@@ -3319,50 +3458,6 @@ func add_dropdown_to_grid(grid: GridContainer, id: String, lang_key: String, opt
 	)
 	grid.add_child(drop)
 	style_popup_menu(drop.get_popup())
-
-const BADGE_MAP = {
-	"FB":  "res://fb1.png",
-	"FEN": "res://fb1.png",
-	"TS":  "res://ts1.png",
-	"TRA": "res://ts1.png",
-	"GS":  "res://gs1.png",
-	"GAL": "res://gs1.png",
-	"BJK": "res://bjk1.png",
-	"BAR": "res://bar1.png",
-	"RMA": "res://rma1.png",
-	"ATM": "res://atm1.png",
-	"JUV": "res://juv1.png",
-	"INT": "res://int1.png",
-	"MIL": "res://mil1.png",
-	"NAP": "res://nap1.png",
-	"TOR": "res://tor1.png",
-	"MC":  "res://mc1.png",
-	"MCI": "res://mc1.png",
-	"MUN": "res://mun1.png",
-	"CHE": "res://che1.png",
-	"ARS": "res://ars1.png",
-	"LIV": "res://liv1.png",
-	"TUR": "res://tur1.png",
-	"ARG": "res://arg1.png",
-	"POR": "res://por1.png",
-	"ENG": "res://eng1.png",
-	"USA": "res://usa1.png",
-	"ITA": "res://ita1.png",
-	"PSG": "res://psg1.png",
-	"BAY": "res://bay1.png",
-	"BVB": "res://bvb1.png",
-	"MIA": "res://mia1.png",
-	"FRA": "res://fra1.png", "ESP": "res://esp1.png", "GER": "res://ger1.png", "BEL": "res://bel1.png",
-	"NED": "res://ned1.png", "CRO": "res://cro1.png", "DEN": "res://den1.png", "SUI": "res://sui1.png",
-	"AUT": "res://aut1.png", "POL": "res://pol1.png", "SRB": "res://srb1.png", "CZE": "res://cze1.png",
-	"SCO": "res://sco1.png", "NOR": "res://nor1.png", "BRA": "res://bra1.png", "URU": "res://uru1.png",
-	"COL": "res://col1.png", "CHI": "res://chi1.png", "PAR": "res://par1.png", "ECU": "res://ecu1.png",
-	"NGA": "res://nga1.png", "MAR": "res://mar1.png", "EGY": "res://egy1.png", "SEN": "res://sen1.png",
-	"ALG": "res://alg1.png", "CMR": "res://cmr1.png", "GHA": "res://gha1.png", "JPN": "res://jpn1.png",
-	"KOR": "res://kor1.png", "KSA": "res://ksa1.png", "IRN": "res://irn1.png", "AUS": "res://aus1.png",
-	"QAT": "res://qat1.png", "MEX": "res://mex1.png", "CAN": "res://can1.png", "GEO": "res://geo1.png",
-	"SWE": "res://swe1.png", "GRE": "res://gre1.png", "ROU": "res://rou1.png", "WAL": "res://wal1.png"
-}
 
 func _draw_bg_watermark_pattern(canvas: Control):
 	var vp = canvas.size
@@ -3551,7 +3646,7 @@ func draw_ball_preview(ctrl: Control, is_home: bool = true, team_name_override: 
 	var colors = team_data["colors"]
 	var short_name = team_data.get("short", "")
 	var is_national = team_data.get("type", "") == "national"
-	var badge_tex = get_badge_texture(short_name)
+	var badge_tex = Global.get_team_badge_texture(team_name)
 	var is_flag_ball = is_national and badge_tex != null
 
 	if is_flag_ball:
@@ -3618,7 +3713,7 @@ func draw_ball_preview(ctrl: Control, is_home: bool = true, team_name_override: 
 	ctrl.draw_arc(center, radius - 1.9, -0.80 * PI, -0.20 * PI, 24, Color(1, 1, 1, 0.28), 1.0, true)
 
 	# Draw favorite team crown cosmetic on top of ball preview
-	if (team_name == Global.favorite_team or (Global.favorite_team != "" and short_name == Global.TEAMS.get(Global.favorite_team, {}).get("short", ""))) and Global.equipped_hat != "none" and Global.HATS.has(Global.equipped_hat):
+	if team_name == Global.favorite_team and Global.equipped_hat != "none" and Global.HATS.has(Global.equipped_hat):
 		var hat_path = Global.HATS[Global.equipped_hat]["texture_path"]
 		if ResourceLoader.exists(hat_path):
 			var h_tex = load(hat_path)
@@ -3630,24 +3725,16 @@ func draw_ball_preview(ctrl: Control, is_home: bool = true, team_name_override: 
 					hw = radius * 1.55
 					hh = radius * 1.02
 					y_overlap = radius * 0.34
+				elif Global.equipped_hat == "player_mask":
+					hw = radius * 1.10
+					hh = radius * 0.78
+					y_overlap = radius * 0.44
 				var hr = Rect2(center.x - hw / 2.0, center.y - radius - hh + y_overlap, hw, hh)
 				ctrl.draw_texture_rect(h_tex, hr, false)
 
-func get_badge_texture(short_name: String) -> Texture2D:
-	if badge_textures.has(short_name):
-		return badge_textures[short_name]
-	var path = ""
-	if BADGE_MAP.has(short_name):
-		path = BADGE_MAP[short_name]
-	elif BADGE_MAP.has(short_name.to_upper()):
-		path = BADGE_MAP[short_name.to_upper()]
-	else:
-		path = "res://" + short_name.to_lower() + "1.png"
-	if path != "" and ResourceLoader.exists(path):
-		var tex = load(path)
-		badge_textures[short_name] = tex
-		return tex
-	badge_textures[short_name] = null
+func get_badge_texture(team_or_short: String) -> Texture2D:
+	if Global.TEAMS.has(team_or_short):
+		return Global.get_team_badge_texture(team_or_short)
 	return null
 
 func add_centered_toggle_to_vbox(parent: Control, id: String, lang_key: String, default_val: bool):
@@ -3831,12 +3918,21 @@ func populate_teams():
 		hbox.add_child(lbl)
 			
 		btn.pressed.connect(func():
-			Global.play_click()
 			if is_home_col:
+				if team == Global.away_team_name:
+					Global.play_ui_error()
+					_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("SAME_TEAM_WARN", "Aynı iki takım karşı karşıya getirilemez!"))
+					return
+				Global.play_click()
 				Global.home_team_name = team
 				home_selected = true
 				Global.home_selected = true
 			else:
+				if team == Global.home_team_name:
+					Global.play_ui_error()
+					_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("SAME_TEAM_WARN", "Aynı iki takım karşı karşıya getirilemez!"))
+					return
+				Global.play_click()
 				Global.away_team_name = team
 				away_selected = true
 				Global.away_selected = true
@@ -4303,10 +4399,16 @@ func _update_start_button_display():
 			match_fee_lbl.text = cost_txt
 
 func _on_start_match():
+	if Global.home_team_name == Global.away_team_name:
+		Global.play_ui_error()
+		_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("SAME_TEAM_WARN", "Aynı iki takım karşı karşıya getirilemez!"))
+		return
 	Global.check_daily_reset()
 	if not Global.has_match_right() or not Global.consume_match_right():
+		Global.play_ui_error()
 		_show_insufficient_tokens_dialog()
 		return
+	Global.play_click()
 
 	_update_start_button_display()
 
@@ -4518,6 +4620,9 @@ func _on_random_team_pressed(is_home: bool):
 	Global.play_click()
 	var teams = Global.TEAMS.keys()
 	if teams.is_empty(): return
+	if teams.size() > 1:
+		var other = Global.away_team_name if is_home else Global.home_team_name
+		teams.erase(other)
 	var rand_team = teams[randi() % teams.size()]
 	if is_home:
 		Global.home_team_name = rand_team
@@ -4661,12 +4766,15 @@ func _switch_tab(idx: int, instant: bool = false):
 		elif idx == 1:
 			_update_start_button_display()
 
+	var tab_changed = (idx != current_tab)
 	current_tab = idx
 	var target_x = -idx * sw
 	if is_instance_valid(tabs_hbox):
 		if instant:
 			tabs_hbox.position.x = target_x
 		else:
+			if tab_changed:
+				Global.play_tab_whoosh()
 			var tw = create_tween()
 			tw.set_ease(Tween.EASE_OUT)
 			tw.set_trans(Tween.TRANS_CUBIC)
@@ -5669,9 +5777,10 @@ func _build_stats_tab() -> Control:
 			var md = most_diff_match
 			var md_h = int(md.get("home_score", md.get("score_h", 0)))
 			var md_a = int(md.get("away_score", md.get("score_a", 0)))
-			records_grid.add_child(create_stat_tile.call("STATS_BIGGEST_WIN", "%s %d - %d %s" % [md.get("home", ""), md_h, md_a, md.get("away", "")]))
+			var diff_sub = LANG[lang].get("STATS_DIFF_FORMAT", "(%d Diff)") % int(most_diff_val)
+			records_grid.add_child(create_stat_tile.call("STATS_BIGGEST_WIN", "%s %d - %d %s" % [md.get("home", ""), md_h, md_a, md.get("away", "")], diff_sub))
 		else:
-			records_grid.add_child(create_stat_tile.call("STATS_BIGGEST_WIN", "-"))
+			records_grid.add_child(create_stat_tile.call("STATS_BIGGEST_WIN", "-", LANG[lang].get("STATS_DIFF_FORMAT", "(%d Diff)") % 0))
 
 		vbox.add_child(gen_card)
 
@@ -5945,6 +6054,7 @@ func _build_shop_tab() -> Control:
 	cred_lbl.add_theme_color_override("font_color", Color8(255, 225, 60))
 	cred_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
 	cred_lbl.add_theme_constant_override("shadow_offset_y", 2)
+	_apply_text_outline(cred_lbl, 4, Color8(0, 0, 0, 240))
 	cred_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	cred_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	cred_lbl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -6025,6 +6135,7 @@ func _build_shop_tab() -> Control:
 	ad_btn.add_theme_color_override("font_pressed_color", Color.WHITE)
 	ad_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 190))
 	ad_btn.add_theme_constant_override("shadow_offset_y", 2)
+	_apply_text_outline(ad_btn, 3, Color8(0, 0, 0, 235))
 	apply_3d_style_to_button(ad_btn, active_theme.accent.darkened(0.14), active_theme.accent.darkened(0.46), 12, 3, 14, 6)
 	var ad_norm_sb = ad_btn.get_theme_stylebox("normal")
 	if ad_norm_sb is StyleBoxFlat:
@@ -6157,6 +6268,7 @@ func _build_shop_tab() -> Control:
 	prem_icon_lbl.add_theme_color_override("font_color", Color.WHITE)
 	prem_icon_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 190))
 	prem_icon_lbl.add_theme_constant_override("shadow_offset_y", 2)
+	_apply_text_outline(prem_icon_lbl, 3, Color8(0, 0, 0, 230))
 	prem_icon_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	ui_labels.append({"node": prem_icon_lbl, "key": "PRO_PASS_TITLE", "type": "label"})
 	prem_title_hb.add_child(prem_icon_lbl)
@@ -6166,6 +6278,7 @@ func _build_shop_tab() -> Control:
 	prem_desc.add_theme_font_override("font", custom_font)
 	prem_desc.add_theme_font_size_override("font_size", int(clamp(round(16.0 * ui_s), 14, 21)))
 	prem_desc.add_theme_color_override("font_color", Color.WHITE)
+	_apply_text_outline(prem_desc, 2, Color8(0, 0, 0, 210))
 	prem_desc.autowrap_mode = TextServer.AUTOWRAP_WORD
 	ui_labels.append({"node": prem_desc, "key": "SHOP_PRO_DESC", "type": "label"})
 	prem_left_vb.add_child(prem_desc)
@@ -6177,7 +6290,12 @@ func _build_shop_tab() -> Control:
 
 	var buy_btn = Button.new()
 	if Global.is_premium:
-		buy_btn.text = " " + LANG[Global.current_lang].get("PRO_OFF", "ELİT KAPAT")
+		if OS.is_debug_build():
+			buy_btn.text = " " + LANG[Global.current_lang].get("PRO_OFF", "ELİT KAPAT")
+			buy_btn.pressed.connect(_on_toggle_premium_off)
+		else:
+			buy_btn.text = " " + LANG[Global.current_lang].get("PRO_ACTIVE", "ELİT AKTİF")
+			buy_btn.pressed.connect(_show_elite_perks_popup)
 		if ResourceLoader.exists("res://checkmark_icon.svg"):
 			buy_btn.icon = load("res://checkmark_icon.svg")
 			buy_btn.expand_icon = true
@@ -6186,7 +6304,7 @@ func _build_shop_tab() -> Control:
 		buy_btn.disabled = false
 		apply_3d_style_to_button(buy_btn, Color8(34, 140, 60, 230), Color8(18, 75, 30), 10, 3.0, 12, 6)
 		buy_btn.add_theme_color_override("font_color", Color.WHITE)
-		buy_btn.pressed.connect(_on_toggle_premium_off)
+		_apply_text_outline(buy_btn, 3, Color8(0, 0, 0, 235))
 		ui_labels.append({"node": buy_btn, "key": "SHOP_BUY", "type": "button_buy_premium"})
 	else:
 		var price_str = Global.get_formatted_premium_price()
@@ -6206,6 +6324,7 @@ func _build_shop_tab() -> Control:
 		buy_btn.add_theme_color_override("font_color", Color.WHITE)
 		buy_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 		buy_btn.add_theme_constant_override("shadow_offset_y", 2)
+		_apply_text_outline(buy_btn, 3, Color8(0, 0, 0, 235))
 		buy_btn.pressed.connect(_on_buy_premium_pressed)
 	buy_btn.add_theme_font_override("font", custom_font)
 	buy_btn.add_theme_font_size_override("font_size", int(clamp(round(19.0 * ui_s), 16, 24)))
@@ -6218,6 +6337,7 @@ func _build_shop_tab() -> Control:
 	rest_shop_btn.add_theme_font_override("font", custom_font)
 	rest_shop_btn.add_theme_font_size_override("font_size", int(clamp(round(15.0 * ui_s), 13, 19)))
 	rest_shop_btn.add_theme_color_override("font_color", Color.WHITE)
+	_apply_text_outline(rest_shop_btn, 2, Color8(0, 0, 0, 220))
 	rest_shop_btn.custom_minimum_size = Vector2(p_btn_w, int(clamp(round(28.0 * ui_s), 24, 34)))
 	var rest_shop_style = StyleBoxFlat.new()
 	rest_shop_style.bg_color = Color(0, 0, 0, 0)
@@ -6274,6 +6394,7 @@ func _build_shop_tab() -> Control:
 	balls_title.add_theme_color_override("font_color", Color.WHITE)
 	balls_title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
 	balls_title.add_theme_constant_override("shadow_offset_y", 2)
+	_apply_text_outline(balls_title, 3, Color8(0, 0, 0, 225))
 	balls_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ui_labels.append({"node": balls_title, "key": "SHOP_BALL_SKINS", "type": "label"})
 	balls_header_hb.add_child(balls_title)
@@ -6344,6 +6465,8 @@ func _build_shop_tab() -> Control:
 		card_vbox.add_child(ball_preview)
 
 		var name_lbl = create_label_node(s_name_key, Color.WHITE, card_name_fs)
+		ui_labels[ui_labels.size() - 1]["on_bg"] = false
+		_apply_text_outline(name_lbl, 3, Color8(0, 0, 0, 230))
 		name_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		card_vbox.add_child(name_lbl)
@@ -6351,8 +6474,9 @@ func _build_shop_tab() -> Control:
 		var action_btn = Button.new()
 		action_btn.add_theme_font_override("font", custom_font)
 		action_btn.add_theme_font_size_override("font_size", card_btn_fs)
-		action_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
+		action_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 220))
 		action_btn.add_theme_constant_override("shadow_offset_y", 2)
+		_apply_text_outline(action_btn, 4, Color8(0, 0, 0, 240))
 		action_btn.custom_minimum_size = Vector2(card_w - 16, card_btn_h)
 		action_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 
@@ -6368,7 +6492,6 @@ func _build_shop_tab() -> Control:
 				action_btn.add_theme_color_override("font_color", Color.WHITE)
 				apply_3d_style_to_button(action_btn, active_theme.bg_top.lightened(0.15), active_theme.bg_bottom.darkened(0.25), 10, 2.5, 8, 4)
 				action_btn.pressed.connect(func():
-					Global.play_click()
 					Global.equipped_ball_skin = s_id
 					Global.save_progression()
 					_refresh_shop_tab()
@@ -6382,18 +6505,20 @@ func _build_shop_tab() -> Control:
 				action_btn.add_theme_constant_override("h_separation", 6)
 			action_btn.add_theme_color_override("font_color", Color.WHITE)
 			apply_3d_style_to_button(action_btn, active_theme.accent, active_theme.accent.darkened(0.35), 10, 3.0, 8, 4)
+			action_btn.set_meta("custom_sfx", true)
 			action_btn.pressed.connect(func():
-				Global.play_click()
 				if Global.ad_credits >= price:
 					Global.ad_credits -= price
 					Global.unlocked_ball_skins.append(s_id)
 					Global.equipped_ball_skin = s_id
 					Global.save_progression()
+					Global.play_shop_buy()
 					if Global.unlocked_ball_skins.size() >= 3:
 						Global.unlock_achievement("COLLECTOR")
 					_refresh_shop_tab()
 					_show_toast(LANG[Global.current_lang][s_name_key] + " " + LANG[Global.current_lang]["SHOP_EQUIPPED"] + "!")
 				else:
+					Global.play_ui_error()
 					_show_toast(LANG[Global.current_lang].get("NEED_MORE_COINS", "Yetersiz Jeton!"))
 			)
 		card_vbox.add_child(action_btn)
@@ -6439,6 +6564,7 @@ func _build_shop_tab() -> Control:
 	hats_title.add_theme_color_override("font_color", Color.WHITE)
 	hats_title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
 	hats_title.add_theme_constant_override("shadow_offset_y", 2)
+	_apply_text_outline(hats_title, 3, Color8(0, 0, 0, 225))
 	hats_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ui_labels.append({"node": hats_title, "key": "SHOP_HATS", "type": "label"})
 	hats_header_hb.add_child(hats_title)
@@ -6462,6 +6588,7 @@ func _build_shop_tab() -> Control:
 		{"id": "none", "name_key": "HAT_NONE", "price": 0, "icon": null},
 		{"id": "kings_crown", "name_key": "HAT_KINGS_CROWN", "price": 500, "icon": preload("res://hat_kings_crown.png")},
 		{"id": "queens_crown", "name_key": "HAT_QUEENS_CROWN", "price": 500, "icon": preload("res://hat_queens_crown.png")},
+		{"id": "player_mask", "name_key": "HAT_PLAYER_MASK", "price": 1000, "icon": preload("res://hat_player_mask.png")},
 		{"id": "viking_helmet", "name_key": "HAT_VIKING", "price": 1250, "icon": preload("res://hat_viking.png")},
 		{"id": "magic_hat", "name_key": "HAT_MAGIC", "price": 1500, "icon": preload("res://hat_magic.png")}
 	]
@@ -6504,9 +6631,10 @@ func _build_shop_tab() -> Control:
 			preview_box.draw_circle(c, r, Color.WHITE)
 			preview_box.draw_arc(c, r, 0, TAU, 32, active_theme.accent, 2.0, true)
 			if h_icon != null:
-				var cr_w = (52.0 if h_id == "viking_helmet" else 42.0) * sc
-				var cr_h = (36.0 if h_id == "viking_helmet" else 30.0) * sc
-				var cr_rect = Rect2(c.x - cr_w / 2.0, c.y - r - cr_h + 6.0 * sc, cr_w, cr_h)
+				var cr_w = (52.0 if h_id == "viking_helmet" else (45.0 if h_id == "player_mask" else 42.0)) * sc
+				var cr_h = (36.0 if h_id == "viking_helmet" else (32.0 if h_id == "player_mask" else 30.0)) * sc
+				var y_ov = (17.0 if h_id == "player_mask" else 6.0) * sc
+				var cr_rect = Rect2(c.x - cr_w / 2.0, c.y - r - cr_h + y_ov, cr_w, cr_h)
 				preview_box.draw_texture_rect(h_icon, cr_rect, false)
 			else:
 				var x_d = 9.0 * sc
@@ -6515,6 +6643,8 @@ func _build_shop_tab() -> Control:
 		card_vbox.add_child(preview_box)
 
 		var name_lbl = create_label_node(h_name_key, Color.WHITE, card_name_fs)
+		ui_labels[ui_labels.size() - 1]["on_bg"] = false
+		_apply_text_outline(name_lbl, 3, Color8(0, 0, 0, 230))
 		name_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		card_vbox.add_child(name_lbl)
@@ -6522,8 +6652,9 @@ func _build_shop_tab() -> Control:
 		var action_btn = Button.new()
 		action_btn.add_theme_font_override("font", custom_font)
 		action_btn.add_theme_font_size_override("font_size", card_btn_fs)
-		action_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 200))
+		action_btn.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 220))
 		action_btn.add_theme_constant_override("shadow_offset_y", 2)
+		_apply_text_outline(action_btn, 4, Color8(0, 0, 0, 240))
 		action_btn.custom_minimum_size = Vector2(card_w - 16, card_btn_h)
 		action_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 
@@ -6538,7 +6669,6 @@ func _build_shop_tab() -> Control:
 				action_btn.add_theme_color_override("font_color", Color.WHITE)
 				apply_3d_style_to_button(action_btn, active_theme.bg_top.lightened(0.15), active_theme.bg_bottom.darkened(0.25), 10, 2.5, 8, 4)
 				action_btn.pressed.connect(func():
-					Global.play_click()
 					Global.equipped_hat = h_id
 					Global.save_progression()
 					if h_id != "none":
@@ -6554,29 +6684,30 @@ func _build_shop_tab() -> Control:
 				action_btn.add_theme_constant_override("h_separation", 6)
 			action_btn.add_theme_color_override("font_color", Color.WHITE)
 			apply_3d_style_to_button(action_btn, active_theme.accent, active_theme.accent.darkened(0.35), 10, 3.0, 8, 4)
+			action_btn.set_meta("custom_sfx", true)
 			action_btn.pressed.connect(func():
-				Global.play_click()
 				if Global.ad_credits >= h_price:
 					Global.ad_credits -= h_price
 					Global.unlocked_hats.append(h_id)
 					Global.equipped_hat = h_id
 					Global.save_progression()
+					Global.play_shop_buy()
 					Global.unlock_achievement("ROYALTY")
 					_refresh_shop_tab()
 					_show_toast(LANG[Global.current_lang][h_name_key] + " " + LANG[Global.current_lang]["SHOP_EQUIPPED"] + "!")
 				else:
+					Global.play_ui_error()
 					_show_toast(LANG[Global.current_lang].get("NEED_MORE_COINS", "Yetersiz Jeton!"))
 			)
 		card_vbox.add_child(action_btn)
 		hats_hbox.add_child(card)
 
-	# --- 5. EXPOSED DAILY QUESTS SECTION (Clickable Card-Button Opening Quests Modal) ---
+	# --- 5. EXPOSED DAILY QUESTS SECTION (Header Opens Modal; Quest Cards Navigate to Team Select) ---
 	var quests_panel = PanelContainer.new()
 	quests_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	quests_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	quests_panel.size_flags_stretch_ratio = 1.55
 	quests_panel.mouse_filter = Control.MOUSE_FILTER_PASS
-	quests_panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	var qp_style = StyleBoxFlat.new()
 	qp_style.bg_color = active_theme.bg_bottom.darkened(0.22)
 	qp_style.corner_radius_top_left = 16; qp_style.corner_radius_top_right = 16
@@ -6591,28 +6722,6 @@ func _build_shop_tab() -> Control:
 	qp_style.content_margin_top = qp_pad_v
 	qp_style.content_margin_bottom = qp_pad_v
 	quests_panel.add_theme_stylebox_override("panel", qp_style)
-
-	var qp_press_state = {"pos": Vector2.ZERO, "active": false}
-	quests_panel.gui_input.connect(func(event: InputEvent):
-		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed:
-				qp_press_state["pos"] = event.global_position
-				qp_press_state["active"] = true
-			elif qp_press_state["active"]:
-				qp_press_state["active"] = false
-				if event.global_position.distance_to(qp_press_state["pos"]) < 14.0:
-					Global.play_click()
-					_open_daily_quests()
-		elif event is InputEventScreenTouch:
-			if event.pressed:
-				qp_press_state["pos"] = event.position
-				qp_press_state["active"] = true
-			elif qp_press_state["active"]:
-				qp_press_state["active"] = false
-				if event.position.distance_to(qp_press_state["pos"]) < 14.0:
-					Global.play_click()
-					_open_daily_quests()
-	)
 	vbox.add_child(quests_panel)
 
 	var qp_vbox = VBoxContainer.new()
@@ -6624,8 +6733,13 @@ func _build_shop_tab() -> Control:
 	# Quests Section Header
 	var q_header_hbox = HBoxContainer.new()
 	q_header_hbox.mouse_filter = Control.MOUSE_FILTER_PASS
+	q_header_hbox.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	q_header_hbox.alignment = BoxContainer.ALIGNMENT_BEGIN
 	q_header_hbox.add_theme_constant_override("separation", 8)
+	_connect_tap_handler(q_header_hbox, func():
+		Global.play_click()
+		_open_daily_quests()
+	)
 	qp_vbox.add_child(q_header_hbox)
 
 	if ResourceLoader.exists("res://quest_icon.svg"):
@@ -6644,6 +6758,7 @@ func _build_shop_tab() -> Control:
 	q_title_lbl.add_theme_font_override("font", custom_font)
 	q_title_lbl.add_theme_font_size_override("font_size", int(clamp(round(23.0 * ui_s), 20, 30)))
 	q_title_lbl.add_theme_color_override("font_color", Color.WHITE)
+	_apply_text_outline(q_title_lbl, 3, Color8(0, 0, 0, 225))
 	q_title_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 	q_header_hbox.add_child(q_title_lbl)
 
@@ -6657,6 +6772,7 @@ func _build_shop_tab() -> Control:
 	q_date_lbl.add_theme_font_override("font", custom_font)
 	q_date_lbl.add_theme_font_size_override("font_size", int(clamp(round(17.0 * ui_s), 15, 22)))
 	q_date_lbl.add_theme_color_override("font_color", Color.WHITE)
+	_apply_text_outline(q_date_lbl, 2, Color8(0, 0, 0, 215))
 	q_date_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	q_date_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 	q_header_hbox.add_child(q_date_lbl)
@@ -6666,6 +6782,7 @@ func _build_shop_tab() -> Control:
 	q_chev_lbl.add_theme_font_override("font", custom_font)
 	q_chev_lbl.add_theme_font_size_override("font_size", int(clamp(round(24.0 * ui_s), 20, 30)))
 	q_chev_lbl.add_theme_color_override("font_color", Color.WHITE)
+	_apply_text_outline(q_chev_lbl, 2, Color8(0, 0, 0, 215))
 	q_chev_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	q_chev_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 	q_header_hbox.add_child(q_chev_lbl)
@@ -6675,6 +6792,11 @@ func _build_shop_tab() -> Control:
 		var q_card = PanelContainer.new()
 		q_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		q_card.mouse_filter = Control.MOUSE_FILTER_PASS
+		q_card.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		_connect_tap_handler(q_card, func():
+			Global.play_click()
+			_switch_tab(1)
+		)
 		var qc_style = StyleBoxFlat.new()
 		qc_style.bg_color = active_theme.bg_top.darkened(0.15)
 		qc_style.corner_radius_top_left = 10; qc_style.corner_radius_top_right = 10
@@ -6706,6 +6828,7 @@ func _build_shop_tab() -> Control:
 		desc_lbl.add_theme_font_override("font", custom_font)
 		desc_lbl.add_theme_font_size_override("font_size", int(clamp(round(18.0 * ui_s), 16, 23)))
 		desc_lbl.add_theme_color_override("font_color", Color.WHITE)
+		_apply_text_outline(desc_lbl, 2, Color8(0, 0, 0, 210))
 		desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
 		desc_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 		text_col.add_child(desc_lbl)
@@ -6747,6 +6870,7 @@ func _build_shop_tab() -> Control:
 		p_txt_lbl.add_theme_font_override("font", custom_font)
 		p_txt_lbl.add_theme_font_size_override("font_size", int(clamp(round(15.0 * ui_s), 13, 19)))
 		p_txt_lbl.add_theme_color_override("font_color", Color.WHITE)
+		_apply_text_outline(p_txt_lbl, 2, Color8(0, 0, 0, 220))
 		p_txt_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
 		prog_hbox.add_child(p_txt_lbl)
 
@@ -6754,6 +6878,7 @@ func _build_shop_tab() -> Control:
 		var claim_btn = Button.new()
 		claim_btn.add_theme_font_override("font", custom_font)
 		claim_btn.add_theme_font_size_override("font_size", int(clamp(round(18.0 * ui_s), 15, 22)))
+		_apply_text_outline(claim_btn, 3, Color8(0, 0, 0, 230))
 		claim_btn.custom_minimum_size = Vector2(int(clamp(round(138.0 * ui_s), 124, 168)), int(clamp(round(41.0 * ui_s), 36, 52)))
 		claim_btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
@@ -6773,10 +6898,11 @@ func _build_shop_tab() -> Control:
 			apply_3d_style_to_button(claim_btn, active_theme.accent, active_theme.accent.darkened(0.35), 10, 3)
 			claim_btn.add_theme_color_override("font_color", Color.WHITE)
 			var q_id = q["id"]
+			claim_btn.set_meta("custom_sfx", true)
 			claim_btn.pressed.connect(func():
-				Global.play_click()
 				var earned = Global.claim_quest_reward(q_id)
 				if earned > 0:
+					Global.play_prize_win()
 					var rew_fmt = LANG.get(Global.current_lang, LANG["ENG"]).get("EARNED_REWARD", "+%s %s")
 					_show_toast(rew_fmt % [str(earned), LANG.get(Global.current_lang, LANG["ENG"]).get("CURRENCY", "Jeton")])
 					_refresh_shop_tab()
@@ -6859,6 +6985,7 @@ func _on_buy_premium_pressed():
 	dlg_title.add_theme_font_override("font", custom_font)
 	dlg_title.add_theme_font_size_override("font_size", 40)
 	dlg_title.add_theme_color_override("font_color", Color.WHITE)
+	_apply_text_outline(dlg_title, 3, Color8(0, 0, 0, 235))
 	dlg_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	dlg_vbox.add_child(dlg_title)
 
@@ -6867,6 +6994,7 @@ func _on_buy_premium_pressed():
 	dlg_desc.add_theme_font_override("font", custom_font)
 	dlg_desc.add_theme_font_size_override("font_size", 26)
 	dlg_desc.add_theme_color_override("font_color", Color.WHITE)
+	_apply_text_outline(dlg_desc, 2, Color8(0, 0, 0, 215))
 	dlg_desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	dlg_desc.autowrap_mode = TextServer.AUTOWRAP_WORD
 	dlg_vbox.add_child(dlg_desc)
@@ -6881,6 +7009,7 @@ func _on_buy_premium_pressed():
 	cancel_btn.add_theme_font_override("font", custom_font)
 	cancel_btn.add_theme_font_size_override("font_size", 26)
 	cancel_btn.add_theme_color_override("font_color", Color.WHITE)
+	_apply_text_outline(cancel_btn, 3, Color8(0, 0, 0, 230))
 	cancel_btn.custom_minimum_size = Vector2(190, 58)
 	apply_3d_style_to_button(cancel_btn, active_theme.bg_top.lightened(0.15), active_theme.bg_bottom.darkened(0.3), 14, 4)
 	cancel_btn.pressed.connect(func():
@@ -6894,6 +7023,7 @@ func _on_buy_premium_pressed():
 	confirm_btn.add_theme_font_override("font", custom_font)
 	confirm_btn.add_theme_font_size_override("font_size", 26)
 	confirm_btn.add_theme_color_override("font_color", Color.WHITE)
+	_apply_text_outline(confirm_btn, 3, Color8(0, 0, 0, 235))
 	confirm_btn.custom_minimum_size = Vector2(190, 58)
 	apply_3d_style_to_button(confirm_btn, active_theme.accent.darkened(0.14), active_theme.accent.darkened(0.46), 14, 4)
 	confirm_btn.pressed.connect(func():
@@ -6905,14 +7035,14 @@ func _on_buy_premium_pressed():
 				billing.start_connection()
 				return
 			
-			var response = billing.purchase("premium_unlock")
+			if premium_purchase_option_id == "":
+				billing.query_product_details(PackedStringArray(["premium_unlock"]), BillingClient.ProductType.INAPP)
+			var response = billing.purchase("premium_unlock", _safe_billing_str(premium_purchase_option_id), _safe_billing_str(premium_offer_id))
 			print("Billing purchase started: ", response)
 			var r_code = response.get("response_code", -1)
 			if r_code == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED:
-				Global.is_premium = true
-				Global.save_progression()
-				_refresh_shop_tab()
-				_show_toast(LANG[Global.current_lang].get("PRO_ACTIVE", "PRO AKTİF!"))
+				_activate_premium_entitlement(true)
+				billing.query_purchases(BillingClient.ProductType.INAPP)
 			elif r_code == BillingClient.BillingResponseCode.OK:
 				# Purchase flow started on Google Play overlay
 				pass
@@ -6931,6 +7061,7 @@ func _on_buy_premium_pressed():
 			print("Mocking successful premium purchase on PC")
 			Global.is_premium = true
 			Global.save_progression()
+			Global.play_prize_win()
 			_refresh_shop_tab()
 			_show_toast(LANG[Global.current_lang].get("PRO_ACTIVE", "PRO AKTİF!"))
 	)
@@ -6958,6 +7089,11 @@ func _on_buy_premium_pressed():
 func _on_toggle_premium_off():
 	Global.play_click()
 	Global.set_premium(false)
+	if is_instance_valid(vip_top_bar):
+		vip_top_bar.visible = false
+	_ensure_house_ad_bar()
+	_ensure_menu_top_banner()
+	_update_start_button_display()
 	_refresh_shop_tab()
 	_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("PRO_OFF_TOAST", "PRO KAPATILDI"))
 
@@ -7232,10 +7368,107 @@ func _open_privacy_policy_modal():
 func _on_restore_purchases_pressed():
 	Global.play_click()
 	if billing:
-		billing.query_purchases(BillingClient.ProductType.INAPP)
+		if billing.is_ready():
+			billing.query_purchases(BillingClient.ProductType.INAPP)
+			billing.query_purchases(BillingClient.ProductType.SUBS)
+		else:
+			billing.start_connection()
 		_show_toast(LANG[Global.current_lang].get("RESTORE_CHECK", "Satın alımlarınız kontrol ediliyor..."))
 	else:
 		_show_toast(LANG[Global.current_lang].get("RESTORE_SUCCESS", "Satın alımlar güncellendi!"))
+
+func _on_update_available_detected(version_name: String, store_url: String):
+	if Global.update_notice_dismissed_this_session:
+		return
+	_show_update_notice_banner(version_name, store_url)
+
+func _show_update_notice_banner(version_name: String, store_url: String):
+	if not is_inside_tree() or Global.update_notice_dismissed_this_session:
+		return
+	if is_instance_valid(update_notice_banner):
+		update_notice_banner.queue_free()
+
+	var holder = MarginContainer.new()
+	holder.name = "UpdateNoticeBanner"
+	holder.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	holder.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	holder.add_theme_constant_override("margin_left", 18)
+	holder.add_theme_constant_override("margin_right", 18)
+	holder.add_theme_constant_override("margin_bottom", 104)
+	holder.mouse_filter = Control.MOUSE_FILTER_PASS
+	holder.z_index = 120
+	add_child(holder)
+	update_notice_banner = holder
+
+	var card = PanelContainer.new()
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var cs = StyleBoxFlat.new()
+	cs.bg_color = active_theme.bg_bottom.darkened(0.22)
+	cs.bg_color.a = 0.97
+	cs.corner_radius_top_left = 18; cs.corner_radius_top_right = 18
+	cs.corner_radius_bottom_left = 18; cs.corner_radius_bottom_right = 18
+	cs.border_width_left = 2; cs.border_width_right = 2
+	cs.border_width_top = 2; cs.border_width_bottom = 4
+	cs.border_color = active_theme.accent
+	cs.shadow_color = Color8(0, 0, 0, 175)
+	cs.shadow_size = 16
+	cs.shadow_offset = Vector2(0, 4)
+	cs.content_margin_left = 16; cs.content_margin_right = 12
+	cs.content_margin_top = 10; cs.content_margin_bottom = 10
+	card.add_theme_stylebox_override("panel", cs)
+	holder.add_child(card)
+
+	var hb = HBoxContainer.new()
+	hb.alignment = BoxContainer.ALIGNMENT_CENTER
+	hb.add_theme_constant_override("separation", 10)
+	card.add_child(hb)
+
+	var msg_lbl = Label.new()
+	var fmt = LANG.get(Global.current_lang, LANG["ENG"]).get("UPDATE_BANNER_FMT", "New update (v%s) is live!")
+	msg_lbl.text = fmt % [version_name.lstrip("vV")]
+	msg_lbl.add_theme_font_override("font", custom_font)
+	msg_lbl.add_theme_font_size_override("font_size", 20)
+	msg_lbl.add_theme_color_override("font_color", Color.WHITE)
+	_apply_text_outline(msg_lbl, 2, Color8(0, 0, 0, 220))
+	msg_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	msg_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	msg_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hb.add_child(msg_lbl)
+
+	var upd_btn = Button.new()
+	upd_btn.text = LANG.get(Global.current_lang, LANG["ENG"]).get("UPDATE_BTN", "UPDATE")
+	upd_btn.add_theme_font_override("font", custom_font)
+	upd_btn.add_theme_font_size_override("font_size", 20)
+	upd_btn.add_theme_color_override("font_color", Color.WHITE)
+	_apply_text_outline(upd_btn, 2, Color8(0, 0, 0, 230))
+	upd_btn.custom_minimum_size = Vector2(124, 48)
+	apply_3d_style_to_button(upd_btn, active_theme.accent.darkened(0.15), active_theme.accent.darkened(0.45), 12, 3, 14, 6)
+	upd_btn.pressed.connect(func():
+		Global.play_click()
+		OS.shell_open(store_url)
+	)
+	hb.add_child(upd_btn)
+
+	var close_b = Button.new()
+	close_b.text = "×"
+	close_b.add_theme_font_override("font", custom_font)
+	close_b.add_theme_font_size_override("font_size", 24)
+	close_b.add_theme_color_override("font_color", Color.WHITE)
+	close_b.custom_minimum_size = Vector2(48, 48)
+	apply_3d_style_to_button(close_b, active_theme.bg_bottom.darkened(0.4), active_theme.bg_bottom.darkened(0.6), 12, 2, 8, 4)
+	close_b.pressed.connect(func():
+		Global.play_click()
+		Global.update_notice_dismissed_this_session = true
+		if is_instance_valid(holder):
+			var tw = create_tween()
+			tw.tween_property(holder, "modulate:a", 0.0, 0.18)
+			tw.tween_callback(holder.queue_free)
+	)
+	hb.add_child(close_b)
+
+	holder.modulate.a = 0.0
+	var in_tw = create_tween()
+	in_tw.tween_property(holder, "modulate:a", 1.0, 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func _show_toast(msg: String):
 	var toast = PanelContainer.new()
@@ -7758,13 +7991,14 @@ func _request_rewarded_ad():
 		is_rewarded_loading = true
 		admob_node.load_rewarded_ad()
 
-var active_reward_purpose: String = "general"
+var active_reward_purpose: String = "none"
+var reward_session_token: int = 0
+var reward_earned_for_session: int = -1
 var wheel_on_reward_callback: Callable = Callable()
 var current_wheel_status_callback: Callable = Callable()
 
 func _show_admob_rewarded():
 	Global.play_click()
-	active_reward_purpose = "general"
 
 	if not Global.is_rewarded_ad_ready():
 		var cd = int(Global.get_rewarded_ad_cooldown_left())
@@ -7777,6 +8011,9 @@ func _show_admob_rewarded():
 	var admob_node = Global.get_admob()
 	if admob_node and admob_node.has_method("show_rewarded_ad"):
 		if admob_node.has_method("is_rewarded_ad_loaded") and admob_node.is_rewarded_ad_loaded():
+			reward_session_token += 1
+			active_reward_purpose = "general"
+			wheel_on_reward_callback = Callable()
 			admob_node.show_rewarded_ad()
 		else:
 			_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("AD_PREPARING", "Reklam hazırlanıyor, lütfen birkaç saniye sonra tekrar deneyin..."))
@@ -7784,10 +8021,13 @@ func _show_admob_rewarded():
 	else:
 		# Fallback for testing on PC without plugin
 		print("AdMob plugin not loaded. Mocking reward +50 credits.")
+		reward_session_token += 1
+		active_reward_purpose = "general"
+		wheel_on_reward_callback = Callable()
 		_on_rewarded_video_earned(null, null)
 
 func _show_prize_dialog(title_txt: String, amount_txt: String, sub_txt: String = ""):
-	Global.play_goal_music()
+	Global.play_prize_win()
 	var overlay = ColorRect.new()
 	overlay.color = Color(0, 0, 0, 0.88)
 	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -7833,6 +8073,7 @@ func _show_prize_dialog(title_txt: String, amount_txt: String, sub_txt: String =
 	t_lbl.add_theme_color_override("font_color", Color.WHITE)
 	t_lbl.add_theme_color_override("font_shadow_color", Color8(180, 100, 0, 200))
 	t_lbl.add_theme_constant_override("shadow_offset_y", 3)
+	_apply_text_outline(t_lbl, 4, Color8(0, 0, 0, 235))
 	t_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(t_lbl)
 	
@@ -7879,6 +8120,7 @@ func _show_prize_dialog(title_txt: String, amount_txt: String, sub_txt: String =
 	amt_lbl.add_theme_color_override("font_color", Color8(255, 225, 40))
 	amt_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 220))
 	amt_lbl.add_theme_constant_override("shadow_offset_y", 4)
+	_apply_text_outline(amt_lbl, 5, Color8(0, 0, 0, 240))
 	amt_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(amt_lbl)
 	
@@ -7915,6 +8157,7 @@ func _show_prize_dialog(title_txt: String, amount_txt: String, sub_txt: String =
 	ok_btn.add_theme_font_override("font", custom_font)
 	ok_btn.add_theme_font_size_override("font_size", 30)
 	ok_btn.add_theme_color_override("font_color", Color.WHITE)
+	_apply_text_outline(ok_btn, 3, Color8(0, 0, 0, 235))
 	apply_3d_style_to_button(ok_btn, Color8(40, 155, 75), Color8(20, 90, 40), 16, 4.5, 36, 12)
 	ok_btn.custom_minimum_size = Vector2(230, 62)
 	ok_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -7936,8 +8179,14 @@ func _show_prize_dialog(title_txt: String, amount_txt: String, sub_txt: String =
 
 func _on_rewarded_video_earned(_ad_info = null, _reward_data = null):
 	is_rewarded_loading = false
-	if active_reward_purpose == "wheel":
-		active_reward_purpose = "general"
+	# Guard against duplicate AdMob reward signals or unrequested invocations
+	if active_reward_purpose == "none" or reward_session_token == reward_earned_for_session:
+		return
+	reward_earned_for_session = reward_session_token
+	var purpose = active_reward_purpose
+	active_reward_purpose = "none"
+
+	if purpose == "wheel":
 		if wheel_on_reward_callback.is_valid():
 			var cb = wheel_on_reward_callback
 			wheel_on_reward_callback = Callable()
@@ -7949,6 +8198,9 @@ func _on_rewarded_video_earned(_ad_info = null, _reward_data = null):
 			if current_wheel_status_callback.is_valid():
 				current_wheel_status_callback.call()
 		_request_rewarded_ad()
+		return
+
+	if purpose != "general":
 		return
 	
 	Global.ad_credits += 50
@@ -8021,6 +8273,8 @@ func _connect_admob_signals(admob_node: Node):
 		admob_node.connect("banner_ad_failed_to_load", Callable(self, "_on_banner_failed_to_load"))
 
 func _exit_tree():
+	if Global.update_available_detected.is_connected(_on_update_available_detected):
+		Global.update_available_detected.disconnect(_on_update_available_detected)
 	var admob_node = Global.get_admob()
 	if admob_node:
 		if admob_node.is_connected("banner_ad_loaded", Callable(self, "_on_banner_loaded")):
@@ -8044,21 +8298,25 @@ func _on_rewarded_ad_loaded(_ad_info = null, _response_info = null):
 
 func _on_rewarded_dismissed(_ad_info = null):
 	is_rewarded_loading = false
-	if active_reward_purpose == "wheel":
-		active_reward_purpose = "general"
-		wheel_on_reward_callback = Callable()
-		if current_wheel_status_callback.is_valid():
-			current_wheel_status_callback.call()
+	var dismissed_token = reward_session_token
+	# Brief grace delay handles adapters where dismissed arrives right before earned_reward
+	get_tree().create_timer(0.4).timeout.connect(func():
+		if not is_instance_valid(self): return
+		if reward_session_token == dismissed_token and reward_earned_for_session != dismissed_token:
+			active_reward_purpose = "none"
+			wheel_on_reward_callback = Callable()
+			if current_wheel_status_callback.is_valid():
+				current_wheel_status_callback.call()
+	)
 	_request_rewarded_ad()
 
 func _on_rewarded_failed_to_show(_ad_info = null, _error_data = null):
 	is_rewarded_loading = false
 	print("[AdMob] Rewarded ad failed to show.")
-	if active_reward_purpose == "wheel":
-		active_reward_purpose = "general"
-		wheel_on_reward_callback = Callable()
-		if current_wheel_status_callback.is_valid():
-			current_wheel_status_callback.call()
+	active_reward_purpose = "none"
+	wheel_on_reward_callback = Callable()
+	if current_wheel_status_callback.is_valid():
+		current_wheel_status_callback.call()
 	_request_rewarded_ad()
 
 func _on_banner_loaded(ad_info, _response_info = null):
@@ -8171,6 +8429,7 @@ func _open_daily_quests():
 	title_lbl.add_theme_font_override("font", custom_font)
 	title_lbl.add_theme_font_size_override("font_size", 38)
 	title_lbl.add_theme_color_override("font_color", Color.WHITE)
+	_apply_text_outline(title_lbl, 3, Color8(0, 0, 0, 235))
 	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(title_lbl)
 	
@@ -8195,6 +8454,14 @@ func _open_daily_quests():
 	
 	for q in Global.daily_quests:
 		var q_card = PanelContainer.new()
+		q_card.mouse_filter = Control.MOUSE_FILTER_PASS
+		q_card.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		_connect_tap_handler(q_card, func():
+			Global.play_click()
+			if is_instance_valid(overlay):
+				overlay.queue_free()
+			_switch_tab(1)
+		)
 		var qc_style = StyleBoxFlat.new()
 		qc_style.bg_color = active_theme.bg_top.darkened(0.12)
 		qc_style.corner_radius_top_left = 14; qc_style.corner_radius_top_right = 14
@@ -8206,11 +8473,13 @@ func _open_daily_quests():
 		quests_vbox.add_child(q_card)
 		
 		var q_hbox = HBoxContainer.new()
+		q_hbox.mouse_filter = Control.MOUSE_FILTER_PASS
 		q_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
 		q_hbox.add_theme_constant_override("separation", 12)
 		q_card.add_child(q_hbox)
 		
 		var text_vbox = VBoxContainer.new()
+		text_vbox.mouse_filter = Control.MOUSE_FILTER_PASS
 		text_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		text_vbox.add_theme_constant_override("separation", 4)
 		q_hbox.add_child(text_vbox)
@@ -8221,6 +8490,7 @@ func _open_daily_quests():
 		desc_lbl.add_theme_font_override("font", custom_font)
 		desc_lbl.add_theme_font_size_override("font_size", 22)
 		desc_lbl.add_theme_color_override("font_color", Color.WHITE)
+		_apply_text_outline(desc_lbl, 2, Color8(0, 0, 0, 215))
 		desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
 		text_vbox.add_child(desc_lbl)
 		
@@ -8231,11 +8501,13 @@ func _open_daily_quests():
 		prog_lbl.add_theme_font_override("font", custom_font)
 		prog_lbl.add_theme_font_size_override("font_size", 18)
 		prog_lbl.add_theme_color_override("font_color", Color8(255, 215, 0))
+		_apply_text_outline(prog_lbl, 3, Color8(0, 0, 0, 230))
 		text_vbox.add_child(prog_lbl)
 		
 		var claim_btn = Button.new()
 		claim_btn.add_theme_font_override("font", custom_font)
 		claim_btn.add_theme_font_size_override("font_size", 20)
+		_apply_text_outline(claim_btn, 3, Color8(0, 0, 0, 230))
 		claim_btn.custom_minimum_size = Vector2(130, 48)
 		claim_btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		
@@ -8250,6 +8522,7 @@ func _open_daily_quests():
 				claim_btn.add_theme_constant_override("icon_max_width", 18)
 				claim_btn.add_theme_constant_override("h_separation", 6)
 			claim_btn.disabled = true
+			claim_btn.mouse_filter = Control.MOUSE_FILTER_PASS
 			apply_3d_style_to_button(claim_btn, Color8(30, 80, 40, 200), Color8(15, 50, 25), 10, 2)
 			claim_btn.add_theme_color_override("font_disabled_color", Color.WHITE)
 		elif is_ready:
@@ -8257,10 +8530,11 @@ func _open_daily_quests():
 			apply_3d_style_to_button(claim_btn, active_theme.accent, active_theme.accent.darkened(0.35), 10, 3)
 			claim_btn.add_theme_color_override("font_color", Color.WHITE)
 			var q_id = q["id"]
+			claim_btn.set_meta("custom_sfx", true)
 			claim_btn.pressed.connect(func():
-				Global.play_click()
 				var earned = Global.claim_quest_reward(q_id)
 				if earned > 0:
+					Global.play_prize_win()
 					var rew_fmt = LANG.get(Global.current_lang, LANG["ENG"]).get("EARNED_REWARD", "+%s %s")
 					var curr_str = LANG.get(Global.current_lang, LANG["ENG"]).get("CURRENCY", "Jeton")
 					_show_toast(rew_fmt % [str(earned), curr_str])
@@ -8271,6 +8545,7 @@ func _open_daily_quests():
 		else:
 			claim_btn.text = LANG.get(Global.current_lang, LANG["ENG"]).get("QUEST_IN_PROGRESS", "Devam Ediyor")
 			claim_btn.disabled = true
+			claim_btn.mouse_filter = Control.MOUSE_FILTER_PASS
 			apply_3d_style_to_button(claim_btn, active_theme.bg_top.lightened(0.1), active_theme.bg_bottom.darkened(0.3), 10, 2)
 			claim_btn.add_theme_color_override("font_disabled_color", Color.WHITE)
 			
@@ -8456,6 +8731,7 @@ func _open_lucky_wheel():
 	var spin_btn = Button.new()
 	spin_btn.add_theme_font_override("font", custom_font)
 	spin_btn.add_theme_font_size_override("font_size", 30)
+	_apply_text_outline(spin_btn, 3, Color8(0, 0, 0, 235))
 	spin_btn.custom_minimum_size = Vector2(380, 66)
 	spin_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	vbox.add_child(spin_btn)
@@ -8603,8 +8879,14 @@ func _open_lucky_wheel():
 		# Align target_seg_mid to -PI/2 (top)
 		var desired_final_angle = -PI/2.0 - target_seg_mid
 		
+		var start_rot = cur_rotation["angle"]
 		var full_rotations = TAU * 5.0
-		var final_rot = cur_rotation["angle"] + full_rotations + fposmod(desired_final_angle - cur_rotation["angle"], TAU)
+		var final_rot = start_rot + full_rotations + fposmod(desired_final_angle - start_rot, TAU)
+		var tick_state = {
+			"wedge": int(floor((start_rot + PI / 2.0) / seg_w)),
+			"last_ms": 0
+		}
+		var total_rot = maxf(final_rot - start_rot, 0.01)
 		
 		var tw = create_tween()
 		tw.set_trans(Tween.TRANS_CUBIC)
@@ -8612,8 +8894,16 @@ func _open_lucky_wheel():
 		tw.tween_method(func(val):
 			if not is_instance_valid(wheel_view): return
 			cur_rotation["angle"] = val
+			var cur_wedge = int(floor((val + PI / 2.0) / seg_w))
+			if cur_wedge != tick_state["wedge"]:
+				tick_state["wedge"] = cur_wedge
+				var now_ms = Time.get_ticks_msec()
+				if now_ms - int(tick_state["last_ms"]) >= 42:
+					tick_state["last_ms"] = now_ms
+					var speed_ratio = clampf((final_rot - val) / total_rot, 0.0, 1.0)
+					Global.play_wheel_tick(speed_ratio)
 			wheel_view.queue_redraw()
-		, cur_rotation["angle"], final_rot, 3.5)
+		, start_rot, final_rot, 3.5)
 		
 		tw.finished.connect(func():
 			if not is_instance_valid(overlay): return
@@ -8696,6 +8986,7 @@ func _show_admob_rewarded_for_wheel(on_reward_callback: Callable) -> bool:
 	var admob_node = Global.get_admob()
 	if admob_node and admob_node.has_method("show_rewarded_ad"):
 		if admob_node.has_method("is_rewarded_ad_loaded") and admob_node.is_rewarded_ad_loaded():
+			reward_session_token += 1
 			active_reward_purpose = "wheel"
 			wheel_on_reward_callback = on_reward_callback
 			admob_node.show_rewarded_ad()
@@ -8707,6 +8998,7 @@ func _show_admob_rewarded_for_wheel(on_reward_callback: Callable) -> bool:
 	else:
 		# Fallback / editor test mode: trigger wheel reward callback immediately!
 		print("[AdMob] Rewarded ad fallback for Lucky Wheel...")
+		reward_session_token += 1
 		active_reward_purpose = "wheel"
 		wheel_on_reward_callback = on_reward_callback
 		_on_rewarded_video_earned()
@@ -8905,14 +9197,9 @@ func _open_leaderboard():
 	)
 	vbox.add_child(close_btn)
 
-func _sync_score_to_web(p_name: String, team: String, goals: int):
-	var http = HTTPRequest.new()
-	add_child(http)
-	http.timeout = 10.0
-	http.request_completed.connect(func(result, response_code, headers, body):
-		http.queue_free()
-		if response_code == 200:
-			print("[LeaderboardSync] Web leaderboard synced successfully: ", p_name, " (", team, "): ", goals)
+func _sync_score_to_web(p_name: String, _team: String, _goals: int):
+	Global.sync_web_leaderboard(p_name, func(ok: bool, goals: int):
+		if ok:
 			var succ_txt = "Skorun başarıyla eşitlendi! (%d Gol)"
 			if Global.current_lang == "ENG": succ_txt = "Score successfully synchronized! (%d Goals)"
 			elif Global.current_lang == "ESP": succ_txt = "¡Puntuación sincronizada con éxito! (%d Goles)"
@@ -8920,7 +9207,6 @@ func _sync_score_to_web(p_name: String, team: String, goals: int):
 			elif Global.current_lang == "ITA": succ_txt = "Punteggio sincronizzato con successo! (%d Gol)"
 			_show_toast(succ_txt % goals)
 		else:
-			print("[LeaderboardSync] Sync failed with response_code: ", response_code)
 			var err_txt = "Skor eşitlenemedi. Lütfen internet bağlantınızı kontrol edin."
 			if Global.current_lang == "ENG": err_txt = "Could not synchronize score. Please check your internet connection."
 			elif Global.current_lang == "ESP": err_txt = "No se pudo sincronizar. Por favor verifica tu conexión a internet."
@@ -8928,18 +9214,6 @@ func _sync_score_to_web(p_name: String, team: String, goals: int):
 			elif Global.current_lang == "ITA": err_txt = "Impossibile sincronizzare. Controlla la tua connessione internet."
 			_show_toast(err_txt)
 	)
-	var url = "https://www.ebstudyo.com/api/sync_score.php"
-	var headers = [
-		"Content-Type: application/json",
-		"User-Agent: BolGolFutbol-Android/1.1.1"
-	]
-	var payload = JSON.stringify({
-		"player_name": p_name,
-		"team_name": team,
-		"goals": goals,
-		"device_id": OS.get_unique_id()
-	})
-	http.request(url, headers, HTTPClient.METHOD_POST, payload)
 
 
 # ======================================================

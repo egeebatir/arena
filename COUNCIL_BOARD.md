@@ -1,6 +1,6 @@
 # 🏛️ BOL GOL FUTBOL: ÇOKLU-AJAN MECLİSİ (COUNCIL BOARD)
 > **Ekosistem Durum ve Karar Masası (Blackboard)**  
-> *Son Güncelleme: 2026-11-16* | *Durum: v1.1.4 (Build 35) — Tam Genişlik Üst Rozet, Ekrana Sığan Mağaza & İstatistikler, 5 Maç Reklamsız Başlangıç + 2 Maçta Bir Interstitial, Görev & Rehber Düzeltmeleri*
+> *Son Güncelleme: 2026-11-19* | *Durum: v1.1.6 (Build 37) — Elit Kulüp Billing Onay Düzeltmesi, Kulüp-Bayrak Ayrımı, Çark Reklam İzolasyonu (60 sn Cooldown), Oyun İçi Güncelleme Bildirimi, Temiz Splash & Yeni Mağaza Görselleri*
 
 ---
 
@@ -8,10 +8,10 @@
 
 | Proje | Konum / Repo | Odak Alanı | Canlı Durum |
 | :--- | :--- | :--- | :--- |
-| **⚽ Mobil Oyun (futbol)** | `c:\Users\egebatir\Documents\futbol`<br>*(arena.git - master)* | Godot 4.6 GDScript, UI/UX, AdMob, Google Play | ✅ 100% Hazır (v1.1.4 Build 35 Dağıtıldı) |
+| **⚽ Mobil Oyun (futbol)** | `c:\Users\egebatir\Documents\futbol`<br>*(arena.git - master)* | Godot 4.6 GDScript, UI/UX, AdMob, Google Play | ✅ 100% Hazır (v1.1.6 Build 37) |
 | **🎬 Otomasyon (futbol_automation)** | `c:\Users\egebatir\Documents\futbol_automation`<br>*(bolgolfutbolotonom.git - main)* | 9:16 Shorts/Reels Video, AI Metadata, Rastgele Tema & Skin | ✅ 100% Hazır (46 Milli Takım, 232 Takım Eşleşmesi) |
-| **🌐 Web & Landing (webfutbol)** | `c:\Users\egebatir\Documents\Bol Gol Futbol\webfutbol`<br>*(webfutbol.git - main / ebstudyo.com)* | Canlı Web Sitesi (HTML5/WASM), On-Demand Yükleme, Kapalı Beta Hunisi & SEO | ✅ v1.1.3 Hazır (Canlı Sunucuya Dağıtıldı) |
-| **📱 Google Play Store** | *Console / ASO (com.ebstudyo.bolgol)* | 5 Dil (TR, EN, ES, PT, IT), İkon, Tanıtım, Güncelleme Notları | 🟢 v1.1.4 Paketi Yayında (Build 35 — internal & alpha) |
+| **🌐 Web & Landing (webfutbol)** | `c:\Users\egebatir\Documents\Bol Gol Futbol\webfutbol`<br>*(webfutbol.git - main / ebstudyo.com)* | Canlı Web Sitesi (HTML5/WASM), On-Demand Yükleme, Kapalı Beta Hunisi & `api/version.json` | ✅ v1.1.6 Hazır |
+| **📱 Google Play Store** | *Console / ASO (com.ebstudyo.bolgol)* | 5 Dil (TR, EN, ES, PT, IT), İkon, Tanıtım, 7+7 Reklamsız SS, Güncelleme Notları | 🟢 v1.1.6 Paketi Yükleniyor (Build 37 — internal & alpha) |
 
 ---
 
@@ -332,4 +332,20 @@
 - [x] **Mağaza Kum Saati SVG İkonu (`hourglass_icon.svg`):** 5 dakikalık ödüllü reklam bekleme sayacındaki emoji yerine özel çizim vektörel `res://hourglass_icon.svg` entegre edildi.
 - [x] **Interstitial Reklam Akışı (`Global.gd`):** İlk 5 maçtan dönüşte geçiş reklamı gösterilmeyecek (`lifetime_matches_played <= 5`) ve sonrasında yalnızca 2 maçta bir (`interstitial_return_counter % 2 == 1`) çıkacak şekilde kalıcı sayaç eklendi.
 - [x] **Sürüm Yükseltme (`v1.1.4` / Build 35) & Dağıtım:** `Global.gd`, `export_presets.cfg`, `tools/play_console_deploy.py` ve `dist_share/index.html` güncellendi; Google Play Console (`internal` & `alpha`, Edit ID: `01060806176771247412`) ve GitHub (`master` + `v1.1.4`) dağıtımları tamamlandı.
+
+### 2026-11-17: Mağaza Logosu & Reklamsız Google Play Store Ekran Görüntüleri + Sonraki Oyun Güncellemesi Notu
+- [x] **Mağaza & Oyun İçi Logo Revizyonu:** `game_logo.png`, `icon.png`, `store_assets/icon_512x512.png` ve `store_assets/feature_graphic_1024x500.png` üzerinde futbol topu ~1.22x büyütülüp derinlik gölgesiyle ön plana çıkarıldı; köşelerdeki beyaz kenar artıkları temizlendi.
+- [x] **Google Play Store Ekran Görüntüleri (`tr-TR` & `en-IN`, 1080x2100):**
+  - Reklamsız (`Global.is_premium = true`), 6 farklı temayla (`Turkuaz`, `Mavi`, `Mor`, `Pembe`, `Yeşil`, `Siyah`) çekilmiş 7 ekran görüntüsü üretildi: Ana 3 sekme (Takım Seçimi, İstatistikler, Mağaza), Şans Çarkı ve 60'-80' arası 3 gerçek maç simülasyonu (FB-GS Obsidyen `64'`, BJK-TS Buz `71'`, PSG-Real Madrid Lav `76'`).
+  - `tools/play_console_deploy.py` scriptine `--screenshots` (`phoneScreenshots`) desteği eklendi.
+- [x] **SONRAKİ OYUN GÜNCELLEMESİ İÇİN NOT -> v1.1.6'DA ÇÖZÜLDÜ (Android Açılış / Splash Ekranı):**
+  - `android/build/res/mipmap*/icon_background.webp` ve `icon_monochrome.webp` içindeki eski BJK kartalı temizlenip `icon_background.png` (`#183979`) ile değiştirildi; `export_presets.cfg` içinde `adaptive_background_432x432="res://icon_background.png"` bağlandı.
+
+### 2026-11-19: v1.1.6 (Build 37) — Elit Kulüp Billing, Kulüp-Bayrak Ayrımı, Çark Reklam İzolasyonu & Güncelleme Bildirimi
+- [x] **Elit Kulüp Google Play Billing Düzeltmesi (`main_menu.gd`):** `GodotGooglePlayBilling` eklentisinin `product_ids` alanını `PackedStringArray` döndürmesi ve `acknowledge_purchase_response` içinde `"token"` anahtarı kullanması düzeltildi; `PURCHASED` durumda anında aktivasyon, otomatik onaylama, `PENDING` bildirimi ve release sürümde yanlışlıkla Elit modu kapatan butonun kaldırılması sağlandı.
+- [x] **Kulüp-Milli Takım Kısaltma Çakışması Çözümü (`Global.gd`, `ball.gd`, `main_menu.gd`):** `CLUB_BADGE_MAP` ve `NATIONAL_FLAG_MAP` ayrıldı; önbellek takım adına bağlandı; 10 çakışan kulüpte (`PORTO SC`, `BRANN SC`, `MARSILYA SC`, `PARMA SC` vb.) milli bayrak sızması ve yanlış favori taç eşleşmesi giderildi.
+- [x] **Şans Çarkı Ödüllü Reklam İzolasyonu & 60 sn Cooldown (`main_menu.gd`, `Global.gd`):** `active_reward_purpose` varsayılanı `"none"` yapıldı, `reward_session_token` ile çift sinyal koruması eklendi ve mağaza reklam bekleme süresi 60 saniyeye optimize edildi.
+- [x] **Oyun İçi Güncelleme Bildirimi (`Global.gd`, `main_menu.gd`, `webfutbol/api/version.json`):** Başlangıçta `ebstudyo.com/api/version.json` üzerinden sürüm kontrolü yapıp güncel olmayan cihazlara alt kısımda tema uyumlu, 5 dilli (`TR`, `ENG`, `ESP`, `POR`, `ITA`) mini güncelleme bildirimi ve Google Play yönlendirmesi eklendi.
+- [x] **Play Console Eski Tablet Ekran Görüntülerinin Kaldırılması:** `tr-TR` ve `en-IN` altındaki eski `sevenInchScreenshots` ve `tenInchScreenshots` temizlendi.
+
 

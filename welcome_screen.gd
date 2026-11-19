@@ -29,6 +29,8 @@ var privacy_btn: Button
 var center_panel: PanelContainer
 var lang_btn: Button
 var privacy_modal: Control = null
+var auth_toast_layer: CanvasLayer = null
+var gp_default_style: StyleBoxFlat = null
 
 var particles: Array = []
 var particle_canvas: Control
@@ -52,6 +54,8 @@ var LANG = {
 		"GUEST": "MİSAFİR GİRİŞİ",
 		"LOGIN_PLAY": "Google Play ile Bağlan",
 		"PLAY_CONNECTED": "Google Play Bağlandı",
+		"PLAY_CONNECTED_MSG": "Google Play Games hesabın başarıyla bağlandı!",
+		"PLAY_FAILED_MSG": "Google Play girişi tamamlanamadı. Lütfen tekrar deneyin veya Misafir olarak oynayın.",
 		"CONNECTING": "BAĞLANILIYOR",
 		"PRIVACY": "Gizlilik Politikası",
 		"PRIVACY_TITLE": "GİZLİLİK POLİTİKASI",
@@ -68,6 +72,8 @@ var LANG = {
 		"GUEST": "PLAY AS GUEST",
 		"LOGIN_PLAY": "Sign in with Google Play",
 		"PLAY_CONNECTED": "Google Play Connected",
+		"PLAY_CONNECTED_MSG": "Google Play Games account connected successfully!",
+		"PLAY_FAILED_MSG": "Google Play sign-in could not complete. Please retry or play as Guest.",
 		"CONNECTING": "CONNECTING",
 		"PRIVACY": "Privacy Policy",
 		"PRIVACY_TITLE": "PRIVACY POLICY",
@@ -84,6 +90,8 @@ var LANG = {
 		"GUEST": "JUGAR COMO INVITADO",
 		"LOGIN_PLAY": "Iniciar con Google Play",
 		"PLAY_CONNECTED": "Conectado con Google Play",
+		"PLAY_CONNECTED_MSG": "¡Cuenta de Google Play Games conectada con éxito!",
+		"PLAY_FAILED_MSG": "No se pudo iniciar sesión en Google Play. Reintenta o juega como invitado.",
 		"CONNECTING": "CONECTANDO",
 		"PRIVACY": "Política de Privacidad",
 		"PRIVACY_TITLE": "POLÍTICA DE PRIVACIDAD",
@@ -100,6 +108,8 @@ var LANG = {
 		"GUEST": "JOGAR COMO CONVIDADO",
 		"LOGIN_PLAY": "Entrar com Google Play",
 		"PLAY_CONNECTED": "Conectado ao Google Play",
+		"PLAY_CONNECTED_MSG": "Conta Google Play Games ligada com sucesso!",
+		"PLAY_FAILED_MSG": "Não foi possível entrar no Google Play. Tente novamente ou jogue como convidado.",
 		"CONNECTING": "CONECTANDO",
 		"PRIVACY": "Política de Privacidade",
 		"PRIVACY_TITLE": "POLÍTICA DE PRIVACIDADE",
@@ -116,6 +126,8 @@ var LANG = {
 		"GUEST": "GIOCA COME OSPITE",
 		"LOGIN_PLAY": "Accedi con Google Play",
 		"PLAY_CONNECTED": "Connesso a Google Play",
+		"PLAY_CONNECTED_MSG": "Account Google Play Games connesso con successo!",
+		"PLAY_FAILED_MSG": "Accesso a Google Play non riuscito. Riprova o gioca come ospite.",
 		"CONNECTING": "CONNESSIONE...",
 		"PRIVACY": "Informativa sulla Privacy",
 		"PRIVACY_TITLE": "INFORMATIVA SULLA PRIVACY",
@@ -174,7 +186,7 @@ func _ready():
 			pitch_lines_texture = p_res
 	
 	if is_instance_valid(Global.bg_music_player) and not Global.bg_music_player.playing:
-		Global.bg_music_player.play()
+		Global.play_menu_music(true)
 	
 	active_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
 	_build_ui()
@@ -682,6 +694,7 @@ func _build_ui():
 	gp_pressed.border_width_bottom = 2
 	gp_pressed.content_margin_top = 3
 	
+	gp_default_style = gp_style
 	gp_btn.add_theme_stylebox_override("normal", gp_style)
 	gp_btn.add_theme_stylebox_override("hover", gp_hover)
 	gp_btn.add_theme_stylebox_override("pressed", gp_pressed)
@@ -959,7 +972,7 @@ func _on_google_play_pressed():
 	get_tree().create_timer(10.0).timeout.connect(func():
 		if is_connecting_google:
 			print("[Welcome] Google Play sign-in timed out or dismissed.")
-			_on_sign_in_failed()
+			_on_sign_in_failed(true)
 	)
 	
 	if sign_in_client and sign_in_client.has_method("sign_in"):
@@ -975,6 +988,74 @@ func _on_google_play_pressed():
 		# PC / Debug fallback: simulate connecting animation for a brief moment then proceed
 		await get_tree().create_timer(1.2).timeout
 		_on_sign_in_result(true, true)
+
+func _show_auth_toast(msg: String, is_success: bool):
+	if not is_inside_tree(): return
+	if is_instance_valid(auth_toast_layer):
+		auth_toast_layer.queue_free()
+	auth_toast_layer = CanvasLayer.new()
+	auth_toast_layer.layer = 50
+	add_child(auth_toast_layer)
+
+	var margin = MarginContainer.new()
+	margin.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_theme_constant_override("margin_top", 56)
+	margin.add_theme_constant_override("margin_left", 24)
+	margin.add_theme_constant_override("margin_right", 24)
+	auth_toast_layer.add_child(margin)
+
+	var panel = PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var ps = StyleBoxFlat.new()
+	ps.bg_color = Color8(16, 92, 52, 245) if is_success else Color8(120, 32, 32, 245)
+	ps.corner_radius_top_left = 18; ps.corner_radius_top_right = 18
+	ps.corner_radius_bottom_left = 18; ps.corner_radius_bottom_right = 18
+	ps.border_width_left = 2; ps.border_width_right = 2
+	ps.border_width_top = 2; ps.border_width_bottom = 3
+	ps.border_color = Color8(72, 235, 140) if is_success else Color8(245, 110, 100)
+	ps.shadow_color = Color(0, 0, 0, 0.45)
+	ps.shadow_size = 12
+	ps.content_margin_left = 20; ps.content_margin_right = 20
+	ps.content_margin_top = 12; ps.content_margin_bottom = 12
+	panel.add_theme_stylebox_override("panel", ps)
+	margin.add_child(panel)
+
+	var hb = HBoxContainer.new()
+	hb.alignment = BoxContainer.ALIGNMENT_CENTER
+	hb.add_theme_constant_override("separation", 10)
+	panel.add_child(hb)
+
+	if is_success and ResourceLoader.exists("res://checkmark_icon.svg"):
+		var ic = TextureRect.new()
+		ic.texture = load("res://checkmark_icon.svg")
+		ic.custom_minimum_size = Vector2(24, 24)
+		ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		hb.add_child(ic)
+
+	var lbl = Label.new()
+	lbl.text = msg
+	lbl.add_theme_font_override("font", custom_font)
+	lbl.add_theme_font_size_override("font_size", 22)
+	lbl.add_theme_color_override("font_color", Color.WHITE)
+	lbl.add_theme_color_override("font_outline_color", Color8(0, 0, 0, 220))
+	lbl.add_theme_constant_override("outline_size", 3)
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
+	lbl.custom_minimum_size = Vector2(min(get_viewport_rect().size.x - 110.0, 520.0), 0)
+	hb.add_child(lbl)
+
+	panel.modulate.a = 0.0
+	var tw = create_tween()
+	tw.tween_property(panel, "modulate:a", 1.0, 0.22)
+	tw.tween_interval(2.8)
+	tw.tween_property(panel, "modulate:a", 0.0, 0.35)
+	tw.tween_callback(func():
+		if is_instance_valid(auth_toast_layer):
+			auth_toast_layer.queue_free()
+	)
 
 func _update_gp_btn_text(new_text: String, new_icon_path: String = ""):
 	if not is_instance_valid(gp_btn): return
@@ -994,23 +1075,27 @@ func _set_gp_btn_connected(animate: bool = false):
 	gp_btn.disabled = true
 	var gp_lbl = gp_btn.get_node_or_null("GPHBox/GPLabel") as Label
 	if is_instance_valid(gp_lbl):
-		gp_lbl.add_theme_color_override("font_color", Color8(110, 255, 150))
+		gp_lbl.add_theme_color_override("font_color", Color8(180, 255, 200))
+		gp_lbl.add_theme_color_override("font_outline_color", Color8(0, 0, 0, 220))
+		gp_lbl.add_theme_constant_override("outline_size", 3)
 	var gp_conn_style = StyleBoxFlat.new()
-	gp_conn_style.bg_color = Color8(14, 65, 42, 238)
-	gp_conn_style.corner_radius_top_left = 14; gp_conn_style.corner_radius_top_right = 14
-	gp_conn_style.corner_radius_bottom_left = 14; gp_conn_style.corner_radius_bottom_right = 14
+	gp_conn_style.bg_color = Color8(16, 96, 54, 245)
+	gp_conn_style.corner_radius_top_left = 26; gp_conn_style.corner_radius_top_right = 26
+	gp_conn_style.corner_radius_bottom_left = 26; gp_conn_style.corner_radius_bottom_right = 26
 	gp_conn_style.border_width_left = 2; gp_conn_style.border_width_right = 2
 	gp_conn_style.border_width_top = 2; gp_conn_style.border_width_bottom = 4
-	gp_conn_style.border_color = Color8(24, 165, 98)
+	gp_conn_style.border_color = Color8(72, 238, 145)
+	gp_conn_style.shadow_color = Color8(32, 210, 115, 110)
+	gp_conn_style.shadow_size = 14
 	gp_btn.add_theme_stylebox_override("normal", gp_conn_style)
 	gp_btn.add_theme_stylebox_override("hover", gp_conn_style)
 	gp_btn.add_theme_stylebox_override("pressed", gp_conn_style)
 	gp_btn.add_theme_stylebox_override("disabled", gp_conn_style)
-	gp_btn.add_theme_color_override("font_disabled_color", Color8(110, 255, 150))
+	gp_btn.add_theme_color_override("font_disabled_color", Color8(180, 255, 200))
 	if animate:
 		gp_btn.pivot_offset = gp_btn.size / 2.0
 		var pop_tw = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		pop_tw.tween_property(gp_btn, "scale", Vector2(1.06, 1.06), 0.16)
+		pop_tw.tween_property(gp_btn, "scale", Vector2(1.07, 1.07), 0.16)
 		pop_tw.tween_property(gp_btn, "scale", Vector2.ONE, 0.14)
 
 func _on_sign_in_result(is_authenticated: bool, is_manual_click: bool = false):
@@ -1020,20 +1105,26 @@ func _on_sign_in_result(is_authenticated: bool, is_manual_click: bool = false):
 		Global.login_method = "google"
 		Global.save_progression()
 		_set_gp_btn_connected(true)
+		_show_auth_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("PLAY_CONNECTED_MSG", "Google Play Games hesabı bağlandı!"), true)
 		if was_manual:
-			await get_tree().create_timer(0.85).timeout
+			await get_tree().create_timer(1.15).timeout
 			goto_main_menu()
 	else:
-		_on_sign_in_failed()
+		_on_sign_in_failed(was_manual)
 
-func _on_sign_in_failed(_arg = null):
+func _on_sign_in_failed(show_feedback: bool = false):
 	is_connecting_google = false
 	if is_instance_valid(gp_btn):
 		var gp_lbl = gp_btn.get_node_or_null("GPHBox/GPLabel") as Label
 		if is_instance_valid(gp_lbl):
 			gp_lbl.add_theme_color_override("font_color", Color.WHITE)
 		_update_gp_btn_text(LANG.get(Global.current_lang, LANG["ENG"])["LOGIN_PLAY"], "res://google_play_logo.svg")
+		if is_instance_valid(gp_default_style):
+			gp_btn.add_theme_stylebox_override("normal", gp_default_style)
+			gp_btn.add_theme_stylebox_override("focus", gp_default_style)
 		gp_btn.disabled = false
+	if show_feedback:
+		_show_auth_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("PLAY_FAILED_MSG", "Google Play girişi tamamlanamadı."), false)
 
 func goto_main_menu():
 	Global.change_scene_with_loading("res://main_menu.tscn")
