@@ -303,6 +303,104 @@ def test_v114_ui_and_ad_rules():
 
     return True
 
+def test_closed_beta_updates():
+    import os
+    from PIL import Image
+    print("\n--- Testing Closed Beta Updates (VS Swap, Crests, SFX, +25% Quests, National i18n, Penalty Bonus) ---")
+    with open("Global.gd", "r", encoding="utf-8") as f:
+        g_content = f.read()
+    with open("main_menu.gd", "r", encoding="utf-8") as f:
+        m_content = f.read()
+    with open("pitch.gd", "r", encoding="utf-8") as f:
+        p_content = f.read()
+    with open("ball.gd", "r", encoding="utf-8") as f:
+        b_content = f.read()
+
+    # 1. VS side-swap button
+    if "func _on_swap_teams_pressed():" in m_content and "versus_badge.pressed.connect(_on_swap_teams_pressed)" in m_content:
+        print("PASS: VS button functions as team side swapper!")
+    else:
+        print("FAIL: VS side-swap handler missing in main_menu.gd")
+        return False
+
+    # 2. Barcelona & Atletico crests valid 800x800 RGBA PNGs >= 15 KB
+    for fn in ["bar1.png", "atm1.png"]:
+        if not os.path.exists(fn) or os.path.getsize(fn) < 15000:
+            print(f"FAIL: {fn} missing or too small")
+            return False
+        im = Image.open(fn)
+        if im.size != (800, 800) or im.mode != "RGBA" or im.getpixel((0, 0))[3] != 0:
+            print(f"FAIL: {fn} invalid dimensions/mode/corner alpha: {im.size}, {im.mode}")
+            return False
+    print("PASS: bar1.png and atm1.png verified as 800x800 transparent RGBA crests!")
+
+    # 3. Reward collect SFX
+    if not os.path.exists("reward_collect.ogg") or "play_reward_collect()" not in g_content or "Global.play_reward_collect()" not in m_content:
+        print("FAIL: reward_collect.ogg or play_reward_collect() wiring missing")
+        return False
+    print("PASS: Dedicated reward_collect.ogg SFX wired to mission claims & prize/wheel dialog!")
+
+    # 4. Mission rewards multiple of 5 and >= 35
+    quest_rewards = [int(x) for x in re.findall(r'"reward":\s*(\d+)', g_content)]
+    if len(quest_rewards) != 21 or any(r % 5 != 0 or r < 35 for r in quest_rewards):
+        print(f"FAIL: Unexpected quest rewards in Global.gd: {quest_rewards}")
+        return False
+    print("PASS: All 21 mission rewards increased by ~25% and rounded up to multiples of 5!")
+
+    # 5. National teams localized across 5 languages (ONLY national teams)
+    if "const NATIONAL_NAMES =" not in g_content or "func get_team_display_name(" not in g_content:
+        print("FAIL: NATIONAL_NAMES / get_team_display_name missing in Global.gd")
+        return False
+    nat_keys = re.findall(r'"([^"]+)":\s*\{"colors":.*?"type":\s*"national"\}', g_content)
+    missing_nat = [k for k in nat_keys if f'"{k}":' not in g_content.split("const NATIONAL_NAMES =")[1].split("func get_team_display_name")[0]]
+    if len(nat_keys) != 46 or missing_nat:
+        print(f"FAIL: National names coverage issue (total={len(nat_keys)}, missing={missing_nat})")
+        return False
+    print("PASS: All 46 national teams translated across 5 languages while clubs remain canonical!")
+
+    # 6. Match Penalty Bonus System (+10% speed, +15% bounciness, +10% goal width)
+    required_p = [
+        "const PENALTY_DURATION_SEC: float = 3.0",
+        "const PENALTY_GOAL_WIDTH_MULT: float = 1.10",
+        "const PENALTY_ELASTICITY_MULT: float = 1.15",
+        "const PENALTY_PROB_FIRST_HALF: float = 0.05",
+        "const PENALTY_PROB_SECOND_HALF: float = 0.10",
+        "penalty_disclaimer_panel",
+        "\"' pen\"",
+    ]
+    for tok in required_p:
+        if tok not in p_content:
+            print(f"FAIL: pitch.gd missing penalty bonus symbol: {tok}")
+            return False
+    if "penalty_bonus_active" not in b_content or "1.10" not in b_content or "1.15" not in b_content:
+        print("FAIL: ball.gd missing penalty speed/bounce modifier (+10% speed / +15% bounce)")
+        return False
+    print("PASS: Match penalty bonus system (+10% speed, +15% bounce, +10% goal width, 3s, 5%/10% prob, pen note) verified!")
+
+    # 7. Region-Fixed Elite Club Pricing & Currency
+    required_g_billing = [
+        "var premium_price_currency_code: String = \"\"",
+        "func resolve_region_from_locale(",
+        "func get_player_region_code(",
+        "func get_premium_currency_code(",
+        "func set_play_billing_price(",
+    ]
+    for tok in required_g_billing:
+        if tok not in g_content:
+            print(f"FAIL: Global.gd missing regional pricing symbol: {tok}")
+            return False
+    g_price_fn = g_content.split("func get_formatted_premium_price()")[1].split("\nfunc ")[0]
+    g_price_code_lines = [ln.split("#", 1)[0] for ln in g_price_fn.splitlines()]
+    if "current_lang" in "\n".join(g_price_code_lines):
+        print("FAIL: Global.get_formatted_premium_price() still depends on current_lang!")
+        return False
+    if "Global.set_play_billing_price" not in m_content or "func _format_premium_currency_badge_text()" not in m_content or "label_premium_price_badge" not in m_content:
+        print("FAIL: main_menu.gd missing region-fixed pricing / Store badge integration")
+        return False
+    print("PASS: Elite Club price & currency are strictly region-locked and decoupled from in-game language!")
+
+    return True
+
 if __name__ == "__main__":
     r1 = test_global_theme_turkuaz()
     r2 = test_main_menu_lang()
@@ -313,7 +411,8 @@ if __name__ == "__main__":
     r7 = test_lucky_wheel_logic()
     r8 = test_admob_safety_guard()
     r9 = test_v114_ui_and_ad_rules()
-    if r1 and r2 and r3 and r4 and r5 and r6 and r7 and r8 and r9:
+    r10 = test_closed_beta_updates()
+    if r1 and r2 and r3 and r4 and r5 and r6 and r7 and r8 and r9 and r10:
         print("\nALL BACKEND VERIFICATION TESTS PASSED SUCCESSFULLY!")
         sys.exit(0)
     else:

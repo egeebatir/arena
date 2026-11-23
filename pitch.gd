@@ -23,6 +23,20 @@ var goal_banner_panel: PanelContainer
 var goal_banner_lbl: Label
 var goal_banner_timer: float = 0.0
 
+const PENALTY_DURATION_SEC: float = 3.0
+const PENALTY_GOAL_WIDTH_MULT: float = 1.10
+const PENALTY_ELASTICITY_MULT: float = 1.15
+const PENALTY_PROB_FIRST_HALF: float = 0.05
+const PENALTY_PROB_SECOND_HALF: float = 0.10
+
+var penalty_bonus_active: bool = false
+var penalty_timer: float = 0.0
+var penalty_used_this_half: bool = false
+var penalty_scheduled_this_half: bool = false
+var penalty_trigger_minute: float = -1.0
+var penalty_disclaimer_panel: PanelContainer
+var penalty_disclaimer_lbl: Label
+
 var abandon_btn: Button
 var pause_btn: Button # YENI DURDURMA BUTONU
 var is_paused: bool = false # DURUM DEĞIŞKENI
@@ -436,6 +450,7 @@ func _ready():
 	added_time_1 = _generate_added_time_1()
 	added_time_2 = _generate_added_time_2()
 	target_yellow_cards = randi_range(1, 3)
+	_roll_half_penalty(1)
 	
 	intro_timer = int(1.0 * FPS_TARGET)
 	
@@ -896,7 +911,7 @@ func setup_scoreboard():
 	intro_overlay.add_child(intro_vbox)
 	
 	var intro_t1 = Label.new()
-	intro_t1.text = Global.home_team_name
+	intro_t1.text = Global.get_team_display_name(Global.home_team_name)
 	intro_t1.add_theme_font_override("font", custom_font)
 	intro_t1.add_theme_font_size_override("font_size", 46)
 	intro_t1.add_theme_color_override("font_color", ball1.team_colors[0])
@@ -914,7 +929,7 @@ func setup_scoreboard():
 	intro_vbox.add_child(intro_vs)
 	
 	var intro_t2 = Label.new()
-	intro_t2.text = Global.away_team_name
+	intro_t2.text = Global.get_team_display_name(Global.away_team_name)
 	intro_t2.add_theme_font_override("font", custom_font)
 	intro_t2.add_theme_font_size_override("font_size", 46)
 	intro_t2.add_theme_color_override("font_color", ball2.team_colors[0])
@@ -958,6 +973,65 @@ func setup_scoreboard():
 	restart_btn.visible = false
 	restart_btn.pressed.connect(func(): Global.play_click(); _on_restart_pressed())
 	ui_layer.add_child(restart_btn)
+
+	# --- COMPACT PENALTY BONUS DISCLAIMER (Positioned between the two curved team badges around pitch) ---
+	penalty_disclaimer_panel = PanelContainer.new()
+	var pd_style = StyleBoxFlat.new()
+	pd_style.bg_color = active_theme.bg_bottom.darkened(0.35)
+	pd_style.bg_color.a = 0.90
+	pd_style.corner_radius_top_left = 11; pd_style.corner_radius_top_right = 11
+	pd_style.corner_radius_bottom_left = 11; pd_style.corner_radius_bottom_right = 11
+	pd_style.border_width_left = 1; pd_style.border_width_right = 1
+	pd_style.border_width_top = 1; pd_style.border_width_bottom = 2
+	pd_style.border_color = Color8(255, 205, 70, 220)
+	pd_style.shadow_color = Color8(0, 0, 0, 120)
+	pd_style.shadow_size = 5
+	pd_style.content_margin_left = 10; pd_style.content_margin_right = 10
+	pd_style.content_margin_top = 2; pd_style.content_margin_bottom = 2
+	penalty_disclaimer_panel.add_theme_stylebox_override("panel", pd_style)
+	penalty_disclaimer_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	penalty_disclaimer_panel.visible = false
+	penalty_disclaimer_panel.modulate.a = 0.0
+
+	var pd_hbox = HBoxContainer.new()
+	pd_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	pd_hbox.add_theme_constant_override("separation", 6)
+	pd_hbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	penalty_disclaimer_panel.add_child(pd_hbox)
+
+	var pd_dot = Control.new()
+	pd_dot.custom_minimum_size = Vector2(8, 8)
+	pd_dot.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	pd_dot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pd_dot.draw.connect(func(): pd_dot.draw_circle(Vector2(4, 4), 3.5, Color8(255, 210, 65)))
+	pd_hbox.add_child(pd_dot)
+
+	penalty_disclaimer_lbl = Label.new()
+	var pen_texts = {
+		"TR": "PENALTI BONUSU",
+		"ENG": "PENALTY BONUS",
+		"ESP": "BONO PENALTI",
+		"POR": "BÓNUS PENÁLTI",
+		"ITA": "BONUS RIGORE"
+	}
+	penalty_disclaimer_lbl.text = pen_texts.get(Global.current_lang, pen_texts["ENG"])
+	penalty_disclaimer_lbl.add_theme_font_override("font", custom_font)
+	penalty_disclaimer_lbl.add_theme_font_size_override("font_size", 18)
+	penalty_disclaimer_lbl.add_theme_color_override("font_color", Color8(255, 228, 120))
+	penalty_disclaimer_lbl.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 190))
+	penalty_disclaimer_lbl.add_theme_constant_override("shadow_offset_y", 1)
+	penalty_disclaimer_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	penalty_disclaimer_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pd_hbox.add_child(penalty_disclaimer_lbl)
+
+	ui_layer.add_child(penalty_disclaimer_panel)
+	ui_layer.move_child(penalty_disclaimer_panel, 0)
+	penalty_disclaimer_panel.reset_size()
+	var pd_size = penalty_disclaimer_panel.get_combined_minimum_size()
+	var gap_scale = clamp((CENTER.y - 210.0) / 395.0, 0.72, 1.0)
+	var r_mid_gap = ARENA_RADIUS + (40.0 + 37.0) * gap_scale
+	var disc_y = max(218.0, CENTER.y - r_mid_gap * 0.93 - pd_size.y * 0.5)
+	penalty_disclaimer_panel.position = Vector2(CENTER.x - pd_size.x * 0.5, disc_y)
 
 func _generate_added_time_1() -> int:
 	var r = randf()
@@ -1151,6 +1225,8 @@ func _reset_match_for_replay():
 	goal_angle = PI / 2.0
 	halftime_timer = 0
 	goal_banner_timer = 0.0
+	_end_penalty_bonus(false)
+	_roll_half_penalty(1)
 	if is_instance_valid(goal_banner_panel):
 		goal_banner_panel.modulate.a = 0.0
 	if is_instance_valid(s1_lbl): s1_lbl.text = "0"
@@ -1172,6 +1248,51 @@ func _reset_match_for_replay():
 	start_delay_timer = int(0.5 * FPS_TARGET)
 	update_card_ui()
 	restart_btn.visible = false
+
+func _roll_half_penalty(half_num: int):
+	penalty_used_this_half = false
+	penalty_scheduled_this_half = false
+	penalty_trigger_minute = -1.0
+	var prob = PENALTY_PROB_FIRST_HALF if half_num == 1 else PENALTY_PROB_SECOND_HALF
+	if randf() < prob:
+		penalty_scheduled_this_half = true
+		if half_num == 1:
+			penalty_trigger_minute = randf_range(5.0, 34.0)
+		else:
+			penalty_trigger_minute = randf_range(50.0, 79.0)
+
+func get_current_goal_width_radians() -> float:
+	return GOAL_WIDTH_RADIANS * PENALTY_GOAL_WIDTH_MULT if penalty_bonus_active else GOAL_WIDTH_RADIANS
+
+func _start_penalty_bonus():
+	if penalty_bonus_active or penalty_used_this_half:
+		return
+	penalty_used_this_half = true
+	penalty_scheduled_this_half = false
+	penalty_bonus_active = true
+	penalty_timer = PENALTY_DURATION_SEC
+	if is_instance_valid(ball1):
+		ball1.penalty_bonus_active = true
+	if is_instance_valid(ball2):
+		ball2.penalty_bonus_active = true
+	if is_instance_valid(penalty_disclaimer_panel):
+		penalty_disclaimer_panel.visible = true
+		penalty_disclaimer_panel.modulate.a = 0.0
+		var tw = create_tween()
+		tw.tween_property(penalty_disclaimer_panel, "modulate:a", 1.0, 0.14)
+
+func _end_penalty_bonus(clamp_speed: bool = false):
+	var was_active = penalty_bonus_active or penalty_timer > 0.0
+	penalty_bonus_active = false
+	penalty_timer = 0.0
+	for b in [ball1, ball2]:
+		if is_instance_valid(b):
+			b.penalty_bonus_active = false
+			if was_active and clamp_speed and b.velocity.length() > b.SPEED * 1.18:
+				b.velocity = b.velocity.normalized() * (b.SPEED * 1.12)
+	if is_instance_valid(penalty_disclaimer_panel):
+		penalty_disclaimer_panel.visible = false
+		penalty_disclaimer_panel.modulate.a = 0.0
 
 func _toggle_pause():
 	is_paused = !is_paused
@@ -1313,10 +1434,18 @@ func _physics_process(delta):
 				spawn_card("yellow")
 				yellow_cards_spawned_this_half += 1
 			
+			if penalty_bonus_active:
+				penalty_timer -= delta
+				if penalty_timer <= 0.0:
+					_end_penalty_bonus(true)
+			elif penalty_scheduled_this_half and not penalty_used_this_half and goal_cooldown_timer <= 0.0 and sim_minute >= penalty_trigger_minute:
+				_start_penalty_bonus()
+			
 			if sim_minute >= half_offset + 45:
 				display_added_time = true
 				var added_t = added_time_1 if state == "FIRST_HALF" else added_time_2
 				if sim_minute >= half_offset + 45 + added_t:
+					_end_penalty_bonus(true)
 					if state == "FIRST_HALF":
 						state = "HALFTIME"
 						halftime_timer = 0
@@ -1335,6 +1464,7 @@ func _physics_process(delta):
 			red_card_spawned_this_half = false
 			yellow_cards_spawned_this_half = 0
 			target_yellow_cards = randi_range(1, 3)
+			_roll_half_penalty(2)
 			ball1.init_ball(Global.home_team_name, CENTER, ARENA_RADIUS)
 			ball2.init_ball(Global.away_team_name, CENTER, ARENA_RADIUS, ball1.position)
 			
@@ -1406,7 +1536,7 @@ func _physics_process(delta):
 		
 		if goal_rotating: goal_angle = fmod(goal_angle + goal_rot_speed, TAU)
 			
-		var posts = calculate_goal_posts(CENTER.x, CENTER.y, ARENA_RADIUS, goal_angle, GOAL_WIDTH_RADIANS)
+		var posts = calculate_goal_posts(CENTER.x, CENTER.y, ARENA_RADIUS, goal_angle, get_current_goal_width_radians())
 		
 		ball1.move()
 		ball2.move()
@@ -1483,7 +1613,8 @@ func resolve_collisions(b1, b2) -> bool:
 		
 		if vel_along_normal > 0: return false
 		
-		var j = -(1.0 + ELASTICITY) * vel_along_normal
+		var cur_elasticity = ELASTICITY * (PENALTY_ELASTICITY_MULT if penalty_bonus_active else 1.0)
+		var j = -(1.0 + cur_elasticity) * vel_along_normal
 		j /= (1.0 / b1.mass + 1.0 / b2.mass)
 		var impulse_x = j * n.x; var impulse_y = j * n.y
 		b1.velocity.x -= impulse_x / b1.mass; b1.velocity.y -= impulse_y / b1.mass
@@ -1503,10 +1634,12 @@ func check_goal(b, team_id):
 		var ball_n = fposmod(ball_ang, TAU)
 		var diff = abs(ball_n - goal_n)
 		while diff > PI: diff = abs(diff - TAU)
-		if diff < GOAL_WIDTH_RADIANS / 2.0:
+		if diff < get_current_goal_width_radians() / 2.0:
 			trigger_goal(b, team_id)
 
 func trigger_goal(b, team_id):
+	var was_penalty_goal = penalty_bonus_active
+	_end_penalty_bonus(false)
 	Global.play_goal_music()
 	Global.trigger_vibration(500)
 	
@@ -1569,21 +1702,23 @@ func trigger_goal(b, team_id):
 	var scorer_display_col = scorer_col.lightened(0.35) if s_lum < 0.25 else (scorer_col.darkened(0.15) if s_lum > 0.85 else scorer_col)
 	var s_outline = Color.BLACK if s_lum > 0.45 else Color.WHITE
 
+	var time_note = (time_str + "' pen") if was_penalty_goal else (time_str + "'")
 	var final_scorer_name = ""
 	if custom_names.size() > 0:
 		var chosen_name = custom_names[randi() % custom_names.size()]
 		final_scorer_name = chosen_name
-		goal_banner_lbl.text = chosen_name + " (" + time_str + "')"
+		goal_banner_lbl.text = chosen_name + " (" + time_note + ")"
 	else:
 		var available_nums = [7, 8, 9, 10, 11, 14, 17, 19, 21, 23]
 		var scorer_num = available_nums[randi() % available_nums.size()]
 		final_scorer_name = "#" + str(scorer_num)
-		goal_banner_lbl.text = final_scorer_name + " (" + time_str + "')"
+		goal_banner_lbl.text = final_scorer_name + " (" + time_note + ")"
 	goal_events.append({
 		"team_id": team_id,
 		"team_name": scoring_team_name,
 		"scorer": final_scorer_name,
 		"minute": time_str,
+		"is_penalty": was_penalty_goal,
 		"sim_minute": sim_minute,
 		"score1": score1,
 		"score2": score2
@@ -1610,7 +1745,7 @@ func calculate_goal_posts(cx: float, cy: float, radius: float, angle: float, wid
 	return {"p1": Vector2(gx - dx, gy - dy), "p2": Vector2(gx + dx, gy + dy)}
 
 func _draw():
-	var posts = calculate_goal_posts(CENTER.x, CENTER.y, ARENA_RADIUS, goal_angle, GOAL_WIDTH_RADIANS)
+	var posts = calculate_goal_posts(CENTER.x, CENTER.y, ARENA_RADIUS, goal_angle, get_current_goal_width_radians())
 	var p1: Vector2 = posts.p1; var p2: Vector2 = posts.p2
 	var dx = cos(goal_angle) * GOAL_DEPTH; var dy = sin(goal_angle) * GOAL_DEPTH
 	var b1 = p1 + Vector2(dx, dy); var b2 = p2 + Vector2(dx, dy)

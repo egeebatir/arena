@@ -24,6 +24,7 @@ var mass = 1.0
 var nerf_timer = 0
 var yellow_nerf_timer = 0
 var speed_multiplier = 1.0
+var penalty_bonus_active: bool = false
 
 var shadow_color = Color(0, 0, 0, 80.0 / 255.0)
 var white = Color.WHITE
@@ -72,6 +73,7 @@ func init_ball(team_name: String, center_pos: Vector2, _r_limit: float, avoid_po
 	speed_multiplier = 1.0
 	nerf_timer = 0
 	yellow_nerf_timer = 0
+	penalty_bonus_active = false
 	
 	if not history.is_empty():
 		history.clear()
@@ -90,6 +92,8 @@ func move():
 	elif yellow_nerf_timer > 0:
 		speed_multiplier = 0.65
 		yellow_nerf_timer -= 1
+	if penalty_bonus_active:
+		speed_multiplier *= 1.10
 		
 	var current_speed = velocity.length()
 	if current_speed < MIN_SPEED:
@@ -116,7 +120,10 @@ func collide_wall(center_pos: Vector2, r_limit: float) -> bool:
 		
 		var dot = velocity.dot(n)
 		velocity -= 2.0 * dot * n
-		velocity *= BOUNCE_DAMPING
+		var bounce_damping = BOUNCE_DAMPING * (1.15 if penalty_bonus_active else 1.0)
+		velocity *= bounce_damping
+		if penalty_bonus_active and velocity.length() > SPEED * 1.65:
+			velocity = velocity.normalized() * (SPEED * 1.65)
 		
 		var hit_pos = position - n * BALL_RADIUS
 		var p_color = team_colors[randi() % team_colors.size()]
@@ -137,7 +144,10 @@ func collide_post(post_pos: Vector2) -> bool:
 		var dot = velocity.dot(n)
 		
 		velocity -= 2.0 * dot * n
-		velocity *= POST_ELASTICITY
+		var post_elast = POST_ELASTICITY * (1.15 if penalty_bonus_active else 1.0)
+		velocity *= post_elast
+		if penalty_bonus_active and velocity.length() > SPEED * 1.65:
+			velocity = velocity.normalized() * (SPEED * 1.65)
 		position += n * overlap
 		
 		var hit_pos = position - n * BALL_RADIUS

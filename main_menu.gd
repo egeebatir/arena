@@ -4,6 +4,7 @@ var custom_font = preload("res://Teko-Bold.ttf")
 var billing
 var premium_purchase_option_id: String = ""
 var premium_offer_id: String = ""
+var premium_dialog_price_lbl: Label = null
 
 func _apply_text_outline(ctrl: Control, outline_sz: int = 3, outline_col: Color = Color8(0, 0, 0, 235)):
 	if not is_instance_valid(ctrl):
@@ -39,7 +40,7 @@ var LANG = {
 		"STATS_DRAW": "Beraberlik", "STATS_MOST_GOALS": "En Çok Gol", "STATS_BIGGEST_WIN": "En Büyük Fark",
 		"SHOP_COSMETICS": "KOZMETİKLER", "SHOP_BALL_SKINS": "Top Görünümleri",
 		"PRO_PASS_TITLE": "ELİT KULÜP",
-		"SHOP_BUY": "49.99 TL — SATIN AL", "SHOP_CANCEL": "VAZGEÇ",
+		"SHOP_BUY": "%s — SATIN AL", "SHOP_CANCEL": "VAZGEÇ",
 		"SHOP_PRO_DESC": "Reklamsız deneyim, tüm özel temalar, toplar, taçlar ve sınırsız maç hakkı",
 		"REPLAY_ASK": "Aynı maçı tekrar oynatmak istediğinize emin misiniz?",
 		"RANDOM": "RASTGELE",
@@ -142,7 +143,7 @@ var LANG = {
 		"STATS_DRAW": "Draws", "STATS_MOST_GOALS": "Most Goals", "STATS_BIGGEST_WIN": "Biggest Win",
 		"SHOP_COSMETICS": "COSMETICS", "SHOP_BALL_SKINS": "Ball Skins",
 		"PRO_PASS_TITLE": "ELITE CLUB",
-		"SHOP_BUY": "$0.99 — BUY NOW", "SHOP_CANCEL": "CANCEL",
+		"SHOP_BUY": "%s — BUY NOW", "SHOP_CANCEL": "CANCEL",
 		"SHOP_PRO_DESC": "Ad-free experience, all custom themes, balls, crowns and unlimited matches",
 		"REPLAY_ASK": "Are you sure you want to replay the exact same match?",
 		"RANDOM": "RANDOM",
@@ -245,7 +246,7 @@ var LANG = {
 		"STATS_DRAW": "Empates", "STATS_MOST_GOALS": "Más Goles", "STATS_BIGGEST_WIN": "Mayor Diferencia",
 		"SHOP_COSMETICS": "COSMÉTICOS", "SHOP_BALL_SKINS": "Apariencias de Balón",
 		"PRO_PASS_TITLE": "CLUB ÉLITE",
-		"SHOP_BUY": "0.99€ — COMPRAR", "SHOP_CANCEL": "CANCELAR",
+		"SHOP_BUY": "%s — COMPRAR", "SHOP_CANCEL": "CANCELAR",
 		"SHOP_PRO_DESC": "Experiencia sin anuncios, todos los temas, balones, coronas y partidos ilimitados",
 		"REPLAY_ASK": "¿Estás seguro de que quieres volver a jugar el mismo partido?",
 		"RANDOM": "ALEATORIO",
@@ -348,7 +349,7 @@ var LANG = {
 		"STATS_DRAW": "Empates", "STATS_MOST_GOALS": "Mais Golos", "STATS_BIGGEST_WIN": "Maior Diferença",
 		"SHOP_COSMETICS": "COSMÉTICOS", "SHOP_BALL_SKINS": "Visuais de Bola",
 		"PRO_PASS_TITLE": "CLUBE ELITE",
-		"SHOP_BUY": "0.99€ — COMPRAR", "SHOP_CANCEL": "CANCELAR",
+		"SHOP_BUY": "%s — COMPRAR", "SHOP_CANCEL": "CANCELAR",
 		"SHOP_PRO_DESC": "Experiência sem anúncios, todos os temas, bolas, coroas e partidas ilimitadas",
 		"REPLAY_ASK": "Tem certeza de que deseja jogar a mesma partida?",
 		"RANDOM": "ALEATÓRIO",
@@ -451,7 +452,7 @@ var LANG = {
 		"STATS_DRAW": "Pareggi", "STATS_MOST_GOALS": "Più Gol", "STATS_BIGGEST_WIN": "Miglior Vittoria",
 		"SHOP_COSMETICS": "COSMETICI", "SHOP_BALL_SKINS": "Aspetti Pallone",
 		"PRO_PASS_TITLE": "CLUB ÉLITE",
-		"SHOP_BUY": "0.99€ — ACQUISTA ORA", "SHOP_CANCEL": "ANNULLA",
+		"SHOP_BUY": "%s — ACQUISTA", "SHOP_CANCEL": "ANNULLA",
 		"SHOP_PRO_DESC": "Esperienza senza pubblicità, tutti i temi, palloni, corone e partite illimitate",
 		"REPLAY_ASK": "Sei sicuro di voler rigiocare la stessa partita?",
 		"RANDOM": "CASUALE",
@@ -560,7 +561,7 @@ var away_preview: Control
 var team_matchup_panel: PanelContainer
 var home_team_card: PanelContainer
 var away_team_card: PanelContainer
-var versus_badge: PanelContainer
+var versus_badge: Button
 
 var active_theme: Dictionary
 var bg_grad: Gradient
@@ -1021,19 +1022,42 @@ func _ready():
 	home_preview = home_card["preview"]
 	home_lbl = home_card["label"]
 	fav_h_btn = home_card["favorite"]
-	versus_badge = PanelContainer.new()
+	versus_badge = Button.new()
 	versus_badge.custom_minimum_size = Vector2(54, 54)
 	versus_badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	versus_badge.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	versus_badge.text = ""
+	versus_badge.set_meta("custom_sfx", true)
+	versus_badge.pressed.connect(_on_swap_teams_pressed)
 	matchup_hbox.add_child(versus_badge)
+	var vs_vbox = VBoxContainer.new()
+	vs_vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
+	vs_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	vs_vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vs_vbox.add_theme_constant_override("separation", -4)
+	versus_badge.add_child(vs_vbox)
 	var versus_label = Label.new()
 	versus_label.text = "VS"
 	versus_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	versus_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	versus_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	versus_label.add_theme_font_override("font", custom_font)
-	versus_label.add_theme_font_size_override("font_size", 26)
+	versus_label.add_theme_font_size_override("font_size", 24)
 	versus_label.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 160))
 	versus_label.add_theme_constant_override("shadow_offset_y", 2)
-	versus_badge.add_child(versus_label)
+	vs_vbox.add_child(versus_label)
+	var swap_hint = Control.new()
+	swap_hint.custom_minimum_size = Vector2(26, 10)
+	swap_hint.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	swap_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	swap_hint.draw.connect(func():
+		var col = Color(1.0, 1.0, 1.0, 0.85)
+		var y_mid = 5.0
+		swap_hint.draw_line(Vector2(4, y_mid), Vector2(22, y_mid), col, 1.8, true)
+		swap_hint.draw_polyline(PackedVector2Array([Vector2(8, y_mid - 3.0), Vector2(4, y_mid), Vector2(8, y_mid + 3.0)]), col, 1.8, true)
+		swap_hint.draw_polyline(PackedVector2Array([Vector2(18, y_mid - 3.0), Vector2(22, y_mid), Vector2(18, y_mid + 3.0)]), col, 1.8, true)
+	)
+	vs_vbox.add_child(swap_hint)
 	var away_card = make_team_card.call(false)
 	away_team_card = away_card["card"]
 	away_preview = away_card["preview"]
@@ -1719,6 +1743,32 @@ func _activate_premium_entitlement(show_feedback: bool = true):
 		Global.play_prize_win()
 		_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("PRO_ACTIVE", "ELİT AKTİF"))
 
+func _get_premium_cta_verb() -> String:
+	var lang = Global.current_lang
+	var verbs = {
+		"TR": "SATIN AL",
+		"ENG": "BUY NOW",
+		"ESP": "COMPRAR",
+		"POR": "COMPRAR",
+		"ITA": "ACQUISTA"
+	}
+	return verbs.get(lang, "BUY NOW")
+
+func _format_premium_buy_text() -> String:
+	var lang = Global.current_lang
+	var price_str = Global.get_formatted_premium_price()
+	var fmt = LANG.get(lang, LANG["ENG"]).get("SHOP_BUY", "%s — BUY NOW")
+	if "%s" in fmt:
+		return fmt % price_str
+	return price_str + " — " + fmt
+
+func _format_premium_currency_badge_text() -> String:
+	var price_str = Global.get_formatted_premium_price()
+	var cc = Global.get_premium_currency_code()
+	if cc != "" and not (cc in price_str):
+		return "%s  •  %s" % [price_str, cc]
+	return price_str
+
 func _on_billing_query_product_details_response(response: Dictionary):
 	print("Billing query product details response: ", response)
 	var response_code = response.get("response_code", -1)
@@ -1731,33 +1781,54 @@ func _on_billing_query_product_details_response(response: Dictionary):
 			var p_id = p.get("productId", p.get("product_id", ""))
 			if p_id == "premium_unlock":
 				var price_str = ""
+				var currency_code = ""
+				var amount_micros: int = 0
 				if p.has("one_time_purchase_offer_details_list"):
 					var ot_list = p.get("one_time_purchase_offer_details_list")
-					if ot_list is Array and ot_list.size() > 0 and ot_list[0] is Dictionary:
-						var first_offer = ot_list[0]
-						price_str = _safe_billing_str(first_offer.get("formatted_price", first_offer.get("formattedPrice", "")))
-						premium_purchase_option_id = _safe_billing_str(first_offer.get("purchase_option_id", ""))
-						premium_offer_id = _safe_billing_str(first_offer.get("offer_id", ""))
+					if ot_list is Array and ot_list.size() > 0:
+						var chosen_offer = null
+						for offer_item in ot_list:
+							if offer_item is Dictionary:
+								var fp_cand = _safe_billing_str(offer_item.get("formatted_price", offer_item.get("formattedPrice", "")))
+								var oid_cand = _safe_billing_str(offer_item.get("offer_id", offer_item.get("offerId", "")))
+								if chosen_offer == null:
+									chosen_offer = offer_item
+								if fp_cand != "" and oid_cand == "":
+									chosen_offer = offer_item
+									break
+						if chosen_offer is Dictionary:
+							price_str = _safe_billing_str(chosen_offer.get("formatted_price", chosen_offer.get("formattedPrice", "")))
+							currency_code = _safe_billing_str(chosen_offer.get("price_currency_code", chosen_offer.get("priceCurrencyCode", "")))
+							amount_micros = int(chosen_offer.get("price_amount_micros", chosen_offer.get("priceAmountMicros", 0)))
+							premium_purchase_option_id = _safe_billing_str(chosen_offer.get("purchase_option_id", chosen_offer.get("purchaseOptionId", "")))
+							premium_offer_id = _safe_billing_str(chosen_offer.get("offer_id", chosen_offer.get("offerId", "")))
 				if price_str == "":
-					if p.has("formattedPrice"):
-						price_str = _safe_billing_str(p.get("formattedPrice"))
-					elif p.has("formatted_price"):
-						price_str = _safe_billing_str(p.get("formatted_price"))
+					if p.has("formattedPrice") or p.has("formatted_price"):
+						price_str = _safe_billing_str(p.get("formattedPrice", p.get("formatted_price", "")))
+						currency_code = _safe_billing_str(p.get("priceCurrencyCode", p.get("price_currency_code", "")))
+						amount_micros = int(p.get("priceAmountMicros", p.get("price_amount_micros", 0)))
 					elif p.has("oneTimePurchaseOfferDetails"):
 						var ot = p.get("oneTimePurchaseOfferDetails")
 						if ot is Dictionary:
 							price_str = _safe_billing_str(ot.get("formattedPrice", ot.get("formatted_price", "")))
+							currency_code = _safe_billing_str(ot.get("priceCurrencyCode", ot.get("price_currency_code", "")))
+							amount_micros = int(ot.get("priceAmountMicros", ot.get("price_amount_micros", 0)))
 					elif p.has("one_time_purchase_offer_details"):
 						var ot = p.get("one_time_purchase_offer_details")
 						if ot is Dictionary:
 							price_str = _safe_billing_str(ot.get("formattedPrice", ot.get("formatted_price", "")))
+							currency_code = _safe_billing_str(ot.get("priceCurrencyCode", ot.get("price_currency_code", "")))
+							amount_micros = int(ot.get("priceAmountMicros", ot.get("price_amount_micros", 0)))
 							if premium_purchase_option_id == "":
 								premium_purchase_option_id = _safe_billing_str(ot.get("purchase_option_id", ""))
 								premium_offer_id = _safe_billing_str(ot.get("offer_id", ""))
 				
-				if price_str != "":
-					Global.premium_price_formatted = price_str
-					print("[Billing] Loaded dynamic regional price: ", price_str, " option_id=", premium_purchase_option_id, " offer_id='", premium_offer_id, "'")
+				if price_str != "" or amount_micros > 0:
+					Global.set_play_billing_price(price_str, currency_code, amount_micros)
+					print("[Billing] Loaded dynamic regional price: ", Global.get_formatted_premium_price(), " currency=", currency_code, " option_id=", premium_purchase_option_id, " offer_id='", premium_offer_id, "'")
+					if is_instance_valid(premium_dialog_price_lbl):
+						premium_dialog_price_lbl.text = _format_premium_currency_badge_text()
+					update_theme_visuals()
 					_refresh_shop_tab()
 	else:
 		print("Product details query returned code: ", response_code, " msg: ", response.get("debug_message", ""))
@@ -2003,15 +2074,9 @@ func update_theme_visuals():
 				else:
 					entry["node"].text = " " + LANG[lang].get("PRO_ACTIVE", "ELİT AKTİF")
 			else:
-				var price_str = Global.get_formatted_premium_price()
-				if lang == "TR":
-					entry["node"].text = price_str + " — SATIN AL"
-				elif lang == "ESP" or lang == "POR":
-					entry["node"].text = price_str + " — COMPRAR"
-				elif lang == "ITA":
-					entry["node"].text = price_str + " — ACQUISTA"
-				else:
-					entry["node"].text = price_str + " — BUY NOW"
+				entry["node"].text = _get_premium_cta_verb()
+		elif t == "label_premium_price_badge" and entry["node"] is Label:
+			entry["node"].text = _format_premium_currency_badge_text()
 		elif LANG[lang].has(entry["key"]):
 			var txt = LANG[lang][entry["key"]]
 			if t == "label" and entry["node"] is Label:
@@ -2019,7 +2084,7 @@ func update_theme_visuals():
 			elif t == "label_upper" and entry["node"] is Label:
 				entry["node"].text = txt.to_upper().replace("I", "I")
 			elif t == "label_team_stats" and entry["node"] is Label:
-				entry["node"].text = (txt % Global.favorite_team).to_upper().replace("I", "I")
+				entry["node"].text = (txt % Global.get_team_display_name(Global.favorite_team)).to_upper().replace("I", "I")
 			elif t == "button" and entry["node"] is Button:
 				entry["node"].text = txt.replace("I", "I")
 			elif t == "placeholder" and entry["node"] is LineEdit:
@@ -2678,7 +2743,7 @@ func setup_player_list_overlay():
 	s_vbox.add_child(window_title_bg)
 	
 	var s_title = Label.new()
-	s_title.text = (squad_state["target_team"] + " " + LANG.get(Global.current_lang, LANG["ENG"]).get("SQUAD_SUFFIX", "KADROSU")).to_upper()
+	s_title.text = (Global.get_team_display_name(squad_state["target_team"]) + " " + LANG.get(Global.current_lang, LANG["ENG"]).get("SQUAD_SUFFIX", "KADROSU")).to_upper()
 	s_title.add_theme_font_override("font", custom_font)
 	s_title.add_theme_font_size_override("font_size", 38)
 	s_title.add_theme_color_override("font_color", Color.WHITE)
@@ -2715,7 +2780,7 @@ func setup_player_list_overlay():
 	header_vbox.add_child(ball_btn)
 	
 	var team_btn = Button.new()
-	team_btn.text = squad_state["target_team"] + " ▾"
+	team_btn.text = Global.get_team_display_name(squad_state["target_team"]) + " ▾"
 	team_btn.custom_minimum_size = Vector2(0, 48)
 	team_btn.add_theme_font_override("font", custom_font)
 	team_btn.add_theme_font_size_override("font_size", 32)
@@ -2964,8 +3029,8 @@ func setup_player_list_overlay():
 	# Dynamic loader for any selected team
 	var load_team_players = func(t_name: String):
 		squad_state["target_team"] = t_name
-		s_title.text = (squad_state["target_team"] + " " + LANG.get(Global.current_lang, LANG["ENG"]).get("SQUAD_SUFFIX", "KADROSU")).to_upper()
-		team_btn.text = squad_state["target_team"] + " ▾"
+		s_title.text = (Global.get_team_display_name(squad_state["target_team"]) + " " + LANG.get(Global.current_lang, LANG["ENG"]).get("SQUAD_SUFFIX", "KADROSU")).to_upper()
+		team_btn.text = Global.get_team_display_name(squad_state["target_team"]) + " ▾"
 		ball_preview.queue_redraw()
 		
 		for r in player_rows:
@@ -3098,10 +3163,11 @@ func setup_player_list_overlay():
 				ch.queue_free()
 			var q = query.strip_edges().to_lower()
 			for tm in Global.TEAMS.keys():
-				if q != "" and not tm.to_lower().contains(q):
+				var disp_tm = Global.get_team_display_name(tm)
+				if q != "" and not tm.to_lower().contains(q) and not disp_tm.to_lower().contains(q):
 					continue
 				var b = Button.new()
-				b.text = tm
+				b.text = disp_tm
 				b.custom_minimum_size = Vector2(285, 58)
 				b.mouse_filter = Control.MOUSE_FILTER_PASS
 				b.add_theme_font_override("font", custom_font)
@@ -3835,10 +3901,54 @@ func _style_matchup_block():
 		versus_style.shadow_color = accent.darkened(0.20)
 		versus_style.shadow_color.a = 0.38
 		versus_style.shadow_size = 10
-		versus_badge.add_theme_stylebox_override("panel", versus_style)
-		var vs_label = versus_badge.get_child(0) as Label
-		if vs_label:
-			vs_label.add_theme_color_override("font_color", Color.WHITE)
+		var versus_hover = versus_style.duplicate()
+		versus_hover.bg_color = accent.darkened(0.18)
+		versus_hover.border_color = accent.lightened(0.45)
+		var versus_pressed = versus_style.duplicate()
+		versus_pressed.bg_color = accent.darkened(0.42)
+		versus_pressed.border_width_bottom = 1
+		versus_badge.add_theme_stylebox_override("normal", versus_style)
+		versus_badge.add_theme_stylebox_override("hover", versus_hover)
+		versus_badge.add_theme_stylebox_override("pressed", versus_pressed)
+		versus_badge.add_theme_stylebox_override("focus", versus_style)
+		if versus_badge.get_child_count() > 0:
+			var vs_vbox = versus_badge.get_child(0)
+			if vs_vbox.get_child_count() > 0 and vs_vbox.get_child(0) is Label:
+				(vs_vbox.get_child(0) as Label).add_theme_color_override("font_color", Color.WHITE)
+
+func _on_swap_teams_pressed():
+	Global.play_click()
+	var tmp_team = Global.home_team_name
+	Global.home_team_name = Global.away_team_name
+	Global.away_team_name = tmp_team
+	var tmp_sel = home_selected
+	home_selected = away_selected
+	away_selected = tmp_sel
+	Global.home_selected = home_selected
+	Global.away_selected = away_selected
+
+	var tmp_lg = Global.last_selected_league_home
+	Global.last_selected_league_home = Global.last_selected_league_away
+	Global.last_selected_league_away = tmp_lg
+	if is_instance_valid(league_dropdown_home) and is_instance_valid(league_dropdown_away):
+		if Global.last_selected_league_home >= 0 and Global.last_selected_league_home < league_dropdown_home.item_count:
+			league_dropdown_home.select(Global.last_selected_league_home)
+		if Global.last_selected_league_away >= 0 and Global.last_selected_league_away < league_dropdown_away.item_count:
+			league_dropdown_away.select(Global.last_selected_league_away)
+
+	if is_instance_valid(search_bar_home) and is_instance_valid(search_bar_away):
+		var tmp_txt = search_bar_home.text
+		search_bar_home.text = search_bar_away.text
+		search_bar_away.text = tmp_txt
+
+	Global.save_progression()
+	populate_teams()
+
+	if is_instance_valid(versus_badge):
+		versus_badge.pivot_offset = versus_badge.size * 0.5
+		var tw = create_tween()
+		tw.tween_property(versus_badge, "scale", Vector2(0.88, 0.88), 0.06)
+		tw.tween_property(versus_badge, "scale", Vector2.ONE, 0.14).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 func populate_teams():
 	if not home_list or not away_list: return
@@ -3905,7 +4015,7 @@ func populate_teams():
 		btn.add_child(hbox)
 		
 		var lbl = Label.new()
-		lbl.text = team
+		lbl.text = Global.get_team_display_name(team)
 		lbl.add_theme_font_override("font", custom_font)
 		lbl.add_theme_font_size_override("font_size", 24 if is_tablet else 28)
 		
@@ -3943,13 +4053,15 @@ func populate_teams():
 	
 	for team in TEAM_NAMES:
 		var team_league = Global.TEAMS[team].get("league", "WORLD")
+		var disp_lower = Global.get_team_display_name(team).to_lower()
+		var key_lower = team.to_lower()
 		
 		# Home column filtering
-		if (lg_filter_h == "ALL" or lg_filter_h == "SELECT" or lg_filter_h == "All Teams" or team_league == lg_filter_h) and (txt_filter_home == "" or txt_filter_home in team.to_lower()):
+		if (lg_filter_h == "ALL" or lg_filter_h == "SELECT" or lg_filter_h == "All Teams" or team_league == lg_filter_h) and (txt_filter_home == "" or txt_filter_home in key_lower or txt_filter_home in disp_lower):
 			home_list.add_child(create_team_btn.call(team, true))
 			
 		# Away column filtering
-		if (lg_filter_a == "ALL" or lg_filter_a == "SELECT" or lg_filter_a == "All Teams" or team_league == lg_filter_a) and (txt_filter_away == "" or txt_filter_away in team.to_lower()):
+		if (lg_filter_a == "ALL" or lg_filter_a == "SELECT" or lg_filter_a == "All Teams" or team_league == lg_filter_a) and (txt_filter_away == "" or txt_filter_away in key_lower or txt_filter_away in disp_lower):
 			away_list.add_child(create_team_btn.call(team, false))
 			
 	if is_instance_valid(home_lbl):
@@ -4065,7 +4177,7 @@ func show_fav_change_confirmation(target_team: String):
 	dlg_vbox.add_child(dlg_title)
 
 	var dlg_desc = Label.new()
-	dlg_desc.text = LANG[lang]["FAV_CONFIRM_DESC"] % target_team
+	dlg_desc.text = LANG[lang]["FAV_CONFIRM_DESC"] % Global.get_team_display_name(target_team)
 	dlg_desc.add_theme_font_override("font", custom_font)
 	dlg_desc.add_theme_font_size_override("font_size", 28)
 	dlg_desc.add_theme_color_override("font_color", Color.WHITE)
@@ -4765,6 +4877,12 @@ func _switch_tab(idx: int, instant: bool = false):
 			_refresh_stats_tab()
 		elif idx == 1:
 			_update_start_button_display()
+		elif idx == 2:
+			if billing and (Global.premium_price_formatted == "" or premium_purchase_option_id == ""):
+				if billing.is_ready():
+					billing.query_product_details(PackedStringArray(["premium_unlock"]), BillingClient.ProductType.INAPP)
+				else:
+					billing.start_connection()
 
 	var tab_changed = (idx != current_tab)
 	current_tab = idx
@@ -5251,7 +5369,7 @@ func _build_stats_tab() -> Control:
 					if d > f_biggest_diff:
 						f_biggest_diff = d
 						f_biggest_win_score = "%d - %d" % [fav_s, opp_s]
-						f_biggest_win_opp = "vs " + opp_name
+						f_biggest_win_opp = "vs " + Global.get_team_display_name(opp_name)
 					if fav_recent_results.size() < 5:
 						var c = "G" if lang == "TR" else ("W" if lang == "ENG" else "V")
 						fav_recent_results.append({"char": c, "col": Color8(34, 160, 75)})
@@ -5261,7 +5379,7 @@ func _build_stats_tab() -> Control:
 					if d > f_biggest_loss_diff:
 						f_biggest_loss_diff = d
 						f_biggest_loss_score = "%d - %d" % [fav_s, opp_s]
-						f_biggest_loss_opp = "vs " + opp_name
+						f_biggest_loss_opp = "vs " + Global.get_team_display_name(opp_name)
 					if fav_recent_results.size() < 5:
 						var c = "M" if lang == "TR" else ("L" if lang == "ENG" else "D")
 						fav_recent_results.append({"char": c, "col": Color8(200, 45, 50)})
@@ -5290,7 +5408,7 @@ func _build_stats_tab() -> Control:
 
 		var f_title = Label.new()
 		var f_template = LANG[lang]["STATS_TEAM"]
-		f_title.text = (f_template % Global.favorite_team).to_upper()
+		f_title.text = (f_template % Global.get_team_display_name(Global.favorite_team)).to_upper()
 		f_title.add_theme_font_override("font", custom_font)
 		f_title.add_theme_font_size_override("font_size", int(clamp(round(24.0 * ui_s), 21, 30)))
 		f_title.add_theme_color_override("font_color", Color.WHITE)
@@ -5771,14 +5889,14 @@ func _build_stats_tab() -> Control:
 		var mg_h = int(mg.get("home_score", mg.get("score_h", 0)))
 		var mg_a = int(mg.get("away_score", mg.get("score_a", 0)))
 		var mg_total = mg_h + mg_a
-		records_grid.add_child(create_stat_tile.call("STATS_MOST_GOALS", "%s %d - %d %s" % [mg.get("home", ""), mg_h, mg_a, mg.get("away", "")], "(%d %s)" % [int(mg_total), LANG[lang].get("GOALS_SUFFIX", "Gol")]))
+		records_grid.add_child(create_stat_tile.call("STATS_MOST_GOALS", "%s %d - %d %s" % [Global.get_team_display_name(mg.get("home", "")), mg_h, mg_a, Global.get_team_display_name(mg.get("away", ""))], "(%d %s)" % [int(mg_total), LANG[lang].get("GOALS_SUFFIX", "Gol")]))
 
 		if most_diff_val > 0:
 			var md = most_diff_match
 			var md_h = int(md.get("home_score", md.get("score_h", 0)))
 			var md_a = int(md.get("away_score", md.get("score_a", 0)))
 			var diff_sub = LANG[lang].get("STATS_DIFF_FORMAT", "(%d Diff)") % int(most_diff_val)
-			records_grid.add_child(create_stat_tile.call("STATS_BIGGEST_WIN", "%s %d - %d %s" % [md.get("home", ""), md_h, md_a, md.get("away", "")], diff_sub))
+			records_grid.add_child(create_stat_tile.call("STATS_BIGGEST_WIN", "%s %d - %d %s" % [Global.get_team_display_name(md.get("home", "")), md_h, md_a, Global.get_team_display_name(md.get("away", ""))], diff_sub))
 		else:
 			records_grid.add_child(create_stat_tile.call("STATS_BIGGEST_WIN", "-", LANG[lang].get("STATS_DIFF_FORMAT", "(%d Diff)") % 0))
 
@@ -5889,7 +6007,7 @@ func _build_stats_tab() -> Control:
 			# Home team (overflow protected + ellipsis)
 			var m_team_fs = int(clamp(round(19.0 * ui_s), 16, 24))
 			var hl = Label.new()
-			hl.text = m_home
+			hl.text = Global.get_team_display_name(m_home)
 			hl.add_theme_font_override("font", custom_font)
 			hl.add_theme_font_size_override("font_size", m_team_fs)
 			if fav != "" and m_home == fav:
@@ -5930,7 +6048,7 @@ func _build_stats_tab() -> Control:
 
 			# Away team (overflow protected + ellipsis)
 			var al = Label.new()
-			al.text = m_away
+			al.text = Global.get_team_display_name(m_away)
 			al.add_theme_font_override("font", custom_font)
 			al.add_theme_font_size_override("font_size", m_team_fs)
 			if fav != "" and m_away == fav:
@@ -6285,8 +6403,38 @@ func _build_shop_tab() -> Control:
 
 	var prem_right_vb = VBoxContainer.new()
 	prem_right_vb.alignment = BoxContainer.ALIGNMENT_CENTER
-	prem_right_vb.add_theme_constant_override("separation", 3)
+	prem_right_vb.add_theme_constant_override("separation", 4)
 	prem_hbox.add_child(prem_right_vb)
+
+	var p_btn_w = int(clamp(round(188.0 * ui_s), 170, 236))
+
+	if not Global.is_premium:
+		var prem_price_badge = PanelContainer.new()
+		prem_price_badge.custom_minimum_size = Vector2(p_btn_w, 0)
+		var ppb_style = StyleBoxFlat.new()
+		var ppb_bg = active_theme.accent.darkened(0.55)
+		ppb_style.bg_color = Color(ppb_bg.r, ppb_bg.g, ppb_bg.b, 0.96)
+		ppb_style.corner_radius_top_left = 8; ppb_style.corner_radius_top_right = 8
+		ppb_style.corner_radius_bottom_left = 8; ppb_style.corner_radius_bottom_right = 8
+		ppb_style.border_width_left = 1; ppb_style.border_width_right = 1
+		ppb_style.border_width_top = 1; ppb_style.border_width_bottom = 2
+		ppb_style.border_color = Color8(255, 206, 84, 225)
+		ppb_style.content_margin_left = 8; ppb_style.content_margin_right = 8
+		ppb_style.content_margin_top = 2; ppb_style.content_margin_bottom = 2
+		prem_price_badge.add_theme_stylebox_override("panel", ppb_style)
+		prem_price_badge.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		prem_right_vb.add_child(prem_price_badge)
+
+		var prem_price_lbl = Label.new()
+		prem_price_lbl.text = _format_premium_currency_badge_text()
+		prem_price_lbl.add_theme_font_override("font", custom_font)
+		prem_price_lbl.add_theme_font_size_override("font_size", int(clamp(round(17.0 * ui_s), 15, 22)))
+		prem_price_lbl.add_theme_color_override("font_color", Color8(255, 232, 148))
+		_apply_text_outline(prem_price_lbl, 2, Color8(0, 0, 0, 230))
+		prem_price_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		prem_price_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		ui_labels.append({"node": prem_price_lbl, "key": "PRO_PRICE_BADGE", "type": "label_premium_price_badge"})
+		prem_price_badge.add_child(prem_price_lbl)
 
 	var buy_btn = Button.new()
 	if Global.is_premium:
@@ -6307,18 +6455,7 @@ func _build_shop_tab() -> Control:
 		_apply_text_outline(buy_btn, 3, Color8(0, 0, 0, 235))
 		ui_labels.append({"node": buy_btn, "key": "SHOP_BUY", "type": "button_buy_premium"})
 	else:
-		var price_str = Global.get_formatted_premium_price()
-		var buy_text = ""
-		var lang = Global.current_lang
-		if lang == "TR":
-			buy_text = price_str + " — SATIN AL"
-		elif lang == "ESP" or lang == "POR":
-			buy_text = price_str + " — COMPRAR"
-		elif lang == "ITA":
-			buy_text = price_str + " — ACQUISTA"
-		else:
-			buy_text = price_str + " — BUY NOW"
-		buy_btn.text = buy_text
+		buy_btn.text = _get_premium_cta_verb()
 		ui_labels.append({"node": buy_btn, "key": "SHOP_BUY", "type": "button_buy_premium"})
 		apply_3d_style_to_button(buy_btn, active_theme.accent.darkened(0.14), active_theme.accent.darkened(0.46), 10, 3.0, 12, 6)
 		buy_btn.add_theme_color_override("font_color", Color.WHITE)
@@ -6328,17 +6465,17 @@ func _build_shop_tab() -> Control:
 		buy_btn.pressed.connect(_on_buy_premium_pressed)
 	buy_btn.add_theme_font_override("font", custom_font)
 	buy_btn.add_theme_font_size_override("font_size", int(clamp(round(19.0 * ui_s), 16, 24)))
-	var p_btn_w = int(clamp(round(188.0 * ui_s), 172, 235))
-	buy_btn.custom_minimum_size = Vector2(p_btn_w, int(clamp(round(44.0 * ui_s), 38, 56)))
+	buy_btn.custom_minimum_size = Vector2(p_btn_w, int(clamp(round(40.0 * ui_s), 36, 52)))
 	prem_right_vb.add_child(buy_btn)
 
 	var rest_shop_btn = Button.new()
 	rest_shop_btn.text = LANG[Global.current_lang].get("RESTORE_PURCHASES", "Satın Alımları Geri Yükle")
 	rest_shop_btn.add_theme_font_override("font", custom_font)
-	rest_shop_btn.add_theme_font_size_override("font_size", int(clamp(round(15.0 * ui_s), 13, 19)))
+	rest_shop_btn.add_theme_font_size_override("font_size", int(clamp(round(14.0 * ui_s), 13, 18)))
 	rest_shop_btn.add_theme_color_override("font_color", Color.WHITE)
 	_apply_text_outline(rest_shop_btn, 2, Color8(0, 0, 0, 220))
-	rest_shop_btn.custom_minimum_size = Vector2(p_btn_w, int(clamp(round(28.0 * ui_s), 24, 34)))
+	ui_labels.append({"node": rest_shop_btn, "key": "RESTORE_PURCHASES", "type": "button"})
+	rest_shop_btn.custom_minimum_size = Vector2(p_btn_w, int(clamp(round(24.0 * ui_s), 22, 30)))
 	var rest_shop_style = StyleBoxFlat.new()
 	rest_shop_style.bg_color = Color(0, 0, 0, 0)
 	rest_shop_btn.add_theme_stylebox_override("normal", rest_shop_style)
@@ -6836,7 +6973,7 @@ func _build_shop_tab() -> Control:
 		# Progress bar and details
 		var cur_p = int(q.get("progress", 0))
 		var tgt_p = max(1, int(q.get("target", 1)))
-		var r_amount = int(q.get("reward", 30))
+		var r_amount = int(q.get("reward", 40))
 		var is_claimed = bool(q.get("claimed", false))
 		var is_ready = cur_p >= tgt_p
 
@@ -6902,7 +7039,7 @@ func _build_shop_tab() -> Control:
 			claim_btn.pressed.connect(func():
 				var earned = Global.claim_quest_reward(q_id)
 				if earned > 0:
-					Global.play_prize_win()
+					Global.play_reward_collect()
 					var rew_fmt = LANG.get(Global.current_lang, LANG["ENG"]).get("EARNED_REWARD", "+%s %s")
 					_show_toast(rew_fmt % [str(earned), LANG.get(Global.current_lang, LANG["ENG"]).get("CURRENCY", "Jeton")])
 					_refresh_shop_tab()
@@ -6988,6 +7125,30 @@ func _on_buy_premium_pressed():
 	_apply_text_outline(dlg_title, 3, Color8(0, 0, 0, 235))
 	dlg_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	dlg_vbox.add_child(dlg_title)
+
+	var dlg_price_pill = PanelContainer.new()
+	dlg_price_pill.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	var dpp_style = StyleBoxFlat.new()
+	var dpp_bg = active_theme.accent.darkened(0.54)
+	dpp_style.bg_color = Color(dpp_bg.r, dpp_bg.g, dpp_bg.b, 0.96)
+	dpp_style.corner_radius_top_left = 10; dpp_style.corner_radius_top_right = 10
+	dpp_style.corner_radius_bottom_left = 10; dpp_style.corner_radius_bottom_right = 10
+	dpp_style.border_width_left = 2; dpp_style.border_width_right = 2
+	dpp_style.border_width_top = 1; dpp_style.border_width_bottom = 2
+	dpp_style.border_color = Color8(255, 206, 84, 230)
+	dpp_style.content_margin_left = 16; dpp_style.content_margin_right = 16
+	dpp_style.content_margin_top = 4; dpp_style.content_margin_bottom = 4
+	dlg_price_pill.add_theme_stylebox_override("panel", dpp_style)
+	dlg_vbox.add_child(dlg_price_pill)
+
+	premium_dialog_price_lbl = Label.new()
+	premium_dialog_price_lbl.text = _format_premium_currency_badge_text()
+	premium_dialog_price_lbl.add_theme_font_override("font", custom_font)
+	premium_dialog_price_lbl.add_theme_font_size_override("font_size", 24)
+	premium_dialog_price_lbl.add_theme_color_override("font_color", Color8(255, 232, 148))
+	_apply_text_outline(premium_dialog_price_lbl, 2, Color8(0, 0, 0, 230))
+	premium_dialog_price_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	dlg_price_pill.add_child(premium_dialog_price_lbl)
 
 	var dlg_desc = Label.new()
 	dlg_desc.text = desc_dict.get(lang, desc_dict["TR"])
@@ -7203,6 +7364,7 @@ func _refresh_shop_tab():
 	if tabs_hbox and tabs_hbox.get_child_count() > 2:
 		var current_shop = tabs_hbox.get_child(2)
 		if current_shop and current_shop.name != "Shop_Placeholder":
+			ui_labels = ui_labels.filter(func(e): return is_instance_valid(e.get("node")) and not current_shop.is_ancestor_of(e["node"]))
 			var sw = get_viewport_rect().size.x
 			tabs_hbox.remove_child(current_shop)
 			current_shop.queue_free()
@@ -8027,7 +8189,7 @@ func _show_admob_rewarded():
 		_on_rewarded_video_earned(null, null)
 
 func _show_prize_dialog(title_txt: String, amount_txt: String, sub_txt: String = ""):
-	Global.play_prize_win()
+	Global.play_reward_collect()
 	var overlay = ColorRect.new()
 	overlay.color = Color(0, 0, 0, 0.88)
 	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -8497,7 +8659,7 @@ func _open_daily_quests():
 		var prog_lbl = Label.new()
 		var p_label_str = LANG.get(Global.current_lang, LANG["ENG"]).get("QUEST_PROGRESS", "İlerleme")
 		var r_label_str = LANG.get(Global.current_lang, LANG["ENG"]).get("QUEST_REWARD", "Ödül")
-		prog_lbl.text = p_label_str + ": " + str(int(q.get("progress", 0))) + " / " + str(int(q.get("target", 1))) + "  •  " + r_label_str + ": +" + str(int(q.get("reward", 30))) + " " + LANG.get(Global.current_lang, LANG["ENG"])["CURRENCY"]
+		prog_lbl.text = p_label_str + ": " + str(int(q.get("progress", 0))) + " / " + str(int(q.get("target", 1))) + "  •  " + r_label_str + ": +" + str(int(q.get("reward", 40))) + " " + LANG.get(Global.current_lang, LANG["ENG"])["CURRENCY"]
 		prog_lbl.add_theme_font_override("font", custom_font)
 		prog_lbl.add_theme_font_size_override("font_size", 18)
 		prog_lbl.add_theme_color_override("font_color", Color8(255, 215, 0))
@@ -8534,7 +8696,7 @@ func _open_daily_quests():
 			claim_btn.pressed.connect(func():
 				var earned = Global.claim_quest_reward(q_id)
 				if earned > 0:
-					Global.play_prize_win()
+					Global.play_reward_collect()
 					var rew_fmt = LANG.get(Global.current_lang, LANG["ENG"]).get("EARNED_REWARD", "+%s %s")
 					var curr_str = LANG.get(Global.current_lang, LANG["ENG"]).get("CURRENCY", "Jeton")
 					_show_toast(rew_fmt % [str(earned), curr_str])
@@ -9080,7 +9242,7 @@ func _open_leaderboard():
 	my_vbox.add_child(my_hbox)
 	
 	var my_name_lbl = Label.new()
-	my_name_lbl.text = p_name + " - " + fav_t
+	my_name_lbl.text = p_name + " - " + Global.get_team_display_name(fav_t)
 	my_name_lbl.add_theme_font_override("font", custom_font)
 	my_name_lbl.add_theme_font_size_override("font_size", 26)
 	my_name_lbl.add_theme_color_override("font_color", Color.WHITE)

@@ -99,27 +99,27 @@ def upload_aab(aab_path, tracks=["internal", "alpha"], release_name=None, releas
             release_notes = [
                 {
                     "language": "tr-TR",
-                    "text": "• Elit Kulüp Düzeltmesi: Google Play satın almaları artık anında aktifleşir, otomatik onaylanır ve Geri Yükle ile her cihazda tanınır.\n• Kulüp & Bayrak Düzeltmesi: Porto, Brann, Marsilya gibi kısaltması çakışan kulüplerde yanlış milli bayrak çıkması giderildi.\n• Şans Çarkı & Reklamlar: Çark reklamının ekstra jeton/bekleme tetiklemesi çözüldü; mağaza reklam süresi 60 sn oldu.\n• Güncelleme Bildirimi & Görsel: Yeni sürüm uyarısı, yenilenen logo ve temiz açılış."
+                    "text": "• Maç Penaltı Bonusu: Devre başına en fazla 1 kez (+%10 hız, +%15 sekme, +%10 kale genişliği, 3 sn / golle biter, ' pen skorbord notu).\n• VS Taraf Değiştirme: Ana menüdeki VS butonuyla ev/deplasman takımlarını tek dokunuşla değiştirin.\n• Bölgesel Fiyat & Yerelleştirme: Elit Kulüp fiyat/para birimi bölgeye sabitlendi; 46 milli takım 5 dilde çevrildi.\n• Yenilenen Armalar & Ekonomi: Barcelona, Atlético, Bayern, Dortmund, PSG yenilendi; Arsenal büyütüldü; görev jetonu +%25 arttı."
                 },
                 {
                     "language": "en-US",
-                    "text": "• Elite Club Fix: Google Play purchases now activate instantly, acknowledge automatically, and restore reliably across devices.\n• Club Crest & Flag Fix: Fixed national flags appearing on clubs with matching short codes (Porto, Brann, Marseille, etc.).\n• Lucky Wheel & Ads: Isolated wheel ad spins from shop coin rewards and lowered shop ad cooldown to 60s.\n• Update Notice & Polish: Added an in-game update banner, ball-forward app logo, and clean startup splash."
+                    "text": "• Match Penalty Bonus: Neutral 3s boost (+10% speed, +15% bounce, +10% goal width, ends on goal, ' pen tag).\n• VS Team Swap: Tap the VS button on the main menu to swap Home and Away sides.\n• Regional Pricing & National i18n: Elite Club price/currency locked to Play Store region; all 46 national teams localized in 5 languages.\n• Crests, Audio & Quests: Redesigned Barcelona, Atlético, Bayern, Dortmund, PSG; scaled Arsenal; softer reward SFX & +25% quest tokens."
                 },
                 {
                     "language": "es-ES",
-                    "text": "• Club Élite: Las compras de Google Play se activan al instante, se confirman automáticamente y se restauran sin fallos.\n• Escudos y Banderas: Corregido el error de banderas en clubes con siglas iguales (Porto, Brann, Marsella, etc.).\n• Ruleta y Anuncios: Giros de ruleta separados de las recompensas de tienda y espera reducida a 60s.\n• Aviso y Pulido: Nuevo aviso de actualización en el menú, logotipo renovado e inicio limpio."
+                    "text": "• Bono Penalti: Impulso de 3s (+10% velocidad, +15% rebote, +10% portería, termina al gol, marca ' pen).\n• Cambio VS: Toca el botón VS en el menú para intercambiar Local y Visitante.\n• Precio Regional y Selecciones: Precio de Club Élite fijo a tu región; 46 selecciones traducidas en 5 idiomas.\n• Escudos, Audio y Misiones: Rediseño de Barcelona, Atlético, Bayern, Dortmund y PSG; ajuste de Arsenal; nuevo sonido y +25% monedas en misiones."
                 },
                 {
                     "language": "pt-BR",
-                    "text": "• Clube Elite: Compras no Google Play ativam na hora, confirmam automaticamente e restauram em qualquer dispositivo.\n• Escudos e Bandeiras: Corrigido o erro de bandeiras em clubes com siglas iguais (Porto, Brann, Marselha, etc.).\n• Roda da Sorte e Anúncios: Giros da roleta isolados dos prêmios da loja e espera reduzida para 60s.\n• Aviso e Polimento: Novo aviso de atualização no menu, ícone renovado e início limpo."
+                    "text": "• Bônus Pênalti: Impulso de 3s (+10% velocidade, +15% quique, +10% gol, encerra no gol, nota ' pen).\n• Troca VS: Toque no botão VS no menu para inverter Mandante e Visitante.\n• Preço Regional e Seleções: Preço do Clube Elite fixado à região; 46 seleções em 5 idiomas.\n• Escudos, Som e Missões: Novos escudos de Barcelona, Atlético, Bayern, Dortmund e PSG; Arsenal ampliado; novo som e +25% moedas nas missões."
                 },
                 {
                     "language": "it-IT",
-                    "text": "• Club Élite: Gli acquisti Google Play si attivano subito, si confermano in automatico e si ripristinano senza errori.\n• Stemmi e Bandiere: Risolto l'errore delle bandiere nazionali su club con sigle uguali (Porto, Brann, Marsiglia, ecc.).\n• Ruota e Annunci: Giri della ruota separati dai premi del negozio e attesa ridotta a 60s.\n• Avviso e Rifiniture: Nuovo avviso di aggiornamento nel menu, logo aggiornato e avvio pulito."
+                    "text": "• Bonus Rigore: Boost di 3s (+10% velocità, +15% rimbalzo, +10% porta, termina al gol, nota ' pen).\n• Scambio VS: Tocca VS nel menu per invertire Casa e Trasferta.\n• Prezzo Regionale e Nazionali: Prezzo Club Élite bloccato sulla regione; 46 nazionali in 5 lingue.\n• Stemmi, Audio e Missioni: Ridisegnati Barcellona, Atlético, Bayern, Dortmund e PSG; Arsenal ingrandito; nuovo suono e +25% monete missioni."
                 }
             ]
 
-        rel_name = release_name or f"{version_code} (1.1.6)"
+        rel_name = release_name or f"{version_code} (1.1.7)"
 
         # 3. Assign bundle to each requested track
         for track in tracks:

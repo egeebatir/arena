@@ -348,4 +348,59 @@
 - [x] **Oyun İçi Güncelleme Bildirimi (`Global.gd`, `main_menu.gd`, `webfutbol/api/version.json`):** Başlangıçta `ebstudyo.com/api/version.json` üzerinden sürüm kontrolü yapıp güncel olmayan cihazlara alt kısımda tema uyumlu, 5 dilli (`TR`, `ENG`, `ESP`, `POR`, `ITA`) mini güncelleme bildirimi ve Google Play yönlendirmesi eklendi.
 - [x] **Play Console Eski Tablet Ekran Görüntülerinin Kaldırılması:** `tr-TR` ve `en-IN` altındaki eski `sevenInchScreenshots` ve `tenInchScreenshots` temizlendi.
 
+### 2026-11-22: 7/24 YouTube & TikTok Canlı Yayın Otomasyon Ekosistemi (v2.0.0-live)
+- [x] **9-Subagent Yönetişim Mimarisi & Birimler Arası Sözleşmeler (`SA-00`..`SA-08`):**
+  - Baş Uzman İnceleyici (`SA-00`) denetiminde 4 adet resmi Handoff Contract (`HC-01` Web API, `HC-02` Godot Pro APK, `HC-03` Kısa Sesli Reklamlar, `HC-04` 232 Takım Kadro Şeması), merkezi `TASK_LEDGER.json`, `AUDIT_LOG.md` ve 11 adet doğrulanmış `WORK_RECEIPT` ile 12 fazlı görev zinciri (`LIVE-F0-001`..`LIVE-F7-002`) %100 tamamlandı.
+  - Ana Google Play üretim reposu (`c:\Users\egebatir\Documents\futbol`) %100 izole tutuldu (0 değiştirilen oyun dosyası).
+- [x] **İzole `Bol Gol Live` Pro APK (`com.ebstudyo.bolgol.live`, 76.6 MB):**
+  - `c:\Users\egebatir\Documents\futbol_live` üzerinde `Bol Gol Live` paket kimliğiyle ana oyunun yanına çakışmadan kurulabilir Pro sürüm derlendi (`bol_gol_live.apk`).
+  - **Pro Ekonomi & Sıfır Reklam:** `coins = 8000`, `is_premium = true`, `ad_free = true`, tüm AdMob eklentileri devre dışı.
+  - **232 Takım (186 Kulüp + 46 Milli Takım) 2026 Kadroları:** `res://assets/data/squads_live_232.json` üzerinden 696 gerçek yıldız oyuncu ve kaptan açılışta otomatik yüklenir.
+  - **2.0s Skor Gösterimi & Gerçek `main_menu.tscn` Görsel Takım Seçim Koreografisi:** Maç bitiminde skor 2.0 saniye ekranda kalır, ardından gerçek takım seçim ekranına (`main_menu.tscn`) dönülerek lig filtreleri ve takım kartları üzerinde ~4.2 saniyelik görsel kaydırma/vurgulama koreografisiyle sıradaki maç seçilir ve otomatik başlatılır.
+  - **3 Maçta Bir 6 Tema Döngüsü:** `Turkuaz -> Mavi -> Mor -> Pembe -> Yeşil -> Siyah` temaları her 3 maçta bir sırayla değişir.
+  - **2 Maçta Bir Kısa Sesli Reklam (`HC-03`):** `res://assets/audio/live_promo/manifest.json` altındaki 8 adet kısa (4.5s - 5.1s), `-14.0 LUFS` normalize Türkçe sesli tanıtım (`promo_short_1.ogg`..`promo_short_8.ogg`) her 2 maçta bir `Bol Gol Futbol` ve `ebstudyo.com` rozetiyle çalar.
+  - **Saha Altı Mini Marka Filigranı & Layer 50 YouTube Safe-Zone HUD:** Saha altında zarif `BOL GOL FUTBOL • ebstudyo.com` filigranı; üst/alt güvenli bölgede `!mac EvSahibi - Deplasman` rehber kartı, bekleyen maç sayacı, toplam yayın golü, sıradaki maç bandı, bağış/abone/beğeni tebrik bildirimleri (toast) ve 5 saniyelik `live_hub.php` telemetri senkronizasyonu aktif edildi.
+- [x] **Çift Yönlü Web API (`live_hub.php`), Şifreli Yönetim Paneli (`/canli-yonetim/`) & Halka Açık Yayın Merkezi (`/canli/`):**
+  - `https://www.ebstudyo.com/api/live_hub.php` (ve geriye dönük uyumlu `live_queue.php`) üzerinde atomik `flock` kilitli `live_hub_state.json`, VIP öncelikli kuyruk, oyun telemetrisi, toast olayları ve dinamik `youtube_video_id` yönetimi devreye alındı.
+  - `https://www.ebstudyo.com/canli-yonetim/`: Bearer şifreli yönetici komuta merkezi (Video ID hot-switch, VIP/Normal maç ekleme, kuyruk silme/temizleme, anlık toast gönderme).
+  - `https://www.ebstudyo.com/canli/`: İzleyiciler için canlı YouTube yayını, aktif maç skoru, sıradaki maç kuyruğu, `!mac` komut rehberi ve Google Play / Web oyun indirme hunisi.
+- [x] **Python YouTube & TikTok Canlı Yayın Botu (`pytchat` + YouTube Data API v3 + Hot-Switch):**
+  - `pytchat` ile `!mac` / `!maç` / `!match` komutları, SuperChat ve Kanal Üyeliği VIP maç önceliği; YouTube Data API v3 (`videos.list`, `channels.list`, `subscriptions.list`) ile anlık beğeni, yeni abone ve izleyici sayısı takibi.
+  - 232 takım ve 1.009 normalize takma ad (`TeamParser`), panelden yayın yeniden başlatılmadan anında `youtube_video_id` değiştirme (hot-switch), `SessionArchiver` ve `systemd` VPS otomasyonu (`24/24` birim testi PASS).
+- [x] **İki Ayrı Özel (Private) GitHub Deposu:**
+  - `https://github.com/egeebatir/bolgol-live-youtube` (`main` -> `ca11fa0`)
+  - `https://github.com/egebatir/bolgol-live-tiktok` (`main` -> `8fdccb0`)
+
+### 2026-11-23: v1.1.7 (Build 38) — Kapalı Beta (Closed Beta) İyileştirme Paketi & Üretim Başvurusu Kayıt Notları
+*(Yalnızca `futbol` Google Play kapalı beta sürümüne uygulanmıştır; `futbol_live` ve `futbol_automation` oyun/video mantığına dokunulmamıştır.)*
+- [x] **Ana Menü VS Butonu ile Ev Sahibi / Deplasman Taraf Değiştirme (`main_menu.gd`):**
+  - Takım eşleşme kartındaki merkezi `VS` rozeti (`54x54 dp`) dokunulabilir taktil 3D butona dönüştürüldü ve ince çift yönlü ok ipucu eklendi.
+  - Basıldığında ev sahibi ve deplasman takımları, seçim durumları, lig filtreleri ve arama filtreleri tek dokunuşla yer değiştirir; kalıcı olarak kaydedilir.
+- [x] **Barcelona (`bar1.png`), Atlético Madrid (`atm1.png`), Bayern Münih (`bay1.png`), Borussia Dortmund (`bvb1.png`) & PSG (`psg1.png`) Armalarının Yeniden Tasarımı + Arsenal (`ars1.png`) Boyut Düzeltmesi:**
+  - Eski gürültülü/3D armalar kaldırılarak `rma1.png`, `nap1.png`, `juv1.png`, `liv1.png` ile uyumlu düz 2D vektörel stilde (800x800 şeffaf dış zemin, yazısız) yeniden tasarlandı:
+    - Barcelona: Klasik kazan kalkan formu, St. George haçı, Katalan şeritleri, düz altın bant, Blaugrana şeritleri ve merkezde klasik altın futbol topu.
+    - Atlético Madrid: Klasik kalkan formu, sol üst lacivert üçgende tam 7 yıldız, kırmızı-beyaz şeritler ve merkezde altın ayı & kocayemiş ağacı (*El Oso y el Madroño*) amblemi.
+    - Bayern Münih (`bay1.png`): Kırmızı dış halka, Bavyera mavi-beyaz baklava dilimi merkezi ve ortada düz altın kraliyet tacı.
+    - Borussia Dortmund (`bvb1.png`): İkonik sarı-siyah dairesel çerçeve ve merkezde sade siyah-sarı geometrik futbol topu.
+    - PSG (`psg1.png`): Lacivert dairesel çerçeve, beyaz dış çizgi, kırmızı Eyfel Kulesi ve kemer içinde altın Fleur-de-lis.
+    - Arsenal (`ars1.png`): Aşırı küçük kenar boşlukları (`498x444`) diğer armalarla uyumlu `740x660` ölçeğine getirildi.
+- [x] **Görev Ödülü & Şans Çarkı Ödül Penceresi İçin Yeni Ödül Sesi (`reward_collect.ogg`, `Global.gd`, `main_menu.gd`):**
+  - Keskin arpejli eski ses yerine sıcak, kulak okşayan marimba/celesta akorlu ve yumuşak jeton ışıltılı `reward_collect.ogg` üretildi ve `Global.play_reward_collect()` ile günlük görev ödülü toplama + şans çarkı/ödül diyaloğu gösterimine bağlandı.
+- [x] **Günlük Görev Jeton Ödüllerinin ~%25 Artırılması (`Global.gd`):**
+  - `QUEST_POOL` altındaki 21 görevin tamamı ~%25 artırılarak yukarı doğru 5'in katlarına yuvarlandı (Kolay: `25-35` -> `35-45`, Orta: `40-50` -> `50-65`, Zor: `60-75` -> `75-95`); mevcut kayıtlardaki alınmamış günlük görevlerin ödül ve çevirileri yüklemede otomatik senkronize edildi.
+- [x] **46 Milli Takım Adının 5 Dilde Yerelleştirilmesi (`Global.gd`, `main_menu.gd`, `pitch.gd`):**
+  - Yalnızca milli takımlara özel `NATIONAL_NAMES` sözlüğü ve `Global.get_team_display_name()` eklendi (TR, ENG, ESP, POR, ITA); kulüp adları evrensel kaldı.
+  - Takım seçim listesi, arama çubuğu (yerel veya kanonik adla arama), maç giriş ekranı, favori onay penceresi, istatistikler, kadro düzenleyici, günlük görevler ve yerel liderlik kartı tam yerelleştirildi.
+- [x] **Maç İçi Ortak Penaltı Bonusu Sistemi (`pitch.gd`, `ball.gd`):**
+  - Yarı başına en fazla 1 kez tetiklenebilir (`%5` ilk yarı, `%10` ikinci yarı olasılık).
+  - Aktif olduğunda (3.0 saniye boyunca veya gol atılana dek): her iki top `%10` daha hızlı ve `%15` daha zıpçık/esnek (`1.15`), kale genişliği `%10` daha geniş (`1.10`) olur; gol atıldığı anda tüm bonuslar anında sona erer.
+  - Saha üstündeki iki takım kavisli bayrak rozetinin tam ortasına sade, kafa karıştırmayan mini `"PENALTI BONUSU"` / `"PENALTY BONUS"` bilgi etiketi eklendi.
+  - Penaltı bonusu aktifken atılan goller, skorbord altındaki golcü/dakika bildirim bandında gerçek maç skorbordları gibi `(64' pen)` biçiminde işaretlendi.
+- [x] **Bölgeye Sabitlenmiş Elit Kulüp Fiyat & Para Birimi Sistemi (`Global.gd`, `main_menu.gd`):**
+  - Google Play Console'dan `GodotGooglePlayBilling` aracılığıyla gelen `formatted_price`, `price_currency_code` ve `price_amount_micros` değerlerinin oyun içi dil (`TR` vb.) değiştirildiğinde ezilmesi (`+ " TL"` eklenmesi ve `current_lang` tabanlı yedek fiyat seçimi) tamamen kaldırıldı.
+  - Fiyat ve para birimi doğrudan Google Play Store bölgesine (ve faturalandırma bağlantısı öncesi/dışı durumlarda yalnızca `OS.get_locale()` + saat dilimi kaynaklı cihaz bölgesine) kilitlendi; dil değişse bile fiyat ve para birimi oyuncunun bölgesine sabit kalır.
+  - Mağaza sayfası Elit Kulüp bloğuna ve satın alma onay penceresine oyuncunun bölgesine sabit fiyat + ISO para birimi rozeti (`₺49,99 • TRY`, `$0.99 • USD`, `€0,99 • EUR` vb.) ve dil uyumlu satın alma butonu eklendi; Play Billing doğrulanmış bölgesel fiyatı soğuk açılışlar için `user://progression.json` içinde bölge etiketiyle önbelleklendi.
+
+
+
 

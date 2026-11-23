@@ -7,6 +7,7 @@ var goal_music_player: AudioStreamPlayer
 var wheel_tick_players: Array[AudioStreamPlayer] = []
 var wheel_tick_idx: int = 0
 var prize_win_player: AudioStreamPlayer
+var reward_collect_player: AudioStreamPlayer
 var shop_buy_player: AudioStreamPlayer
 var ui_error_player: AudioStreamPlayer
 var tab_whoosh_player: AudioStreamPlayer
@@ -82,6 +83,9 @@ var interstitial_return_counter: int = 0
 var came_from_completed_match: bool = false
 var is_premium: bool = false
 var premium_price_formatted: String = ""
+var premium_price_currency_code: String = ""
+var premium_price_amount_micros: int = 0
+var premium_price_source_region: String = ""
 var home_selected: bool = true
 var away_selected: bool = true
 var last_selected_league_home: int = 1
@@ -89,8 +93,8 @@ var last_selected_league_away: int = 1
 var custom_player_names: Dictionary = {}
 var unlocked_achievements: Array = []
 var favorite_team_goals_scored: int = 0
-const CURRENT_GAME_VERSION: String = "1.1.6"
-const CURRENT_VERSION_CODE: int = 37
+const CURRENT_GAME_VERSION: String = "1.1.7"
+const CURRENT_VERSION_CODE: int = 38
 const VERSION_CHECK_URL: String = "https://www.ebstudyo.com/api/version.json"
 const PLAY_STORE_URL: String = "https://play.google.com/store/apps/details?id=com.ebstudyo.bolgol"
 var last_tutorial_version: String = ""
@@ -141,17 +145,139 @@ func consume_match_right() -> bool:
 		return true
 	return false
 
+const EUROZONE_REGIONS := [
+	"AD", "AT", "BE", "CY", "DE", "EE", "ES", "FI", "FR", "GR",
+	"HR", "IE", "IT", "LT", "LU", "LV", "MC", "MT", "NL", "PT",
+	"SI", "SK", "SM", "VA"
+]
+
+const REGION_FALLBACK_PRICES := {
+	"TR": {"formatted": "₺49,99", "currency": "TRY"},
+	"GB": {"formatted": "£0.89", "currency": "GBP"},
+	"BR": {"formatted": "R$ 4,90", "currency": "BRL"},
+	"MX": {"formatted": "MX$19.00", "currency": "MXN"},
+	"CA": {"formatted": "CA$1.39", "currency": "CAD"},
+	"AU": {"formatted": "A$1.49", "currency": "AUD"},
+	"NZ": {"formatted": "NZ$1.69", "currency": "NZD"},
+	"JP": {"formatted": "¥150", "currency": "JPY"},
+	"IN": {"formatted": "₹89.00", "currency": "INR"},
+	"PL": {"formatted": "4,99 zł", "currency": "PLN"},
+	"CZ": {"formatted": "25,00 Kč", "currency": "CZK"},
+	"SE": {"formatted": "11,00 kr", "currency": "SEK"},
+	"NO": {"formatted": "11,00 kr", "currency": "NOK"},
+	"DK": {"formatted": "7,50 kr", "currency": "DKK"},
+	"CH": {"formatted": "CHF 1.00", "currency": "CHF"},
+	"LI": {"formatted": "CHF 1.00", "currency": "CHF"},
+	"SA": {"formatted": "SAR 3.99", "currency": "SAR"},
+	"AE": {"formatted": "AED 3.99", "currency": "AED"},
+	"RO": {"formatted": "4,99 lei", "currency": "RON"},
+	"HU": {"formatted": "399 Ft", "currency": "HUF"},
+	"KR": {"formatted": "1,400 KRW", "currency": "KRW"},
+	"RU": {"formatted": "99 RUB", "currency": "RUB"},
+	"UA": {"formatted": "40 UAH", "currency": "UAH"},
+}
+
+const UNSUPPORTED_FONT_CURRENCY_CHARS := "฿₦₩₪₫₱₴₽лв"
+
+func resolve_region_from_locale(locale_str: String, tz_name: String = "") -> String:
+	var norm = locale_str.strip_edges().replace("-", "_")
+	var parts = norm.split("_", false)
+	for i in range(1, parts.size()):
+		var tok = parts[i].strip_edges().to_upper()
+		if tok.length() == 2 and tok >= "AA" and tok <= "ZZ":
+			# Validate strictly A-Z letters
+			var is_alpha = true
+			for ci in range(2):
+				var u = tok.unicode_at(ci)
+				if u < 65 or u > 90:
+					is_alpha = false
+					break
+			if is_alpha:
+				return tok
+	var lang_part = parts[0].to_lower() if parts.size() > 0 else ""
+	var tz_l = tz_name.to_lower()
+	if "turkey" in tz_l or "istanbul" in tz_l or "trt" == tz_l:
+		return "TR"
+	if "london" in tz_l:
+		return "GB"
+	if "tokyo" in tz_l:
+		return "JP"
+	if "seoul" in tz_l:
+		return "KR"
+	if "sao_paulo" in tz_l or "brasilia" in tz_l:
+		return "BR"
+	match lang_part:
+		"tr": return "TR"
+		"it": return "IT"
+		"pt": return "PT"
+		"es": return "ES"
+		"de": return "DE"
+		"fr": return "FR"
+		"nl": return "NL"
+		"pl": return "PL"
+		"ja": return "JP"
+		"ko": return "KR"
+	return "US"
+
+func get_player_region_code() -> String:
+	var tz_info = Time.get_time_zone_from_system()
+	var tz_name = str(tz_info.get("name", "")) if tz_info is Dictionary else ""
+	return resolve_region_from_locale(OS.get_locale(), tz_name)
+
+func get_region_fallback_price_info(region_code: String) -> Dictionary:
+	var rc = region_code.strip_edges().to_upper()
+	if REGION_FALLBACK_PRICES.has(rc):
+		return REGION_FALLBACK_PRICES[rc]
+	if rc in EUROZONE_REGIONS:
+		return {"formatted": "€0,99", "currency": "EUR"}
+	return {"formatted": "$0.99", "currency": "USD"}
+
+func set_play_billing_price(formatted_price: String, currency_code: String = "", amount_micros: int = 0) -> void:
+	var fp = formatted_price.strip_edges()
+	var cc = currency_code.strip_edges().to_upper()
+	if fp == "" and amount_micros <= 0:
+		return
+	if fp == "" and cc != "" and amount_micros > 0:
+		var whole_val = float(amount_micros) / 1000000.0
+		fp = "%.2f %s" % [whole_val, cc]
+	premium_price_formatted = fp
+	premium_price_currency_code = cc
+	premium_price_amount_micros = amount_micros
+	premium_price_source_region = get_player_region_code()
+	save_progression()
+
+func _sanitize_price_for_font(raw_price: String, currency_code: String) -> String:
+	var s = raw_price.strip_edges()
+	if s == "":
+		return ""
+	var has_unsupported = false
+	var cleaned = ""
+	for i in range(s.length()):
+		var ch = s.substr(i, 1)
+		if UNSUPPORTED_FONT_CURRENCY_CHARS.find(ch) != -1:
+			has_unsupported = true
+		else:
+			cleaned += ch
+	if has_unsupported and currency_code != "":
+		cleaned = cleaned.strip_edges()
+		if not cleaned.ends_with(currency_code) and not cleaned.begins_with(currency_code):
+			return (cleaned + " " + currency_code).strip_edges()
+		return cleaned
+	return s
+
+func get_premium_currency_code() -> String:
+	if premium_price_currency_code != "":
+		return premium_price_currency_code
+	var info = get_region_fallback_price_info(get_player_region_code())
+	return str(info.get("currency", "USD"))
+
 func get_formatted_premium_price() -> String:
+	# Strictly region-bound (Google Play Billing product details first, then OS/device region fallback).
+	# Never alter price or currency based on Global.current_lang.
 	if premium_price_formatted != "":
-		var p = premium_price_formatted.replace("₺", "").strip_edges()
-		if current_lang == "TR":
-			return p + " TL" if not p.ends_with("TL") else p
-		return premium_price_formatted
-	if current_lang == "TR":
-		return "49.99 TL"
-	elif current_lang == "ESP" or current_lang == "POR" or current_lang == "ITA":
-		return "0.99 €"
-	return "$0.99"
+		return _sanitize_price_for_font(premium_price_formatted, premium_price_currency_code)
+	var info = get_region_fallback_price_info(get_player_region_code())
+	return str(info.get("formatted", "$0.99"))
 
 func is_skin_unlocked(skin_id: String) -> bool:
 	return is_premium or (skin_id in unlocked_ball_skins)
@@ -886,6 +1012,65 @@ var TEAMS = {
 	"CELTIC SC":      {"colors": [Color8(0, 128, 0), Color8(255, 255, 255)],   "short": "CLT", "league": "WORLD", "type": "club"}
 }
 
+# Localized display names for the 46 national teams only (clubs stay canonical across all languages).
+const NATIONAL_NAMES = {
+	"TÜRKİYE":         {"TR": "TÜRKİYE",         "ENG": "TURKEY",         "ESP": "TURQUÍA",        "POR": "TURQUIA",        "ITA": "TURCHIA"},
+	"ARJANTİN":        {"TR": "ARJANTİN",        "ENG": "ARGENTINA",      "ESP": "ARGENTINA",      "POR": "ARGENTINA",      "ITA": "ARGENTINA"},
+	"PORTEKİZ":        {"TR": "PORTEKİZ",        "ENG": "PORTUGAL",       "ESP": "PORTUGAL",       "POR": "PORTUGAL",       "ITA": "PORTOGALLO"},
+	"İNGİLTERE":       {"TR": "İNGİLTERE",       "ENG": "ENGLAND",        "ESP": "INGLATERRA",     "POR": "INGLATERRA",     "ITA": "INGHILTERRA"},
+	"ABD":             {"TR": "ABD",             "ENG": "USA",            "ESP": "ESTADOS UNIDOS", "POR": "ESTADOS UNIDOS", "ITA": "USA"},
+	"İTALYA":          {"TR": "İTALYA",          "ENG": "ITALY",          "ESP": "ITALIA",         "POR": "ITÁLIA",         "ITA": "ITALIA"},
+	"FRANSA":          {"TR": "FRANSA",          "ENG": "FRANCE",         "ESP": "FRANCIA",        "POR": "FRANÇA",         "ITA": "FRANCIA"},
+	"İSPANYA":         {"TR": "İSPANYA",         "ENG": "SPAIN",          "ESP": "ESPAÑA",         "POR": "ESPANHA",        "ITA": "SPAGNA"},
+	"ALMANYA":         {"TR": "ALMANYA",         "ENG": "GERMANY",        "ESP": "ALEMANIA",       "POR": "ALEMANHA",       "ITA": "GERMANIA"},
+	"BELÇİKA":         {"TR": "BELÇİKA",         "ENG": "BELGIUM",        "ESP": "BÉLGICA",        "POR": "BÉLGICA",        "ITA": "BELGIO"},
+	"HOLLANDA":        {"TR": "HOLLANDA",        "ENG": "NETHERLANDS",    "ESP": "PAÍSES BAJOS",   "POR": "PAÍSES BAIXOS",  "ITA": "PAESI BASSI"},
+	"HIRVATİSTAN":     {"TR": "HIRVATİSTAN",     "ENG": "CROATIA",        "ESP": "CROACIA",        "POR": "CROÁCIA",        "ITA": "CROAZIA"},
+	"DANİMARKA":       {"TR": "DANİMARKA",       "ENG": "DENMARK",        "ESP": "DINAMARCA",      "POR": "DINAMARCA",      "ITA": "DANIMARCA"},
+	"İSVİÇRE":         {"TR": "İSVİÇRE",         "ENG": "SWITZERLAND",    "ESP": "SUIZA",          "POR": "SUÍÇA",          "ITA": "SVIZZERA"},
+	"AVUSTURYA":       {"TR": "AVUSTURYA",       "ENG": "AUSTRIA",        "ESP": "AUSTRIA",        "POR": "ÁUSTRIA",        "ITA": "AUSTRIA"},
+	"POLONYA":         {"TR": "POLONYA",         "ENG": "POLAND",         "ESP": "POLONIA",        "POR": "POLÓNIA",        "ITA": "POLONIA"},
+	"SIRBİSTAN":       {"TR": "SIRBİSTAN",       "ENG": "SERBIA",         "ESP": "SERBIA",         "POR": "SÉRVIA",         "ITA": "SERBIA"},
+	"ÇEKYA":           {"TR": "ÇEKYA",           "ENG": "CZECHIA",        "ESP": "CHEQUIA",        "POR": "CHÉQUIA",        "ITA": "CECHIA"},
+	"İSKOÇYA":         {"TR": "İSKOÇYA",         "ENG": "SCOTLAND",       "ESP": "ESCOCIA",        "POR": "ESCÓCIA",        "ITA": "SCOZIA"},
+	"NORVEÇ":          {"TR": "NORVEÇ",          "ENG": "NORWAY",         "ESP": "NORUEGA",        "POR": "NORUEGA",        "ITA": "NORVEGIA"},
+	"BREZİLYA":        {"TR": "BREZİLYA",        "ENG": "BRAZIL",         "ESP": "BRASIL",         "POR": "BRASIL",         "ITA": "BRASILE"},
+	"URUGUAY":         {"TR": "URUGUAY",         "ENG": "URUGUAY",        "ESP": "URUGUAY",        "POR": "URUGUAI",        "ITA": "URUGUAY"},
+	"KOLOMBİYA":       {"TR": "KOLOMBİYA",       "ENG": "COLOMBIA",       "ESP": "COLOMBIA",       "POR": "COLÔMBIA",       "ITA": "COLOMBIA"},
+	"ŞİLİ":            {"TR": "ŞİLİ",            "ENG": "CHILE",          "ESP": "CHILE",          "POR": "CHILE",          "ITA": "CILE"},
+	"PARAGUAY":        {"TR": "PARAGUAY",        "ENG": "PARAGUAY",       "ESP": "PARAGUAY",       "POR": "PARAGUAI",       "ITA": "PARAGUAY"},
+	"EKVADOR":         {"TR": "EKVADOR",         "ENG": "ECUADOR",        "ESP": "ECUADOR",        "POR": "EQUADOR",        "ITA": "ECUADOR"},
+	"NİJERYA":         {"TR": "NİJERYA",         "ENG": "NIGERIA",        "ESP": "NIGERIA",        "POR": "NIGÉRIA",        "ITA": "NIGERIA"},
+	"FAS":             {"TR": "FAS",             "ENG": "MOROCCO",        "ESP": "MARRUECOS",      "POR": "MARROCOS",       "ITA": "MAROCCO"},
+	"MISIR":           {"TR": "MISIR",           "ENG": "EGYPT",          "ESP": "EGIPTO",         "POR": "EGITO",          "ITA": "EGITTO"},
+	"SENEGAL":         {"TR": "SENEGAL",         "ENG": "SENEGAL",        "ESP": "SENEGAL",        "POR": "SENEGAL",        "ITA": "SENEGAL"},
+	"CEZAYİR":         {"TR": "CEZAYİR",         "ENG": "ALGERIA",        "ESP": "ARGELIA",        "POR": "ARGÉLIA",        "ITA": "ALGERIA"},
+	"KAMERUN":         {"TR": "KAMERUN",         "ENG": "CAMEROON",       "ESP": "CAMERÚN",        "POR": "CAMARÕES",       "ITA": "CAMERUN"},
+	"GANA":            {"TR": "GANA",            "ENG": "GHANA",          "ESP": "GHANA",          "POR": "GANA",           "ITA": "GHANA"},
+	"JAPONYA":         {"TR": "JAPONYA",         "ENG": "JAPAN",          "ESP": "JAPÓN",          "POR": "JAPÃO",          "ITA": "GIAPPONE"},
+	"GÜNEY KORE":      {"TR": "GÜNEY KORE",      "ENG": "SOUTH KOREA",    "ESP": "COREA DEL SUR",  "POR": "COREIA DO SUL",  "ITA": "COREA DEL SUD"},
+	"SUUDİ ARABİSTAN": {"TR": "SUUDİ ARABİSTAN", "ENG": "SAUDI ARABIA",   "ESP": "ARABIA SAUDITA", "POR": "ARÁBIA SAUDITA", "ITA": "ARABIA SAUDITA"},
+	"İRAN":            {"TR": "İRAN",            "ENG": "IRAN",           "ESP": "IRÁN",           "POR": "IRÃO",           "ITA": "IRAN"},
+	"AVUSTRALYA":      {"TR": "AVUSTRALYA",      "ENG": "AUSTRALIA",      "ESP": "AUSTRALIA",      "POR": "AUSTRÁLIA",      "ITA": "AUSTRALIA"},
+	"KATAR":           {"TR": "KATAR",           "ENG": "QATAR",          "ESP": "CATAR",          "POR": "CATAR",          "ITA": "QATAR"},
+	"MEKSİKA":         {"TR": "MEKSİKA",         "ENG": "MEXICO",         "ESP": "MÉXICO",         "POR": "MÉXICO",         "ITA": "MESSICO"},
+	"KANADA":          {"TR": "KANADA",          "ENG": "CANADA",         "ESP": "CANADÁ",         "POR": "CANADÁ",         "ITA": "CANADA"},
+	"GÜRCİSTAN":       {"TR": "GÜRCİSTAN",       "ENG": "GEORGIA",        "ESP": "GEORGIA",        "POR": "GEÓRGIA",        "ITA": "GEORGIA"},
+	"İSVEÇ":           {"TR": "İSVEÇ",           "ENG": "SWEDEN",         "ESP": "SUECIA",         "POR": "SUÉCIA",         "ITA": "SVEZIA"},
+	"YUNANİSTAN":      {"TR": "YUNANİSTAN",      "ENG": "GREECE",         "ESP": "GRECIA",         "POR": "GRÉCIA",         "ITA": "GRECIA"},
+	"ROMANYA":         {"TR": "ROMANYA",         "ENG": "ROMANIA",        "ESP": "RUMANIA",        "POR": "ROMÉNIA",        "ITA": "ROMANIA"},
+	"GALLER":          {"TR": "GALLER",          "ENG": "WALES",          "ESP": "GALES",          "POR": "PAÍS DE GALES",  "ITA": "GALLES"}
+}
+
+func get_team_display_name(team_key: String, lang: String = "") -> String:
+	if team_key == "":
+		return ""
+	var target_lang = lang if lang != "" else current_lang
+	if NATIONAL_NAMES.has(team_key):
+		var names_dict: Dictionary = NATIONAL_NAMES[team_key]
+		return String(names_dict.get(target_lang, names_dict.get("ENG", team_key)))
+	return team_key
+
 func get_team_badge_texture(team_name: String) -> Texture2D:
 	if TEAM_BADGES.has(team_name):
 		return TEAM_BADGES[team_name]
@@ -984,6 +1169,10 @@ func _ready():
 	prize_win_player.stream = preload("res://prize_win.ogg")
 	add_child(prize_win_player)
 
+	reward_collect_player = AudioStreamPlayer.new()
+	reward_collect_player.stream = preload("res://reward_collect.ogg")
+	add_child(reward_collect_player)
+
 	shop_buy_player = AudioStreamPlayer.new()
 	shop_buy_player.stream = preload("res://shop_buy.ogg")
 	add_child(shop_buy_player)
@@ -1066,6 +1255,7 @@ func _update_sfx_volumes():
 	for wt in wheel_tick_players:
 		_apply_player_linear_vol(wt, get_sfx_linear_volume(master_vol, sfx_v, 0.75))
 	_apply_player_linear_vol(prize_win_player, get_sfx_linear_volume(master_vol, sfx_v, 0.90))
+	_apply_player_linear_vol(reward_collect_player, get_sfx_linear_volume(master_vol, sfx_v, 0.92))
 	_apply_player_linear_vol(shop_buy_player, get_sfx_linear_volume(master_vol, sfx_v, 0.85))
 	_apply_player_linear_vol(ui_error_player, get_sfx_linear_volume(master_vol, sfx_v, 0.80))
 	_apply_player_linear_vol(tab_whoosh_player, get_sfx_linear_volume(master_vol, sfx_v, 0.55))
@@ -1091,6 +1281,15 @@ func play_prize_win():
 	if prize_win_player.playing:
 		prize_win_player.stop()
 	prize_win_player.play()
+
+func play_reward_collect():
+	var target_vol = get_sfx_linear_volume(master_vol, vol_settings.get("sfx", 0.75), 0.92)
+	if target_vol <= 0.01 or not is_instance_valid(reward_collect_player):
+		return
+	reward_collect_player.volume_db = linear_to_db(clamp(target_vol, 0.0001, 1.0))
+	if reward_collect_player.playing:
+		reward_collect_player.stop()
+	reward_collect_player.play()
 
 func play_shop_buy():
 	var target_vol = get_sfx_linear_volume(master_vol, vol_settings.get("sfx", 0.75), 0.85)
@@ -1330,7 +1529,11 @@ func save_progression():
 			"current_theme": current_theme,
 			"shake_enabled": shake_enabled,
 			"match_duration": match_duration,
-			"last_tutorial_version": last_tutorial_version
+			"last_tutorial_version": last_tutorial_version,
+			"premium_price_formatted": premium_price_formatted,
+			"premium_price_currency_code": premium_price_currency_code,
+			"premium_price_amount_micros": premium_price_amount_micros,
+			"premium_price_source_region": premium_price_source_region
 		}
 		var json_str = JSON.stringify(data)
 		var hash_val = generate_save_hash(json_str)
@@ -1410,7 +1613,14 @@ func load_progression():
 			if data_to_load.has("shake_enabled"): shake_enabled = bool(data_to_load["shake_enabled"])
 			if data_to_load.has("match_duration"): match_duration = int(data_to_load["match_duration"])
 			if data_to_load.has("last_tutorial_version"): last_tutorial_version = str(data_to_load["last_tutorial_version"])
+			var saved_price_region = str(data_to_load.get("premium_price_source_region", "")).strip_edges().to_upper()
+			if saved_price_region != "" and saved_price_region == get_player_region_code():
+				premium_price_formatted = str(data_to_load.get("premium_price_formatted", ""))
+				premium_price_currency_code = str(data_to_load.get("premium_price_currency_code", ""))
+				premium_price_amount_micros = int(data_to_load.get("premium_price_amount_micros", 0))
+				premium_price_source_region = saved_price_region
 		check_daily_reset()
+		_sync_daily_quests_from_pool()
 
 
 func check_daily_reset():
@@ -1425,6 +1635,38 @@ func check_daily_reset():
 		save_progression()
 	elif daily_quests.is_empty():
 		generate_daily_quests()
+		save_progression()
+
+func _sync_daily_quests_from_pool():
+	if daily_quests.is_empty():
+		return
+	var templates_by_id = {}
+	for diff_key in QUEST_POOL:
+		for tpl in QUEST_POOL[diff_key]:
+			templates_by_id[tpl["id"]] = tpl
+	var fav = favorite_team if favorite_team != "" else (home_team_name if home_team_name != "" else "GALATA FK")
+	var captain = get_active_custom_player_name()
+	var changed = false
+	for q in daily_quests:
+		var q_id = q.get("id", "")
+		if templates_by_id.has(q_id):
+			var tpl = templates_by_id[q_id]
+			var new_reward = int(tpl.get("reward", 40))
+			if not q.get("claimed", false) and int(q.get("reward", 0)) != new_reward:
+				q["reward"] = new_reward
+				changed = true
+			var desc_dict = tpl.get("desc", {})
+			var formatted_desc = {}
+			for lang_key in desc_dict:
+				var s = String(desc_dict[lang_key])
+				s = s.replace("{fav}", get_team_display_name(fav, lang_key))
+				s = s.replace("{captain}", captain)
+				s = s.replace("{target}", str(q.get("target", 1)))
+				formatted_desc[lang_key] = s
+			if q.get("desc", {}) != formatted_desc:
+				q["desc"] = formatted_desc
+				changed = true
+	if changed:
 		save_progression()
 
 func has_custom_captain_configured() -> bool:
@@ -1465,7 +1707,7 @@ const QUEST_POOL = {
 			"id": "easy_play_1",
 			"type": "play_matches",
 			"target": 1,
-			"reward": 25,
+			"reward": 35,
 			"desc": {
 				"TR": "1 maç oyna",
 				"ENG": "Play 1 match",
@@ -1478,7 +1720,7 @@ const QUEST_POOL = {
 			"id": "easy_play_2",
 			"type": "play_matches",
 			"target": 2,
-			"reward": 30,
+			"reward": 40,
 			"desc": {
 				"TR": "2 maç oyna",
 				"ENG": "Play 2 matches",
@@ -1491,7 +1733,7 @@ const QUEST_POOL = {
 			"id": "easy_wheel_spin",
 			"type": "wheel_spin",
 			"target": 1,
-			"reward": 25,
+			"reward": 35,
 			"desc": {
 				"TR": "Şans çarkını 1 kez çevir",
 				"ENG": "Spin the lucky wheel 1 time",
@@ -1504,7 +1746,7 @@ const QUEST_POOL = {
 			"id": "easy_fav_goal",
 			"type": "fav_goals",
 			"target": 1,
-			"reward": 30,
+			"reward": 40,
 			"desc": {
 				"TR": "{fav} ile 1 gol at",
 				"ENG": "Score 1 goal with {fav}",
@@ -1517,7 +1759,7 @@ const QUEST_POOL = {
 			"id": "easy_captain_goal",
 			"type": "captain_goals",
 			"target": 1,
-			"reward": 30,
+			"reward": 40,
 			"desc": {
 				"TR": "Kaptan oyuncun ({captain}) ile 1 gol at",
 				"ENG": "Score 1 goal with your captain ({captain})",
@@ -1530,7 +1772,7 @@ const QUEST_POOL = {
 			"id": "easy_win_1",
 			"type": "win_match",
 			"target": 1,
-			"reward": 35,
+			"reward": 45,
 			"desc": {
 				"TR": "1 maç kazan",
 				"ENG": "Win 1 match",
@@ -1543,7 +1785,7 @@ const QUEST_POOL = {
 			"id": "easy_score_2",
 			"type": "total_goals",
 			"target": 2,
-			"reward": 30,
+			"reward": 40,
 			"desc": {
 				"TR": "Toplam 2 gol at",
 				"ENG": "Score 2 total goals",
@@ -1558,7 +1800,7 @@ const QUEST_POOL = {
 			"id": "med_fav_win",
 			"type": "fav_win",
 			"target": 1,
-			"reward": 45,
+			"reward": 60,
 			"desc": {
 				"TR": "{fav} ile 1 maç kazan",
 				"ENG": "Win 1 match with {fav}",
@@ -1571,7 +1813,7 @@ const QUEST_POOL = {
 			"id": "med_captain_goals_2",
 			"type": "captain_goals",
 			"target": 2,
-			"reward": 45,
+			"reward": 60,
 			"desc": {
 				"TR": "Kaptan oyuncun ({captain}) ile 2 gol at",
 				"ENG": "Score 2 goals with your captain ({captain})",
@@ -1584,7 +1826,7 @@ const QUEST_POOL = {
 			"id": "med_win_margin_2",
 			"type": "win_margin",
 			"target": 2,
-			"reward": 45,
+			"reward": 60,
 			"desc": {
 				"TR": "En az 2 farkla maç kazan",
 				"ENG": "Win a match by at least 2 goals margin",
@@ -1597,7 +1839,7 @@ const QUEST_POOL = {
 			"id": "med_goals_in_match_3",
 			"type": "goals_in_match",
 			"target": 3,
-			"reward": 40,
+			"reward": 50,
 			"desc": {
 				"TR": "Bir maçta 3 veya daha fazla gol at",
 				"ENG": "Score 3 or more goals in a single match",
@@ -1610,7 +1852,7 @@ const QUEST_POOL = {
 			"id": "med_fav_goals_3",
 			"type": "fav_goals",
 			"target": 3,
-			"reward": 45,
+			"reward": 60,
 			"desc": {
 				"TR": "{fav} ile toplam 3 gol at",
 				"ENG": "Score 3 total goals with {fav}",
@@ -1623,7 +1865,7 @@ const QUEST_POOL = {
 			"id": "med_clean_sheet",
 			"type": "clean_sheet",
 			"target": 1,
-			"reward": 50,
+			"reward": 65,
 			"desc": {
 				"TR": "Gol yemeden maç kazan (Kalesini Koru)",
 				"ENG": "Win a match without conceding (Clean Sheet)",
@@ -1636,7 +1878,7 @@ const QUEST_POOL = {
 			"id": "med_win_2",
 			"type": "win_match",
 			"target": 2,
-			"reward": 50,
+			"reward": 65,
 			"desc": {
 				"TR": "2 maç kazan",
 				"ENG": "Win 2 matches",
@@ -1651,7 +1893,7 @@ const QUEST_POOL = {
 			"id": "hard_comeback_win",
 			"type": "comeback_win",
 			"target": 1,
-			"reward": 65,
+			"reward": 85,
 			"desc": {
 				"TR": "Favori takımınla geriye düştüğün maçı çevir ve kazan (Geri Dönüş)",
 				"ENG": "Win a match with your favorite team after trailing behind (Comeback)",
@@ -1664,7 +1906,7 @@ const QUEST_POOL = {
 			"id": "hard_goals_in_match_4",
 			"type": "goals_in_match",
 			"target": 4,
-			"reward": 60,
+			"reward": 75,
 			"desc": {
 				"TR": "Bir maçta 4 veya daha fazla gol at",
 				"ENG": "Score 4 or more goals in a single match",
@@ -1677,7 +1919,7 @@ const QUEST_POOL = {
 			"id": "hard_goals_in_match_5",
 			"type": "goals_in_match",
 			"target": 5,
-			"reward": 75,
+			"reward": 95,
 			"desc": {
 				"TR": "Bir maçta 5 veya daha fazla gol at (Gol Yağmuru)",
 				"ENG": "Score 5 or more goals in a single match (Goal Rain)",
@@ -1690,7 +1932,7 @@ const QUEST_POOL = {
 			"id": "hard_captain_hat_trick",
 			"type": "captain_goals",
 			"target": 3,
-			"reward": 70,
+			"reward": 90,
 			"desc": {
 				"TR": "Kaptan oyuncun ({captain}) ile 3 gol at (Hat-Trick)",
 				"ENG": "Score a hat-trick (3 goals) with your captain ({captain})",
@@ -1703,7 +1945,7 @@ const QUEST_POOL = {
 			"id": "hard_win_margin_3",
 			"type": "win_margin",
 			"target": 3,
-			"reward": 70,
+			"reward": 90,
 			"desc": {
 				"TR": "En az 3 farkla maç kazan (Ezici Galibiyet)",
 				"ENG": "Win a match by at least 3 goals margin (Dominant Win)",
@@ -1716,7 +1958,7 @@ const QUEST_POOL = {
 			"id": "hard_clean_sheet_margin_2",
 			"type": "clean_sheet_margin",
 			"target": 2,
-			"reward": 65,
+			"reward": 85,
 			"desc": {
 				"TR": "Gol yemeden en az 2 farkla maç kazan",
 				"ENG": "Win by at least 2 goals with a clean sheet",
@@ -1729,7 +1971,7 @@ const QUEST_POOL = {
 			"id": "hard_fav_win_2",
 			"type": "fav_win",
 			"target": 2,
-			"reward": 75,
+			"reward": 95,
 			"desc": {
 				"TR": "{fav} ile 2 maç kazan",
 				"ENG": "Win 2 matches with {fav}",
@@ -1784,7 +2026,7 @@ func generate_daily_quests():
 		var desc_dict = q.get("desc", {})
 		for lang_key in desc_dict:
 			var s = String(desc_dict[lang_key])
-			s = s.replace("{fav}", fav)
+			s = s.replace("{fav}", get_team_display_name(fav, lang_key))
 			s = s.replace("{captain}", captain)
 			s = s.replace("{target}", str(q.get("target", 1)))
 			formatted_desc[lang_key] = s
@@ -1940,7 +2182,7 @@ func claim_quest_reward(quest_id: String) -> int:
 	for q in daily_quests:
 		if q["id"] == quest_id and not q.get("claimed", false) and int(q.get("progress", 0)) >= int(q.get("target", 1)):
 			q["claimed"] = true
-			var r = int(q.get("reward", 30))
+			var r = int(q.get("reward", 40))
 			ad_credits += r
 			save_progression()
 			return r
