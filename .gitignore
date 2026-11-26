@@ -7,6 +7,7 @@ build/
 *.idsig
 *.bak
 *.zip
+store_assets/itchio_build/pkg/
 tools/service_account.json
 tools/automation_config.json
 tools/automation_result.json

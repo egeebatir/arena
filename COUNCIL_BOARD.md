@@ -423,21 +423,22 @@
   - `scripts/schedule_live_broadcast.py` ile yarınki UCL gecesi (`Galatasaray vs Feyenoord`, `k1pstPcJfyQ`) için kapaklı planlı canlı yayın oluşturuldu.
   - `config/community_schedule.json` v2.0.0'a yükseltildi ve `scripts/community_post_manager.py` ile 5 adet yayına hazır topluluk anketi/gönderisi (`output/community_posts_ready.md`) üretildi.
 
-### 2026-11-26: Faz 2 Organik Görünürlük, 8-Bölge ASO Paketi, Başlıklı Mağaza Görselleri, Programatik Maç Simülasyonu SEO & itch.io Dağıtım Kiti (Yerel Hazırlık — Dry-Run Onaylı)
+### 2026-11-26: Faz 2 Organik Görünürlük, 8-Bölge ASO Paketi, Başlıklı Mağaza Görselleri, Tam 5-Dil Web Çevirisi, 16 Derbi SEO Sayfası & itch.io Paketi (CANLI YAYINDA)
 - [x] **Canlı Play Console Mağaza Denetimi & Kritik Tespit:**
   - Canlı Play Console üzerinde yalnızca `tr-TR` ve `en-IN` listelemelerinin bulunduğu ve her ikisinde de tek cümlelik *"şu an geliştirme ve test aşamasındadır"* yer tutucu metninin kaldığı tespit edildi; `production` kanalı henüz boş olduğundan (`alpha` -> `38 / 1.1.7`), `webfutbol` üzerindeki kapalı beta akışı bozulmadan korundu.
-- [x] **8 Bölge / 5 Dil Google Play ASO Paketi (`store_assets/aso_listings.json` & `tools/play_console_deploy.py`):**
-  - `tr-TR`, `en-US`, `en-GB`, `en-IN`, `es-ES`, `es-419`, `pt-BR` ve `it-IT` için karakter sınırlarına (`Başlık <=30`, `Kısa <=80`, `Uzun <=4000`), Antislop kurallarına (sıfır `—`, sıfır yapay buzzword) ve gerçek oyun verilerine (`232` takım, `46` milli takım, `8` lig) tam uyumlu mağaza metinleri üretildi; her dilde `ebstudyo.com/liderlik-tablosu`, `/simulasyon` ve `/canli` web köprüleri eklendi.
+- [x] **8 Bölge / 5 Dil Google Play ASO Paketi (`store_assets/aso_listings.json` & `tools/play_console_deploy.py` — Canlıya Alındı, Edit ID: `07096435456611849420`):**
+  - `tr-TR`, `en-US`, `en-GB`, `en-IN`, `es-ES`, `es-419`, `pt-BR` ve `it-IT` için karakter sınırlarına (`Başlık <=30`, `Kısa <=80`, `Uzun <=4000`), Antislop kurallarına (sıfır `—`, sıfır yapay buzzword) ve gerçek oyun verilerine (`232` takım, `46` milli takım, `8` lig) tam uyumlu mağaza metinleri üretildi ve Play Console üzerinde yayınlandı; her dilde `ebstudyo.com/liderlik-tablosu`, `/simulasyon` ve `/canli` web köprüleri eklendi.
   - `tools/play_console_deploy.py` içine `--action fetch_listings`, `--action update_listings` ve `--action update_screenshots_batch` (`--dry-run` korumalı) eklendi.
-- [x] **48 Adet Başlıklı 1080x1920 Mağaza Ekran Görüntüsü (`tools/generate_aso_screenshots.py`):**
-  - 8 bölgenin tamamı için 6'şar adet yüksek kontrastlı (WCAG AAA `#FFFFFF` ve `#4ADE80` / `#0B1218`) 1080x1920 dikey mağaza görseli `store_assets/screenshots_captioned/` altında üretildi.
+- [x] **48 Adet Başlıklı 1080x1920 Mağaza Ekran Görüntüsü (`tools/generate_aso_screenshots.py` — Canlıya Alındı, Edit ID: `14615764418492851754`):**
+  - 8 bölgenin tamamı için 6'şar adet yüksek kontrastlı (WCAG AAA `#FFFFFF` ve `#4ADE80` / `#0B1218`) 1080x1920 dikey mağaza görseli `store_assets/screenshots_captioned/` altında üretildi ve Google Play Console'a yüklendi.
   - Mağaza dönüşüm oranını (CVR) artırmak üzere ilk sıralara canlı saha aksiyonu alındı (`tr-TR` için `FEN vs GAL` #1; küresel bölgeler için `PSG vs RMA` #1 ve `LIV vs RMA` #2).
-- [x] **Web GA4 + Play Store UTM Huni Telemetrisi & 16 Programatik Derbi SEO Sayfası (`webfutbol`):**
-  - `bol-gol-futbol/index.html` ve `canli/index.html` sayfalarında eksik olan `G-W5T3VVF16F` GA4 etiketi eklendi; `assets/redesign/site.js` içine otomatik Play Store `referrer` UTM etiketleme, `BOLGOL_RELEASE_STAGE` bayrağı ve GA4 dönüşüm olayları (`click_google_play`, `start_web_game`, `submit_beta_email`, `run_quick_sim`, `share_matchup`) bağlandı.
-  - Ortak `assets/redesign/simulator.js` modülü (`?h=...&a=...` derin link ve tek tık paylaşım destekli) ve `tools/generate_matchup_pages.py` ile 8 Türkçe + 8 Küresel yüksek aranma hacimli statik derbi/milli maç simülasyon sayfası (`/simulasyon/galatasaray-fenerbahce/`, `/simulasyon/real-madrid-barcelona/` vb.) üretildi; `sitemap.xml` `/canli/` dahil **31 URL**'ye çıkarıldı.
+- [x] **Tam 5-Dil (`TR, ENG, ESP, POR, ITA`) Web Dil Seçici Onarımı, GA4 + UTM Telemetrisi & 16 Derbi SEO Sayfası (`webfutbol` — `ebstudyo.com`'da Yayında):**
+  - Sitedeki alt sayfaların yalnızca üst menü/footer çevirisi yapıp gövde açıklamalarını Türkçe bıraktığı kök sorun giderildi: `lang.js`, `assets/redesign/i18n-home.js` (`391` aktif anahtar x `5` dil), `assets/redesign/simulator.js` (`46` milli takım 5 dil çevirisi + anlık `eb:langchange` güncellemesi) ve `canli/index.html` (yeni 5-dilli açılır menü + dinamik skorbord/kuyruk çevirisi) dahil **31 HTML sayfasının tamamı** %100 5 dile çevrildi.
+  - `bol-gol-futbol/index.html`, `simulasyon/index.html` ve `canli/index.html` sayfalarında eksik olan `G-W5T3VVF16F` GA4 etiketi eklendi; `assets/redesign/site.js` içine otomatik Play Store `referrer` UTM etiketleme, `BOLGOL_RELEASE_STAGE` bayrağı ve GA4 dönüşüm olayları bağlandı.
+  - `tools/generate_matchup_pages.py` ile 16 yüksek aranma hacimli derbi/milli maç simülasyon sayfası 5 dilli dil seçici ve sözlüklerle üretildi; `sitemap.xml` `/canli/` dahil **31 URL** olarak `ebstudyo.com`'a deploy edildi.
 - [x] **Sıfır Maliyetli itch.io & Web Portal Paketi (`tools/build_itchio_package.py` & `store_assets/portal_kit_itchio.md`):**
   - Mevcut WASM derlemesinden `ensureCrossOriginIsolationHeaders: false` uyumlu, dikey çerçeveli ve `ebstudyo.com` + Google Play üst bar bağlantılı `bol_gol_futbol_itchio_web.zip` (30.2 MB) ve `630x500` kapak görseli üretildi.
-- [x] **Adversarial QA Doğrulamaları:** `tests/test_backend_logic.py`, `tests/test_aso_listings.py`, `tests/test_visibility_seo_funnel.py` ve Node.js JS sözdizimi kontrolleri %100 PASS (Canlı yayınlama kullanıcı onayı bekliyor).
+- [x] **Adversarial QA Doğrulamaları:** 31 sayfalık 5-dil DOM/VM geçiş testi (`0` hata), `tests/test_backend_logic.py`, `tests/test_aso_listings.py`, `tests/test_visibility_seo_funnel.py`, canlı Play Console `fetch_listings` ve canlı `ebstudyo.com` HTTP doğrulamaları %100 PASS.
 
 
 ### 2026-11-26: Web (`webfutbol` / `ebstudyo.com`) Core Web Vitals, Erişilebilirlik & Lighthouse Optimizasyonu
