@@ -48,6 +48,9 @@
 7. **📦 Sürüm & Dağıtım Bütünlük Lideri (`version_release_controller`):**
    - Yeni bir versiyon üretildiğinde 7 halkayı (Presets, Schema Migration, Web Badges, WASM Build, Automation Links, Release Notes, Git Tags) denetler ve senkronize eder.
 
+8. **📣 Genel Sosyal Medya, Topluluk & Büyüme Direktörü (`social_media_director` — `.agents/council/11_social_media_director.md`):**
+   - `EB Stüdyo (TR)`, `EB Studio (EN)`, TikTok ve Instagram Reels genel büyüme, SEO/hashtag otopsisi, topluluk anketleri, canlı yayın programlama ve video otomasyonu optimizasyonunu yönetir.
+
 ---
 
 ## 📊 GÜNCEL PROJE DURUMU VE SON GELİŞMELER (2026-09-24)
@@ -400,6 +403,39 @@
   - Google Play Console'dan `GodotGooglePlayBilling` aracılığıyla gelen `formatted_price`, `price_currency_code` ve `price_amount_micros` değerlerinin oyun içi dil (`TR` vb.) değiştirildiğinde ezilmesi (`+ " TL"` eklenmesi ve `current_lang` tabanlı yedek fiyat seçimi) tamamen kaldırıldı.
   - Fiyat ve para birimi doğrudan Google Play Store bölgesine (ve faturalandırma bağlantısı öncesi/dışı durumlarda yalnızca `OS.get_locale()` + saat dilimi kaynaklı cihaz bölgesine) kilitlendi; dil değişse bile fiyat ve para birimi oyuncunun bölgesine sabit kalır.
   - Mağaza sayfası Elit Kulüp bloğuna ve satın alma onay penceresine oyuncunun bölgesine sabit fiyat + ISO para birimi rozeti (`₺49,99 • TRY`, `$0.99 • USD`, `€0,99 • EUR` vb.) ve dil uyumlu satın alma butonu eklendi; Play Billing doğrulanmış bölgesel fiyatı soğuk açılışlar için `user://progression.json` içinde bölge etiketiyle önbelleklendi.
+
+### 2026-11-23: EB Stüdyo (TR) Kanal Otopsisi, Görsel Kimlik Yenileme, Viral Formül v2 & Sosyal Medya Subagent'ı
+- [x] **Derin Kanal Otopsisi (`futbol_automation/scripts/channel_deep_audit.py`):**
+  - 143 herkese açık video analiz edildi (`output/channel_audit_tr.md`, `output/channel_audit_tr.json`).
+  - `<500` izlenme alan 16 futbol Shorts'unun kök nedenleri doğrulandı: Ekim videolarındaki `{YABANCI/İKİNCİL OYUNCU} MAÇI ÇÖZDÜ!` başlık sırası mobilde kulüp adını ilk 40 karakterin dışına itti, 42-44s uzun süreler retention'ı düşürdü ve TR kanalına yabancı alt/orta eşleşmeler eklendi.
+  - Kazananlar (`2000+`, ort. 4.911 izlenme, max 26.353): Ortalama `36.8s` süre, takım/stadyum/gol draması ilk 35 karakterde, `#maçözeti`, `#futbol`, `#goller`, `#bolgol`, `#shorts` SEO uyumu.
+- [x] **500 İzlenme Altı Video ve Eski Çalma Listesi Temizliği (`scripts/unlist_underperforming.py`):**
+  - Yedek alınarak (`config/unlisted_backup_20261123.json`) canlı yayın tekrarı (`v0Hccf6Hrno`) hariç `<500` izlenen **16 video** ve 6 futbol dışı eski çalma listesi (`Kediler`, `Kısa Hikayeler` vb.) `unlisted` yapıldı; kanalın yüksek izlenmeli mirası korunurken vitrin %100 **Bol Gol Futbol** odağına alındı.
+- [x] **Yeni Kanal Görsel Kimliği (`scripts/generate_channel_branding.py` & `scripts/apply_channel_optimization.py`):**
+  - **2560x1440 Banner (`yt_banner_bolgol_tr.png`):** 1546x423 güvenli merkez alanda resmi logo, dairesel saha çizgileri, kulüp armaları ve `ebstudyo.com | Google Play'de Ücretsiz Oyna` CTA'sı üretilip YouTube API ile yüklendi.
+  - **150x150 Watermark Badge (`yt_watermark_badge_tr.png`):** Sağ alt köşeye 3. saniyeden itibaren `ABONE OL` rozeti olarak tanımlandı (`HTTP 204`).
+  - **800x800 Profil Logosu (`yt_avatar_bolgol_tr.png`):** Yuvarlak kırpmaya tam uyumlu üretildi (YouTube Studio üzerinden yüklemeye hazır).
+- [x] **Kanal SEO, Ana Sayfa & Viral Formül v2 Güncellemesi:**
+  - Kanal açıklaması ve 500 karakterlik SEO anahtar kelimeleri (`bol gol futbol`, `mobil futbol oyunu`, `android futbol oyunu` vb.) güncellendi; kanal fragmanı (`PpsFRkMTllA`), ana sayfa bölümleri (`popularUploads`, `recentUploads`, `Şampiyonlar Ligi`, `Süper Lig`, `GALATASARAY`, `FENERBAHÇE`, `Milli Takımlar`, `Avrupa Ligi`) ve en iyi 10 futbol videosunun açıklaması `ebstudyo.com` + Google Play linkiyle güçlendirildi.
+  - `src/ai/metadata_generator.py`: TR kanalında ikincil oyuncu odaklı başlık tuzağı kaldırıldı; Temsilcimiz/Takım/Gol/Stadyum öncelikli Viral Formül v2 ve `test_dynamic_metadata.py` / `test_pipeline.py` %100 PASS onaylandı.
+- [x] **Genel Sosyal Medya Subagent'ı & Canlı/Topluluk Otomasyonu:**
+  - `.agents/council/11_social_media_director.md` oluşturuldu.
+  - `scripts/schedule_live_broadcast.py` ile yarınki UCL gecesi (`Galatasaray vs Feyenoord`, `k1pstPcJfyQ`) için kapaklı planlı canlı yayın oluşturuldu.
+  - `config/community_schedule.json` v2.0.0'a yükseltildi ve `scripts/community_post_manager.py` ile 5 adet yayına hazır topluluk anketi/gönderisi (`output/community_posts_ready.md`) üretildi.
+
+### 2026-11-26: Web (`webfutbol` / `ebstudyo.com`) Core Web Vitals, Erişilebilirlik & Lighthouse Optimizasyonu
+- [x] **Responsive AVIF / WebP Görsel Dönüşümü (`-86%` Boyut Tasarrufu, `2,478 KiB -> 344 KiB`):**
+  - `weboyun1.png` (`1,427 KiB`) korunarak `#game-cover` için `image-set()` destekli `game-cover-{1x,2x}.{avif,webp}` (`7.5 KiB` - `22.5 KiB`) ve JPEG yedeği üretildi; gizli `#status-splash` görseli yalnızca oyun başlatıldığında yüklenecek biçimde (`data-src`) ertelendi.
+  - Mağaza ekran görüntüleri (`store-screen-1..4.jpg`) için `240w`, `360w` ve `450w` AVIF + WebP varyantları üretildi; Hero telefon ekranlarına `<picture>` + `fetchpriority="high"` tanımlandı.
+  - `game-icon.png` (`263 KiB`) yerine `48x48` `favicon-48.png` (`4.4 KiB`) ve `180x180` `apple-touch-icon.png` (`41 KiB`) eklendi.
+- [x] **Kritik Render Yolu, LCP Opaklık Kilidi & Ana İş Parçacığı (Main-Thread) Temizliği (`site.css`, `site.js`, `lang.js`):**
+  - `site.css` başındaki `@import url("fonts/fonts.css")` zinciri kaldırılarak `@font-face` tanımları doğrudan `site.css` içine alındı; `Geist-normal-latin.woff2` ön yüklemesiyle `CLS = 0` sabitlendi.
+  - Hero elemanlarını `1.7s` boyunca `opacity: 0` tutan açılış gecikmeleri kaldırılıp GPU `transform` geçişlerine dönüştürüldü; `.dot` üzerindeki `box-shadow` animasyonu GPU tabanlı `::after` `transform + opacity` yapısına taşındı (Mobil LCP: `12.4 s -> 1.0 s`).
+  - `Lenis` yalnızca masaüstü (`pointer: fine`) ilk `wheel` etkileşiminde devreye girecek şekilde izole edildi; `revealVisible` kaynaklı zorunlu reflow döngüsü kaldırıldı, `translations.js` / `i18n-home.js` / `lang.js` betiklerine `defer` eklendi ve GA4 (`gtag.js`) etkileşim / `visibilitychange` / `load` sonrasına taşındı.
+- [x] **Erişilebilirlik (`97 -> 100`) & Agentic Browsing (`50 -> 100`):**
+  - 14 HTML sayfasının tamamında `.lang-btn` `aria-label` değeri görünür dil koduyla eşleştirildi (WCAG 2.5.3) ve dekoratif SVG ikonlarına `aria-hidden="true"` eklendi.
+  - `#canvas` üzerindeki `tabindex="1"` kaldırılıp oyun başlatılana dek `tabindex="-1"` (`startWebGameOnDemand` içinde `tabIndex = 0`) yapıldı.
+- [x] **Doğrulamalar:** 14 HTML sayfası, 5 JS dosyası, 32 satır içi script, 5 dilli sözlük, `.htaccess` güvenlik kuralları ve yerel Lighthouse denetimleri onaylandı (Ana Sayfa Mobil: `98 / 100 / 100 / 100`, Masaüstü: `100 / 100 / 100 / 100`, `/bol-gol-futbol/` Mobil: `100 / 100 / 100 / 100`).
 
 
 
