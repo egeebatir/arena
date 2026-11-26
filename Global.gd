@@ -76,6 +76,7 @@ var unlocked_hats: Array = []
 var equipped_hat: String = "none" # "none", "kings_crown", "queens_crown"
 var favorite_team: String = ""
 var player_name: String = ""
+var play_games_player_id: String = ""
 var login_method: String = ""
 var matches_played_since_prompt: int = 0
 var lifetime_matches_played: int = 0
@@ -93,8 +94,8 @@ var last_selected_league_away: int = 1
 var custom_player_names: Dictionary = {}
 var unlocked_achievements: Array = []
 var favorite_team_goals_scored: int = 0
-const CURRENT_GAME_VERSION: String = "1.1.7"
-const CURRENT_VERSION_CODE: int = 38
+const CURRENT_GAME_VERSION: String = "1.1.8"
+const CURRENT_VERSION_CODE: int = 39
 const VERSION_CHECK_URL: String = "https://www.ebstudyo.com/api/version.json"
 const PLAY_STORE_URL: String = "https://play.google.com/store/apps/details?id=com.ebstudyo.bolgol"
 var last_tutorial_version: String = ""
@@ -293,6 +294,17 @@ func set_premium(val: bool):
 var play_games_sign_in_client: Node = null
 var play_games_achievements_client: Node = null
 var play_games_leaderboards_client: Node = null
+var play_games_players_client: Node = null
+var play_games_snapshots_client: Node = null
+
+const CLOUD_SNAPSHOT_NAME: String = "bolgol_account_save_v1"
+signal cloud_save_restored
+signal account_identity_changed
+var _last_cloud_sync_msec: int = 0
+var _last_auth_trigger_msec: int = 0
+var _cloud_load_pending_overwrite: bool = false
+var _pending_account_link_restore: bool = false
+var _cloud_initial_check_done: bool = false
 
 const ACHIEVEMENTS = {
 	"FIRST_WIN": {
@@ -356,6 +368,8 @@ func init_google_play_services():
 			if sign_in_script:
 				play_games_sign_in_client = sign_in_script.new()
 				add_child(play_games_sign_in_client)
+		if play_games_sign_in_client and not play_games_sign_in_client.user_authenticated.is_connected(_on_global_play_games_authenticated):
+			play_games_sign_in_client.user_authenticated.connect(_on_global_play_games_authenticated)
 		
 		if not play_games_achievements_client and ResourceLoader.exists("res://addons/GodotPlayGameServices/scripts/achievements/achievements_client.gd"):
 			var ach_script = load("res://addons/GodotPlayGameServices/scripts/achievements/achievements_client.gd")
@@ -370,6 +384,373 @@ func init_google_play_services():
 				play_games_leaderboards_client = lead_script.new()
 				add_child(play_games_leaderboards_client)
 				print("[Global] Google Play Leaderboards client initialized successfully.")
+
+		if not play_games_players_client and ResourceLoader.exists("res://addons/GodotPlayGameServices/scripts/players/players_client.gd"):
+			var pl_script = load("res://addons/GodotPlayGameServices/scripts/players/players_client.gd")
+			if pl_script:
+				play_games_players_client = pl_script.new()
+				add_child(play_games_players_client)
+				play_games_players_client.current_player_loaded.connect(_on_play_games_current_player_loaded)
+				print("[Global] Google Play Players client initialized successfully.")
+
+		if not play_games_snapshots_client and ResourceLoader.exists("res://addons/GodotPlayGameServices/scripts/snapshots/snapshots_client.gd"):
+			var snap_script = load("res://addons/GodotPlayGameServices/scripts/snapshots/snapshots_client.gd")
+			if snap_script:
+				play_games_snapshots_client = snap_script.new()
+				add_child(play_games_snapshots_client)
+				play_games_snapshots_client.game_loaded.connect(_on_cloud_game_loaded)
+				play_games_snapshots_client.game_saved.connect(_on_cloud_game_saved)
+				play_games_snapshots_client.conflict_emitted.connect(_on_cloud_conflict)
+				print("[Global] Google Play Snapshots client initialized successfully.")
+
+func sign_in_google_play() -> void:
+	init_google_play_services()
+	if play_games_sign_in_client and play_games_sign_in_client.has_method("sign_in"):
+		play_games_sign_in_client.sign_in()
+	elif Engine.has_singleton("GodotPlayGameServices"):
+		var gps = Engine.get_singleton("GodotPlayGameServices")
+		if gps and gps.has_method("signIn"):
+			gps.signIn()
+
+func _on_global_play_games_authenticated(is_auth: bool):
+	if not is_auth:
+		return
+	var now_ms = Time.get_ticks_msec()
+	if _last_auth_trigger_msec > 0 and (now_ms - _last_auth_trigger_msec) < 1500:
+		return
+	_last_auth_trigger_msec = now_ms
+	if login_method != "google" or play_games_player_id == "":
+		_pending_account_link_restore = true
+		_cloud_initial_check_done = false
+	login_method = "google"
+	save_progression(false)
+	if play_games_players_client and play_games_players_client.has_method("load_current_player"):
+		play_games_players_client.load_current_player(true)
+	else:
+		load_cloud_save()
+	# Safety fallback: if Snapshots API does not respond within 6s (e.g. offline), unlock future cloud saves
+	var tree_ref = get_tree()
+	if tree_ref:
+		tree_ref.create_timer(6.0).timeout.connect(func():
+			if login_method == "google" and not _cloud_initial_check_done:
+				_cloud_initial_check_done = true
+		)
+
+func _on_play_games_current_player_loaded(current_player):
+	if current_player == null:
+		load_cloud_save()
+		return
+	var new_id = str(current_player.player_id).strip_edges()
+	var new_name = str(current_player.display_name).strip_edges()
+	if new_id != "" and play_games_player_id != "" and new_id != play_games_player_id:
+		print("[Global] Play Games account switched: ", play_games_player_id, " -> ", new_id)
+		_reset_account_bound_state()
+		_cloud_load_pending_overwrite = true
+		_pending_account_link_restore = true
+		_cloud_initial_check_done = false
+		play_games_player_id = new_id
+		player_name = new_name
+		login_method = "google"
+		save_stats(false)
+		save_progression(false)
+		account_identity_changed.emit()
+	else:
+		if play_games_player_id == "" and new_id != "":
+			_pending_account_link_restore = true
+		if new_id != "":
+			play_games_player_id = new_id
+		if new_name != "":
+			player_name = new_name
+		save_progression(false)
+		account_identity_changed.emit()
+	load_cloud_save()
+
+func _reset_account_bound_state():
+	is_premium = false
+	match_history = []
+	lifetime_matches_played = 0
+	matches_played_since_prompt = 0
+	favorite_team = ""
+	favorite_team_goals_scored = 0
+	ad_credits = 0
+	unlocked_ball_skins = ["default"]
+	equipped_ball_skin = "default"
+	unlocked_hats = []
+	equipped_hat = "none"
+	custom_player_names = {}
+	unlocked_achievements = []
+
+func switch_local_account_session(keep_guest: bool = false):
+	_reset_account_bound_state()
+	play_games_player_id = ""
+	player_name = ""
+	login_method = "guest" if keep_guest else ""
+	_cloud_load_pending_overwrite = true
+	_pending_account_link_restore = false
+	_cloud_initial_check_done = false
+	save_stats(false)
+	save_progression(false)
+	account_identity_changed.emit()
+
+func _extract_snapshot_bytes(snapshot) -> PackedByteArray:
+	if snapshot == null:
+		return PackedByteArray()
+	var raw_val = null
+	if snapshot is Dictionary:
+		raw_val = snapshot.get("content", null)
+	elif "content" in snapshot:
+		raw_val = snapshot.content
+	if raw_val == null:
+		return PackedByteArray()
+	if raw_val is PackedByteArray:
+		return raw_val
+	if raw_val is Array:
+		var out := PackedByteArray()
+		out.resize(raw_val.size())
+		for i in range(raw_val.size()):
+			out[i] = int(raw_val[i]) & 0xFF
+		return out
+	if raw_val is String:
+		return (raw_val as String).to_utf8_buffer()
+	return PackedByteArray()
+
+func build_cloud_save_payload() -> Dictionary:
+	return {
+		"schema": 1,
+		"player_id": play_games_player_id,
+		"player_name": player_name,
+		"match_history": match_history,
+		"lifetime_matches_played": lifetime_matches_played,
+		"favorite_team": favorite_team,
+		"favorite_team_goals_scored": favorite_team_goals_scored,
+		"ad_credits": ad_credits,
+		"unlocked_ball_skins": unlocked_ball_skins,
+		"equipped_ball_skin": equipped_ball_skin,
+		"unlocked_hats": unlocked_hats,
+		"equipped_hat": equipped_hat,
+		"custom_player_names": custom_player_names,
+		"unlocked_achievements": unlocked_achievements,
+		"updated_at": int(Time.get_unix_time_from_system())
+	}
+
+func _match_entry_signature(m: Variant) -> String:
+	if not (m is Dictionary):
+		return str(m)
+	return "%s|%s|%d|%d|%s" % [
+		str(m.get("home", "")),
+		str(m.get("away", "")),
+		int(m.get("home_score", m.get("score_h", 0))),
+		int(m.get("away_score", m.get("score_a", 0))),
+		str(m.get("timestamp", m.get("date", "")))
+	]
+
+func apply_cloud_save_payload(data: Dictionary, force_overwrite: bool = false) -> bool:
+	if not (data is Dictionary) or data.is_empty():
+		return false
+	var cloud_id = str(data.get("player_id", "")).strip_edges()
+	if play_games_player_id != "" and cloud_id != "" and cloud_id != play_games_player_id:
+		return false
+
+	var cloud_hist: Array = data.get("match_history", []) if (data.get("match_history") is Array) else []
+	var cloud_lifetime: int = max(int(data.get("lifetime_matches_played", 0)), cloud_hist.size())
+	var cloud_fav: String = str(data.get("favorite_team", "")).strip_edges()
+	var cloud_credits: int = max(0, int(data.get("ad_credits", 0)))
+	var cloud_skins: Array = data.get("unlocked_ball_skins", []) if (data.get("unlocked_ball_skins") is Array) else []
+	var cloud_hats: Array = data.get("unlocked_hats", []) if (data.get("unlocked_hats") is Array) else []
+	var cloud_names: Dictionary = data.get("custom_player_names", {}) if (data.get("custom_player_names") is Dictionary) else {}
+	var cloud_ach: Array = data.get("unlocked_achievements", []) if (data.get("unlocked_achievements") is Array) else []
+
+	if force_overwrite:
+		match_history = cloud_hist.duplicate(true)
+		if match_history.size() > 100:
+			match_history = match_history.slice(match_history.size() - 100)
+		lifetime_matches_played = max(cloud_lifetime, match_history.size())
+		favorite_team = cloud_fav
+		ad_credits = cloud_credits
+		unlocked_ball_skins = cloud_skins.duplicate()
+		if not ("default" in unlocked_ball_skins):
+			unlocked_ball_skins.append("default")
+		equipped_ball_skin = str(data.get("equipped_ball_skin", "default"))
+		unlocked_hats = cloud_hats.duplicate()
+		equipped_hat = str(data.get("equipped_hat", "none"))
+		custom_player_names = cloud_names.duplicate(true)
+		unlocked_achievements = cloud_ach.duplicate()
+		if str(data.get("player_name", "")).strip_edges() != "" and player_name == "":
+			player_name = str(data["player_name"]).strip_edges()
+		favorite_team_goals_scored = max(int(data.get("favorite_team_goals_scored", 0)), recalculate_favorite_team_goals())
+		_pending_account_link_restore = false
+		save_stats(false)
+		save_progression(false)
+		cloud_save_restored.emit()
+		return true
+
+	var local_empty = match_history.is_empty() and lifetime_matches_played == 0
+	var cloud_newer = cloud_lifetime > lifetime_matches_played or cloud_hist.size() > match_history.size()
+	var has_cloud_progress = (
+		not cloud_hist.is_empty()
+		or cloud_lifetime > 0
+		or cloud_fav != ""
+		or cloud_skins.size() > 1
+		or not cloud_hats.is_empty()
+		or cloud_credits > ad_credits
+		or not cloud_names.is_empty()
+		or not cloud_ach.is_empty()
+	)
+	var missing_cosmetics_or_fav = (
+		(favorite_team == "" and cloud_fav != "")
+		or cloud_credits > ad_credits
+	)
+	for sk in cloud_skins:
+		if not (sk in unlocked_ball_skins):
+			missing_cosmetics_or_fav = true
+			break
+	for ht in cloud_hats:
+		if not (ht in unlocked_hats):
+			missing_cosmetics_or_fav = true
+			break
+
+	if not local_empty and not cloud_newer and not (_pending_account_link_restore and has_cloud_progress) and not missing_cosmetics_or_fav:
+		_pending_account_link_restore = false
+		return false
+
+	# Restore or merge match history so connecting Google Play always brings back historical stats
+	if local_empty or match_history.is_empty():
+		match_history = cloud_hist.duplicate(true)
+	elif not cloud_hist.is_empty():
+		if _pending_account_link_restore:
+			var merged: Array = cloud_hist.duplicate(true)
+			var seen_sigs := {}
+			for cm in merged:
+				seen_sigs[_match_entry_signature(cm)] = true
+			var added_guest := 0
+			for lm in match_history:
+				var sig = _match_entry_signature(lm)
+				if not seen_sigs.has(sig):
+					merged.append(lm)
+					seen_sigs[sig] = true
+					added_guest += 1
+			if merged.size() > 100:
+				merged = merged.slice(merged.size() - 100)
+			match_history = merged
+			lifetime_matches_played = max(lifetime_matches_played, cloud_lifetime + added_guest)
+		elif cloud_hist.size() > match_history.size():
+			match_history = cloud_hist.duplicate(true)
+
+	if match_history.size() > 100:
+		match_history = match_history.slice(match_history.size() - 100)
+	lifetime_matches_played = max(max(lifetime_matches_played, cloud_lifetime), match_history.size())
+
+	if cloud_fav != "" and (favorite_team == "" or cloud_newer or _pending_account_link_restore):
+		favorite_team = cloud_fav
+
+	ad_credits = max(ad_credits, cloud_credits)
+
+	for sk in cloud_skins:
+		var sk_s = str(sk)
+		if sk_s != "" and not (sk_s in unlocked_ball_skins):
+			unlocked_ball_skins.append(sk_s)
+	if not ("default" in unlocked_ball_skins):
+		unlocked_ball_skins.append("default")
+	var cloud_eq_skin = str(data.get("equipped_ball_skin", "default"))
+	if equipped_ball_skin == "default" and cloud_eq_skin != "default" and (cloud_eq_skin in unlocked_ball_skins or is_premium):
+		equipped_ball_skin = cloud_eq_skin
+
+	for ht in cloud_hats:
+		var ht_s = str(ht)
+		if ht_s != "" and not (ht_s in unlocked_hats):
+			unlocked_hats.append(ht_s)
+	var cloud_eq_hat = str(data.get("equipped_hat", "none"))
+	if equipped_hat == "none" and cloud_eq_hat != "none" and (cloud_eq_hat in unlocked_hats or is_premium):
+		equipped_hat = cloud_eq_hat
+
+	for team_k in cloud_names.keys():
+		if not custom_player_names.has(team_k) or _pending_account_link_restore:
+			custom_player_names[team_k] = cloud_names[team_k]
+
+	for ach in cloud_ach:
+		var ach_s = str(ach)
+		if ach_s != "" and not (ach_s in unlocked_achievements):
+			unlocked_achievements.append(ach_s)
+
+	if str(data.get("player_name", "")).strip_edges() != "" and player_name == "":
+		player_name = str(data["player_name"]).strip_edges()
+
+	favorite_team_goals_scored = max(int(data.get("favorite_team_goals_scored", 0)), recalculate_favorite_team_goals())
+	_pending_account_link_restore = false
+
+	save_stats(false)
+	save_progression(false)
+	cloud_save_restored.emit()
+	return true
+
+func sync_cloud_save(force_now: bool = false):
+	if login_method != "google":
+		return
+	if not _cloud_initial_check_done:
+		return
+	if not play_games_snapshots_client or not play_games_snapshots_client.has_method("save_game"):
+		return
+	var now_msec = Time.get_ticks_msec()
+	if not force_now and _last_cloud_sync_msec > 0 and (now_msec - _last_cloud_sync_msec) < 5000:
+		return
+	_last_cloud_sync_msec = now_msec
+	var payload_json = JSON.stringify(build_cloud_save_payload())
+	var bytes = payload_json.to_utf8_buffer()
+	var desc = "Bol Gol Futbol (%d matches)" % max(lifetime_matches_played, match_history.size())
+	play_games_snapshots_client.save_game(CLOUD_SNAPSHOT_NAME, desc, bytes, lifetime_matches_played * 36000, lifetime_matches_played)
+
+func load_cloud_save():
+	if login_method != "google":
+		return
+	if play_games_snapshots_client and play_games_snapshots_client.has_method("load_game"):
+		play_games_snapshots_client.load_game(CLOUD_SNAPSHOT_NAME, false)
+	else:
+		_cloud_initial_check_done = true
+
+func _on_cloud_game_saved(is_saved: bool, save_data_name: String, _desc: String):
+	print("[CloudSave] save_game(", save_data_name, ") -> ", is_saved)
+
+func _on_cloud_game_loaded(snapshot):
+	_cloud_initial_check_done = true
+	if snapshot == null:
+		_cloud_load_pending_overwrite = false
+		_pending_account_link_restore = false
+		if not match_history.is_empty() or lifetime_matches_played > 0 or favorite_team != "":
+			sync_cloud_save(true)
+		return
+	var content_bytes: PackedByteArray = _extract_snapshot_bytes(snapshot)
+	if content_bytes.is_empty():
+		_cloud_load_pending_overwrite = false
+		_pending_account_link_restore = false
+		if not match_history.is_empty() or lifetime_matches_played > 0 or favorite_team != "":
+			sync_cloud_save(true)
+		return
+	var parsed = JSON.parse_string(content_bytes.get_string_from_utf8())
+	var force_ow = _cloud_load_pending_overwrite
+	_cloud_load_pending_overwrite = false
+	if typeof(parsed) == TYPE_DICTIONARY:
+		var prev_cloud_lt = int(parsed.get("lifetime_matches_played", 0))
+		var applied = apply_cloud_save_payload(parsed, force_ow)
+		print("[CloudSave] Loaded snapshot applied=", applied, " matches=", match_history.size())
+		if lifetime_matches_played > prev_cloud_lt:
+			sync_cloud_save(true)
+	else:
+		_pending_account_link_restore = false
+
+func _on_cloud_conflict(conflict):
+	_cloud_initial_check_done = true
+	if conflict == null:
+		return
+	var s_server = conflict.server_snapshot if "server_snapshot" in conflict else (conflict.snapshot if "snapshot" in conflict else null)
+	var s_local = conflict.conflicting_snapshot if "conflicting_snapshot" in conflict else null
+	var b1 = _extract_snapshot_bytes(s_server)
+	var b2 = _extract_snapshot_bytes(s_local)
+	var d1 = JSON.parse_string(b1.get_string_from_utf8()) if not b1.is_empty() else {}
+	var d2 = JSON.parse_string(b2.get_string_from_utf8()) if not b2.is_empty() else {}
+	var best = d1 if (typeof(d1) == TYPE_DICTIONARY and (typeof(d2) != TYPE_DICTIONARY or int(d1.get("lifetime_matches_played", 0)) >= int(d2.get("lifetime_matches_played", 0)))) else d2
+	if typeof(best) == TYPE_DICTIONARY and not best.is_empty():
+		apply_cloud_save_payload(best, false)
+		sync_cloud_save(true)
 
 func unlock_achievement(achievement_key: String):
 	if not ACHIEVEMENTS.has(achievement_key):
@@ -1415,7 +1796,7 @@ func _process_update_check_response(result: int, response_code: int, body: Packe
 # ======================================================
 # STATS PERSISTENCE  (user://stats.json)
 # ======================================================
-func save_stats():
+func save_stats(sync_cloud: bool = true):
 	if match_history.size() > 100:
 		match_history = match_history.slice(match_history.size() - 100)
 	var final_path = "user://stats.json"
@@ -1423,6 +1804,8 @@ func save_stats():
 	if file:
 		file.store_string(JSON.stringify(match_history))
 		file.close()
+	if sync_cloud:
+		sync_cloud_save(true)
 
 func load_stats():
 	if OS.get_name() == "Web":
@@ -1491,7 +1874,7 @@ const SAVE_SALT = "bol_gol_futbol_anti_cheat_salt_2026"
 func generate_save_hash(data_str: String) -> String:
 	return (data_str + SAVE_SALT).sha256_text()
 
-func save_progression():
+func save_progression(sync_cloud: bool = true):
 	var final_path = "user://progression.json"
 	var file = FileAccess.open(final_path, FileAccess.WRITE)
 	if file:
@@ -1504,6 +1887,7 @@ func save_progression():
 			"equipped_hat": equipped_hat,
 			"favorite_team": favorite_team,
 			"player_name": player_name,
+			"play_games_player_id": play_games_player_id,
 			"login_method": login_method,
 			"matches_played_since_prompt": matches_played_since_prompt,
 			"lifetime_matches_played": lifetime_matches_played,
@@ -1543,6 +1927,8 @@ func save_progression():
 		}
 		file.store_string(JSON.stringify(secure_data))
 		file.close()
+	if sync_cloud:
+		sync_cloud_save(false)
 
 func load_progression():
 	if not FileAccess.file_exists("user://progression.json"):
@@ -1579,6 +1965,7 @@ func load_progression():
 			if data_to_load.has("equipped_hat"): equipped_hat = data_to_load["equipped_hat"]
 			if data_to_load.has("favorite_team"): favorite_team = data_to_load["favorite_team"]
 			if data_to_load.has("player_name"): player_name = str(data_to_load["player_name"])
+			if data_to_load.has("play_games_player_id"): play_games_player_id = str(data_to_load["play_games_player_id"])
 			if data_to_load.has("login_method"): login_method = data_to_load["login_method"]
 			if data_to_load.has("matches_played_since_prompt"): matches_played_since_prompt = int(data_to_load["matches_played_since_prompt"])
 			if data_to_load.has("lifetime_matches_played"):

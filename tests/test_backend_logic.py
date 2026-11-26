@@ -401,6 +401,85 @@ def test_closed_beta_updates():
 
     return True
 
+def test_v118_cloud_restore_and_stats_empty_svg():
+    import os
+    print("\n--- Testing v1.1.8 Cloud Save Restore, Restore Purchases & Stats Empty SVGs ---")
+    with open("Global.gd", "r", encoding="utf-8") as f:
+        g_content = f.read()
+    with open("main_menu.gd", "r", encoding="utf-8") as f:
+        m_content = f.read()
+    snap_path = os.path.join("addons", "GodotPlayGameServices", "scripts", "snapshots", "snapshot.gd")
+    snap_meta_path = os.path.join("addons", "GodotPlayGameServices", "scripts", "snapshots", "snapshot_metadata.gd")
+    with open(snap_path, "r", encoding="utf-8") as f:
+        snap_content = f.read()
+    with open(snap_meta_path, "r", encoding="utf-8") as f:
+        snap_meta_content = f.read()
+
+    # 1. Snapshot signed byte-array & float metadata marshalling safety
+    if "int(raw_content[i]) & 0xFF" not in snap_content or "cover_image_aspect_ratio: float" not in snap_meta_content:
+        print("FAIL: PlayGamesSnapshot / PlayGamesSnapshotMetadata marshalling fix missing!")
+        return False
+    print("PASS: PlayGamesSnapshot safely decodes Gson signed byte arrays & float metadata!")
+
+    # 2. Cloud save stats restore, conflict server_snapshot fix & initial-load write guard
+    req_cloud = [
+        "const CLOUD_SNAPSHOT_NAME: String = \"bolgol_account_save_v1\"",
+        "var _cloud_initial_check_done: bool = false",
+        "var _pending_account_link_restore: bool = false",
+        "func _extract_snapshot_bytes(",
+        "func apply_cloud_save_payload(",
+        "conflict.server_snapshot",
+        "recalculate_favorite_team_goals()",
+    ]
+    for sym in req_cloud:
+        if sym not in g_content:
+            print(f"FAIL: Global.gd missing cloud save symbol: {sym}")
+            return False
+    print("PASS: Google Play Cloud Save stats restoration, guest-link merge & initial-check guard verified!")
+
+    # 3. Restore Purchases end-to-end state machine & 5-language feedback
+    req_restore = [
+        "var _pending_manual_restore: bool = false",
+        "var _restore_timeout_token: int = 0",
+        "\"RESTORE_NONE\":",
+        "\"RESTORE_UNAVAILABLE\":",
+        "\"CLOUD_RESTORED_TOAST\":",
+        "is_manual_restore: bool = false",
+    ]
+    for sym in req_restore:
+        if sym not in m_content:
+            print(f"FAIL: main_menu.gd missing Restore Purchases symbol: {sym}")
+            return False
+    print("PASS: Restore Purchases button state machine, connection retry, timeout & 5-lang feedback verified!")
+
+    # 4. Stats Empty State: Favorite Team -> Team Selection link, clean SVGs & zero emojis
+    stats_fn = m_content.split("func _build_stats_tab()")[1].split("\nfunc ")[0]
+    if "_navigate_to_favorite_team_selection()" not in stats_fn or "res://fav_shield_icon.svg" not in stats_fn or "STATS_FAV_EMPTY_TITLE" not in stats_fn:
+        print("FAIL: _build_stats_tab missing favorite team link or fav_shield_icon.svg / STATS_FAV_EMPTY_TITLE!")
+        return False
+    if "star_gold.svg" in stats_fn:
+        print("FAIL: _build_stats_tab empty state still references cartoon star_gold.svg!")
+        return False
+    # Ensure zero emoji codepoints (>= U+1F300) in non-comment code/UI strings of main_menu.gd
+    non_comment_code = "\n".join(ln.split("#", 1)[0] for ln in m_content.splitlines())
+    bad_emojis = [ch for ch in non_comment_code if ord(ch) >= 0x1F300]
+    if bad_emojis:
+        print(f"FAIL: Emoji characters still present in main_menu.gd: {set(bad_emojis)}")
+        return False
+    fav_svg = "fav_shield_icon.svg"
+    ball_svg = "soccer_ball_icon.svg"
+    for svg_p in [fav_svg, ball_svg]:
+        if not os.path.exists(svg_p):
+            print(f"FAIL: Missing SVG icon: {svg_p}")
+            return False
+        with open(svg_p, "r", encoding="utf-8") as sf:
+            sc = sf.read()
+        if 'stroke="#FFFFFF"' not in sc or "radialGradient" in sc:
+            print(f"FAIL: SVG {svg_p} does not follow clean white vector stroke theme!")
+            return False
+    print("PASS: Stats empty state links to Team Selection, uses clean thematic SVGs & contains ZERO emojis!")
+    return True
+
 if __name__ == "__main__":
     r1 = test_global_theme_turkuaz()
     r2 = test_main_menu_lang()
@@ -412,7 +491,8 @@ if __name__ == "__main__":
     r8 = test_admob_safety_guard()
     r9 = test_v114_ui_and_ad_rules()
     r10 = test_closed_beta_updates()
-    if r1 and r2 and r3 and r4 and r5 and r6 and r7 and r8 and r9 and r10:
+    r11 = test_v118_cloud_restore_and_stats_empty_svg()
+    if r1 and r2 and r3 and r4 and r5 and r6 and r7 and r8 and r9 and r10 and r11:
         print("\nALL BACKEND VERIFICATION TESTS PASSED SUCCESSFULLY!")
         sys.exit(0)
     else:

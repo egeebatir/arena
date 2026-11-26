@@ -11,8 +11,20 @@ var metadata: PlayGamesSnapshotMetadata ## The metadata of the snapshot.
 
 ## Constructor that creates a Snapshot from a [Dictionary] containing the properties.
 func _init(dictionary: Dictionary) -> void:
-	if dictionary.has("content"): content = dictionary.content
-	if dictionary.has("metadata"): metadata = PlayGamesSnapshotMetadata.new(dictionary.metadata)
+	if dictionary.has("content") and dictionary.content != null:
+		var raw_content = dictionary.content
+		if raw_content is PackedByteArray:
+			content = raw_content
+		elif raw_content is Array:
+			var bytes := PackedByteArray()
+			bytes.resize(raw_content.size())
+			for i in range(raw_content.size()):
+				bytes[i] = int(raw_content[i]) & 0xFF
+			content = bytes
+		elif raw_content is String:
+			content = (raw_content as String).to_utf8_buffer()
+	if dictionary.has("metadata") and dictionary.metadata is Dictionary:
+		metadata = PlayGamesSnapshotMetadata.new(dictionary.metadata)
 
 func _to_string() -> String:
 	var result := PackedStringArray()

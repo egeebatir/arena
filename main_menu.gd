@@ -5,6 +5,8 @@ var billing
 var premium_purchase_option_id: String = ""
 var premium_offer_id: String = ""
 var premium_dialog_price_lbl: Label = null
+var _pending_manual_restore: bool = false
+var _restore_timeout_token: int = 0
 
 func _apply_text_outline(ctrl: Control, outline_sz: int = 3, outline_col: Color = Color8(0, 0, 0, 235)):
 	if not is_instance_valid(ctrl):
@@ -70,7 +72,10 @@ var LANG = {
 		"PRO_ACTIVE": "ELİT AKTİF", "PRO_OFF": "ELİT KAPAT", "PRO_OFF_TOAST": "ELİT KULÜP KAPATILDI", "RESTORE_PURCHASES": "Satın Alımları Geri Yükle",
 		"PRIVACY_POLICY": "Gizlilik Politikası", "PRIVACY_TITLE": "GİZLİLİK POLİTİKASI",
 		"RESTORE_CHECK": "Satın alımlar kontrol ediliyor...", "RESTORE_SUCCESS": "Satın alımlar geri yüklendi!",
-		"EXIT_CONFIRM": "Çıkmak istediğinize emin misiniz?", "EXIT_TITLE": "ÇIKIŞ", "SEC_ACCOUNT": "HESAP & GİZLİLİK",
+		"RESTORE_NONE": "Bu hesapta aktif satın alım bulunamadı.", "RESTORE_UNAVAILABLE": "Google Play Mağaza bağlantısı kurulamadı. Lütfen internetinizi kontrol edin.",
+		"CLOUD_RESTORED_TOAST": "Google Play istatistiklerin ve kayıtların geri yüklendi!", "CONNECT_GOOGLE_PLAY_BTN": "Google Play ile Bağlan",
+		"STATS_FAV_EMPTY_TITLE": "FAVORİ TAKIMINI BELİRLE",
+		"EXIT_CONFIRM": "Çıkmak istediğinize emin misiniz?", "EXIT_TITLE": "ÇIKIŞ", "SEC_ACCOUNT": "HESAP & GİZLİLİK", "SWITCH_ACCOUNT_BTN": "Hesap Değiştir",
 		"SHOP_HATS": "Taçlar & Aksesuarlar", "HAT_KINGS_CROWN": "Kral Tacı", "HAT_QUEENS_CROWN": "Kraliçe Tacı",
 		"HAT_VIKING": "Viking Miğferi", "HAT_MAGIC": "Büyücü Şapkası", "HAT_PLAYER_MASK": "Futbolcu Maskesi",
 		"HAT_NONE": "Taç Yok", "HAT_FAV_NOTICE": "Taçlar yalnızca favori takımının topunda görünür.",
@@ -173,7 +178,10 @@ var LANG = {
 		"PRO_ACTIVE": "ELITE ACTIVE", "PRO_OFF": "TURN OFF ELITE", "PRO_OFF_TOAST": "ELITE CLUB DEACTIVATED", "RESTORE_PURCHASES": "Restore Purchases",
 		"PRIVACY_POLICY": "Privacy Policy", "PRIVACY_TITLE": "PRIVACY POLICY",
 		"RESTORE_CHECK": "Checking purchases...", "RESTORE_SUCCESS": "Purchases restored!",
-		"EXIT_CONFIRM": "Are you sure you want to exit?", "EXIT_TITLE": "EXIT", "SEC_ACCOUNT": "ACCOUNT & PRIVACY",
+		"RESTORE_NONE": "No active purchases found on this account.", "RESTORE_UNAVAILABLE": "Could not connect to Google Play Store. Please check your connection.",
+		"CLOUD_RESTORED_TOAST": "Your Google Play stats and progress have been restored!", "CONNECT_GOOGLE_PLAY_BTN": "Sign in with Google Play",
+		"STATS_FAV_EMPTY_TITLE": "SET YOUR FAVORITE TEAM",
+		"EXIT_CONFIRM": "Are you sure you want to exit?", "EXIT_TITLE": "EXIT", "SEC_ACCOUNT": "ACCOUNT & PRIVACY", "SWITCH_ACCOUNT_BTN": "Switch Account",
 		"SHOP_HATS": "Crowns & Accessories", "HAT_KINGS_CROWN": "King's Crown", "HAT_QUEENS_CROWN": "Queen's Crown",
 		"HAT_VIKING": "Viking Helmet", "HAT_MAGIC": "Magic Hat", "HAT_PLAYER_MASK": "Player Mask",
 		"HAT_NONE": "No Crown", "HAT_FAV_NOTICE": "Crowns only appear on your favorite team's ball.",
@@ -276,7 +284,10 @@ var LANG = {
 		"PRO_ACTIVE": "ÉLITE ACTIVO", "PRO_OFF": "DESACTIVAR ÉLITE", "PRO_OFF_TOAST": "CLUB ÉLITE DESACTIVADO", "RESTORE_PURCHASES": "Restaurar Compras",
 		"PRIVACY_POLICY": "Política de Privacidad", "PRIVACY_TITLE": "POLÍTICA DE PRIVACIDAD",
 		"RESTORE_CHECK": "Comprobando compras...", "RESTORE_SUCCESS": "¡Compras restauradas!",
-		"EXIT_CONFIRM": "¿Estás seguro de que quieres salir?", "EXIT_TITLE": "SALIR", "SEC_ACCOUNT": "CUENTA Y PRIVACIDAD",
+		"RESTORE_NONE": "No se encontraron compras activas en esta cuenta.", "RESTORE_UNAVAILABLE": "No se pudo conectar a Google Play Store. Comprueba tu conexión.",
+		"CLOUD_RESTORED_TOAST": "¡Tus estadísticas y progreso de Google Play se han restaurado!", "CONNECT_GOOGLE_PLAY_BTN": "Conectar con Google Play",
+		"STATS_FAV_EMPTY_TITLE": "ELIGE TU EQUIPO FAVORITO",
+		"EXIT_CONFIRM": "¿Estás seguro de que quieres salir?", "EXIT_TITLE": "SALIR", "SEC_ACCOUNT": "CUENTA Y PRIVACIDAD", "SWITCH_ACCOUNT_BTN": "Cambiar Cuenta",
 		"SHOP_HATS": "Coronas y Accesorios", "HAT_KINGS_CROWN": "Corona de Rey", "HAT_QUEENS_CROWN": "Corona de Reina",
 		"HAT_VIKING": "Casco Vikingo", "HAT_MAGIC": "Sombrero Mágico", "HAT_PLAYER_MASK": "Máscara de Jugador",
 		"HAT_NONE": "Sin Corona", "HAT_FAV_NOTICE": "Las coronas solo aparecen en el balón favorito.",
@@ -379,7 +390,10 @@ var LANG = {
 		"PRO_ACTIVE": "ELITE ATIVO", "PRO_OFF": "DESATIVAR ELITE", "PRO_OFF_TOAST": "CLUBE ELITE DESATIVADO", "RESTORE_PURCHASES": "Restaurar Compras",
 		"PRIVACY_POLICY": "Política de Privacidade", "PRIVACY_TITLE": "POLÍTICA DE PRIVACIDADE",
 		"RESTORE_CHECK": "A verificar compras...", "RESTORE_SUCCESS": "Compras restauradas!",
-		"EXIT_CONFIRM": "Tem certeza de que deseja sair?", "EXIT_TITLE": "SAIR", "SEC_ACCOUNT": "CONTA E PRIVACIDADE",
+		"RESTORE_NONE": "Nenhuma compra ativa encontrada nesta conta.", "RESTORE_UNAVAILABLE": "Não foi possível ligar à Google Play Store. Verifique a sua ligação.",
+		"CLOUD_RESTORED_TOAST": "As suas estatísticas e progresso do Google Play foram restaurados!", "CONNECT_GOOGLE_PLAY_BTN": "Ligar ao Google Play",
+		"STATS_FAV_EMPTY_TITLE": "ESCOLHA A SUA EQUIPA FAVORITA",
+		"EXIT_CONFIRM": "Tem certeza de que deseja sair?", "EXIT_TITLE": "SAIR", "SEC_ACCOUNT": "CONTA E PRIVACIDADE", "SWITCH_ACCOUNT_BTN": "Trocar Conta",
 		"SHOP_HATS": "Coroas e Acessórios", "HAT_KINGS_CROWN": "Coroa de Rei", "HAT_QUEENS_CROWN": "Coroa de Rainha",
 		"HAT_VIKING": "Capacete Viking", "HAT_MAGIC": "Chapéu Mágico", "HAT_PLAYER_MASK": "Máscara de Jogador",
 		"HAT_NONE": "Sem Coroa", "HAT_FAV_NOTICE": "As coroas só aparecem na bola favorita.",
@@ -482,7 +496,10 @@ var LANG = {
 		"PRO_ACTIVE": "ÉLITE ATTIVO", "PRO_OFF": "DISATTIVA ÉLITE", "PRO_OFF_TOAST": "CLUB ÉLITE DISATTIVATO", "RESTORE_PURCHASES": "Ripristina Acquisti",
 		"PRIVACY_POLICY": "Informativa sulla Privacy", "PRIVACY_TITLE": "INFORMATIVA SULLA PRIVACY",
 		"RESTORE_CHECK": "Verifica acquisti...", "RESTORE_SUCCESS": "Acquisti ripristinati!",
-		"EXIT_CONFIRM": "Sei sicuro di voler uscire?", "EXIT_TITLE": "ESCI", "SEC_ACCOUNT": "ACCOUNT E PRIVACY",
+		"RESTORE_NONE": "Nessun acquisto attivo trovato su questo account.", "RESTORE_UNAVAILABLE": "Impossibile connettersi a Google Play Store. Controlla la connessione.",
+		"CLOUD_RESTORED_TOAST": "Statistiche e progressi di Google Play ripristinati!", "CONNECT_GOOGLE_PLAY_BTN": "Accedi con Google Play",
+		"STATS_FAV_EMPTY_TITLE": "SCEGLI LA TUA SQUADRA PREFERITA",
+		"EXIT_CONFIRM": "Sei sicuro di voler uscire?", "EXIT_TITLE": "ESCI", "SEC_ACCOUNT": "ACCOUNT E PRIVACY", "SWITCH_ACCOUNT_BTN": "Cambia Account",
 		"SHOP_HATS": "Corone e Accessori", "HAT_KINGS_CROWN": "Corona del Re", "HAT_QUEENS_CROWN": "Corona della Regina",
 		"HAT_VIKING": "Elmo Vichingo", "HAT_MAGIC": "Cappello Magico", "HAT_PLAYER_MASK": "Maschera da Giocatore",
 		"HAT_NONE": "Nessuna Corona", "HAT_FAV_NOTICE": "Le corone appaiono solo sul pallone della squadra preferita.",
@@ -686,6 +703,10 @@ func _ready():
 	# Load progression
 	Global.load_progression()
 	active_theme = Global.THEMES.get(Global.current_theme, Global.THEMES["Turkuaz"])
+	if not Global.cloud_save_restored.is_connected(_on_cloud_save_restored):
+		Global.cloud_save_restored.connect(_on_cloud_save_restored)
+	if not Global.account_identity_changed.is_connected(_on_account_identity_changed):
+		Global.account_identity_changed.connect(_on_account_identity_changed)
 	
 	# Initialize Google Play Billing
 	if Engine.has_singleton("GodotGooglePlayBilling"):
@@ -1707,7 +1728,6 @@ func _on_billing_connected():
 	if billing:
 		billing.query_product_details(PackedStringArray(["premium_unlock"]), BillingClient.ProductType.INAPP)
 		billing.query_purchases(BillingClient.ProductType.INAPP)
-		billing.query_purchases(BillingClient.ProductType.SUBS)
 
 func _safe_billing_str(val) -> String:
 	if val == null:
@@ -1742,6 +1762,47 @@ func _activate_premium_entitlement(show_feedback: bool = true):
 	if show_feedback and not was_premium:
 		Global.play_prize_win()
 		_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("PRO_ACTIVE", "ELİT AKTİF"))
+
+func _revoke_premium_entitlement():
+	if not Global.is_premium:
+		return
+	Global.set_premium(false)
+	if is_instance_valid(vip_top_bar):
+		vip_top_bar.visible = false
+	_ensure_house_ad_bar()
+	_ensure_menu_top_banner()
+	_update_start_button_display()
+	_refresh_shop_tab()
+
+func _on_cloud_save_restored():
+	_update_fav_buttons()
+	_update_start_button_display()
+	_refresh_stats_tab()
+	_refresh_shop_tab()
+	if is_instance_valid(settings_overlay) and settings_overlay.visible:
+		settings_overlay.queue_free()
+		setup_settings_overlay()
+		settings_overlay.visible = true
+	_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("CLOUD_RESTORED_TOAST", "Google Play istatistiklerin ve kayıtların geri yüklendi!"))
+
+func _on_account_identity_changed():
+	if billing and billing.is_ready():
+		billing.query_purchases(BillingClient.ProductType.INAPP)
+	elif billing:
+		billing.start_connection()
+	if not Global.is_premium:
+		if is_instance_valid(vip_top_bar):
+			vip_top_bar.visible = false
+		_ensure_house_ad_bar()
+		_ensure_menu_top_banner()
+	_update_fav_buttons()
+	_update_start_button_display()
+	_refresh_stats_tab()
+	_refresh_shop_tab()
+	if is_instance_valid(settings_overlay) and settings_overlay.visible:
+		settings_overlay.queue_free()
+		setup_settings_overlay()
+		settings_overlay.visible = true
 
 func _get_premium_cta_verb() -> String:
 	var lang = Global.current_lang
@@ -1838,6 +1899,11 @@ func _on_billing_disconnected():
 
 func _on_billing_connect_error(response_code, debug_message):
 	print("Billing connect error: ", response_code, " msg: ", debug_message)
+	if _pending_manual_restore:
+		_pending_manual_restore = false
+		_restore_timeout_token += 1
+		Global.play_ui_error()
+		_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("RESTORE_UNAVAILABLE", "Google Play Mağaza bağlantısı kurulamadı."))
 
 func _on_billing_purchases_updated_dict(response: Dictionary):
 	print("Billing purchases updated dict: ", response)
@@ -1851,7 +1917,7 @@ func _on_billing_purchases_updated_dict(response: Dictionary):
 	else:
 		_on_billing_purchase_error(response_code, _safe_billing_str(response.get("debug_message", "")))
 
-func _on_billing_purchases_updated(purchases):
+func _on_billing_purchases_updated(purchases, is_authoritative_query: bool = false, is_manual_restore: bool = false):
 	print("Billing purchases updated: ", purchases)
 	var purchase_list: Array = []
 	if purchases is Array or purchases is PackedStringArray:
@@ -1860,6 +1926,8 @@ func _on_billing_purchases_updated(purchases):
 	elif purchases is Dictionary:
 		purchase_list.append(purchases)
 
+	var found_purchased_premium := false
+	var found_pending_premium := false
 	for purchase in purchase_list:
 		if not (purchase is Dictionary):
 			continue
@@ -1869,18 +1937,37 @@ func _on_billing_purchases_updated(purchases):
 			var p_ack = bool(purchase.get("is_acknowledged", false))
 			var p_token = _safe_billing_str(purchase.get("purchase_token", purchase.get("token", "")))
 			if p_state == BillingClient.PurchaseState.PURCHASED:
+				found_purchased_premium = true
 				# Grant entitlement immediately on verified PURCHASED state; acknowledge async to prevent 3-day refund
-				_activate_premium_entitlement(true)
+				_activate_premium_entitlement(not is_manual_restore)
 				if not p_ack and p_token != "" and billing:
 					billing.acknowledge_purchase(p_token)
 			elif p_state == BillingClient.PurchaseState.PENDING:
+				found_pending_premium = true
 				var pending_msg = "Ödemeniz Google Play onayı bekliyor." if Global.current_lang == "TR" else "Payment is pending Google Play confirmation."
 				_show_toast(pending_msg)
 
+	if is_manual_restore and found_purchased_premium:
+		Global.play_reward_collect()
+		_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("RESTORE_SUCCESS", "Satın alımlar geri yüklendi!"))
+
+	if is_authoritative_query and not found_purchased_premium and not found_pending_premium:
+		_revoke_premium_entitlement()
+		if is_manual_restore:
+			Global.play_ui_error()
+			_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("RESTORE_NONE", "Bu hesapta aktif satın alım bulunamadı."))
+
 func _on_billing_query_purchases_response(query_result):
-	var response_code = int(query_result.get("response_code", -1))
-	if response_code == BillingClient.BillingResponseCode.OK and query_result.has("purchases"):
-		_on_billing_purchases_updated(query_result.purchases)
+	var was_manual_restore = _pending_manual_restore
+	_pending_manual_restore = false
+	_restore_timeout_token += 1
+	var response_code = int(query_result.get("response_code", -1)) if query_result is Dictionary else -1
+	if response_code == BillingClient.BillingResponseCode.OK and query_result is Dictionary:
+		var purchases_payload = query_result.get("purchases", query_result.get("purchases_list", []))
+		_on_billing_purchases_updated(purchases_payload, true, was_manual_restore)
+	elif was_manual_restore:
+		Global.play_ui_error()
+		_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("RESTORE_UNAVAILABLE", "Google Play Mağaza bağlantısı kurulamadı."))
 
 func _on_billing_purchase_acknowledged(purchase_token):
 	print("Billing purchase acknowledged! Token: ", purchase_token)
@@ -2449,6 +2536,51 @@ func setup_settings_overlay():
 	acc_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	acc_vbox.add_theme_constant_override("separation", 15)
 	scroll_vbox.add_child(acc_vbox)
+
+	var acc_status_lbl = Label.new()
+	var acc_disp = Global.player_name.strip_edges()
+	if Global.login_method == "google":
+		acc_status_lbl.text = "Google Play: " + (acc_disp if acc_disp != "" else "Connected")
+	else:
+		acc_status_lbl.text = "Misafir / Guest"
+	acc_status_lbl.add_theme_font_override("font", custom_font)
+	acc_status_lbl.add_theme_font_size_override("font_size", 21)
+	acc_status_lbl.add_theme_color_override("font_color", Color8(180, 235, 255) if Global.login_method == "google" else Color.WHITE)
+	acc_status_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	acc_vbox.add_child(acc_status_lbl)
+
+	if Global.login_method != "google":
+		var gp_link_btn = Button.new()
+		gp_link_btn.text = LANG[Global.current_lang].get("CONNECT_GOOGLE_PLAY_BTN", "Google Play ile Bağlan")
+		gp_link_btn.icon = preload("res://google_play_logo.svg") if ResourceLoader.exists("res://google_play_logo.svg") else null
+		gp_link_btn.expand_icon = true
+		gp_link_btn.add_theme_constant_override("icon_max_width", 26)
+		gp_link_btn.add_theme_constant_override("h_separation", 10)
+		gp_link_btn.add_theme_font_override("font", custom_font)
+		gp_link_btn.add_theme_font_size_override("font_size", 24)
+		gp_link_btn.add_theme_color_override("font_color", Color.WHITE)
+		gp_link_btn.custom_minimum_size = Vector2(400, 56)
+		apply_3d_style_to_button(gp_link_btn, Color8(16, 108, 60), Color8(10, 68, 36), 14, 3)
+		gp_link_btn.pressed.connect(func():
+			Global.play_click()
+			Global.sign_in_google_play()
+		)
+		acc_vbox.add_child(gp_link_btn)
+		ui_labels.append({"node": gp_link_btn, "key": "CONNECT_GOOGLE_PLAY_BTN", "type": "button"})
+
+	var switch_acc_btn = Button.new()
+	switch_acc_btn.text = LANG[Global.current_lang].get("SWITCH_ACCOUNT_BTN", "Hesap Değiştir")
+	switch_acc_btn.add_theme_font_override("font", custom_font)
+	switch_acc_btn.add_theme_font_size_override("font_size", 24)
+	switch_acc_btn.add_theme_color_override("font_color", Color.WHITE)
+	switch_acc_btn.custom_minimum_size = Vector2(400, 56)
+	apply_3d_style_to_button(switch_acc_btn, active_theme.bg_top.lightened(0.14), active_theme.bg_bottom.darkened(0.28), 14, 3)
+	switch_acc_btn.pressed.connect(func():
+		Global.play_click()
+		_open_switch_account_modal()
+	)
+	acc_vbox.add_child(switch_acc_btn)
+	ui_labels.append({"node": switch_acc_btn, "key": "SWITCH_ACCOUNT_BTN", "type": "button"})
 	
 	var ach_btn = Button.new()
 	ach_btn.custom_minimum_size = Vector2(400, 60)
@@ -4641,12 +4773,17 @@ func _show_insufficient_tokens_dialog():
 	vbox.add_child(btn_vbox)
 	
 	var ad_btn = Button.new()
-	var ad_txt = "🎬 VİDEO İZLE (+50 JETON)"
-	if Global.current_lang == "ENG": ad_txt = "🎬 WATCH VIDEO (+50 COINS)"
-	elif Global.current_lang == "ESP": ad_txt = "🎬 VER VIDEO (+50 MONEDAS)"
-	elif Global.current_lang == "POR": ad_txt = "🎬 ASSISTIR VÍDEO (+50 MOEDAS)"
-	elif Global.current_lang == "ITA": ad_txt = "🎬 GUARDA VIDEO (+50 MONETE)"
+	var ad_txt = "VİDEO İZLE (+50 JETON)"
+	if Global.current_lang == "ENG": ad_txt = "WATCH VIDEO (+50 COINS)"
+	elif Global.current_lang == "ESP": ad_txt = "VER VIDEO (+50 MONEDAS)"
+	elif Global.current_lang == "POR": ad_txt = "ASSISTIR VÍDEO (+50 MOEDAS)"
+	elif Global.current_lang == "ITA": ad_txt = "GUARDA VIDEO (+50 MONETE)"
 	ad_btn.text = ad_txt
+	if ResourceLoader.exists("res://video.svg"):
+		ad_btn.icon = load("res://video.svg")
+		ad_btn.expand_icon = true
+		ad_btn.add_theme_constant_override("icon_max_width", 26)
+		ad_btn.add_theme_constant_override("h_separation", 10)
 	ad_btn.custom_minimum_size = Vector2(0, 56)
 	ad_btn.add_theme_font_override("font", custom_font)
 	ad_btn.add_theme_font_size_override("font_size", 28)
@@ -4660,12 +4797,17 @@ func _show_insufficient_tokens_dialog():
 	btn_vbox.add_child(ad_btn)
 	
 	var wheel_btn = Button.new()
-	var wheel_txt = "🎡 ŞANS ÇARKI"
-	if Global.current_lang == "ENG": wheel_txt = "🎡 LUCKY WHEEL"
-	elif Global.current_lang == "ESP": wheel_txt = "🎡 RULETA DE LA SUERTE"
-	elif Global.current_lang == "POR": wheel_txt = "🎡 ROLETA DA SORTE"
-	elif Global.current_lang == "ITA": wheel_txt = "🎡 RUOTA DELLA FORTUNA"
+	var wheel_txt = "ŞANS ÇARKI"
+	if Global.current_lang == "ENG": wheel_txt = "LUCKY WHEEL"
+	elif Global.current_lang == "ESP": wheel_txt = "RULETA DE LA SUERTE"
+	elif Global.current_lang == "POR": wheel_txt = "ROLETA DA SORTE"
+	elif Global.current_lang == "ITA": wheel_txt = "RUOTA DELLA FORTUNA"
 	wheel_btn.text = wheel_txt
+	if ResourceLoader.exists("res://wheel_icon.svg"):
+		wheel_btn.icon = load("res://wheel_icon.svg")
+		wheel_btn.expand_icon = true
+		wheel_btn.add_theme_constant_override("icon_max_width", 24)
+		wheel_btn.add_theme_constant_override("h_separation", 10)
 	wheel_btn.custom_minimum_size = Vector2(0, 52)
 	wheel_btn.add_theme_font_override("font", custom_font)
 	wheel_btn.add_theme_font_size_override("font_size", 26)
@@ -4679,12 +4821,17 @@ func _show_insufficient_tokens_dialog():
 	btn_vbox.add_child(wheel_btn)
 	
 	var shop_btn = Button.new()
-	var shop_txt = "🛒 MAĞAZAYA GİT"
-	if Global.current_lang == "ENG": shop_txt = "🛒 VISIT SHOP"
-	elif Global.current_lang == "ESP": shop_txt = "🛒 IR A LA TIENDA"
-	elif Global.current_lang == "POR": shop_txt = "🛒 IR PARA A LOJA"
-	elif Global.current_lang == "ITA": shop_txt = "🛒 VAI AL NEGOZIO"
+	var shop_txt = "MAĞAZAYA GİT"
+	if Global.current_lang == "ENG": shop_txt = "VISIT SHOP"
+	elif Global.current_lang == "ESP": shop_txt = "IR A LA TIENDA"
+	elif Global.current_lang == "POR": shop_txt = "IR PARA A LOJA"
+	elif Global.current_lang == "ITA": shop_txt = "VAI AL NEGOZIO"
 	shop_btn.text = shop_txt
+	if ResourceLoader.exists("res://shoppingcarticon.svg"):
+		shop_btn.icon = load("res://shoppingcarticon.svg")
+		shop_btn.expand_icon = true
+		shop_btn.add_theme_constant_override("icon_max_width", 22)
+		shop_btn.add_theme_constant_override("h_separation", 10)
 	shop_btn.custom_minimum_size = Vector2(0, 50)
 	shop_btn.add_theme_font_override("font", custom_font)
 	shop_btn.add_theme_font_size_override("font_size", 24)
@@ -5636,38 +5783,65 @@ func _build_stats_tab() -> Control:
 
 		vbox.add_child(fav_card)
 	else:
-		# Call-to-action Card: Prompt player to select a favorite team!
+		# Call-to-action Card: Prompt player to select a favorite team & link directly to Team Selection!
 		var cta_card = create_card_panel.call()
 		cta_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		cta_card.size_flags_stretch_ratio = 0.85
+		cta_card.size_flags_stretch_ratio = 0.90
+		cta_card.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		cta_card.gui_input.connect(func(ev: InputEvent):
+			if (ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT) or (ev is InputEventScreenTouch and ev.pressed):
+				_navigate_to_favorite_team_selection()
+		)
+
 		var cta_vbox = VBoxContainer.new()
 		cta_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 		cta_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		cta_vbox.add_theme_constant_override("separation", int(clamp(round(14.0 * ui_s), 10, 22)))
+		cta_vbox.mouse_filter = Control.MOUSE_FILTER_PASS
+		cta_vbox.add_theme_constant_override("separation", int(clamp(round(12.0 * ui_s), 8, 18)))
 		cta_card.add_child(cta_vbox)
 
-		var cta_header = HBoxContainer.new()
-		cta_header.alignment = BoxContainer.ALIGNMENT_CENTER
-		cta_header.add_theme_constant_override("separation", 8)
-		cta_vbox.add_child(cta_header)
+		var fav_badge_sz = int(clamp(round(62.0 * ui_s), 52, 78))
+		var fav_badge_panel = PanelContainer.new()
+		fav_badge_panel.custom_minimum_size = Vector2(fav_badge_sz, fav_badge_sz)
+		fav_badge_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		fav_badge_panel.mouse_filter = Control.MOUSE_FILTER_PASS
+		var fbp_style = StyleBoxFlat.new()
+		var fbp_bg = active_theme.bg_bottom.darkened(0.72) if is_buz else active_theme.bg_bottom.darkened(0.36)
+		fbp_style.bg_color = Color(fbp_bg.r, fbp_bg.g, fbp_bg.b, 0.95)
+		var fbp_r = int(round(fav_badge_sz * 0.5))
+		fbp_style.corner_radius_top_left = fbp_r; fbp_style.corner_radius_top_right = fbp_r
+		fbp_style.corner_radius_bottom_left = fbp_r; fbp_style.corner_radius_bottom_right = fbp_r
+		fbp_style.border_width_left = 2; fbp_style.border_width_right = 2
+		fbp_style.border_width_top = 2; fbp_style.border_width_bottom = 3
+		fbp_style.border_color = active_theme.accent
+		fav_badge_panel.add_theme_stylebox_override("panel", fbp_style)
+		cta_vbox.add_child(fav_badge_panel)
 
-		var star_ic = TextureRect.new()
-		star_ic.texture = preload("res://star_gold.svg") if ResourceLoader.exists("res://star_gold.svg") else null
-		if star_ic.texture:
-			var st_sz = int(clamp(round(28.0 * ui_s), 24, 38))
-			star_ic.custom_minimum_size = Vector2(st_sz, st_sz)
-			star_ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			star_ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			cta_header.add_child(star_ic)
+		var fav_badge_center = CenterContainer.new()
+		fav_badge_center.set_anchors_preset(Control.PRESET_FULL_RECT)
+		fav_badge_center.mouse_filter = Control.MOUSE_FILTER_PASS
+		fav_badge_panel.add_child(fav_badge_center)
+
+		var shield_ic = TextureRect.new()
+		shield_ic.texture = preload("res://fav_shield_icon.svg") if ResourceLoader.exists("res://fav_shield_icon.svg") else preload("res://star_icon.svg")
+		var sh_sz = int(clamp(round(32.0 * ui_s), 26, 42))
+		shield_ic.custom_minimum_size = Vector2(sh_sz, sh_sz)
+		shield_ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		shield_ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		shield_ic.mouse_filter = Control.MOUSE_FILTER_PASS
+		fav_badge_center.add_child(shield_ic)
 
 		var cta_title = Label.new()
-		cta_title.text = LANG[lang].get("FAV_CONFIRM_TITLE", "Favori Takımı Belirle")
+		cta_title.text = LANG[lang].get("STATS_FAV_EMPTY_TITLE", "FAVORİ TAKIMINI BELİRLE")
 		cta_title.add_theme_font_override("font", custom_font)
 		cta_title.add_theme_font_size_override("font_size", int(clamp(round(28.0 * ui_s), 24, 36)))
 		cta_title.add_theme_color_override("font_color", Color.WHITE)
 		cta_title.add_theme_color_override("font_shadow_color", Color8(0, 0, 0, 180))
 		cta_title.add_theme_constant_override("shadow_offset_y", 2)
-		cta_header.add_child(cta_title)
+		cta_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		cta_title.mouse_filter = Control.MOUSE_FILTER_PASS
+		ui_labels.append({"node": cta_title, "key": "STATS_FAV_EMPTY_TITLE", "type": "label"})
+		cta_vbox.add_child(cta_title)
 
 		var cta_desc = Label.new()
 		cta_desc.text = LANG[lang].get("STATS_SELECT_FAV_PROMPT", "Takımına özel rekorları ve detaylı istatistikleri görmek için favori takımını seç!")
@@ -5676,19 +5850,27 @@ func _build_stats_tab() -> Control:
 		cta_desc.add_theme_color_override("font_color", Color.WHITE)
 		cta_desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		cta_desc.autowrap_mode = TextServer.AUTOWRAP_WORD
+		cta_desc.mouse_filter = Control.MOUSE_FILTER_PASS
+		ui_labels.append({"node": cta_desc, "key": "STATS_SELECT_FAV_PROMPT", "type": "label"})
 		cta_vbox.add_child(cta_desc)
 
 		var cta_btn = Button.new()
 		cta_btn.text = LANG[lang].get("STATS_CHOOSE_FAV_BTN", "FAVORİ TAKIM SEÇ")
+		if ResourceLoader.exists("res://star_icon.svg"):
+			cta_btn.icon = preload("res://star_icon.svg")
+			cta_btn.expand_icon = true
+			cta_btn.add_theme_constant_override("icon_max_width", int(clamp(round(20.0 * ui_s), 18, 26)))
+			cta_btn.add_theme_constant_override("h_separation", 8)
 		cta_btn.add_theme_font_override("font", custom_font)
 		cta_btn.add_theme_font_size_override("font_size", int(clamp(round(24.0 * ui_s), 21, 30)))
-		cta_btn.custom_minimum_size = Vector2(int(clamp(round(230.0 * ui_s), 210, 290)), int(clamp(round(54.0 * ui_s), 48, 68)))
+		cta_btn.add_theme_color_override("font_color", Color.WHITE)
+		cta_btn.custom_minimum_size = Vector2(int(clamp(round(245.0 * ui_s), 220, 310)), int(clamp(round(54.0 * ui_s), 48, 68)))
 		cta_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		apply_3d_style_to_button(cta_btn, active_theme.accent, active_theme.accent.darkened(0.35), 14, 4, 20, 10)
 		cta_btn.pressed.connect(func():
-			Global.play_click()
-			_switch_tab(1)
+			_navigate_to_favorite_team_selection()
 		)
+		ui_labels.append({"node": cta_btn, "key": "STATS_CHOOSE_FAV_BTN", "type": "button"})
 		cta_vbox.add_child(cta_btn)
 
 		vbox.add_child(cta_card)
@@ -5697,23 +5879,44 @@ func _build_stats_tab() -> Control:
 	if history.is_empty():
 		var empty_card = create_card_panel.call()
 		empty_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		empty_card.size_flags_stretch_ratio = 1.25
+		empty_card.size_flags_stretch_ratio = 1.20
 		var empty_vbox = VBoxContainer.new()
 		empty_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 		empty_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		empty_vbox.add_theme_constant_override("separation", int(clamp(round(18.0 * ui_s), 12, 28)))
+		empty_vbox.add_theme_constant_override("separation", int(clamp(round(16.0 * ui_s), 12, 24)))
 		empty_card.add_child(empty_vbox)
+
+		var match_badge_sz = int(clamp(round(72.0 * ui_s), 58, 92))
+		var match_badge_panel = PanelContainer.new()
+		match_badge_panel.custom_minimum_size = Vector2(match_badge_sz, match_badge_sz)
+		match_badge_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		var mbp_style = StyleBoxFlat.new()
+		var mbp_bg = active_theme.bg_bottom.darkened(0.72) if is_buz else active_theme.bg_bottom.darkened(0.36)
+		mbp_style.bg_color = Color(mbp_bg.r, mbp_bg.g, mbp_bg.b, 0.95)
+		var mbp_r = int(round(match_badge_sz * 0.5))
+		mbp_style.corner_radius_top_left = mbp_r; mbp_style.corner_radius_top_right = mbp_r
+		mbp_style.corner_radius_bottom_left = mbp_r; mbp_style.corner_radius_bottom_right = mbp_r
+		mbp_style.border_width_left = 2; mbp_style.border_width_right = 2
+		mbp_style.border_width_top = 2; mbp_style.border_width_bottom = 3
+		mbp_style.border_color = active_theme.accent
+		match_badge_panel.add_theme_stylebox_override("panel", mbp_style)
+		empty_vbox.add_child(match_badge_panel)
+
+		var match_badge_center = CenterContainer.new()
+		match_badge_center.set_anchors_preset(Control.PRESET_FULL_RECT)
+		match_badge_panel.add_child(match_badge_center)
 
 		var ball_icon = TextureRect.new()
 		if ResourceLoader.exists("res://soccer_ball_icon.svg"):
-			ball_icon.texture = load("res://soccer_ball_icon.svg")
+			ball_icon.texture = preload("res://soccer_ball_icon.svg")
+		elif ResourceLoader.exists("res://statsicon.svg"):
+			ball_icon.texture = preload("res://statsicon.svg")
 		if ball_icon.texture:
-			var b_sz = int(clamp(round(76.0 * ui_s), 58, 108))
+			var b_sz = int(clamp(round(38.0 * ui_s), 30, 50))
 			ball_icon.custom_minimum_size = Vector2(b_sz, b_sz)
 			ball_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			ball_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			ball_icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-			empty_vbox.add_child(ball_icon)
+			match_badge_center.add_child(ball_icon)
 
 		var no_data_lbl = Label.new()
 		no_data_lbl.text = LANG[lang]["STATS_NO_DATA"]
@@ -5727,15 +5930,22 @@ func _build_stats_tab() -> Control:
 
 		var start_btn = Button.new()
 		start_btn.text = LANG[lang].get("START_MATCH", "MAÇI BAŞLAT")
+		if ResourceLoader.exists("res://match_start_arrow.svg"):
+			start_btn.icon = preload("res://match_start_arrow.svg")
+			start_btn.expand_icon = true
+			start_btn.add_theme_constant_override("icon_max_width", int(clamp(round(20.0 * ui_s), 18, 26)))
+			start_btn.add_theme_constant_override("h_separation", 8)
 		start_btn.add_theme_font_override("font", custom_font)
 		start_btn.add_theme_font_size_override("font_size", int(clamp(round(26.0 * ui_s), 22, 32)))
-		start_btn.custom_minimum_size = Vector2(int(clamp(round(230.0 * ui_s), 210, 300)), int(clamp(round(58.0 * ui_s), 52, 74)))
+		start_btn.add_theme_color_override("font_color", Color.WHITE)
+		start_btn.custom_minimum_size = Vector2(int(clamp(round(245.0 * ui_s), 220, 310)), int(clamp(round(58.0 * ui_s), 52, 74)))
 		start_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		apply_3d_style_to_button(start_btn, active_theme.accent, active_theme.accent.darkened(0.35), 14, 4, 24, 12)
 		start_btn.pressed.connect(func():
 			Global.play_click()
 			_switch_tab(1)
 		)
+		ui_labels.append({"node": start_btn, "key": "START_MATCH", "type": "button"})
 		empty_vbox.add_child(start_btn)
 
 		vbox.add_child(empty_card)
@@ -7527,17 +7737,147 @@ func _open_privacy_policy_modal():
 	)
 	pvbox.add_child(close_btn)
 
+func _navigate_to_favorite_team_selection():
+	Global.play_click()
+	_switch_tab(1)
+	get_tree().create_timer(0.26).timeout.connect(func():
+		if not is_inside_tree():
+			return
+		for btn in [fav_h_btn, fav_a_btn]:
+			if is_instance_valid(btn):
+				btn.pivot_offset = btn.size * 0.5
+				var tw = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+				tw.tween_property(btn, "scale", Vector2(1.10, 1.10), 0.16)
+				tw.tween_property(btn, "scale", Vector2.ONE, 0.14)
+				tw.tween_property(btn, "scale", Vector2(1.08, 1.08), 0.15)
+				tw.tween_property(btn, "scale", Vector2.ONE, 0.14)
+	)
+
 func _on_restore_purchases_pressed():
 	Global.play_click()
+	var lang = Global.current_lang
 	if billing:
+		_pending_manual_restore = true
+		_restore_timeout_token += 1
+		var expected_tok = _restore_timeout_token
+		_show_toast(LANG.get(lang, LANG["ENG"]).get("RESTORE_CHECK", "Satın alımlar kontrol ediliyor..."))
 		if billing.is_ready():
 			billing.query_purchases(BillingClient.ProductType.INAPP)
-			billing.query_purchases(BillingClient.ProductType.SUBS)
 		else:
 			billing.start_connection()
-		_show_toast(LANG[Global.current_lang].get("RESTORE_CHECK", "Satın alımlarınız kontrol ediliyor..."))
+		get_tree().create_timer(8.0).timeout.connect(func():
+			if is_inside_tree() and _pending_manual_restore and _restore_timeout_token == expected_tok:
+				_pending_manual_restore = false
+				Global.play_ui_error()
+				_show_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("RESTORE_UNAVAILABLE", "Google Play Mağaza bağlantısı kurulamadı."))
+		)
 	else:
-		_show_toast(LANG[Global.current_lang].get("RESTORE_SUCCESS", "Satın alımlar güncellendi!"))
+		if Global.is_premium:
+			Global.play_reward_collect()
+			_show_toast(LANG.get(lang, LANG["ENG"]).get("RESTORE_SUCCESS", "Satın alımlar geri yüklendi!"))
+		else:
+			Global.play_ui_error()
+			_show_toast(LANG.get(lang, LANG["ENG"]).get("RESTORE_NONE", "Bu hesapta aktif satın alım bulunamadı."))
+
+func _open_switch_account_modal():
+	var lang = Global.current_lang
+	var overlay = ColorRect.new()
+	overlay.color = Color(0, 0, 0, 0.78)
+	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(overlay)
+
+	var center = CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(center)
+
+	var p = PanelContainer.new()
+	var p_s = StyleBoxFlat.new()
+	p_s.bg_color = active_theme.bg_bottom.darkened(0.18)
+	p_s.corner_radius_top_left = 22; p_s.corner_radius_top_right = 22
+	p_s.corner_radius_bottom_left = 22; p_s.corner_radius_bottom_right = 22
+	p_s.border_width_left = 3; p_s.border_width_right = 3
+	p_s.border_width_top = 3; p_s.border_width_bottom = 5
+	p_s.border_color = active_theme.accent
+	p_s.content_margin_left = 28; p_s.content_margin_right = 28
+	p_s.content_margin_top = 24; p_s.content_margin_bottom = 24
+	p.add_theme_stylebox_override("panel", p_s)
+	p.custom_minimum_size = Vector2(min(get_viewport_rect().size.x * 0.90, 560), 0)
+	center.add_child(p)
+
+	var vb = VBoxContainer.new()
+	vb.alignment = BoxContainer.ALIGNMENT_CENTER
+	vb.add_theme_constant_override("separation", 16)
+	p.add_child(vb)
+
+	var title_lbl = Label.new()
+	title_lbl.text = LANG.get(lang, LANG["ENG"]).get("SWITCH_ACCOUNT_BTN", "Switch Account").to_upper()
+	title_lbl.add_theme_font_override("font", custom_font)
+	title_lbl.add_theme_font_size_override("font_size", 34)
+	title_lbl.add_theme_color_override("font_color", Color.WHITE)
+	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vb.add_child(title_lbl)
+
+	var desc_map = {
+		"TR": "Android Google Play Games üzerinden başka bir Gmail hesabı seçip oyuna dönebilir veya giriş ekranına geçebilirsin. İstatistiklerin hesabına kaydedilir.",
+		"ENG": "Choose another Gmail account in Google Play Games and return to the game, or log out to the welcome screen. Your stats stay synced to your account.",
+		"ESP": "Elige otra cuenta de Gmail en Google Play Games y vuelve al juego, o regresa a la pantalla de inicio. Tus estadísticas se guardan en tu cuenta.",
+		"POR": "Escolha outra conta Gmail no Google Play Games e volte ao jogo, ou saia para a tela inicial. As suas estatísticas ficam salvas na conta.",
+		"ITA": "Scegli un altro account Gmail su Google Play Games e torna al gioco, oppure esci alla schermata iniziale. Le tue statistiche restano salvate."
+	}
+	var desc_lbl = Label.new()
+	desc_lbl.text = desc_map.get(lang, desc_map["ENG"])
+	desc_lbl.add_theme_font_override("font", custom_font)
+	desc_lbl.add_theme_font_size_override("font_size", 21)
+	desc_lbl.add_theme_color_override("font_color", Color.WHITE)
+	desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
+	vb.add_child(desc_lbl)
+
+	var pg_btn = Button.new()
+	var pg_texts = {"TR": "Google Play Games'i Aç & Değiştir", "ENG": "Open Google Play Games & Switch", "ESP": "Abrir Google Play Games", "POR": "Abrir Google Play Games", "ITA": "Apri Google Play Games"}
+	pg_btn.text = pg_texts.get(lang, pg_texts["ENG"])
+	pg_btn.add_theme_font_override("font", custom_font)
+	pg_btn.add_theme_font_size_override("font_size", 22)
+	pg_btn.add_theme_color_override("font_color", Color.WHITE)
+	pg_btn.custom_minimum_size = Vector2(360, 52)
+	apply_3d_style_to_button(pg_btn, Color8(15, 110, 60), Color8(10, 68, 36), 12, 3)
+	pg_btn.pressed.connect(func():
+		Global.play_click()
+		Global.switch_local_account_session(false)
+		OS.shell_open("https://play.google.com/store/apps/details?id=com.google.android.play.games")
+		overlay.queue_free()
+		get_tree().change_scene_to_file("res://welcome_screen.tscn")
+	)
+	vb.add_child(pg_btn)
+
+	var out_btn = Button.new()
+	var out_texts = {"TR": "Çıkış Yap (Giriş Ekranı)", "ENG": "Sign Out (Welcome Screen)", "ESP": "Cerrar Sesión", "POR": "Terminar Sessão", "ITA": "Esci (Schermata Iniziale)"}
+	out_btn.text = out_texts.get(lang, out_texts["ENG"])
+	out_btn.add_theme_font_override("font", custom_font)
+	out_btn.add_theme_font_size_override("font_size", 22)
+	out_btn.add_theme_color_override("font_color", Color.WHITE)
+	out_btn.custom_minimum_size = Vector2(360, 52)
+	apply_3d_style_to_button(out_btn, active_theme.accent.darkened(0.12), active_theme.accent.darkened(0.45), 12, 3)
+	out_btn.pressed.connect(func():
+		Global.play_click()
+		Global.switch_local_account_session(false)
+		overlay.queue_free()
+		get_tree().change_scene_to_file("res://welcome_screen.tscn")
+	)
+	vb.add_child(out_btn)
+
+	var cancel_b = Button.new()
+	cancel_b.text = LANG.get(lang, LANG["ENG"]).get("SHOP_CANCEL", "CANCEL")
+	cancel_b.add_theme_font_override("font", custom_font)
+	cancel_b.add_theme_font_size_override("font_size", 22)
+	cancel_b.add_theme_color_override("font_color", Color.WHITE)
+	cancel_b.custom_minimum_size = Vector2(220, 48)
+	apply_3d_style_to_button(cancel_b, active_theme.bg_top.lightened(0.14), active_theme.bg_bottom.darkened(0.3), 12, 3)
+	cancel_b.pressed.connect(func():
+		Global.play_click()
+		overlay.queue_free()
+	)
+	vb.add_child(cancel_b)
 
 func _on_update_available_detected(version_name: String, store_url: String):
 	if Global.update_notice_dismissed_this_session:

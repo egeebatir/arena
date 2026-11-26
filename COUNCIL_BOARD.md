@@ -1,6 +1,6 @@
 # 🏛️ BOL GOL FUTBOL: ÇOKLU-AJAN MECLİSİ (COUNCIL BOARD)
 > **Ekosistem Durum ve Karar Masası (Blackboard)**  
-> *Son Güncelleme: 2026-11-19* | *Durum: v1.1.6 (Build 37) — Elit Kulüp Billing Onay Düzeltmesi, Kulüp-Bayrak Ayrımı, Çark Reklam İzolasyonu (60 sn Cooldown), Oyun İçi Güncelleme Bildirimi, Temiz Splash & Yeni Mağaza Görselleri*
+> *Son Güncelleme: 2026-11-26* | *Durum: v1.1.8 (Build 39) — Google Play Games Bulut Kayıt & İstatistik Geri Yükleme, Satın Alımları Geri Yükle Durum Makinesi, Hesap Değiştirme, İstatistik Ekranı Favori Takım Bağlantısı & Tematik Vektörel SVG İkonlar*
 
 ---
 
@@ -423,6 +423,23 @@
   - `scripts/schedule_live_broadcast.py` ile yarınki UCL gecesi (`Galatasaray vs Feyenoord`, `k1pstPcJfyQ`) için kapaklı planlı canlı yayın oluşturuldu.
   - `config/community_schedule.json` v2.0.0'a yükseltildi ve `scripts/community_post_manager.py` ile 5 adet yayına hazır topluluk anketi/gönderisi (`output/community_posts_ready.md`) üretildi.
 
+### 2026-11-26: Faz 2 Organik Görünürlük, 8-Bölge ASO Paketi, Başlıklı Mağaza Görselleri, Programatik Maç Simülasyonu SEO & itch.io Dağıtım Kiti (Yerel Hazırlık — Dry-Run Onaylı)
+- [x] **Canlı Play Console Mağaza Denetimi & Kritik Tespit:**
+  - Canlı Play Console üzerinde yalnızca `tr-TR` ve `en-IN` listelemelerinin bulunduğu ve her ikisinde de tek cümlelik *"şu an geliştirme ve test aşamasındadır"* yer tutucu metninin kaldığı tespit edildi; `production` kanalı henüz boş olduğundan (`alpha` -> `38 / 1.1.7`), `webfutbol` üzerindeki kapalı beta akışı bozulmadan korundu.
+- [x] **8 Bölge / 5 Dil Google Play ASO Paketi (`store_assets/aso_listings.json` & `tools/play_console_deploy.py`):**
+  - `tr-TR`, `en-US`, `en-GB`, `en-IN`, `es-ES`, `es-419`, `pt-BR` ve `it-IT` için karakter sınırlarına (`Başlık <=30`, `Kısa <=80`, `Uzun <=4000`), Antislop kurallarına (sıfır `—`, sıfır yapay buzzword) ve gerçek oyun verilerine (`232` takım, `46` milli takım, `8` lig) tam uyumlu mağaza metinleri üretildi; her dilde `ebstudyo.com/liderlik-tablosu`, `/simulasyon` ve `/canli` web köprüleri eklendi.
+  - `tools/play_console_deploy.py` içine `--action fetch_listings`, `--action update_listings` ve `--action update_screenshots_batch` (`--dry-run` korumalı) eklendi.
+- [x] **48 Adet Başlıklı 1080x1920 Mağaza Ekran Görüntüsü (`tools/generate_aso_screenshots.py`):**
+  - 8 bölgenin tamamı için 6'şar adet yüksek kontrastlı (WCAG AAA `#FFFFFF` ve `#4ADE80` / `#0B1218`) 1080x1920 dikey mağaza görseli `store_assets/screenshots_captioned/` altında üretildi.
+  - Mağaza dönüşüm oranını (CVR) artırmak üzere ilk sıralara canlı saha aksiyonu alındı (`tr-TR` için `FEN vs GAL` #1; küresel bölgeler için `PSG vs RMA` #1 ve `LIV vs RMA` #2).
+- [x] **Web GA4 + Play Store UTM Huni Telemetrisi & 16 Programatik Derbi SEO Sayfası (`webfutbol`):**
+  - `bol-gol-futbol/index.html` ve `canli/index.html` sayfalarında eksik olan `G-W5T3VVF16F` GA4 etiketi eklendi; `assets/redesign/site.js` içine otomatik Play Store `referrer` UTM etiketleme, `BOLGOL_RELEASE_STAGE` bayrağı ve GA4 dönüşüm olayları (`click_google_play`, `start_web_game`, `submit_beta_email`, `run_quick_sim`, `share_matchup`) bağlandı.
+  - Ortak `assets/redesign/simulator.js` modülü (`?h=...&a=...` derin link ve tek tık paylaşım destekli) ve `tools/generate_matchup_pages.py` ile 8 Türkçe + 8 Küresel yüksek aranma hacimli statik derbi/milli maç simülasyon sayfası (`/simulasyon/galatasaray-fenerbahce/`, `/simulasyon/real-madrid-barcelona/` vb.) üretildi; `sitemap.xml` `/canli/` dahil **31 URL**'ye çıkarıldı.
+- [x] **Sıfır Maliyetli itch.io & Web Portal Paketi (`tools/build_itchio_package.py` & `store_assets/portal_kit_itchio.md`):**
+  - Mevcut WASM derlemesinden `ensureCrossOriginIsolationHeaders: false` uyumlu, dikey çerçeveli ve `ebstudyo.com` + Google Play üst bar bağlantılı `bol_gol_futbol_itchio_web.zip` (30.2 MB) ve `630x500` kapak görseli üretildi.
+- [x] **Adversarial QA Doğrulamaları:** `tests/test_backend_logic.py`, `tests/test_aso_listings.py`, `tests/test_visibility_seo_funnel.py` ve Node.js JS sözdizimi kontrolleri %100 PASS (Canlı yayınlama kullanıcı onayı bekliyor).
+
+
 ### 2026-11-26: Web (`webfutbol` / `ebstudyo.com`) Core Web Vitals, Erişilebilirlik & Lighthouse Optimizasyonu
 - [x] **Responsive AVIF / WebP Görsel Dönüşümü (`-86%` Boyut Tasarrufu, `2,478 KiB -> 344 KiB`):**
   - `weboyun1.png` (`1,427 KiB`) korunarak `#game-cover` için `image-set()` destekli `game-cover-{1x,2x}.{avif,webp}` (`7.5 KiB` - `22.5 KiB`) ve JPEG yedeği üretildi; gizli `#status-splash` görseli yalnızca oyun başlatıldığında yüklenecek biçimde (`data-src`) ertelendi.
@@ -436,6 +453,16 @@
   - 14 HTML sayfasının tamamında `.lang-btn` `aria-label` değeri görünür dil koduyla eşleştirildi (WCAG 2.5.3) ve dekoratif SVG ikonlarına `aria-hidden="true"` eklendi.
   - `#canvas` üzerindeki `tabindex="1"` kaldırılıp oyun başlatılana dek `tabindex="-1"` (`startWebGameOnDemand` içinde `tabIndex = 0`) yapıldı.
 - [x] **Doğrulamalar:** 14 HTML sayfası, 5 JS dosyası, 32 satır içi script, 5 dilli sözlük, `.htaccess` güvenlik kuralları ve yerel Lighthouse denetimleri onaylandı (Ana Sayfa Mobil: `98 / 100 / 100 / 100`, Masaüstü: `100 / 100 / 100 / 100`, `/bol-gol-futbol/` Mobil: `100 / 100 / 100 / 100`).
+
+### 2026-11-26: v1.1.8 (Build 39) — Google Play Bulut Kayıt, Satın Alımları Geri Yükle & Boş İstatistik Ekranı Vektörel Yenilemesi
+- [x] **Google Play Games Bulut Kayıt & İstatistik Geri Alma (`Global.gd`, `welcome_screen.gd`, `snapshot.gd`, `snapshot_metadata.gd`):**
+  - `GodotPlayGameServices` içindeki `PlayGamesSnapshot` Gson işaretli bayt dizisi (`int(b) & 0xFF`, Türkçe UTF-8 uyumlu) ve `cover_image_aspect_ratio: float` tip uyuşmazlığı giderildi; çakışma çözümünde `conflict.server_snapshot` düzeltildi.
+  - `bolgol_account_save_v1` üzerinden Google Play hesabına bağlanıldığında geçmiş maç istatistikleri, favori takım, toplam goller, jetonlar, açılan toplar/şapkalar ve özel kadrolar eksiksiz geri yüklenir; misafir olarak oynanmış maçlar kaybolmadan bulut geçmişiyle birleştirilir ve ilk yükleme tamamlanmadan bulut kaydının ezilmesi (`_cloud_initial_check_done`) engellenir.
+- [x] **Satın Alımları Geri Yükle & Hesap Yönetimi (`main_menu.gd`):**
+  - `_on_restore_purchases_pressed()` durum makinesine (`_pending_manual_restore`, otomatik `start_connection()` yeniden denemesi, 8 sn zaman aşımı koruması) kavuşturuldu; 5 dilde (`TR, ENG, ESP, POR, ITA`) net geri yükleme / bulunamadı / bağlantı hatası bildirimleri ve Ayarlar içinden tek dokunuşla Google Play bağlama eklendi.
+- [x] **İstatistik Ekranı Boş Durum Yönlendirmesi & Tematik SVG İkonlar (`main_menu.gd`, `fav_shield_icon.svg`, `soccer_ball_icon.svg`):**
+  - Favori takım yokken kart ve *"FAVORİ TAKIM SEÇ"* butonu doğrudan Takım Seçimi sekmesine (`_switch_tab(1)`) bağlandı ve *"Favorim Yap"* butonlarına görsel vurgu animasyonu eklendi; başlık 5 dilde `STATS_FAV_EMPTY_TITLE` olarak düzeltildi.
+  - Boş durumdaki karikatürize/emoji tarzı görseller ve UI emojileri tamamen kaldırıldı; diğer arayüz ikonlarıyla uyumlu sade beyaz çizgisel `fav_shield_icon.svg` ve yenilenen `soccer_ball_icon.svg` entegre edildi.
 
 
 

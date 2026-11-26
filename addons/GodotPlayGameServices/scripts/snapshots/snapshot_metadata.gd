@@ -6,7 +6,7 @@ class_name PlayGamesSnapshotMetadata extends RefCounted
 var snapshot_id: String ## The ID of the snapshot.
 var unique_name: String ## The unique identifier of this snapshot. This is the file_name parameter passed to the save_game method.
 var description: String ## The description of the snapshot. This is the description parameter passed to the save_game method.
-var cover_image_aspect_ratio: int ## The aspect ratio of the cover image for this snapshot.
+var cover_image_aspect_ratio: float ## The aspect ratio of the cover image for this snapshot.
 var progress_value: int  ## The progress value for this snapshot.
 var last_modified_timestamp: int ## The last time this snapshot was modified, in millis since epoch.
 var played_time: int ## The played time of this snapshot in milliseconds.
@@ -18,18 +18,18 @@ var cover_image_uri: String ## The snapshot cover image.
 
 ## Constructor that creates a SnapshotMetadata from a [Dictionary] containing the properties.
 func _init(dictionary: Dictionary) -> void:
-	if dictionary.has("snapshotId"): snapshot_id = dictionary.snapshotId
-	if dictionary.has("uniqueName"): unique_name = dictionary.uniqueName
-	if dictionary.has("description"): description = dictionary.description
-	if dictionary.has("coverImageAspectRatio"): cover_image_aspect_ratio = dictionary.coverImageAspectRatio
-	if dictionary.has("progressValue"): progress_value = dictionary.progressValue
-	if dictionary.has("lastModifiedTimestamp"): last_modified_timestamp = dictionary.lastModifiedTimestamp
-	if dictionary.has("playedTime"): played_time = dictionary.playedTime
-	if dictionary.has("hasChangePending"): has_change_pending = dictionary.hasChangePending
-	if dictionary.has("owner"): owner = PlayGamesPlayer.new(dictionary.owner)
-	if dictionary.has("game"): game = PlayGamesGame.new(dictionary.game)
-	if dictionary.has("deviceName"): device_name = dictionary.deviceName
-	if dictionary.has("coverImageUri"): cover_image_uri = dictionary.coverImageUri
+	if dictionary.has("snapshotId") and dictionary.snapshotId != null: snapshot_id = str(dictionary.snapshotId)
+	if dictionary.has("uniqueName") and dictionary.uniqueName != null: unique_name = str(dictionary.uniqueName)
+	if dictionary.has("description") and dictionary.description != null: description = str(dictionary.description)
+	if dictionary.has("coverImageAspectRatio") and dictionary.coverImageAspectRatio != null: cover_image_aspect_ratio = float(dictionary.coverImageAspectRatio)
+	if dictionary.has("progressValue") and dictionary.progressValue != null: progress_value = int(dictionary.progressValue)
+	if dictionary.has("lastModifiedTimestamp") and dictionary.lastModifiedTimestamp != null: last_modified_timestamp = int(dictionary.lastModifiedTimestamp)
+	if dictionary.has("playedTime") and dictionary.playedTime != null: played_time = int(dictionary.playedTime)
+	if dictionary.has("hasChangePending") and dictionary.hasChangePending != null: has_change_pending = bool(dictionary.hasChangePending)
+	if dictionary.has("owner") and dictionary.owner is Dictionary: owner = PlayGamesPlayer.new(dictionary.owner)
+	if dictionary.has("game") and dictionary.game is Dictionary: game = PlayGamesGame.new(dictionary.game)
+	if dictionary.has("deviceName") and dictionary.deviceName != null: device_name = str(dictionary.deviceName)
+	if dictionary.has("coverImageUri") and dictionary.coverImageUri != null: cover_image_uri = str(dictionary.coverImageUri)
 
 func _to_string() -> String:
 	var result := PackedStringArray()

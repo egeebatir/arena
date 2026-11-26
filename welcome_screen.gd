@@ -964,7 +964,7 @@ func _on_google_play_pressed():
 	is_connecting_google = true
 	connecting_dots_count = 0
 	connecting_dots_timer = 0.0
-	gp_btn.disabled = true
+	gp_btn.disabled = false
 	var base_txt = LANG.get(Global.current_lang, LANG["ENG"])["CONNECTING"]
 	_update_gp_btn_text(base_txt)
 	
@@ -1072,7 +1072,7 @@ func _update_gp_btn_text(new_text: String, new_icon_path: String = ""):
 func _set_gp_btn_connected(animate: bool = false):
 	if not is_instance_valid(gp_btn): return
 	_update_gp_btn_text(LANG.get(Global.current_lang, LANG["ENG"]).get("PLAY_CONNECTED", "Google Play Bağlandı"), "res://checkmark_icon.svg")
-	gp_btn.disabled = true
+	gp_btn.disabled = false
 	var gp_lbl = gp_btn.get_node_or_null("GPHBox/GPLabel") as Label
 	if is_instance_valid(gp_lbl):
 		gp_lbl.add_theme_color_override("font_color", Color8(180, 255, 200))
@@ -1102,8 +1102,7 @@ func _on_sign_in_result(is_authenticated: bool, is_manual_click: bool = false):
 	var was_manual = is_connecting_google or is_manual_click
 	is_connecting_google = false
 	if is_authenticated:
-		Global.login_method = "google"
-		Global.save_progression()
+		Global._on_global_play_games_authenticated(true)
 		_set_gp_btn_connected(true)
 		_show_auth_toast(LANG.get(Global.current_lang, LANG["ENG"]).get("PLAY_CONNECTED_MSG", "Google Play Games hesabı bağlandı!"), true)
 		if was_manual:
